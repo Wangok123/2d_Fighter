@@ -1,0 +1,126 @@
+{
+    "Summary": {
+        "YooVersion": "2.3.2-preview",
+        "UnityVersion": "2022.3.15f1",
+        "BuildDate": "2025/7/24 16:10:17",
+        "BuildSeconds": 0,
+        "BuildTarget": 19,
+        "BuildPipeline": "RawFileBuildPipeline",
+        "BuildBundleType": 3,
+        "BuildPackageName": "RawPackage",
+        "BuildPackageVersion": "2025-07-24-970",
+        "BuildPackageNote": "2025/7/24 16:10:17",
+        "UniqueBundleName": true,
+        "EnableAddressable": true,
+        "LocationToLower": false,
+        "IncludeAssetGUID": false,
+        "AutoCollectShaders": true,
+        "IgnoreRuleName": "YooAsset.Editor.RawFileIgnoreRule",
+        "ClearBuildCacheFiles": false,
+        "UseAssetDependencyDB": false,
+        "EnableSharePackRule": false,
+        "SingleReferencedPackAlone": true,
+        "EncryptionClassName": "null",
+        "FileNameStyle": 0,
+        "CompressOption": 0,
+        "DisableWriteTypeTree": false,
+        "IgnoreTypeTreeChanges": false,
+        "WriteLinkXML": true,
+        "CacheServerHost": "",
+        "CacheServerPort": 0,
+        "BuiltinShadersBundleName": "",
+        "MonoScriptsBundleName": "",
+        "AssetFileTotalCount": 3,
+        "MainAssetTotalCount": 3,
+        "AllBundleTotalCount": 3,
+        "AllBundleTotalSize": 160,
+        "EncryptedBundleTotalCount": 0,
+        "EncryptedBundleTotalSize": 0
+    },
+    "AssetInfos": [
+        {
+            "Address": "demo_tbreward",
+            "AssetPath": "Assets/GenerateDatas/bytes/demo_tbreward.bytes",
+            "AssetGUID": "e32435ca9d35df74286f2e77765db421",
+            "AssetTags": [],
+            "MainBundleName": "rawpackage_assets_generatedatas_bytes_demo_tbreward_bytes.rawfile",
+            "MainBundleSize": 45,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "latcfg_tbmap",
+            "AssetPath": "Assets/GenerateDatas/bytes/latcfg_tbmap.bytes",
+            "AssetGUID": "33d14b1fc9b57cc4c9ac00ed59a26822",
+            "AssetTags": [],
+            "MainBundleName": "rawpackage_assets_generatedatas_bytes_latcfg_tbmap_bytes.rawfile",
+            "MainBundleSize": 65,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "latcfg_tbunit",
+            "AssetPath": "Assets/GenerateDatas/bytes/latcfg_tbunit.bytes",
+            "AssetGUID": "dfbb529b35cf6cc4d9273a8e4c3e41c8",
+            "AssetTags": [],
+            "MainBundleName": "rawpackage_assets_generatedatas_bytes_latcfg_tbunit_bytes.rawfile",
+            "MainBundleSize": 50,
+            "DependAssets": [],
+            "DependBundles": []
+        }
+    ],
+    "BundleInfos": [
+        {
+            "BundleName": "rawpackage_assets_generatedatas_bytes_demo_tbreward_bytes.rawfile",
+            "FileName": "18bdf986d2580d74d38f98b8be526649.rawfile",
+            "FileHash": "18bdf986d2580d74d38f98b8be526649",
+            "FileCRC": "61e20ed4",
+            "FileSize": 45,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/GenerateDatas/bytes/demo_tbreward.bytes",
+                    "AssetGUID": "e32435ca9d35df74286f2e77765db421"
+                }
+            ]
+        },
+        {
+            "BundleName": "rawpackage_assets_generatedatas_bytes_latcfg_tbmap_bytes.rawfile",
+            "FileName": "bede60a18ab3efa2c3af39f224f6f214.rawfile",
+            "FileHash": "bede60a18ab3efa2c3af39f224f6f214",
+            "FileCRC": "eb26f503",
+            "FileSize": 65,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/GenerateDatas/bytes/latcfg_tbmap.bytes",
+                    "AssetGUID": "33d14b1fc9b57cc4c9ac00ed59a26822"
+                }
+            ]
+        },
+        {
+            "BundleName": "rawpackage_assets_generatedatas_bytes_latcfg_tbunit_bytes.rawfile",
+            "FileName": "8b07b85dd0d0b250ed4162069b39e5db.rawfile",
+            "FileHash": "8b07b85dd0d0b250ed4162069b39e5db",
+            "FileCRC": "64370c70",
+            "FileSize": 50,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/GenerateDatas/bytes/latcfg_tbunit.bytes",
+                    "AssetGUID": "dfbb529b35cf6cc4d9273a8e4c3e41c8"
+                }
+            ]
+        }
+    ],
+    "IndependAssets": []
+}

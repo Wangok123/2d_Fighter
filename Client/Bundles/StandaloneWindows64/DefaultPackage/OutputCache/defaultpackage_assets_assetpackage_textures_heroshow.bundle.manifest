@@ -1,0 +1,21 @@
+ManifestFileVersion: 0
+CRC: 3078732620
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: fbce3a758a0108e8e7ceb29414ba08f5
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 2612ac43db082a73502ee80f2eceb73f
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: fbce3a758a0108e8e7ceb29414ba08f5
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/AssetPackage/Textures/HeroShow/arthur_show.jpg
+- Assets/AssetPackage/Textures/HeroShow/houyi_show.jpg
+Dependencies: []

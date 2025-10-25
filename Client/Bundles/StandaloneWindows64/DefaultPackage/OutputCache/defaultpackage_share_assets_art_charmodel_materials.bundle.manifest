@@ -1,0 +1,45 @@
+ManifestFileVersion: 0
+CRC: 3669222138
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: dea16404b23065aadfa5e8c2a813a9e1
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: b30fce1a9ad74efb72be6c308c56e365
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: dea16404b23065aadfa5e8c2a813a9e1
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Art/CharModel/Materials/flash.png
+- Assets/Art/CharModel/Materials/qiangshou03.mat
+- Assets/Art/CharModel/Materials/jing_ling_nv_001_ty.mat
+- Assets/Art/CharModel/Materials/mat_houyi.mat
+- Assets/Art/CharModel/Materials/tx_qiangshou03.tga
+- Assets/Art/CharModel/Materials/0742.tga
+- Assets/Art/CharModel/Materials/tex_xb_red.tga
+- Assets/Art/CharModel/Materials/WhiteDots.mat
+- Assets/Art/CharModel/Materials/flash.mat
+- Assets/Art/CharModel/Materials/tex_houyi.tga
+- Assets/Art/CharModel/Materials/jlxb_001_ty.mat
+- Assets/Art/CharModel/Materials/mat_xb_blue.mat
+- Assets/Art/CharModel/Materials/mat_xb_red.mat
+- Assets/Art/CharModel/Materials/glow2.mat
+- Assets/Art/CharModel/Materials/mat_arthur.mat
+- Assets/Art/CharModel/Materials/tex_xb_blue.tga
+- Assets/Art/CharModel/Materials/WhiteDots.png
+- Assets/Art/CharModel/Materials/0742.mat
+- Assets/Art/CharModel/Materials/tex_arthur.tga
+- Assets/Art/CharModel/Materials/glow2.tga
+- Assets/Art/CharModel/Materials/wlxb_001_ty.mat
+- Assets/Art/CharModel/Materials/jing_ling_nan_001_ty.mat
+Dependencies: []

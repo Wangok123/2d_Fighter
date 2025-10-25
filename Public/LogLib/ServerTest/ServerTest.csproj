@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <OutputType>Exe</OutputType>
+        <TargetFramework>net8.0</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\LATMath\LATMath.csproj" />
+      <ProjectReference Include="..\LATTimer\LATTimer.csproj" />
+      <ProjectReference Include="..\LogLib\LogLib.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Reference Include="PETimer">
+        <HintPath>..\..\..\..\..\Downloads\定时器\_3Note\Libs\PETimer.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+</Project>

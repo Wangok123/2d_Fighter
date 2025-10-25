@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+package GameProtocol; 
+
+// 这里定义各种通用结构
+
+message UserDto {
+  uint64 user_id = 1;    // 用户唯一ID
+  string username = 2;   // 用户名
+  int32 level = 6;      // 用户等级
+  uint32 exp = 7;        // 用户经验值
+}
+
+message HeroDto {
+  int32 hero_id = 1;    // 英雄ID
+}
+
+message BattleHeroDto {
+    string user_name = 1;   // 用户名
+    int32 hero_id = 2;      // 英雄ID
+}

@@ -1,0 +1,32 @@
+ManifestFileVersion: 0
+CRC: 2780710245
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 1cbf9bb733336a9d60451abb335b8aca
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 2612ac43db082a73502ee80f2eceb73f
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 1cbf9bb733336a9d60451abb335b8aca
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Resources/ResEffects/Textures/ray_circle2.png
+- Assets/Resources/ResEffects/Textures/Lightbeam 1.png
+- Assets/Resources/ResEffects/Textures/falloffLightbeamadd.png
+- Assets/Resources/ResEffects/Textures/Burst.png
+- Assets/Resources/ResEffects/Textures/Noise_Wave_000.tga
+- Assets/Resources/ResEffects/Textures/simpleSmoke3.png
+- Assets/Resources/ResEffects/Textures/falloffLightbeam.png
+- Assets/Resources/ResEffects/Textures/tx_zhuoshao04.tga
+- Assets/Resources/ResEffects/Textures/dreamgray.png
+- Assets/Resources/ResEffects/Textures/4pebbles.png
+- Assets/Resources/ResEffects/Textures/069lizi_blue.tga
+- Assets/Resources/ResEffects/Textures/069lizi_red.tga
+- Assets/Resources/ResEffects/Textures/tx_fs_ptsdg.tga
+Dependencies: []

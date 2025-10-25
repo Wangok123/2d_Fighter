@@ -1,0 +1,38 @@
+ManifestFileVersion: 0
+CRC: 3494695793
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 4170bf054217ff9a8647541b179db09f
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: a749dd3f8ace53a175d1c48e13d68249
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 4170bf054217ff9a8647541b179db09f
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 74
+  Script: {instanceID: 0}
+- Class: 111
+  Script: {instanceID: 0}
+- Class: 137
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Art/CharModel/Arthur.FBX
+- Assets/Art/CharModel/Houyi.FBX
+- Assets/Art/CharModel/xb_red_yc.FBX
+- Assets/Art/CharModel/xb_blue_yc.FBX
+- Assets/Art/CharModel/xb_blue_jz.FBX
+- Assets/Art/CharModel/xb_red_jz.FBX
+Dependencies:
+- D:/Project/2D_ACT/Client/Bundles/StandaloneWindows64/DefaultPackage/OutputCache/defaultpackage_share_assets_art_charmodel_materials.bundle

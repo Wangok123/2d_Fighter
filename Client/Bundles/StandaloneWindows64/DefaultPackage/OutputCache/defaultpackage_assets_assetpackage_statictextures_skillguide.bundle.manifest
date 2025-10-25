@@ -1,0 +1,24 @@
+ManifestFileVersion: 0
+CRC: 1195732507
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 2422f6946c7abf08a2fd83038483d6fa
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 2d8df09e698f722ada1caa03d3413830
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 2422f6946c7abf08a2fd83038483d6fa
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/AssetPackage/StaticTextures/SkillGuide/pos.png
+- Assets/AssetPackage/StaticTextures/SkillGuide/arthur_sk3.png
+- Assets/AssetPackage/StaticTextures/SkillGuide/circle_blue_ramp.png
+Dependencies: []

@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+import "operation.proto";
+package GameProtocol; 
+
+message BattleStartRequest{
+    
+}
+
+message SendOperationKeyRequest{
+    uint32 roomId = 1;
+    OperationKey opKey = 2;
+}
+
+message OperationKeyNotification{
+    uint32 frameId = 1;
+    repeated OperationKey keyList = 2;
+}

@@ -1,0 +1,156 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 185f6993d5150494d98da50e26cb1c25, type: 3}
+  m_Name: AssetBundleCollectorSetting
+  m_EditorClassIdentifier: 
+  ShowPackageView: 1
+  ShowEditorAlias: 0
+  UniqueBundleName: 1
+  Packages:
+  - PackageName: DefaultPackage
+    PackageDesc: 
+    EnableAddressable: 1
+    LocationToLower: 0
+    IncludeAssetGUID: 0
+    AutoCollectShaders: 1
+    IgnoreRuleName: NormalIgnoreRule
+    Groups:
+    - GroupName: Audios
+      GroupDesc: "\u97F3\u6548"
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/AssetPackage/Audios
+        CollectorGUID: 6e44ff9ae28276a409ee7348e056c472
+        CollectorType: 0
+        AddressRuleName: GroupAndFileLowerRules
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: Characters
+      GroupDesc: "\u89D2\u8272"
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/AssetPackage/Characters/ResChars
+        CollectorGUID: 6bd8846aeae19b24985e4c52b6a5f524
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectPrefab
+        AssetTags: 
+        UserData: 
+    - GroupName: Codes
+      GroupDesc: "\u70ED\u66F4\u65B0\u7A0B\u5E8F\u96C6"
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors: []
+    - GroupName: Effects
+      GroupDesc: "\u7279\u6548"
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors: []
+    - GroupName: Materials
+      GroupDesc: "\u6750\u8D28"
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors: []
+    - GroupName: Scenes
+      GroupDesc: "\u573A\u666F"
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/AssetPackage/Scenes
+        CollectorGUID: fdb256d29b36a8c40bdd0f3dfc8c39b2
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+    - GroupName: Shaders
+      GroupDesc: 
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors: []
+    - GroupName: UI
+      GroupDesc: 
+      AssetTags: ui
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/AssetPackage/UI/UIPrefab
+        CollectorGUID: 8660bcaa97c8c13418e93e7bd502c922
+        CollectorType: 0
+        AddressRuleName: AddressByGroupAndFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectPrefab
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/AssetPackage/Atlas
+        CollectorGUID: e06b23caedb45684eb6aa7ae64d8c466
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/AssetPackage/Sprites
+        CollectorGUID: 3d1de526d5a3a1247aa8a875a2257275
+        CollectorType: 1
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectSprite
+        AssetTags: 
+        UserData: 
+    - GroupName: Texture
+      GroupDesc: 
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/AssetPackage/Textures
+        CollectorGUID: 74173668c8e896b45b07953af4494218
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+      - CollectPath: Assets/AssetPackage/StaticTextures
+        CollectorGUID: 1e13267891d58eb40a842133ee3f7990
+        CollectorType: 2
+        AddressRuleName: AddressByFolderAndFileName
+        PackRuleName: PackTopDirectory
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 
+  - PackageName: RawPackage
+    PackageDesc: 
+    EnableAddressable: 1
+    LocationToLower: 0
+    IncludeAssetGUID: 0
+    AutoCollectShaders: 1
+    IgnoreRuleName: RawFileIgnoreRule
+    Groups:
+    - GroupName: Config
+      GroupDesc: 
+      AssetTags: 
+      ActiveRuleName: EnableGroup
+      Collectors:
+      - CollectPath: Assets/GenerateDatas/bytes
+        CollectorGUID: bfd2ff083f452c14980db23e2783a92a
+        CollectorType: 0
+        AddressRuleName: AddressByFileName
+        PackRuleName: PackRawFile
+        FilterRuleName: CollectAll
+        AssetTags: 
+        UserData: 

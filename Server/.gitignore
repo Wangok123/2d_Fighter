@@ -1,0 +1,88 @@
+## 通用忽略规则 ##
+
+# 操作系统生成的文件
+.DS_Store
+Thumbs.db
+*.lnk
+
+# 编辑器临时文件
+*.swp
+*~
+~$*
+*.tmp
+
+## Visual Studio 特定文件 ##
+
+# 用户特定文件
+*.user
+*.userosscache
+*.sln.docstates
+
+# 生成输出目录
+**/[Bb]in/
+**/[Oo]bj/
+
+# Visual Studio 缓存/临时目录
+.vs/
+.vscode/
+*.VC.db
+*.VC.VC.opendb
+
+# MSTest 测试结果
+[Tt]est[Rr]esult*/
+[Bb]uild[Ll]og.*
+
+# NuGet 包目录
+packages/
+
+# 项目引用文件
+*.nupkg
+*.suo
+*.cache
+*.pdb
+*.idb
+
+# 编译生成文件
+*.exe
+*.dll
+*.lib
+*.winmd
+*.ilk
+*.exp
+*.xml
+
+## 项目特定文件 ##
+
+# ReSharper 文件
+_ReSharper.*
+*.ReSharper
+
+# Rider 文件
+.idea/
+
+# 代码分析文件
+*.ruleset
+
+# 单元测试覆盖率结果
+coverage.xml
+*.coverage
+*.coverage.*
+
+# 发布输出目录
+publish/
+
+# 本地开发环境文件
+local.settings.json
+
+# 文档生成输出
+doc/_site/
+doc/_output/
+
+# 项目工具生成文件
+.project
+*.dot[Cc]over
+
+# 包引用文件
+project.lock.json
+*.nuget.props
+*.nuget.targets

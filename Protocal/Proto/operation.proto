@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+package GameProtocol; 
+
+enum OperationKeyType{
+    None = 0;
+    Move = 1;
+    Skill = 2;
+}
+
+message OperationKey{
+    int32 OperationIndex = 1;
+    OperationKeyType keyType = 2;
+
+    MoveKey moveKey = 3;
+    SkillKey skillKey = 4;
+}
+
+message MoveKey{
+    uint32 keyId = 1;
+
+    int64 x = 2;
+    int64 z = 3;
+}
+
+message SkillKey{
+    uint32 skillId = 1;
+
+    int64 x = 2;
+    int64 z = 3;
+}

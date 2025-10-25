@@ -1,0 +1,23 @@
+[L]##[2025-02-27 20:05:16.351][Thread:1]>>>>>>>>Client Start...
+[L]##[2025-02-27 20:05:16.372][Thread:10]>>>>>>>>Client Connect Server Success, SessionID: 1
+[E]##[2025-02-27 20:05:16.383][Thread:10]>>>>>>>>System.NotImplementedException: The method or operation is not implemented.
+   at KCPTest.ClientSession.OnConnected() in D:\Project\2D_ACT\Public\LogLib\KCPTest\ClientSession.cs:line 11
+   at LATNet.KCPSession`1.InitSession(UInt32 sessionId, Action`2 udpSender, IPEndPoint remotePoint) in D:\Project\2D_ACT\Public\LogLib\LATNet\KCPSession.cs:line 52
+   at LATNet.KCPNet`2.ClientReceive() in D:\Project\2D_ACT\Public\LogLib\LATNet\KCPNet.cs:line 214
+[L]##[2025-02-27 20:05:19.383][Thread:10]>>>>>>>>Connect Success
+[L]##[2025-02-27 20:05:24.394][Thread:4]>>>>>>>>Send Ping
+[L]##[2025-02-27 20:05:29.397][Thread:10]>>>>>>>>Send Ping
+[L]##[2025-02-27 20:05:34.397][Thread:4]>>>>>>>>Send Ping
+[L]##[2025-02-27 20:05:39.413][Thread:4]>>>>>>>>Send Ping
+[L]##[2025-02-27 20:05:44.415][Thread:4]>>>>>>>>Send Ping
+[L]##[2025-02-27 20:05:49.420][Thread:10]>>>>>>>>Send Ping
+[L]##[2025-02-27 20:05:54.425][Thread:4]>>>>>>>>Send Ping
+[L]##[2025-02-27 20:05:59.435][Thread:4]>>>>>>>>Send Ping
+[L]##[2025-02-27 20:06:04.439][Thread:4]>>>>>>>>Send Ping
+[L]##[2025-02-27 20:06:09.448][Thread:4]>>>>>>>>Send Ping
+[L]##[2025-02-27 20:06:14.452][Thread:4]>>>>>>>>Send Ping
+[L]##[2025-02-27 20:06:19.465][Thread:4]>>>>>>>>Send Ping
+[L]##[2025-02-27 20:06:24.475][Thread:10]>>>>>>>>Send Ping
+[L]##[2025-02-27 20:06:29.479][Thread:10]>>>>>>>>Send Ping
+[L]##[2025-02-27 20:06:34.484][Thread:10]>>>>>>>>Send Ping
+[L]##[2025-02-27 20:06:39.499][Thread:4]>>>>>>>>Send Ping

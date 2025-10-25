@@ -1,0 +1,141 @@
+ManifestFileVersion: 0
+CRC: 3949091339
+AssetBundleManifest:
+  AssetBundleInfos:
+    Info_0:
+      Name: defaultpackage_assets_assetpackage_audios_resaudio.bundle
+      Dependencies: {}
+    Info_1:
+      Name: defaultpackage_assets_assetpackage_characters_reschars.bundle
+      Dependencies:
+        Dependency_0: defaultpackage_assets_assetpackage_statictextures_skillguide.bundle
+        Dependency_1: defaultpackage_share_assets_art_charmodel.bundle
+        Dependency_2: defaultpackage_share_assets_art_charmodel_materials.bundle
+    Info_2:
+      Name: defaultpackage_assets_assetpackage_scenes.bundle
+      Dependencies:
+        Dependency_0: defaultpackage_share_assets_art_charmodel_materials.bundle
+        Dependency_1: defaultpackage_share_assets_resources_reseffects.bundle
+        Dependency_2: defaultpackage_share_assets_resources_resscenes.bundle
+    Info_3:
+      Name: defaultpackage_assets_assetpackage_ui_uiprefab_common.bundle
+      Dependencies: {}
+    Info_4:
+      Name: defaultpackage_assets_assetpackage_ui_uiprefab_dynamicitem.bundle
+      Dependencies:
+        Dependency_0: defaultpackage_assets_assetpackage_statictextures_playwnd.bundle
+        Dependency_1: defaultpackage_share_assets_resources_resfonts.bundle
+        Dependency_2: defaultpackage_share_assets_assetpackage_ui_uiani.bundle
+    Info_5:
+      Name: defaultpackage_assets_assetpackage_ui_uiprefab.bundle
+      Dependencies:
+        Dependency_0: defaultpackage_assets_assetpackage_sprites_skillicon_houyi.bundle
+        Dependency_1: defaultpackage_assets_assetpackage_statictextures_lobbywnd.bundle
+        Dependency_2: defaultpackage_assets_assetpackage_statictextures_loginwnd.bundle
+        Dependency_3: defaultpackage_assets_assetpackage_statictextures_matchwnd.bundle
+        Dependency_4: defaultpackage_assets_assetpackage_statictextures_playwnd.bundle
+        Dependency_5: defaultpackage_assets_assetpackage_statictextures_resultwnd.bundle
+        Dependency_6: defaultpackage_assets_assetpackage_statictextures_selectwnd.bundle
+        Dependency_7: defaultpackage_assets_assetpackage_statictextures_startwnd.bundle
+        Dependency_8: defaultpackage_share_assets_resources_resfonts.bundle
+        Dependency_9: defaultpackage_share_assets_assetpackage_ui_uiani.bundle
+    Info_6:
+      Name: defaultpackage_assets_assetpackage_ui_uiprefab_loadwnd.bundle
+      Dependencies:
+        Dependency_0: defaultpackage_assets_assetpackage_sprites_heroload.bundle
+        Dependency_1: defaultpackage_assets_assetpackage_statictextures_loadwnd.bundle
+        Dependency_2: defaultpackage_share_assets_resources_resfonts.bundle
+    Info_7:
+      Name: defaultpackage_assets_assetpackage_ui_uiprefab_selectwnd.bundle
+      Dependencies:
+        Dependency_0: defaultpackage_assets_assetpackage_sprites_headicon.bundle
+        Dependency_1: defaultpackage_assets_assetpackage_sprites_skillicon_arthur.bundle
+        Dependency_2: defaultpackage_assets_assetpackage_textures_heroshow.bundle
+        Dependency_3: defaultpackage_assets_assetpackage_statictextures_playwnd.bundle
+        Dependency_4: defaultpackage_assets_assetpackage_statictextures_selectwnd.bundle
+        Dependency_5: defaultpackage_share_assets_resources_resfonts.bundle
+    Info_8:
+      Name: defaultpackage_assets_assetpackage_atlas.bundle
+      Dependencies:
+        Dependency_0: defaultpackage_assets_assetpackage_sprites_headicon.bundle
+        Dependency_1: defaultpackage_assets_assetpackage_sprites_heroload.bundle
+        Dependency_2: defaultpackage_assets_assetpackage_sprites_skillicon_arthur.bundle
+        Dependency_3: defaultpackage_assets_assetpackage_sprites_skillicon_houyi.bundle
+    Info_9:
+      Name: defaultpackage_assets_assetpackage_sprites_headicon.bundle
+      Dependencies: {}
+    Info_10:
+      Name: defaultpackage_assets_assetpackage_sprites_heroload.bundle
+      Dependencies: {}
+    Info_11:
+      Name: defaultpackage_assets_assetpackage_sprites_skillicon_arthur.bundle
+      Dependencies: {}
+    Info_12:
+      Name: defaultpackage_assets_assetpackage_sprites_skillicon_houyi.bundle
+      Dependencies: {}
+    Info_13:
+      Name: defaultpackage_assets_assetpackage_textures_heroshow.bundle
+      Dependencies: {}
+    Info_14:
+      Name: defaultpackage_assets_assetpackage_statictextures_loadwnd.bundle
+      Dependencies: {}
+    Info_15:
+      Name: defaultpackage_assets_assetpackage_statictextures_lobbywnd.bundle
+      Dependencies: {}
+    Info_16:
+      Name: defaultpackage_assets_assetpackage_statictextures_loginwnd.bundle
+      Dependencies: {}
+    Info_17:
+      Name: defaultpackage_assets_assetpackage_statictextures_matchwnd.bundle
+      Dependencies: {}
+    Info_18:
+      Name: defaultpackage_assets_assetpackage_statictextures_playwnd.bundle
+      Dependencies: {}
+    Info_19:
+      Name: defaultpackage_assets_assetpackage_statictextures_resultwnd.bundle
+      Dependencies: {}
+    Info_20:
+      Name: defaultpackage_assets_assetpackage_statictextures_selectwnd.bundle
+      Dependencies: {}
+    Info_21:
+      Name: defaultpackage_assets_assetpackage_statictextures_skillguide.bundle
+      Dependencies: {}
+    Info_22:
+      Name: defaultpackage_assets_assetpackage_statictextures_startwnd.bundle
+      Dependencies: {}
+    Info_23:
+      Name: defaultpackage_share_assets_art_charmodel.bundle
+      Dependencies:
+        Dependency_0: defaultpackage_share_assets_art_charmodel_materials.bundle
+    Info_24:
+      Name: defaultpackage_share_assets_art_charmodel_materials.bundle
+      Dependencies: {}
+    Info_25:
+      Name: defaultpackage_share_assets_resources_reseffects.bundle
+      Dependencies:
+        Dependency_0: defaultpackage_share_assets_resources_reseffects_material.bundle
+    Info_26:
+      Name: defaultpackage_share_assets_resources_reseffects_material.bundle
+      Dependencies:
+        Dependency_0: defaultpackage_share_assets_resources_reseffects_textures.bundle
+    Info_27:
+      Name: defaultpackage_share_assets_resources_reseffects_textures.bundle
+      Dependencies: {}
+    Info_28:
+      Name: defaultpackage_share_assets_resources_resscenes.bundle
+      Dependencies:
+        Dependency_0: defaultpackage_share_assets_art_scenemodel_materials.bundle
+        Dependency_1: defaultpackage_share_assets_art_scenemodel.bundle
+    Info_29:
+      Name: defaultpackage_share_assets_art_scenemodel_materials.bundle
+      Dependencies: {}
+    Info_30:
+      Name: defaultpackage_share_assets_art_scenemodel.bundle
+      Dependencies:
+        Dependency_0: defaultpackage_share_assets_art_scenemodel_materials.bundle
+    Info_31:
+      Name: defaultpackage_share_assets_resources_resfonts.bundle
+      Dependencies: {}
+    Info_32:
+      Name: defaultpackage_share_assets_assetpackage_ui_uiani.bundle
+      Dependencies: {}

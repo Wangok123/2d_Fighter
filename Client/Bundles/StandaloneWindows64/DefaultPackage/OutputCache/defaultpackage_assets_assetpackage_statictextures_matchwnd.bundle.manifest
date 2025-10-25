@@ -1,0 +1,28 @@
+ManifestFileVersion: 0
+CRC: 328062780
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 016f69f7c5c55b5122f8c80f0301a4f7
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 2d8df09e698f722ada1caa03d3413830
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 016f69f7c5c55b5122f8c80f0301a4f7
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/AssetPackage/StaticTextures/MatchWnd/icon_1.png
+- Assets/AssetPackage/StaticTextures/MatchWnd/frame_normal.png
+- Assets/AssetPackage/StaticTextures/MatchWnd/btn_sure.png
+- Assets/AssetPackage/StaticTextures/MatchWnd/bg_match.jpg
+- Assets/AssetPackage/StaticTextures/MatchWnd/frame_sure.png
+- Assets/AssetPackage/StaticTextures/MatchWnd/icon_0.png
+- Assets/AssetPackage/StaticTextures/MatchWnd/iconcCenter.png
+Dependencies: []

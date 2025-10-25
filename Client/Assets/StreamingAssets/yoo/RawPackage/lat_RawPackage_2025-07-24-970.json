@@ -1,0 +1,70 @@
+{
+    "FileVersion": "2.3.1",
+    "EnableAddressable": true,
+    "LocationToLower": false,
+    "IncludeAssetGUID": false,
+    "OutputNameStyle": 0,
+    "BuildBundleType": 3,
+    "BuildPipeline": "RawFileBuildPipeline",
+    "PackageName": "RawPackage",
+    "PackageVersion": "2025-07-24-970",
+    "PackageNote": "2025/7/24 16:10:17",
+    "AssetList": [
+        {
+            "Address": "demo_tbreward",
+            "AssetPath": "Assets/GenerateDatas/bytes/demo_tbreward.bytes",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 0,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "latcfg_tbmap",
+            "AssetPath": "Assets/GenerateDatas/bytes/latcfg_tbmap.bytes",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "latcfg_tbunit",
+            "AssetPath": "Assets/GenerateDatas/bytes/latcfg_tbunit.bytes",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 2,
+            "DependBundleIDs": []
+        }
+    ],
+    "BundleList": [
+        {
+            "BundleName": "rawpackage_assets_generatedatas_bytes_demo_tbreward_bytes.rawfile",
+            "UnityCRC": 0,
+            "FileHash": "18bdf986d2580d74d38f98b8be526649",
+            "FileCRC": "61e20ed4",
+            "FileSize": 45,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "rawpackage_assets_generatedatas_bytes_latcfg_tbmap_bytes.rawfile",
+            "UnityCRC": 0,
+            "FileHash": "bede60a18ab3efa2c3af39f224f6f214",
+            "FileCRC": "eb26f503",
+            "FileSize": 65,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "rawpackage_assets_generatedatas_bytes_latcfg_tbunit_bytes.rawfile",
+            "UnityCRC": 0,
+            "FileHash": "8b07b85dd0d0b250ed4162069b39e5db",
+            "FileCRC": "64370c70",
+            "FileSize": 50,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        }
+    ]
+}

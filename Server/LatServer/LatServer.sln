@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LatServer", "LatServer\LatServer.csproj", "{D81857F2-E0D9-4C35-A729-5C829172CFDF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LatNet", "LatNet\LatNet.csproj", "{F36F7608-77A0-49B5-B930-426C12815853}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LatProtocol", "LatProtocol\LatProtocol.csproj", "{2DB4F957-3914-43E2-B15F-55F5E91923AF}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{D81857F2-E0D9-4C35-A729-5C829172CFDF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D81857F2-E0D9-4C35-A729-5C829172CFDF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D81857F2-E0D9-4C35-A729-5C829172CFDF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D81857F2-E0D9-4C35-A729-5C829172CFDF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F36F7608-77A0-49B5-B930-426C12815853}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F36F7608-77A0-49B5-B930-426C12815853}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F36F7608-77A0-49B5-B930-426C12815853}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F36F7608-77A0-49B5-B930-426C12815853}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2DB4F957-3914-43E2-B15F-55F5E91923AF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2DB4F957-3914-43E2-B15F-55F5E91923AF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2DB4F957-3914-43E2-B15F-55F5E91923AF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2DB4F957-3914-43E2-B15F-55F5E91923AF}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

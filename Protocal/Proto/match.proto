@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+import "common.proto";
+package GameProtocol; 
+
+message MatchRequest {
+    MatchType status = 1; 
+}
+
+message MatchResponse {
+    int32 predictionTime = 1; 
+}
+
+message ConfirmNotification{
+    uint32 roomId = 1;
+    bool dismiss = 2;
+    repeated ConfirmDto confirmData = 3;
+}
+
+message SendConfirmRequest{
+    uint32 roomId = 1;
+}
+
+message SelectNotification{
+
+}
+
+message SendSelectRequest{
+    uint32 roomId = 1;
+    int32 heroId = 2;
+}
+
+message SendLoadProgressRequest{
+    uint32 roomId = 1;
+    int32 percent = 2;
+}
+
+message LoadProgressNotification{
+    repeated int32 percentList = 1;
+}
+
+message LoadResourceNotification {
+    uint32 mapId = 1;
+    int32 posIndex = 2; // 位置索引
+    repeated BattleHeroDto heroDataList = 3; // 英雄数据
+}
+
+message LoadingFinishRequest {
+    uint32 roomId = 1;
+}
+
+message LoadingFinishNotification {
+    
+}
+
+enum MatchType {
+    None = 0;
+    MatchType_1vs1 = 1;
+    MatchType_2vs2 = 2;
+    MatchType_5vs5 = 3;
+}
+
+message ConfirmDto {
+    uint32 iconIndex = 1;
+    bool confirmDone = 2;
+}
+
+message SelectDto{
+    int32 selectID = 1;
+    bool selectDone = 2;
+}

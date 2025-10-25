@@ -1,0 +1,42 @@
+ManifestFileVersion: 0
+CRC: 3185667105
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 7bb8d32d4f574d54ac70b480985b920b
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 2d8df09e698f722ada1caa03d3413830
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 7bb8d32d4f574d54ac70b480985b920b
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/AssetPackage/StaticTextures/LobbyWnd/bg_icon.png
+- Assets/AssetPackage/StaticTextures/LobbyWnd/btn_cancel.png
+- Assets/AssetPackage/StaticTextures/LobbyWnd/btn_friend.png
+- Assets/AssetPackage/StaticTextures/LobbyWnd/btn_video.png
+- Assets/AssetPackage/StaticTextures/LobbyWnd/bg_bottom.png
+- Assets/AssetPackage/StaticTextures/LobbyWnd/fg_exp.png
+- Assets/AssetPackage/StaticTextures/LobbyWnd/icon_player.png
+- Assets/AssetPackage/StaticTextures/LobbyWnd/wifi.png
+- Assets/AssetPackage/StaticTextures/LobbyWnd/battery.png
+- Assets/AssetPackage/StaticTextures/LobbyWnd/bg_topbar.png
+- Assets/AssetPackage/StaticTextures/LobbyWnd/diamond.png
+- Assets/AssetPackage/StaticTextures/LobbyWnd/bg_value.png
+- Assets/AssetPackage/StaticTextures/LobbyWnd/bg_exp.png
+- Assets/AssetPackage/StaticTextures/LobbyWnd/btnRank.png
+- Assets/AssetPackage/StaticTextures/LobbyWnd/coin.png
+- Assets/AssetPackage/StaticTextures/LobbyWnd/btn_mail.png
+- Assets/AssetPackage/StaticTextures/LobbyWnd/bg_match.png
+- Assets/AssetPackage/StaticTextures/LobbyWnd/ticket.png
+- Assets/AssetPackage/StaticTextures/LobbyWnd/btnMatch.png
+- Assets/AssetPackage/StaticTextures/LobbyWnd/btn_settings.png
+- Assets/AssetPackage/StaticTextures/LobbyWnd/bg_lobby.jpg
+Dependencies: []

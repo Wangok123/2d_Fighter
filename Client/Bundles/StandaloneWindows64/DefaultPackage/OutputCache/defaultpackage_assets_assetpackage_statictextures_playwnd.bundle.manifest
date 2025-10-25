@@ -1,0 +1,49 @@
+ManifestFileVersion: 0
+CRC: 2992263650
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: a67b80ef1c9ac4e6e634873b5104e356
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 2d8df09e698f722ada1caa03d3413830
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: a67b80ef1c9ac4e6e634873b5104e356
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/AssetPackage/StaticTextures/PlayWnd/Effect/circle.png
+- Assets/AssetPackage/StaticTextures/PlayWnd/stick_circle.png
+- Assets/AssetPackage/StaticTextures/PlayWnd/bg_battleinfo.png
+- Assets/AssetPackage/StaticTextures/PlayWnd/MiniMap/blueTower.png
+- Assets/AssetPackage/StaticTextures/PlayWnd/income.png
+- Assets/AssetPackage/StaticTextures/PlayWnd/btn_chat.png
+- Assets/AssetPackage/StaticTextures/PlayWnd/silenceIcon.png
+- Assets/AssetPackage/StaticTextures/PlayWnd/battery.png
+- Assets/AssetPackage/StaticTextures/PlayWnd/bg_map.png
+- Assets/AssetPackage/StaticTextures/PlayWnd/hpbg.png
+- Assets/AssetPackage/StaticTextures/PlayWnd/stick_arrow.png
+- Assets/AssetPackage/StaticTextures/PlayWnd/silenceState.png
+- Assets/AssetPackage/StaticTextures/PlayWnd/Effect/ramp.png
+- Assets/AssetPackage/StaticTextures/PlayWnd/MiniMap/houyi_mapIcon.png
+- Assets/AssetPackage/StaticTextures/PlayWnd/enemytowerhpfg.png
+- Assets/AssetPackage/StaticTextures/PlayWnd/MiniMap/redHeroMapFrame.png
+- Assets/AssetPackage/StaticTextures/PlayWnd/mapKuang.png
+- Assets/AssetPackage/StaticTextures/PlayWnd/selftowerhpbg.png
+- Assets/AssetPackage/StaticTextures/PlayWnd/frame_skill.png
+- Assets/AssetPackage/StaticTextures/PlayWnd/selfteamhpfg.png
+- Assets/AssetPackage/StaticTextures/PlayWnd/stick_dir.png
+- Assets/AssetPackage/StaticTextures/PlayWnd/wifi.png
+- Assets/AssetPackage/StaticTextures/PlayWnd/forbid.png
+- Assets/AssetPackage/StaticTextures/PlayWnd/stick_point.png
+- Assets/AssetPackage/StaticTextures/PlayWnd/hp_sep.png
+- Assets/AssetPackage/StaticTextures/PlayWnd/road.png
+- Assets/AssetPackage/StaticTextures/PlayWnd/selftowerhpfg.png
+- Assets/AssetPackage/StaticTextures/PlayWnd/ska.png
+Dependencies: []

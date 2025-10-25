@@ -1,0 +1,38 @@
+ManifestFileVersion: 0
+CRC: 1830727188
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 75cb06eea4298fe07037edf73925d5cd
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 0f9fba26cbb38215f317d1fd6b1954a0
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 75cb06eea4298fe07037edf73925d5cd
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Resources/ResScenes/mat_wall.mat
+- Assets/Resources/ResScenes/mat_blue.mat
+- Assets/Resources/ResScenes/mat_floor.mat
+- Assets/Resources/ResScenes/1V1.prefab
+- Assets/Resources/ResScenes/mat_red.mat
+Dependencies:
+- D:/Project/2D_ACT/Client/Bundles/StandaloneWindows64/DefaultPackage/OutputCache/defaultpackage_share_assets_art_scenemodel.bundle
+- D:/Project/2D_ACT/Client/Bundles/StandaloneWindows64/DefaultPackage/OutputCache/defaultpackage_share_assets_art_scenemodel_materials.bundle

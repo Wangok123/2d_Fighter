@@ -1,0 +1,23 @@
+ManifestFileVersion: 0
+CRC: 2284896780
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 04cc6edb562be3cc67383b6b84490e23
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 923768aebf385ad86f7762daa8034951
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 04cc6edb562be3cc67383b6b84490e23
+HashAppended: 0
+ClassTypes:
+- Class: 213
+  Script: {instanceID: 0}
+- Class: 687078895
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/AssetPackage/Sprites/HeadIcon/houyi_head.png
+- Assets/AssetPackage/Sprites/HeadIcon/arthur_head.png
+Dependencies: []

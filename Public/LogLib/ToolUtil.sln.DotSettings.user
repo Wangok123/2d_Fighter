@@ -1,0 +1,7 @@
+﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CProject_005C2D_005FACT_005CPublic_005CLogLib_005CLATMath_005Cbin_005CRelease_005Cnetstandard2_002E1_005CLATMath_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CProject_005C2D_005FACT_005CPublic_005CLogLib_005CLATMath_005CUnityEditor_002ECoreModule_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CProject_005C2D_005FACT_005CPublic_005CLogLib_005CLATMath_005CUnityEngine_002ECoreModule_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CProject_005C2D_005FACT_005CPublic_005CLogLib_005CLogLib_005Cbin_005CRelease_005Cnetstandard2_002E1_005CLogLib_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=D_003A_005CUnityProject_005C2_002Dd_005F_002Dact_005CPublic_005CLogLib_005Cdll_005CKcp_002Edll/@EntryIndexedValue">True</s:Boolean>
+	<s:Boolean x:Key="/Default/AddReferences/RecentPaths/=_002FUsers_002Fwanghan_002FDownloads_002F_5B9A_65F6_5668_002F_005F3Note_002FLibs_002FPETimer_002Edll/@EntryIndexedValue">True</s:Boolean></wpf:ResourceDictionary>

@@ -1,0 +1,63 @@
+ManifestFileVersion: 0
+CRC: 2550062854
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 184d66657a38886f3894635476222e19
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 9a2ca7bdbd1871f7131daf57de908e0c
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 184d66657a38886f3894635476222e19
+HashAppended: 0
+ClassTypes:
+- Class: 83
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/AssetPackage/Audios/ResAudio/houyi_slogan1.mp3
+- Assets/AssetPackage/Audios/ResAudio/arthur_ska_rls.mp3
+- Assets/AssetPackage/Audios/ResAudio/tower_ska_rls.mp3
+- Assets/AssetPackage/Audios/ResAudio/arthur_sk1_rls.mp3
+- Assets/AssetPackage/Audios/ResAudio/selfDeath.mp3
+- Assets/AssetPackage/Audios/ResAudio/arthur_sk3_rls.mp3
+- Assets/AssetPackage/Audios/ResAudio/com_cd_ok.mp3
+- Assets/AssetPackage/Audios/ResAudio/firstblood.mp3
+- Assets/AssetPackage/Audios/ResAudio/houyi_sk1_rls.mp3
+- Assets/AssetPackage/Audios/ResAudio/arthur_slogan2.mp3
+- Assets/AssetPackage/Audios/ResAudio/killEnemy.mp3
+- Assets/AssetPackage/Audios/ResAudio/matchReminder.mp3
+- Assets/AssetPackage/Audios/ResAudio/matchSureClick.mp3
+- Assets/AssetPackage/Audios/ResAudio/houyi_ska_multiarrow.mp3
+- Assets/AssetPackage/Audios/ResAudio/houyi_slogan3.mp3
+- Assets/AssetPackage/Audios/ResAudio/com_hit2.mp3
+- Assets/AssetPackage/Audios/ResAudio/houyi_sk2_rls.mp3
+- Assets/AssetPackage/Audios/ResAudio/arthur_ska_hit.wav
+- Assets/AssetPackage/Audios/ResAudio/arthur_sk1_hit.wav
+- Assets/AssetPackage/Audios/ResAudio/arthur_sk1_rls2.mp3
+- Assets/AssetPackage/Audios/ResAudio/com_click1.mp3
+- Assets/AssetPackage/Audios/ResAudio/selfCrystalHurt.mp3
+- Assets/AssetPackage/Audios/ResAudio/victory.mp3
+- Assets/AssetPackage/Audios/ResAudio/loginBtnClick.mp3
+- Assets/AssetPackage/Audios/ResAudio/tower_ska_hit.mp3
+- Assets/AssetPackage/Audios/ResAudio/arthur_slogan3.mp3
+- Assets/AssetPackage/Audios/ResAudio/matchBtnClick.mp3
+- Assets/AssetPackage/Audios/ResAudio/houyi_ska_rls.mp3
+- Assets/AssetPackage/Audios/ResAudio/arthur_sk2_rls.mp3
+- Assets/AssetPackage/Audios/ResAudio/houyi_sk3_rls.mp3
+- Assets/AssetPackage/Audios/ResAudio/defeat.mp3
+- Assets/AssetPackage/Audios/ResAudio/destroyEnemyTower.mp3
+- Assets/AssetPackage/Audios/ResAudio/com_click2.mp3
+- Assets/AssetPackage/Audios/ResAudio/houyi_multi_hit.mp3
+- Assets/AssetPackage/Audios/ResAudio/arthur_slogan1.mp3
+- Assets/AssetPackage/Audios/ResAudio/selectHeroClick.mp3
+- Assets/AssetPackage/Audios/ResAudio/selfTowerDestroy.mp3
+- Assets/AssetPackage/Audios/ResAudio/load.mp3
+- Assets/AssetPackage/Audios/ResAudio/com_hit1.mp3
+- Assets/AssetPackage/Audios/ResAudio/houyi_slogan2.mp3
+- Assets/AssetPackage/Audios/ResAudio/welcombattle.mp3
+- Assets/AssetPackage/Audios/ResAudio/battle.mp3
+- Assets/AssetPackage/Audios/ResAudio/main.mp3
+- Assets/AssetPackage/Audios/ResAudio/houyi_sk3_hit.mp3
+Dependencies: []

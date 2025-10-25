@@ -1,0 +1,67 @@
+{
+  "runtimeTarget": {
+    "name": ".NETStandard,Version=v2.1/",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETStandard,Version=v2.1": {},
+    ".NETStandard,Version=v2.1/": {
+      "LATPhysics/1.0.0": {
+        "dependencies": {
+          "LATMath": "1.0.0.0",
+          "LogLib": "1.0.0.0"
+        },
+        "runtime": {
+          "LATPhysics.dll": {}
+        }
+      },
+      "LATMath/1.0.0.0": {
+        "runtime": {
+          "LATMath.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "LogLib/1.0.0.0": {
+        "runtime": {
+          "LogLib.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "UnityEngine.CoreModule/0.0.0.0": {
+        "runtime": {
+          "UnityEngine.CoreModule.dll": {
+            "assemblyVersion": "0.0.0.0",
+            "fileVersion": "0.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "LATPhysics/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "LATMath/1.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "LogLib/1.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "UnityEngine.CoreModule/0.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

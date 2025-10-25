@@ -1,0 +1,30 @@
+ManifestFileVersion: 0
+CRC: 2827184095
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 71827d0fde75c01ee54212a87d70791a
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 033fafe2c9f6c610c3a734393882fd4c
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 71827d0fde75c01ee54212a87d70791a
+HashAppended: 0
+ClassTypes:
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+- Class: 687078895
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/AssetPackage/Atlas/skillicon.spriteatlasv2
+- Assets/AssetPackage/Atlas/heroload.spriteatlasv2
+- Assets/AssetPackage/Atlas/headicon.spriteatlasv2
+Dependencies:
+- D:/Project/2D_ACT/Client/Bundles/StandaloneWindows64/DefaultPackage/OutputCache/defaultpackage_assets_assetpackage_sprites_headicon.bundle
+- D:/Project/2D_ACT/Client/Bundles/StandaloneWindows64/DefaultPackage/OutputCache/defaultpackage_assets_assetpackage_sprites_heroload.bundle
+- D:/Project/2D_ACT/Client/Bundles/StandaloneWindows64/DefaultPackage/OutputCache/defaultpackage_assets_assetpackage_sprites_skillicon_arthur.bundle
+- D:/Project/2D_ACT/Client/Bundles/StandaloneWindows64/DefaultPackage/OutputCache/defaultpackage_assets_assetpackage_sprites_skillicon_houyi.bundle

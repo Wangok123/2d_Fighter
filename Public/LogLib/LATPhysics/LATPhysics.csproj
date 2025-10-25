@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>netstandard2.1</TargetFramework>
+        <ImplicitUsings>enable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <LangVersion>11</LangVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <Reference Include="LATMath">
+        <HintPath>..\LATMath\bin\Release\netstandard2.1\LATMath.dll</HintPath>
+      </Reference>
+      <Reference Include="LogLib">
+        <HintPath>..\LogLib\bin\Release\netstandard2.1\LogLib.dll</HintPath>
+      </Reference>
+    </ItemGroup>
+
+</Project>

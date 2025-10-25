@@ -1,0 +1,3316 @@
+{
+    "Summary": {
+        "YooVersion": "2.3.2-preview",
+        "UnityVersion": "2022.3.15f1",
+        "BuildDate": "2025/6/17 3:21:46",
+        "BuildSeconds": 21,
+        "BuildTarget": 19,
+        "BuildPipeline": "BuiltinBuildPipeline",
+        "BuildBundleType": 2,
+        "BuildPackageName": "DefaultPackage",
+        "BuildPackageVersion": "2025-06-17-201",
+        "BuildPackageNote": "2025/6/17 3:21:23",
+        "UniqueBundleName": true,
+        "EnableAddressable": true,
+        "LocationToLower": false,
+        "IncludeAssetGUID": false,
+        "AutoCollectShaders": true,
+        "IgnoreRuleName": "YooAsset.Editor.NormalIgnoreRule",
+        "ClearBuildCacheFiles": true,
+        "UseAssetDependencyDB": false,
+        "EnableSharePackRule": true,
+        "SingleReferencedPackAlone": true,
+        "EncryptionClassName": "null",
+        "FileNameStyle": 2,
+        "CompressOption": 2,
+        "DisableWriteTypeTree": false,
+        "IgnoreTypeTreeChanges": true,
+        "WriteLinkXML": true,
+        "CacheServerHost": "",
+        "CacheServerPort": 0,
+        "BuiltinShadersBundleName": "",
+        "MonoScriptsBundleName": "",
+        "AssetFileTotalCount": 230,
+        "MainAssetTotalCount": 70,
+        "AllBundleTotalCount": 30,
+        "AllBundleTotalSize": 36894576,
+        "EncryptedBundleTotalCount": 0,
+        "EncryptedBundleTotalSize": 0
+    },
+    "AssetInfos": [
+        {
+            "Address": "headicon",
+            "AssetPath": "Assets/AssetPackage/Atlas/headicon.spriteatlasv2",
+            "AssetGUID": "f70a3c7a58eaa064998fc4ac4516faf8",
+            "AssetTags": [
+                "ui"
+            ],
+            "MainBundleName": "defaultpackage_assets_assetpackage_atlas.bundle",
+            "MainBundleSize": 221094,
+            "DependAssets": [
+                {
+                    "AssetPath": "Assets/AssetPackage/Sprites/HeadIcon/arthur_head.png",
+                    "AssetGUID": "87a3180ba1027314aad2aed0b01384ab"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Sprites/HeadIcon/houyi_head.png",
+                    "AssetGUID": "a4186b9ed6c951b4491e0997e55d64bc"
+                }
+            ],
+            "DependBundles": [
+                "defaultpackage_assets_assetpackage_sprites_headicon.bundle"
+            ]
+        },
+        {
+            "Address": "heroload",
+            "AssetPath": "Assets/AssetPackage/Atlas/heroload.spriteatlasv2",
+            "AssetGUID": "7f6f68df40287364984ba590cbdea598",
+            "AssetTags": [
+                "ui"
+            ],
+            "MainBundleName": "defaultpackage_assets_assetpackage_atlas.bundle",
+            "MainBundleSize": 221094,
+            "DependAssets": [
+                {
+                    "AssetPath": "Assets/AssetPackage/Sprites/HeroLoad/arthur_load.png",
+                    "AssetGUID": "8f9ae87c8b1c1954fa1fcb063e77ffed"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Sprites/HeroLoad/houyi_load.png",
+                    "AssetGUID": "6a31c8eae927dc24a9f0d6d3cc36dbe9"
+                }
+            ],
+            "DependBundles": [
+                "defaultpackage_assets_assetpackage_sprites_heroload.bundle"
+            ]
+        },
+        {
+            "Address": "skillicon",
+            "AssetPath": "Assets/AssetPackage/Atlas/skillicon.spriteatlasv2",
+            "AssetGUID": "7980b09c0fa754545ac01055f3c6d9b6",
+            "AssetTags": [
+                "ui"
+            ],
+            "MainBundleName": "defaultpackage_assets_assetpackage_atlas.bundle",
+            "MainBundleSize": 221094,
+            "DependAssets": [
+                {
+                    "AssetPath": "Assets/AssetPackage/Sprites/SkillIcon/arthur/arthur_sk0.png",
+                    "AssetGUID": "5a0bab7b83a09594998f1ddb6193359d"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Sprites/SkillIcon/arthur/arthur_sk1.png",
+                    "AssetGUID": "045f0f8e061471c4385fa601c6084dbd"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Sprites/SkillIcon/arthur/arthur_sk2.png",
+                    "AssetGUID": "fa97db93d5f55c647b78663a3b216899"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Sprites/SkillIcon/arthur/arthur_sk3.png",
+                    "AssetGUID": "76e80e92ce741b5438faed8da4cd6f2a"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Sprites/SkillIcon/houyi/houyi_sk0.png",
+                    "AssetGUID": "22331407502f780499459327eb88c656"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Sprites/SkillIcon/houyi/houyi_sk1.png",
+                    "AssetGUID": "17eae8d754fbdc145a7334dc040aa5e9"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Sprites/SkillIcon/houyi/houyi_sk2.png",
+                    "AssetGUID": "5b3a4a7cea9aa7d43a416f26ba5ac0e5"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Sprites/SkillIcon/houyi/houyi_sk3.png",
+                    "AssetGUID": "d15255d867cfbc240889672b0f669340"
+                }
+            ],
+            "DependBundles": [
+                "defaultpackage_assets_assetpackage_sprites_skillicon_arthur.bundle",
+                "defaultpackage_assets_assetpackage_sprites_skillicon_houyi.bundle"
+            ]
+        },
+        {
+            "Address": "audios_arthur_sk1_hit",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/arthur_sk1_hit.wav",
+            "AssetGUID": "02c62100ea2067e48ba0f5f6e27dd017",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
+            "MainBundleSize": 5883334,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "audios_arthur_sk1_rls",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/arthur_sk1_rls.mp3",
+            "AssetGUID": "14be37b188ef6134da899b3a56863739",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
+            "MainBundleSize": 5883334,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "audios_arthur_sk1_rls2",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/arthur_sk1_rls2.mp3",
+            "AssetGUID": "566ef3e78ef8c274584a31fc84048742",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
+            "MainBundleSize": 5883334,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "audios_arthur_sk2_rls",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/arthur_sk2_rls.mp3",
+            "AssetGUID": "2ec188dfc2ecf124b8bacf30ff28d0a6",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
+            "MainBundleSize": 5883334,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "audios_arthur_sk3_rls",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/arthur_sk3_rls.mp3",
+            "AssetGUID": "c2aa72b0645d9c640bc43bdec8ddaa7e",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
+            "MainBundleSize": 5883334,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "audios_arthur_ska_hit",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/arthur_ska_hit.wav",
+            "AssetGUID": "1490234066850d946927ffd7c5e0912a",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
+            "MainBundleSize": 5883334,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "audios_arthur_ska_rls",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/arthur_ska_rls.mp3",
+            "AssetGUID": "0078cd201417e254696e714253e98075",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
+            "MainBundleSize": 5883334,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "audios_arthur_slogan1",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/arthur_slogan1.mp3",
+            "AssetGUID": "19a35cc651afb3049bab5baf643e6d98",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
+            "MainBundleSize": 5883334,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "audios_arthur_slogan2",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/arthur_slogan2.mp3",
+            "AssetGUID": "fe3c4ccdfbbf00949a70ab6b4c76f003",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
+            "MainBundleSize": 5883334,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "audios_arthur_slogan3",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/arthur_slogan3.mp3",
+            "AssetGUID": "3609f6669f7d9344199ae46f9433196d",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
+            "MainBundleSize": 5883334,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "audios_battle",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/battle.mp3",
+            "AssetGUID": "d8185a0cca26a2e44aac190cd78d43d8",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
+            "MainBundleSize": 5883334,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "audios_com_cd_ok",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/com_cd_ok.mp3",
+            "AssetGUID": "7665f09223d83b04fa853a129b507d8f",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
+            "MainBundleSize": 5883334,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "audios_com_click1",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/com_click1.mp3",
+            "AssetGUID": "3dadc5bb6c43a734cb7942a7327b537e",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
+            "MainBundleSize": 5883334,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "audios_com_click2",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/com_click2.mp3",
+            "AssetGUID": "a2d92a3e8a47eb3468b78e32bc0b46cb",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
+            "MainBundleSize": 5883334,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "audios_com_hit1",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/com_hit1.mp3",
+            "AssetGUID": "f924046f6fdf80044bf8d9b6b3de0979",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
+            "MainBundleSize": 5883334,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "audios_com_hit2",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/com_hit2.mp3",
+            "AssetGUID": "5b0cd486f9d599c4c898eec98573cb0b",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
+            "MainBundleSize": 5883334,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "audios_defeat",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/defeat.mp3",
+            "AssetGUID": "437e7a75bbe059c4ab76ea53fdd39d59",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
+            "MainBundleSize": 5883334,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "audios_destroyenemytower",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/destroyEnemyTower.mp3",
+            "AssetGUID": "050c83c93745ccd4996279b16df72c08",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
+            "MainBundleSize": 5883334,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "audios_firstblood",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/firstblood.mp3",
+            "AssetGUID": "a909a0d92036ac74ab7d0225e0af8ead",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
+            "MainBundleSize": 5883334,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "audios_houyi_multi_hit",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/houyi_multi_hit.mp3",
+            "AssetGUID": "e74e6b7450d1e8a49bda19816c87735d",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
+            "MainBundleSize": 5883334,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "audios_houyi_sk1_rls",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/houyi_sk1_rls.mp3",
+            "AssetGUID": "3b16900571d33e449835bd1e1a63ea4c",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
+            "MainBundleSize": 5883334,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "audios_houyi_sk2_rls",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/houyi_sk2_rls.mp3",
+            "AssetGUID": "5f432379bfb2a2a4b92b9884c1c42aa9",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
+            "MainBundleSize": 5883334,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "audios_houyi_sk3_hit",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/houyi_sk3_hit.mp3",
+            "AssetGUID": "93e9a64986139034b9956e7b070511fd",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
+            "MainBundleSize": 5883334,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "audios_houyi_sk3_rls",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/houyi_sk3_rls.mp3",
+            "AssetGUID": "da46ba9363a915741852dcdb3f14689e",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
+            "MainBundleSize": 5883334,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "audios_houyi_ska_multiarrow",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/houyi_ska_multiarrow.mp3",
+            "AssetGUID": "b7b295d21c1aa7b4d98fbc722aa73979",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
+            "MainBundleSize": 5883334,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "audios_houyi_ska_rls",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/houyi_ska_rls.mp3",
+            "AssetGUID": "2cbaf6450a3245042b2e024b0f5b1fe8",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
+            "MainBundleSize": 5883334,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "audios_houyi_slogan1",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/houyi_slogan1.mp3",
+            "AssetGUID": "a614720509233e140bab68f68d449da5",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
+            "MainBundleSize": 5883334,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "audios_houyi_slogan2",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/houyi_slogan2.mp3",
+            "AssetGUID": "e15a25c6e198c50498f20125b0e7e1f3",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
+            "MainBundleSize": 5883334,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "audios_houyi_slogan3",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/houyi_slogan3.mp3",
+            "AssetGUID": "93272ea080ab93c49a172f8cb43d9302",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
+            "MainBundleSize": 5883334,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "audios_killenemy",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/killEnemy.mp3",
+            "AssetGUID": "bfe493e2d29895d48bc60c8b64d40bd2",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
+            "MainBundleSize": 5883334,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "audios_load",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/load.mp3",
+            "AssetGUID": "a6cf663c91506b841a38bcc153c1fe73",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
+            "MainBundleSize": 5883334,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "audios_loginbtnclick",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/loginBtnClick.mp3",
+            "AssetGUID": "1ce3477f9b4c62643b191101a8cfb3c6",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
+            "MainBundleSize": 5883334,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "audios_main",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/main.mp3",
+            "AssetGUID": "4510eac027179c243be31e58857f379b",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
+            "MainBundleSize": 5883334,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "audios_matchbtnclick",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/matchBtnClick.mp3",
+            "AssetGUID": "2346d22327076fe48b129621fa303c4e",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
+            "MainBundleSize": 5883334,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "audios_matchreminder",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/matchReminder.mp3",
+            "AssetGUID": "80978b831cab2aa4597eac8db851d88f",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
+            "MainBundleSize": 5883334,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "audios_matchsureclick",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/matchSureClick.mp3",
+            "AssetGUID": "b541bce1837768648ab9f9f543833bd7",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
+            "MainBundleSize": 5883334,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "audios_selectheroclick",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/selectHeroClick.mp3",
+            "AssetGUID": "12fb94bbe69956f44940f89dd68dc83d",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
+            "MainBundleSize": 5883334,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "audios_selfcrystalhurt",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/selfCrystalHurt.mp3",
+            "AssetGUID": "537dbac90ef91b5459b9611b78c7d7d0",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
+            "MainBundleSize": 5883334,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "audios_selfdeath",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/selfDeath.mp3",
+            "AssetGUID": "97f774097ba033c4e97f4725ebf47a97",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
+            "MainBundleSize": 5883334,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "audios_selftowerdestroy",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/selfTowerDestroy.mp3",
+            "AssetGUID": "30e75e58caef755418c535b29a18f07b",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
+            "MainBundleSize": 5883334,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "audios_tower_ska_hit",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/tower_ska_hit.mp3",
+            "AssetGUID": "84d3b765b10651e47915c4d0ffccd820",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
+            "MainBundleSize": 5883334,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "audios_tower_ska_rls",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/tower_ska_rls.mp3",
+            "AssetGUID": "e8b1590183d8b1f488f7324935ab1cb3",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
+            "MainBundleSize": 5883334,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "audios_victory",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/victory.mp3",
+            "AssetGUID": "7440e4f06d9cd5446914ae71d120b2e2",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
+            "MainBundleSize": 5883334,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "audios_welcombattle",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/welcombattle.mp3",
+            "AssetGUID": "fb623c52ca00e6b4e87404c05eff1b8b",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
+            "MainBundleSize": 5883334,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "Loading",
+            "AssetPath": "Assets/AssetPackage/Scenes/Loading.unity",
+            "AssetGUID": "1edade3bef1f3854599a9d8b89aea2f9",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_scenes.bundle",
+            "MainBundleSize": 74926,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "map_101",
+            "AssetPath": "Assets/AssetPackage/Scenes/map_101.unity",
+            "AssetGUID": "8d7b31948867fdd44abb3d8ba693b73f",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_scenes.bundle",
+            "MainBundleSize": 74926,
+            "DependAssets": [
+                {
+                    "AssetPath": "Assets/Art/CharModel/Materials/0742.mat",
+                    "AssetGUID": "56a8cd5651da2f547bd7e8dc7196c5bb"
+                },
+                {
+                    "AssetPath": "Assets/Art/CharModel/Materials/0742.tga",
+                    "AssetGUID": "2d1e316b79989264ca5b472e98d41b1b"
+                },
+                {
+                    "AssetPath": "Assets/Art/SceneModel/1V1.FBX",
+                    "AssetGUID": "b0b449ee5f48db84eb5f61454c53ee32"
+                },
+                {
+                    "AssetPath": "Assets/Art/SceneModel/Materials/1v1_b02.Out.mat",
+                    "AssetGUID": "6e94255df145a3142b59f422bf176ec1"
+                },
+                {
+                    "AssetPath": "Assets/Art/SceneModel/Materials/1v1_b02.Out.png",
+                    "AssetGUID": "7b6588887b8dd2440a113ff877728f7a"
+                },
+                {
+                    "AssetPath": "Assets/Art/SceneModel/Materials/1v1_b03.Out.mat",
+                    "AssetGUID": "1735ef2730600074ca21cef7ad4f6e3a"
+                },
+                {
+                    "AssetPath": "Assets/Art/SceneModel/Materials/1v1_b03.Out.png",
+                    "AssetGUID": "e999df9e4af141b459a48675e5ebade0"
+                },
+                {
+                    "AssetPath": "Assets/Art/SceneModel/Materials/1v1_b04.Out.mat",
+                    "AssetGUID": "7d96a45265237b54897ffaf1a39e7b67"
+                },
+                {
+                    "AssetPath": "Assets/Art/SceneModel/Materials/1v1_b04.Out.png",
+                    "AssetGUID": "a05e38daff732df42a26fd1a4cca285c"
+                },
+                {
+                    "AssetPath": "Assets/Art/SceneModel/Materials/3v3_b_plant.Out.mat",
+                    "AssetGUID": "4c4ce088aeaf7914f83943a157b26640"
+                },
+                {
+                    "AssetPath": "Assets/Art/SceneModel/Materials/3v3_b_plant.Out.png",
+                    "AssetGUID": "566cb5da8da9148438eedbb69ef4f8ed"
+                },
+                {
+                    "AssetPath": "Assets/Art/SceneModel/Materials/3v3_b01.Out.mat",
+                    "AssetGUID": "03fcae96addbfa843a8da312fa1f6b60"
+                },
+                {
+                    "AssetPath": "Assets/Art/SceneModel/Materials/3v3_b01.Out.png",
+                    "AssetGUID": "6c332835888754d40879ceb1a16b5be3"
+                },
+                {
+                    "AssetPath": "Assets/Art/SceneModel/Materials/3v3_plant.Out.mat",
+                    "AssetGUID": "8a074e1b2d4b9d94597ffb4324d46b3e"
+                },
+                {
+                    "AssetPath": "Assets/Art/SceneModel/Materials/3v3_plant.Out.png",
+                    "AssetGUID": "aea41b35e8f996a43be2a5466887366b"
+                },
+                {
+                    "AssetPath": "Assets/Art/SceneModel/Materials/cpt02_fangyuta.Out.mat",
+                    "AssetGUID": "397bf51cb81e9ed4da2d43cebdec792f"
+                },
+                {
+                    "AssetPath": "Assets/Art/SceneModel/Materials/cpt02_fangyuta.Out.png",
+                    "AssetGUID": "59f0aaa08685e3f4eb49a148f2b7fcf1"
+                },
+                {
+                    "AssetPath": "Assets/Art/SceneModel/Materials/cpt02_fangyuta_red.Out.mat",
+                    "AssetGUID": "b68a8e888d7db104eb0168be180941af"
+                },
+                {
+                    "AssetPath": "Assets/Art/SceneModel/Materials/cpt02_fangyuta_red.Out.png",
+                    "AssetGUID": "d2cbe77dfd80f6c4ba7a2d695389a6b0"
+                },
+                {
+                    "AssetPath": "Assets/Art/SceneModel/Materials/cpt02_jidi.Out.mat",
+                    "AssetGUID": "2992eb8031f183d4989aa0f2922d959a"
+                },
+                {
+                    "AssetPath": "Assets/Art/SceneModel/Materials/cpt02_jidi.Out.png",
+                    "AssetGUID": "ba33ed9081bf77241833c6ebcaac42d3"
+                },
+                {
+                    "AssetPath": "Assets/Art/SceneModel/Materials/cpt02_jidi_red.Out.mat",
+                    "AssetGUID": "1aceb32d22095734daf6dc712f2439e2"
+                },
+                {
+                    "AssetPath": "Assets/Art/SceneModel/Materials/cpt02_jidi_red.Out.png",
+                    "AssetGUID": "76aa33e5b680fae4ead41dc3a97dfc40"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/blueCrystalBomb.prefab",
+                    "AssetGUID": "b89588f22af145f4382d746b6f5c25e9"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/blueTowerBomb.prefab",
+                    "AssetGUID": "304307d43ce9bc44e8a1c6d2086de729"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Material/069lizi_blue.mat",
+                    "AssetGUID": "df6201693ad958548becaf85cf43c6c4"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Material/069lizi_red.mat",
+                    "AssetGUID": "4fe384717604acd41a2b8fd410a486fb"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Material/4Pebbles.mat",
+                    "AssetGUID": "9e0ed6f917001b84e81b1fd497bae057"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Material/burst.mat",
+                    "AssetGUID": "0d36188846815fc48909864f8ad7c066"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Material/dreamgray.mat",
+                    "AssetGUID": "c6ee64f1d1d07884cb7737344100cd9f"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Material/falloffLightbeam.mat",
+                    "AssetGUID": "be86cba599528984482e31b7e1a051c8"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Material/falloffLightbeamadd.mat",
+                    "AssetGUID": "e340d9d4560a9bc4da05665342761c31"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Material/gjs_cunbu022.mat",
+                    "AssetGUID": "1c207a1153bffdf48aa6eeef03f186c2"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Material/gjs_guangshujian02.mat",
+                    "AssetGUID": "c1d946592d72a694db841482bf4b6c42"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Material/gjs_guangshujian02_fire.mat",
+                    "AssetGUID": "f74f92e12e4f4fb43895bbad8218d7a8"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Material/Lightbeam 1.mat",
+                    "AssetGUID": "82ef56417f12a9649b38a95110f79f9c"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Material/ray_circle2.mat",
+                    "AssetGUID": "fa3033d31e3c61842bb774b58612003a"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Material/simpleSmoke3.mat",
+                    "AssetGUID": "92eacec80bc9f3f41a623ef825b23c7d"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/redCrystalBomb.prefab",
+                    "AssetGUID": "cd2f6db707d1e9e4ab24966bb977e43c"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/redTowerBomb.prefab",
+                    "AssetGUID": "9be4563f97e497f4aadd82f24a936e1f"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Textures/069lizi_blue.tga",
+                    "AssetGUID": "ee8ab74bde46a8c478503c419485e3f6"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Textures/069lizi_red.tga",
+                    "AssetGUID": "9e09f052b2294f342a5263e6b022d4fe"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Textures/4pebbles.png",
+                    "AssetGUID": "aacacbc1b20d60f4394fc753c8d93d6a"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Textures/Burst.png",
+                    "AssetGUID": "25afdfc1e6f66654881a319203574f4d"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Textures/dreamgray.png",
+                    "AssetGUID": "8ba526152e05dca4db0a0ae679b42623"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Textures/falloffLightbeam.png",
+                    "AssetGUID": "c3aa1a1b74d58c44b8904b4fcb5ab548"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Textures/falloffLightbeamadd.png",
+                    "AssetGUID": "55dd8c10a2253684d94db693dc994b26"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Textures/Lightbeam 1.png",
+                    "AssetGUID": "2dba3b87835bca44c8166c8e5e79b48d"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Textures/Noise_Wave_000.tga",
+                    "AssetGUID": "ca422fa333add1f43ab5326605905660"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Textures/ray_circle2.png",
+                    "AssetGUID": "6e3c7140b5f62f442abb31d6eb674e84"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Textures/simpleSmoke3.png",
+                    "AssetGUID": "12707ac5173525e4a8d3c94ccc075120"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Textures/tx_fs_ptsdg.tga",
+                    "AssetGUID": "b684633402aaff749b7674aab2665bcf"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Textures/tx_zhuoshao04.tga",
+                    "AssetGUID": "17b72398b22e8ca4bac8fc6c38db503d"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResScenes/1V1.prefab",
+                    "AssetGUID": "54e9c3e2cd2f306458b917a563cd7c6f"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResScenes/mat_blue.mat",
+                    "AssetGUID": "81a3ab6edaa154646b52dd188acc0c39"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResScenes/mat_floor.mat",
+                    "AssetGUID": "0a88a33f6adfe9d42998b6fdad71055a"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResScenes/mat_red.mat",
+                    "AssetGUID": "05a37835c4a1e8f4bb1792176480660d"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResScenes/mat_wall.mat",
+                    "AssetGUID": "393ffa6990bdd9243b415b97798c35f4"
+                }
+            ],
+            "DependBundles": [
+                "defaultpackage_share_assets_art_charmodel_materials.bundle",
+                "defaultpackage_share_assets_art_scenemodel.bundle",
+                "defaultpackage_share_assets_art_scenemodel_materials.bundle",
+                "defaultpackage_share_assets_resources_reseffects.bundle",
+                "defaultpackage_share_assets_resources_reseffects_material.bundle",
+                "defaultpackage_share_assets_resources_reseffects_textures.bundle",
+                "defaultpackage_share_assets_resources_resscenes.bundle"
+            ]
+        },
+        {
+            "Address": "arthur_show",
+            "AssetPath": "Assets/AssetPackage/Textures/HeroShow/arthur_show.jpg",
+            "AssetGUID": "5da077e7ff5732b4895587900872601e",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_textures_heroshow.bundle",
+            "MainBundleSize": 10303849,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "houyi_show",
+            "AssetPath": "Assets/AssetPackage/Textures/HeroShow/houyi_show.jpg",
+            "AssetGUID": "5e41c54432865984186cd2fddb4228b2",
+            "AssetTags": [],
+            "MainBundleName": "defaultpackage_assets_assetpackage_textures_heroshow.bundle",
+            "MainBundleSize": 10303849,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "UI_Scroll View",
+            "AssetPath": "Assets/AssetPackage/UI/UIPrefab/Common/Scroll View.prefab",
+            "AssetGUID": "ab5c056c6e21035418e5e36473749df0",
+            "AssetTags": [
+                "ui"
+            ],
+            "MainBundleName": "defaultpackage_assets_assetpackage_ui_uiprefab_common.bundle",
+            "MainBundleSize": 8792,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "UI_ItemHPHero",
+            "AssetPath": "Assets/AssetPackage/UI/UIPrefab/DynamicItem/ItemHPHero.prefab",
+            "AssetGUID": "968364017d5864140b4e17b3bf7c9568",
+            "AssetTags": [
+                "ui"
+            ],
+            "MainBundleName": "defaultpackage_assets_assetpackage_ui_uiprefab_dynamicitem.bundle",
+            "MainBundleSize": 8442,
+            "DependAssets": [
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/hp_sep.png",
+                    "AssetGUID": "a56342f141f48d3418c079ba2ce3ef25"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/hpbg.png",
+                    "AssetGUID": "041f46df89d13bb4a97c22bbfb0f8873"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/selfteamhpfg.png",
+                    "AssetGUID": "d900a9fa46e0c6c47b5ab953d6a97d89"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/silenceIcon.png",
+                    "AssetGUID": "9d3668848e890b5409b2366f3c5015e7"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/silenceState.png",
+                    "AssetGUID": "b39c0ad3a4a7d7f4e91a60930acc29b6"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResFonts/fzcyt.ttf",
+                    "AssetGUID": "bf62f97d7ec290444be28ba002329e05"
+                }
+            ],
+            "DependBundles": [
+                "defaultpackage_assets_assetpackage_statictextures_playwnd.bundle",
+                "defaultpackage_share_assets_resources_resfonts.bundle"
+            ]
+        },
+        {
+            "Address": "UI_ItemHPSoldier",
+            "AssetPath": "Assets/AssetPackage/UI/UIPrefab/DynamicItem/ItemHPSoldier.prefab",
+            "AssetGUID": "4098098ccb33dea49872daa19819648e",
+            "AssetTags": [
+                "ui"
+            ],
+            "MainBundleName": "defaultpackage_assets_assetpackage_ui_uiprefab_dynamicitem.bundle",
+            "MainBundleSize": 8442,
+            "DependAssets": [
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/hpbg.png",
+                    "AssetGUID": "041f46df89d13bb4a97c22bbfb0f8873"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/selfteamhpfg.png",
+                    "AssetGUID": "d900a9fa46e0c6c47b5ab953d6a97d89"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/silenceIcon.png",
+                    "AssetGUID": "9d3668848e890b5409b2366f3c5015e7"
+                }
+            ],
+            "DependBundles": [
+                "defaultpackage_assets_assetpackage_statictextures_playwnd.bundle"
+            ]
+        },
+        {
+            "Address": "UI_ItemHPTower",
+            "AssetPath": "Assets/AssetPackage/UI/UIPrefab/DynamicItem/ItemHPTower.prefab",
+            "AssetGUID": "3899777f81263884b879c9fee20f14da",
+            "AssetTags": [
+                "ui"
+            ],
+            "MainBundleName": "defaultpackage_assets_assetpackage_ui_uiprefab_dynamicitem.bundle",
+            "MainBundleSize": 8442,
+            "DependAssets": [
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/selftowerhpbg.png",
+                    "AssetGUID": "58b802c20c5e2484e97bebffafefde1d"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/selftowerhpfg.png",
+                    "AssetGUID": "fd07d68da714b6c40be5e3d6f9eb5101"
+                }
+            ],
+            "DependBundles": [
+                "defaultpackage_assets_assetpackage_statictextures_playwnd.bundle"
+            ]
+        },
+        {
+            "Address": "UI_ItemMapIcon",
+            "AssetPath": "Assets/AssetPackage/UI/UIPrefab/DynamicItem/ItemMapIcon.prefab",
+            "AssetGUID": "15d3c717dd6ccb3439b8a2e1a50ce50d",
+            "AssetTags": [
+                "ui"
+            ],
+            "MainBundleName": "defaultpackage_assets_assetpackage_ui_uiprefab_dynamicitem.bundle",
+            "MainBundleSize": 8442,
+            "DependAssets": [
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/MiniMap/blueTower.png",
+                    "AssetGUID": "db4ccf26f865cc343a929c405586fcfa"
+                }
+            ],
+            "DependBundles": [
+                "defaultpackage_assets_assetpackage_statictextures_playwnd.bundle"
+            ]
+        },
+        {
+            "Address": "UI_ItemMapIconHero",
+            "AssetPath": "Assets/AssetPackage/UI/UIPrefab/DynamicItem/ItemMapIconHero.prefab",
+            "AssetGUID": "f6038722b90ac834eba6d5ac8d510990",
+            "AssetTags": [
+                "ui"
+            ],
+            "MainBundleName": "defaultpackage_assets_assetpackage_ui_uiprefab_dynamicitem.bundle",
+            "MainBundleSize": 8442,
+            "DependAssets": [
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/MiniMap/houyi_mapIcon.png",
+                    "AssetGUID": "85a85dbe25425d049824e955cc432daf"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/MiniMap/redHeroMapFrame.png",
+                    "AssetGUID": "9b9dadf8fc9d6a74485744694990415d"
+                }
+            ],
+            "DependBundles": [
+                "defaultpackage_assets_assetpackage_statictextures_playwnd.bundle"
+            ]
+        },
+        {
+            "Address": "UI_JumpNum",
+            "AssetPath": "Assets/AssetPackage/UI/UIPrefab/DynamicItem/JumpNum.prefab",
+            "AssetGUID": "5c767d6261a18954aa4636a7fe360866",
+            "AssetTags": [
+                "ui"
+            ],
+            "MainBundleName": "defaultpackage_assets_assetpackage_ui_uiprefab_dynamicitem.bundle",
+            "MainBundleSize": 8442,
+            "DependAssets": [
+                {
+                    "AssetPath": "Assets/AssetPackage/UI/UIAni/JumpCenter.anim",
+                    "AssetGUID": "eb75adc74556ef94790894fd76004dc0"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/UI/UIAni/JumpLeft.anim",
+                    "AssetGUID": "96d2e9f2032b2164ea9584064190e5b0"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/UI/UIAni/JumpNum.controller",
+                    "AssetGUID": "95215239f8bc99644bd3b773507a9275"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/UI/UIAni/JumpRight.anim",
+                    "AssetGUID": "3168c580477f29c48a75af06c4c0a593"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResFonts/fzcyt.ttf",
+                    "AssetGUID": "bf62f97d7ec290444be28ba002329e05"
+                }
+            ],
+            "DependBundles": [
+                "defaultpackage_share_assets_assetpackage_ui_uiani.bundle",
+                "defaultpackage_share_assets_resources_resfonts.bundle"
+            ]
+        },
+        {
+            "Address": "UI_HPWnd",
+            "AssetPath": "Assets/AssetPackage/UI/UIPrefab/HPWnd.prefab",
+            "AssetGUID": "06f9ffa90171a5545b7f3827d312f77e",
+            "AssetTags": [
+                "ui"
+            ],
+            "MainBundleName": "defaultpackage_assets_assetpackage_ui_uiprefab.bundle",
+            "MainBundleSize": 49860,
+            "DependAssets": [],
+            "DependBundles": []
+        },
+        {
+            "Address": "UI_LoadWnd",
+            "AssetPath": "Assets/AssetPackage/UI/UIPrefab/LoadWnd/LoadWnd.prefab",
+            "AssetGUID": "4442970f0371dcc42a5305e927022ae9",
+            "AssetTags": [
+                "ui"
+            ],
+            "MainBundleName": "defaultpackage_assets_assetpackage_ui_uiprefab_loadwnd.bundle",
+            "MainBundleSize": 15379,
+            "DependAssets": [
+                {
+                    "AssetPath": "Assets/AssetPackage/Sprites/HeroLoad/houyi_load.png",
+                    "AssetGUID": "6a31c8eae927dc24a9f0d6d3cc36dbe9"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LoadWnd/bg_load.jpg",
+                    "AssetGUID": "3cb31157f3c27f846bab663f078ce66c"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LoadWnd/bgName.png",
+                    "AssetGUID": "828df9b24fa323e468dfb524b45a2c7c"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LoadWnd/frame_load.png",
+                    "AssetGUID": "099441ef90ee1cf45b6fc5a69ee1d8a4"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LoadWnd/vs.png",
+                    "AssetGUID": "3042b1f93795a394280269f8b0d64e53"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/UI/UIPrefab/LoadWnd/player.prefab",
+                    "AssetGUID": "b738b3a13d3adb44186d9672462458c2"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResFonts/fSimpleRound.ttf",
+                    "AssetGUID": "f4990f011244ac2439c68cdf72185c4c"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResFonts/fzcyt.ttf",
+                    "AssetGUID": "bf62f97d7ec290444be28ba002329e05"
+                }
+            ],
+            "DependBundles": [
+                "defaultpackage_assets_assetpackage_sprites_heroload.bundle",
+                "defaultpackage_assets_assetpackage_statictextures_loadwnd.bundle",
+                "defaultpackage_share_assets_resources_resfonts.bundle"
+            ]
+        },
+        {
+            "Address": "UI_player",
+            "AssetPath": "Assets/AssetPackage/UI/UIPrefab/LoadWnd/player.prefab",
+            "AssetGUID": "b738b3a13d3adb44186d9672462458c2",
+            "AssetTags": [
+                "ui"
+            ],
+            "MainBundleName": "defaultpackage_assets_assetpackage_ui_uiprefab_loadwnd.bundle",
+            "MainBundleSize": 15379,
+            "DependAssets": [
+                {
+                    "AssetPath": "Assets/AssetPackage/Sprites/HeroLoad/houyi_load.png",
+                    "AssetGUID": "6a31c8eae927dc24a9f0d6d3cc36dbe9"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LoadWnd/bgName.png",
+                    "AssetGUID": "828df9b24fa323e468dfb524b45a2c7c"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LoadWnd/frame_load.png",
+                    "AssetGUID": "099441ef90ee1cf45b6fc5a69ee1d8a4"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResFonts/fSimpleRound.ttf",
+                    "AssetGUID": "f4990f011244ac2439c68cdf72185c4c"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResFonts/fzcyt.ttf",
+                    "AssetGUID": "bf62f97d7ec290444be28ba002329e05"
+                }
+            ],
+            "DependBundles": [
+                "defaultpackage_assets_assetpackage_sprites_heroload.bundle",
+                "defaultpackage_assets_assetpackage_statictextures_loadwnd.bundle",
+                "defaultpackage_share_assets_resources_resfonts.bundle"
+            ]
+        },
+        {
+            "Address": "UI_LobbyWnd",
+            "AssetPath": "Assets/AssetPackage/UI/UIPrefab/LobbyWnd.prefab",
+            "AssetGUID": "a6ec242bb0287b9459a441ad78d6bdf9",
+            "AssetTags": [
+                "ui"
+            ],
+            "MainBundleName": "defaultpackage_assets_assetpackage_ui_uiprefab.bundle",
+            "MainBundleSize": 49860,
+            "DependAssets": [
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LobbyWnd/battery.png",
+                    "AssetGUID": "1aef38c60ef0e8a46925cd0549563626"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LobbyWnd/bg_bottom.png",
+                    "AssetGUID": "d942f5ae7f91dd04d993bde5f643ba03"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LobbyWnd/bg_exp.png",
+                    "AssetGUID": "2d0ddc54328674d43ba5fdff4acdbcba"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LobbyWnd/bg_icon.png",
+                    "AssetGUID": "052d8f7e3bb748945a6d2c624a81ab99"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LobbyWnd/bg_lobby.jpg",
+                    "AssetGUID": "c90aaecb2f8b1914ba324a4e9416a965"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LobbyWnd/bg_match.png",
+                    "AssetGUID": "cf07768d739d508488402c85db9b55e9"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LobbyWnd/bg_topbar.png",
+                    "AssetGUID": "4bbc6f9474c13bb48ac8bcaec23acb97"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LobbyWnd/bg_value.png",
+                    "AssetGUID": "3fe6f6dbfed61ed46839b74ae82d600c"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LobbyWnd/btn_cancel.png",
+                    "AssetGUID": "ba43323e36c838043aba1f3cf787c465"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LobbyWnd/btn_friend.png",
+                    "AssetGUID": "5a239cdeb778b5c4aab73cb7cddd7f9f"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LobbyWnd/btn_mail.png",
+                    "AssetGUID": "ae1d877b66ebe3d449070b46c7e3a95d"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LobbyWnd/btn_settings.png",
+                    "AssetGUID": "10cf26016728bfa45a8214da8854d706"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LobbyWnd/btn_video.png",
+                    "AssetGUID": "c30d93bdf4acc4a4786e27ad9ef4b57b"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LobbyWnd/btnMatch.png",
+                    "AssetGUID": "3b8c9e84bbc891d4da6fe9419ae695d1"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LobbyWnd/btnRank.png",
+                    "AssetGUID": "adedb5d9c291e8e4692b9e682cd94252"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LobbyWnd/coin.png",
+                    "AssetGUID": "12ceb55a671254249b0af22221d861e3"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LobbyWnd/diamond.png",
+                    "AssetGUID": "cd2557f1d71ed9e4d8af3ca8be5b2d4b"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LobbyWnd/fg_exp.png",
+                    "AssetGUID": "d0631bb666dd2824aa78929b8f64f03a"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LobbyWnd/icon_player.png",
+                    "AssetGUID": "cbcff2e43423a754681587b2ae51a8ab"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LobbyWnd/ticket.png",
+                    "AssetGUID": "1f00c8aed11746a458566b83e688084b"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LobbyWnd/wifi.png",
+                    "AssetGUID": "244c16ac4e1bb554aab17fce96570b30"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResFonts/fSimpleRound.ttf",
+                    "AssetGUID": "f4990f011244ac2439c68cdf72185c4c"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResFonts/fzcyt.ttf",
+                    "AssetGUID": "bf62f97d7ec290444be28ba002329e05"
+                }
+            ],
+            "DependBundles": [
+                "defaultpackage_assets_assetpackage_statictextures_lobbywnd.bundle",
+                "defaultpackage_share_assets_resources_resfonts.bundle"
+            ]
+        },
+        {
+            "Address": "UI_LoginWnd",
+            "AssetPath": "Assets/AssetPackage/UI/UIPrefab/LoginWnd.prefab",
+            "AssetGUID": "1e208c013a55d4d4d8a81781cf1f0998",
+            "AssetTags": [
+                "ui"
+            ],
+            "MainBundleName": "defaultpackage_assets_assetpackage_ui_uiprefab.bundle",
+            "MainBundleSize": 49860,
+            "DependAssets": [
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LoginWnd/acct.png",
+                    "AssetGUID": "2baefeb0edef171479ee370821cc24e9"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LoginWnd/bg_input.png",
+                    "AssetGUID": "82472be199f0cdf448fb294f16e96c84"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LoginWnd/bg_login.jpg",
+                    "AssetGUID": "e33c47e539daaaa428d93bf3d0fcffef"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LoginWnd/btn_login.png",
+                    "AssetGUID": "586096e346908bd4593a8868dcffd86d"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LoginWnd/pass.png",
+                    "AssetGUID": "e033ab1f3a8b5504989469dc0da2c1df"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LoginWnd/title.png",
+                    "AssetGUID": "c49a54ad265480a40b518fcac81ca292"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/enemytowerhpfg.png",
+                    "AssetGUID": "6d62134a743330643a86362dc5061867"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/stick_point.png",
+                    "AssetGUID": "be7a6df9a87580b41b1c806a56a02148"
+                }
+            ],
+            "DependBundles": [
+                "defaultpackage_assets_assetpackage_statictextures_loginwnd.bundle",
+                "defaultpackage_assets_assetpackage_statictextures_playwnd.bundle"
+            ]
+        },
+        {
+            "Address": "UI_MatchWnd",
+            "AssetPath": "Assets/AssetPackage/UI/UIPrefab/MatchWnd.prefab",
+            "AssetGUID": "3338649629488f140bc31361deb1a25b",
+            "AssetTags": [
+                "ui"
+            ],
+            "MainBundleName": "defaultpackage_assets_assetpackage_ui_uiprefab.bundle",
+            "MainBundleSize": 49860,
+            "DependAssets": [
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/MatchWnd/bg_match.jpg",
+                    "AssetGUID": "ace0ea2699bb84a45bf0aa30a26733fd"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/MatchWnd/btn_sure.png",
+                    "AssetGUID": "f87b7c087df997142896e5919947cce1"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/MatchWnd/frame_normal.png",
+                    "AssetGUID": "dc92cbebe12106c40afb016bb4a351ae"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/MatchWnd/frame_sure.png",
+                    "AssetGUID": "5050635ef789fd641a280aa12818978d"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/MatchWnd/icon_0.png",
+                    "AssetGUID": "e3b45a37f683ef74795b1a2b3084f4fe"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/MatchWnd/icon_1.png",
+                    "AssetGUID": "2d6af0b66bcef8948b24f0ab05db9522"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/MatchWnd/iconcCenter.png",
+                    "AssetGUID": "0fd3044c89b18cf42853d869eb50c15a"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResFonts/fSimpleRound.ttf",
+                    "AssetGUID": "f4990f011244ac2439c68cdf72185c4c"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResFonts/fzcyt.ttf",
+                    "AssetGUID": "bf62f97d7ec290444be28ba002329e05"
+                }
+            ],
+            "DependBundles": [
+                "defaultpackage_assets_assetpackage_statictextures_matchwnd.bundle",
+                "defaultpackage_share_assets_resources_resfonts.bundle"
+            ]
+        },
+        {
+            "Address": "UI_PlayWnd",
+            "AssetPath": "Assets/AssetPackage/UI/UIPrefab/PlayWnd.prefab",
+            "AssetGUID": "a6904fc30642caf41829d7dc95fb5aa9",
+            "AssetTags": [
+                "ui"
+            ],
+            "MainBundleName": "defaultpackage_assets_assetpackage_ui_uiprefab.bundle",
+            "MainBundleSize": 49860,
+            "DependAssets": [
+                {
+                    "AssetPath": "Assets/AssetPackage/Sprites/SkillIcon/houyi/houyi_sk0.png",
+                    "AssetGUID": "22331407502f780499459327eb88c656"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Sprites/SkillIcon/houyi/houyi_sk1.png",
+                    "AssetGUID": "17eae8d754fbdc145a7334dc040aa5e9"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LoginWnd/bg_input.png",
+                    "AssetGUID": "82472be199f0cdf448fb294f16e96c84"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/battery.png",
+                    "AssetGUID": "967b0b267fddefe4298f72bcbb136899"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/bg_battleinfo.png",
+                    "AssetGUID": "f97a670ef91dc15438e6094609970919"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/bg_map.png",
+                    "AssetGUID": "523519bd86b24184d8b9936e3dec1ecb"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/btn_chat.png",
+                    "AssetGUID": "12a25d3b7306acc48bc5af9c96ada027"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/Effect/circle.png",
+                    "AssetGUID": "9cc9427ec427e2b49b2f7168c5f208d2"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/Effect/ramp.png",
+                    "AssetGUID": "544029d1280e4f3468ccc7792d56119c"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/forbid.png",
+                    "AssetGUID": "57c24aa28c4b726479be5467436dd038"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/frame_skill.png",
+                    "AssetGUID": "d5f950d1e7c3c914c96f4896fa67a3fd"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/income.png",
+                    "AssetGUID": "1b3ca7c2427e9774da8c6d925d583c5a"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/mapKuang.png",
+                    "AssetGUID": "91a9e96c9b476d84c9db6561b6bc27d1"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/road.png",
+                    "AssetGUID": "008f54ac0c893114fad0cbf6601633e7"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/ska.png",
+                    "AssetGUID": "8130875f166c01f4c872efcacf4cd207"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/stick_arrow.png",
+                    "AssetGUID": "97e55c20c70a72c4da11356cb1034a30"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/stick_circle.png",
+                    "AssetGUID": "5b64d3542ad2c4c4f9402040bb225d1b"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/stick_dir.png",
+                    "AssetGUID": "e0eade3e5a06a4e449ec69f03409ff49"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/stick_point.png",
+                    "AssetGUID": "be7a6df9a87580b41b1c806a56a02148"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/wifi.png",
+                    "AssetGUID": "2641aef15a0e99646811e3946da3c1e7"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/SelectWnd/herobg.png",
+                    "AssetGUID": "efd406f3feb67ec41923056f3fadbbd5"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/UI/UIAni/ClickEffect.controller",
+                    "AssetGUID": "57033d50d2efaf242939fdc5e1b3927f"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/UI/UIAni/ClickEffectAni.anim",
+                    "AssetGUID": "ab1655a6f33317c4eb6674f5b973f79d"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResFonts/fSimpleRound.ttf",
+                    "AssetGUID": "f4990f011244ac2439c68cdf72185c4c"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResFonts/fzcyt.ttf",
+                    "AssetGUID": "bf62f97d7ec290444be28ba002329e05"
+                }
+            ],
+            "DependBundles": [
+                "defaultpackage_assets_assetpackage_sprites_skillicon_houyi.bundle",
+                "defaultpackage_assets_assetpackage_statictextures_loginwnd.bundle",
+                "defaultpackage_assets_assetpackage_statictextures_playwnd.bundle",
+                "defaultpackage_assets_assetpackage_statictextures_selectwnd.bundle",
+                "defaultpackage_share_assets_assetpackage_ui_uiani.bundle",
+                "defaultpackage_share_assets_resources_resfonts.bundle"
+            ]
+        },
+        {
+            "Address": "UI_ResultWnd",
+            "AssetPath": "Assets/AssetPackage/UI/UIPrefab/ResultWnd.prefab",
+            "AssetGUID": "38bb9b206c9793e44abd54a09c1fa3f6",
+            "AssetTags": [
+                "ui"
+            ],
+            "MainBundleName": "defaultpackage_assets_assetpackage_ui_uiprefab.bundle",
+            "MainBundleSize": 49860,
+            "DependAssets": [
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/ResultWnd/win.png",
+                    "AssetGUID": "8d78a5f4953d82b4f8d89a0c48f2af52"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/SelectWnd/heroselect.png",
+                    "AssetGUID": "400c6a67b6df5984bac08f1ea6770b69"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/UI/UIAni/imgResult.controller",
+                    "AssetGUID": "9d02e383acafba847a860da672433685"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/UI/UIAni/ResultTweenAni.anim",
+                    "AssetGUID": "72ea0fc768935f14f98df8a8c3d70335"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResFonts/fSimpleRound.ttf",
+                    "AssetGUID": "f4990f011244ac2439c68cdf72185c4c"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResFonts/fzcyt.ttf",
+                    "AssetGUID": "bf62f97d7ec290444be28ba002329e05"
+                }
+            ],
+            "DependBundles": [
+                "defaultpackage_assets_assetpackage_statictextures_resultwnd.bundle",
+                "defaultpackage_assets_assetpackage_statictextures_selectwnd.bundle",
+                "defaultpackage_share_assets_assetpackage_ui_uiani.bundle",
+                "defaultpackage_share_assets_resources_resfonts.bundle"
+            ]
+        },
+        {
+            "Address": "UI_ItemHero",
+            "AssetPath": "Assets/AssetPackage/UI/UIPrefab/SelectWnd/ItemHero.prefab",
+            "AssetGUID": "83b0743a2e8a7224aa88a6e4a4c5ae5c",
+            "AssetTags": [
+                "ui"
+            ],
+            "MainBundleName": "defaultpackage_assets_assetpackage_ui_uiprefab_selectwnd.bundle",
+            "MainBundleSize": 17579,
+            "DependAssets": [
+                {
+                    "AssetPath": "Assets/AssetPackage/Sprites/HeadIcon/arthur_head.png",
+                    "AssetGUID": "87a3180ba1027314aad2aed0b01384ab"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/SelectWnd/selectGlow.png",
+                    "AssetGUID": "5cd5958eade5e6c458e68b639740e4af"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResFonts/fSimpleRound.ttf",
+                    "AssetGUID": "f4990f011244ac2439c68cdf72185c4c"
+                }
+            ],
+            "DependBundles": [
+                "defaultpackage_assets_assetpackage_sprites_headicon.bundle",
+                "defaultpackage_assets_assetpackage_statictextures_selectwnd.bundle",
+                "defaultpackage_share_assets_resources_resfonts.bundle"
+            ]
+        },
+        {
+            "Address": "UI_SelectWnd",
+            "AssetPath": "Assets/AssetPackage/UI/UIPrefab/SelectWnd/SelectWnd.prefab",
+            "AssetGUID": "91daec01c32f76c4f98172020d3b580f",
+            "AssetTags": [
+                "ui"
+            ],
+            "MainBundleName": "defaultpackage_assets_assetpackage_ui_uiprefab_selectwnd.bundle",
+            "MainBundleSize": 17579,
+            "DependAssets": [
+                {
+                    "AssetPath": "Assets/AssetPackage/Sprites/HeadIcon/arthur_head.png",
+                    "AssetGUID": "87a3180ba1027314aad2aed0b01384ab"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Sprites/SkillIcon/arthur/arthur_sk0.png",
+                    "AssetGUID": "5a0bab7b83a09594998f1ddb6193359d"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Sprites/SkillIcon/arthur/arthur_sk1.png",
+                    "AssetGUID": "045f0f8e061471c4385fa601c6084dbd"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Sprites/SkillIcon/arthur/arthur_sk2.png",
+                    "AssetGUID": "fa97db93d5f55c647b78663a3b216899"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Sprites/SkillIcon/arthur/arthur_sk3.png",
+                    "AssetGUID": "76e80e92ce741b5438faed8da4cd6f2a"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/frame_skill.png",
+                    "AssetGUID": "d5f950d1e7c3c914c96f4896fa67a3fd"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/SelectWnd/btnSure.png",
+                    "AssetGUID": "c2aafd00ba7af594fad30c74acf32181"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/SelectWnd/clockicon.png",
+                    "AssetGUID": "b9c65604cf65ced48b730470ec728def"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/SelectWnd/herobg.png",
+                    "AssetGUID": "efd406f3feb67ec41923056f3fadbbd5"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/SelectWnd/heroselect.png",
+                    "AssetGUID": "400c6a67b6df5984bac08f1ea6770b69"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/SelectWnd/selectGlow.png",
+                    "AssetGUID": "5cd5958eade5e6c458e68b639740e4af"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/SelectWnd/selecttime.png",
+                    "AssetGUID": "854a69d4e39e50e4996aff7b48eea1bd"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/SelectWnd/英雄选择.png",
+                    "AssetGUID": "f6f15866c6e85804fb42bdcf648661d6"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Textures/HeroShow/houyi_show.jpg",
+                    "AssetGUID": "5e41c54432865984186cd2fddb4228b2"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/UI/UIPrefab/Common/Scroll View.prefab",
+                    "AssetGUID": "ab5c056c6e21035418e5e36473749df0"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/UI/UIPrefab/SelectWnd/ItemHero.prefab",
+                    "AssetGUID": "83b0743a2e8a7224aa88a6e4a4c5ae5c"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResFonts/fSimpleRound.ttf",
+                    "AssetGUID": "f4990f011244ac2439c68cdf72185c4c"
+                }
+            ],
+            "DependBundles": [
+                "defaultpackage_assets_assetpackage_sprites_headicon.bundle",
+                "defaultpackage_assets_assetpackage_sprites_skillicon_arthur.bundle",
+                "defaultpackage_assets_assetpackage_statictextures_playwnd.bundle",
+                "defaultpackage_assets_assetpackage_statictextures_selectwnd.bundle",
+                "defaultpackage_assets_assetpackage_textures_heroshow.bundle",
+                "defaultpackage_assets_assetpackage_ui_uiprefab_common.bundle",
+                "defaultpackage_share_assets_resources_resfonts.bundle"
+            ]
+        },
+        {
+            "Address": "UI_StartWnd",
+            "AssetPath": "Assets/AssetPackage/UI/UIPrefab/StartWnd.prefab",
+            "AssetGUID": "d020abf64d183dd4384cf425c576b171",
+            "AssetTags": [
+                "ui"
+            ],
+            "MainBundleName": "defaultpackage_assets_assetpackage_ui_uiprefab.bundle",
+            "MainBundleSize": 49860,
+            "DependAssets": [
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/StartWnd/bg_start.jpg",
+                    "AssetGUID": "856c4b5c26e855148a28beda65a793c1"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/StartWnd/btn_area.png",
+                    "AssetGUID": "b2bf7f62d956fb24dabc38e41da76024"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/StartWnd/btn_exit.png",
+                    "AssetGUID": "95a80d06677314145b2fc4ac7fa6b7cb"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/StartWnd/btn_start.png",
+                    "AssetGUID": "94ffef6888b138d429005a580a4cfc9d"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResFonts/fzcyt.ttf",
+                    "AssetGUID": "bf62f97d7ec290444be28ba002329e05"
+                }
+            ],
+            "DependBundles": [
+                "defaultpackage_assets_assetpackage_statictextures_startwnd.bundle",
+                "defaultpackage_share_assets_resources_resfonts.bundle"
+            ]
+        },
+        {
+            "Address": "UI_TipsWnd",
+            "AssetPath": "Assets/AssetPackage/UI/UIPrefab/TipsWnd.prefab",
+            "AssetGUID": "1808475d061acfb41ac0b4dce318828c",
+            "AssetTags": [
+                "ui"
+            ],
+            "MainBundleName": "defaultpackage_assets_assetpackage_ui_uiprefab.bundle",
+            "MainBundleSize": 49860,
+            "DependAssets": [
+                {
+                    "AssetPath": "Assets/AssetPackage/UI/UIAni/TipsWindow.anim",
+                    "AssetGUID": "c2c3a7a0668f86c42bd6f35e7e268233"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/UI/UIAni/TipsWnd.controller",
+                    "AssetGUID": "9ac791e1e04ba63469ad03aeaf719800"
+                }
+            ],
+            "DependBundles": [
+                "defaultpackage_share_assets_assetpackage_ui_uiani.bundle"
+            ]
+        }
+    ],
+    "BundleInfos": [
+        {
+            "BundleName": "defaultpackage_assets_assetpackage_atlas.bundle",
+            "FileName": "defaultpackage_assets_assetpackage_atlas_49807bc6d9286a9a6832b202019d9bc0.bundle",
+            "FileHash": "49807bc6d9286a9a6832b202019d9bc0",
+            "FileCRC": "f62a752e",
+            "FileSize": 221094,
+            "Encrypted": false,
+            "Tags": [
+                "ui"
+            ],
+            "DependBundles": [
+                "defaultpackage_assets_assetpackage_sprites_headicon.bundle",
+                "defaultpackage_assets_assetpackage_sprites_heroload.bundle",
+                "defaultpackage_assets_assetpackage_sprites_skillicon_arthur.bundle",
+                "defaultpackage_assets_assetpackage_sprites_skillicon_houyi.bundle"
+            ],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/AssetPackage/Atlas/headicon.spriteatlasv2",
+                    "AssetGUID": "f70a3c7a58eaa064998fc4ac4516faf8"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Atlas/heroload.spriteatlasv2",
+                    "AssetGUID": "7f6f68df40287364984ba590cbdea598"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Atlas/skillicon.spriteatlasv2",
+                    "AssetGUID": "7980b09c0fa754545ac01055f3c6d9b6"
+                }
+            ]
+        },
+        {
+            "BundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
+            "FileName": "defaultpackage_assets_assetpackage_audios_resaudio_1b83ea407c5d0be2a371ab24f314341b.bundle",
+            "FileHash": "1b83ea407c5d0be2a371ab24f314341b",
+            "FileCRC": "db7b2a8e",
+            "FileSize": 5883334,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/AssetPackage/Audios/ResAudio/arthur_sk1_hit.wav",
+                    "AssetGUID": "02c62100ea2067e48ba0f5f6e27dd017"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Audios/ResAudio/arthur_sk1_rls.mp3",
+                    "AssetGUID": "14be37b188ef6134da899b3a56863739"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Audios/ResAudio/arthur_sk1_rls2.mp3",
+                    "AssetGUID": "566ef3e78ef8c274584a31fc84048742"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Audios/ResAudio/arthur_sk2_rls.mp3",
+                    "AssetGUID": "2ec188dfc2ecf124b8bacf30ff28d0a6"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Audios/ResAudio/arthur_sk3_rls.mp3",
+                    "AssetGUID": "c2aa72b0645d9c640bc43bdec8ddaa7e"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Audios/ResAudio/arthur_ska_hit.wav",
+                    "AssetGUID": "1490234066850d946927ffd7c5e0912a"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Audios/ResAudio/arthur_ska_rls.mp3",
+                    "AssetGUID": "0078cd201417e254696e714253e98075"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Audios/ResAudio/arthur_slogan1.mp3",
+                    "AssetGUID": "19a35cc651afb3049bab5baf643e6d98"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Audios/ResAudio/arthur_slogan2.mp3",
+                    "AssetGUID": "fe3c4ccdfbbf00949a70ab6b4c76f003"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Audios/ResAudio/arthur_slogan3.mp3",
+                    "AssetGUID": "3609f6669f7d9344199ae46f9433196d"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Audios/ResAudio/battle.mp3",
+                    "AssetGUID": "d8185a0cca26a2e44aac190cd78d43d8"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Audios/ResAudio/com_cd_ok.mp3",
+                    "AssetGUID": "7665f09223d83b04fa853a129b507d8f"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Audios/ResAudio/com_click1.mp3",
+                    "AssetGUID": "3dadc5bb6c43a734cb7942a7327b537e"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Audios/ResAudio/com_click2.mp3",
+                    "AssetGUID": "a2d92a3e8a47eb3468b78e32bc0b46cb"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Audios/ResAudio/com_hit1.mp3",
+                    "AssetGUID": "f924046f6fdf80044bf8d9b6b3de0979"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Audios/ResAudio/com_hit2.mp3",
+                    "AssetGUID": "5b0cd486f9d599c4c898eec98573cb0b"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Audios/ResAudio/defeat.mp3",
+                    "AssetGUID": "437e7a75bbe059c4ab76ea53fdd39d59"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Audios/ResAudio/destroyEnemyTower.mp3",
+                    "AssetGUID": "050c83c93745ccd4996279b16df72c08"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Audios/ResAudio/firstblood.mp3",
+                    "AssetGUID": "a909a0d92036ac74ab7d0225e0af8ead"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Audios/ResAudio/houyi_multi_hit.mp3",
+                    "AssetGUID": "e74e6b7450d1e8a49bda19816c87735d"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Audios/ResAudio/houyi_sk1_rls.mp3",
+                    "AssetGUID": "3b16900571d33e449835bd1e1a63ea4c"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Audios/ResAudio/houyi_sk2_rls.mp3",
+                    "AssetGUID": "5f432379bfb2a2a4b92b9884c1c42aa9"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Audios/ResAudio/houyi_sk3_hit.mp3",
+                    "AssetGUID": "93e9a64986139034b9956e7b070511fd"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Audios/ResAudio/houyi_sk3_rls.mp3",
+                    "AssetGUID": "da46ba9363a915741852dcdb3f14689e"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Audios/ResAudio/houyi_ska_multiarrow.mp3",
+                    "AssetGUID": "b7b295d21c1aa7b4d98fbc722aa73979"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Audios/ResAudio/houyi_ska_rls.mp3",
+                    "AssetGUID": "2cbaf6450a3245042b2e024b0f5b1fe8"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Audios/ResAudio/houyi_slogan1.mp3",
+                    "AssetGUID": "a614720509233e140bab68f68d449da5"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Audios/ResAudio/houyi_slogan2.mp3",
+                    "AssetGUID": "e15a25c6e198c50498f20125b0e7e1f3"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Audios/ResAudio/houyi_slogan3.mp3",
+                    "AssetGUID": "93272ea080ab93c49a172f8cb43d9302"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Audios/ResAudio/killEnemy.mp3",
+                    "AssetGUID": "bfe493e2d29895d48bc60c8b64d40bd2"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Audios/ResAudio/load.mp3",
+                    "AssetGUID": "a6cf663c91506b841a38bcc153c1fe73"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Audios/ResAudio/loginBtnClick.mp3",
+                    "AssetGUID": "1ce3477f9b4c62643b191101a8cfb3c6"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Audios/ResAudio/main.mp3",
+                    "AssetGUID": "4510eac027179c243be31e58857f379b"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Audios/ResAudio/matchBtnClick.mp3",
+                    "AssetGUID": "2346d22327076fe48b129621fa303c4e"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Audios/ResAudio/matchReminder.mp3",
+                    "AssetGUID": "80978b831cab2aa4597eac8db851d88f"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Audios/ResAudio/matchSureClick.mp3",
+                    "AssetGUID": "b541bce1837768648ab9f9f543833bd7"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Audios/ResAudio/selectHeroClick.mp3",
+                    "AssetGUID": "12fb94bbe69956f44940f89dd68dc83d"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Audios/ResAudio/selfCrystalHurt.mp3",
+                    "AssetGUID": "537dbac90ef91b5459b9611b78c7d7d0"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Audios/ResAudio/selfDeath.mp3",
+                    "AssetGUID": "97f774097ba033c4e97f4725ebf47a97"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Audios/ResAudio/selfTowerDestroy.mp3",
+                    "AssetGUID": "30e75e58caef755418c535b29a18f07b"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Audios/ResAudio/tower_ska_hit.mp3",
+                    "AssetGUID": "84d3b765b10651e47915c4d0ffccd820"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Audios/ResAudio/tower_ska_rls.mp3",
+                    "AssetGUID": "e8b1590183d8b1f488f7324935ab1cb3"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Audios/ResAudio/victory.mp3",
+                    "AssetGUID": "7440e4f06d9cd5446914ae71d120b2e2"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Audios/ResAudio/welcombattle.mp3",
+                    "AssetGUID": "fb623c52ca00e6b4e87404c05eff1b8b"
+                }
+            ]
+        },
+        {
+            "BundleName": "defaultpackage_assets_assetpackage_scenes.bundle",
+            "FileName": "defaultpackage_assets_assetpackage_scenes_f9a813f464adbe433d7abd9038cdf62a.bundle",
+            "FileHash": "f9a813f464adbe433d7abd9038cdf62a",
+            "FileCRC": "c87f7d22",
+            "FileSize": 74926,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [
+                "defaultpackage_share_assets_art_charmodel_materials.bundle",
+                "defaultpackage_share_assets_art_scenemodel.bundle",
+                "defaultpackage_share_assets_art_scenemodel_materials.bundle",
+                "defaultpackage_share_assets_resources_reseffects.bundle",
+                "defaultpackage_share_assets_resources_reseffects_material.bundle",
+                "defaultpackage_share_assets_resources_reseffects_textures.bundle",
+                "defaultpackage_share_assets_resources_resscenes.bundle"
+            ],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/AssetPackage/Scenes/Loading.unity",
+                    "AssetGUID": "1edade3bef1f3854599a9d8b89aea2f9"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Scenes/map_101.unity",
+                    "AssetGUID": "8d7b31948867fdd44abb3d8ba693b73f"
+                }
+            ]
+        },
+        {
+            "BundleName": "defaultpackage_assets_assetpackage_sprites_headicon.bundle",
+            "FileName": "defaultpackage_assets_assetpackage_sprites_headicon_2fbb67eeec40835588adc11363c26806.bundle",
+            "FileHash": "2fbb67eeec40835588adc11363c26806",
+            "FileCRC": "41b2dacc",
+            "FileSize": 3487,
+            "Encrypted": false,
+            "Tags": [
+                "ui"
+            ],
+            "DependBundles": [],
+            "ReferenceBundles": [
+                "defaultpackage_assets_assetpackage_atlas.bundle",
+                "defaultpackage_assets_assetpackage_ui_uiprefab_selectwnd.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/AssetPackage/Sprites/HeadIcon/arthur_head.png",
+                    "AssetGUID": "87a3180ba1027314aad2aed0b01384ab"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Sprites/HeadIcon/houyi_head.png",
+                    "AssetGUID": "a4186b9ed6c951b4491e0997e55d64bc"
+                }
+            ]
+        },
+        {
+            "BundleName": "defaultpackage_assets_assetpackage_sprites_heroload.bundle",
+            "FileName": "defaultpackage_assets_assetpackage_sprites_heroload_74c2057448ab307265bf7a46c404d7b1.bundle",
+            "FileHash": "74c2057448ab307265bf7a46c404d7b1",
+            "FileCRC": "a883cc57",
+            "FileSize": 3557,
+            "Encrypted": false,
+            "Tags": [
+                "ui"
+            ],
+            "DependBundles": [],
+            "ReferenceBundles": [
+                "defaultpackage_assets_assetpackage_atlas.bundle",
+                "defaultpackage_assets_assetpackage_ui_uiprefab_loadwnd.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/AssetPackage/Sprites/HeroLoad/arthur_load.png",
+                    "AssetGUID": "8f9ae87c8b1c1954fa1fcb063e77ffed"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Sprites/HeroLoad/houyi_load.png",
+                    "AssetGUID": "6a31c8eae927dc24a9f0d6d3cc36dbe9"
+                }
+            ]
+        },
+        {
+            "BundleName": "defaultpackage_assets_assetpackage_sprites_skillicon_arthur.bundle",
+            "FileName": "defaultpackage_assets_assetpackage_sprites_skillicon_arthur_a7f96defca0bd91331a36ded2521f57c.bundle",
+            "FileHash": "a7f96defca0bd91331a36ded2521f57c",
+            "FileCRC": "28082fc3",
+            "FileSize": 4206,
+            "Encrypted": false,
+            "Tags": [
+                "ui"
+            ],
+            "DependBundles": [],
+            "ReferenceBundles": [
+                "defaultpackage_assets_assetpackage_atlas.bundle",
+                "defaultpackage_assets_assetpackage_ui_uiprefab_selectwnd.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/AssetPackage/Sprites/SkillIcon/arthur/arthur_sk0.png",
+                    "AssetGUID": "5a0bab7b83a09594998f1ddb6193359d"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Sprites/SkillIcon/arthur/arthur_sk1.png",
+                    "AssetGUID": "045f0f8e061471c4385fa601c6084dbd"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Sprites/SkillIcon/arthur/arthur_sk2.png",
+                    "AssetGUID": "fa97db93d5f55c647b78663a3b216899"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Sprites/SkillIcon/arthur/arthur_sk3.png",
+                    "AssetGUID": "76e80e92ce741b5438faed8da4cd6f2a"
+                }
+            ]
+        },
+        {
+            "BundleName": "defaultpackage_assets_assetpackage_sprites_skillicon_houyi.bundle",
+            "FileName": "defaultpackage_assets_assetpackage_sprites_skillicon_houyi_28942f013cc8e58d0264a7863b6f06ad.bundle",
+            "FileHash": "28942f013cc8e58d0264a7863b6f06ad",
+            "FileCRC": "7fda6c0b",
+            "FileSize": 4199,
+            "Encrypted": false,
+            "Tags": [
+                "ui"
+            ],
+            "DependBundles": [],
+            "ReferenceBundles": [
+                "defaultpackage_assets_assetpackage_atlas.bundle",
+                "defaultpackage_assets_assetpackage_ui_uiprefab.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/AssetPackage/Sprites/SkillIcon/houyi/houyi_sk0.png",
+                    "AssetGUID": "22331407502f780499459327eb88c656"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Sprites/SkillIcon/houyi/houyi_sk1.png",
+                    "AssetGUID": "17eae8d754fbdc145a7334dc040aa5e9"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Sprites/SkillIcon/houyi/houyi_sk2.png",
+                    "AssetGUID": "5b3a4a7cea9aa7d43a416f26ba5ac0e5"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Sprites/SkillIcon/houyi/houyi_sk3.png",
+                    "AssetGUID": "d15255d867cfbc240889672b0f669340"
+                }
+            ]
+        },
+        {
+            "BundleName": "defaultpackage_assets_assetpackage_statictextures_loadwnd.bundle",
+            "FileName": "defaultpackage_assets_assetpackage_statictextures_loadwnd_0951800cae4e24178f08d8fb05dff6d1.bundle",
+            "FileHash": "0951800cae4e24178f08d8fb05dff6d1",
+            "FileCRC": "2ebf3c4d",
+            "FileSize": 308260,
+            "Encrypted": false,
+            "Tags": [
+                "ui"
+            ],
+            "DependBundles": [],
+            "ReferenceBundles": [
+                "defaultpackage_assets_assetpackage_ui_uiprefab_loadwnd.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LoadWnd/bg_load.jpg",
+                    "AssetGUID": "3cb31157f3c27f846bab663f078ce66c"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LoadWnd/bgName.png",
+                    "AssetGUID": "828df9b24fa323e468dfb524b45a2c7c"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LoadWnd/frame_load.png",
+                    "AssetGUID": "099441ef90ee1cf45b6fc5a69ee1d8a4"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LoadWnd/vs.png",
+                    "AssetGUID": "3042b1f93795a394280269f8b0d64e53"
+                }
+            ]
+        },
+        {
+            "BundleName": "defaultpackage_assets_assetpackage_statictextures_lobbywnd.bundle",
+            "FileName": "defaultpackage_assets_assetpackage_statictextures_lobbywnd_5e7f8d5b50369b185e37af79c99557b7.bundle",
+            "FileHash": "5e7f8d5b50369b185e37af79c99557b7",
+            "FileCRC": "a9f0202a",
+            "FileSize": 1376689,
+            "Encrypted": false,
+            "Tags": [
+                "ui"
+            ],
+            "DependBundles": [],
+            "ReferenceBundles": [
+                "defaultpackage_assets_assetpackage_ui_uiprefab.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LobbyWnd/battery.png",
+                    "AssetGUID": "1aef38c60ef0e8a46925cd0549563626"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LobbyWnd/bg_bottom.png",
+                    "AssetGUID": "d942f5ae7f91dd04d993bde5f643ba03"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LobbyWnd/bg_exp.png",
+                    "AssetGUID": "2d0ddc54328674d43ba5fdff4acdbcba"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LobbyWnd/bg_icon.png",
+                    "AssetGUID": "052d8f7e3bb748945a6d2c624a81ab99"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LobbyWnd/bg_lobby.jpg",
+                    "AssetGUID": "c90aaecb2f8b1914ba324a4e9416a965"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LobbyWnd/bg_match.png",
+                    "AssetGUID": "cf07768d739d508488402c85db9b55e9"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LobbyWnd/bg_topbar.png",
+                    "AssetGUID": "4bbc6f9474c13bb48ac8bcaec23acb97"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LobbyWnd/bg_value.png",
+                    "AssetGUID": "3fe6f6dbfed61ed46839b74ae82d600c"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LobbyWnd/btn_cancel.png",
+                    "AssetGUID": "ba43323e36c838043aba1f3cf787c465"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LobbyWnd/btn_friend.png",
+                    "AssetGUID": "5a239cdeb778b5c4aab73cb7cddd7f9f"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LobbyWnd/btn_mail.png",
+                    "AssetGUID": "ae1d877b66ebe3d449070b46c7e3a95d"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LobbyWnd/btn_settings.png",
+                    "AssetGUID": "10cf26016728bfa45a8214da8854d706"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LobbyWnd/btn_video.png",
+                    "AssetGUID": "c30d93bdf4acc4a4786e27ad9ef4b57b"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LobbyWnd/btnMatch.png",
+                    "AssetGUID": "3b8c9e84bbc891d4da6fe9419ae695d1"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LobbyWnd/btnRank.png",
+                    "AssetGUID": "adedb5d9c291e8e4692b9e682cd94252"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LobbyWnd/coin.png",
+                    "AssetGUID": "12ceb55a671254249b0af22221d861e3"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LobbyWnd/diamond.png",
+                    "AssetGUID": "cd2557f1d71ed9e4d8af3ca8be5b2d4b"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LobbyWnd/fg_exp.png",
+                    "AssetGUID": "d0631bb666dd2824aa78929b8f64f03a"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LobbyWnd/icon_player.png",
+                    "AssetGUID": "cbcff2e43423a754681587b2ae51a8ab"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LobbyWnd/ticket.png",
+                    "AssetGUID": "1f00c8aed11746a458566b83e688084b"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LobbyWnd/wifi.png",
+                    "AssetGUID": "244c16ac4e1bb554aab17fce96570b30"
+                }
+            ]
+        },
+        {
+            "BundleName": "defaultpackage_assets_assetpackage_statictextures_loginwnd.bundle",
+            "FileName": "defaultpackage_assets_assetpackage_statictextures_loginwnd_6d8c247b81ec789f241a72a03c55fa29.bundle",
+            "FileHash": "6d8c247b81ec789f241a72a03c55fa29",
+            "FileCRC": "52a389cd",
+            "FileSize": 915868,
+            "Encrypted": false,
+            "Tags": [
+                "ui"
+            ],
+            "DependBundles": [],
+            "ReferenceBundles": [
+                "defaultpackage_assets_assetpackage_ui_uiprefab.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LoginWnd/acct.png",
+                    "AssetGUID": "2baefeb0edef171479ee370821cc24e9"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LoginWnd/bg_input.png",
+                    "AssetGUID": "82472be199f0cdf448fb294f16e96c84"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LoginWnd/bg_login.jpg",
+                    "AssetGUID": "e33c47e539daaaa428d93bf3d0fcffef"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LoginWnd/btn_login.png",
+                    "AssetGUID": "586096e346908bd4593a8868dcffd86d"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LoginWnd/pass.png",
+                    "AssetGUID": "e033ab1f3a8b5504989469dc0da2c1df"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/LoginWnd/title.png",
+                    "AssetGUID": "c49a54ad265480a40b518fcac81ca292"
+                }
+            ]
+        },
+        {
+            "BundleName": "defaultpackage_assets_assetpackage_statictextures_matchwnd.bundle",
+            "FileName": "defaultpackage_assets_assetpackage_statictextures_matchwnd_f8fac482ea24d75beeb4efd9d0d9d58d.bundle",
+            "FileHash": "f8fac482ea24d75beeb4efd9d0d9d58d",
+            "FileCRC": "14f08b26",
+            "FileSize": 677294,
+            "Encrypted": false,
+            "Tags": [
+                "ui"
+            ],
+            "DependBundles": [],
+            "ReferenceBundles": [
+                "defaultpackage_assets_assetpackage_ui_uiprefab.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/MatchWnd/bg_match.jpg",
+                    "AssetGUID": "ace0ea2699bb84a45bf0aa30a26733fd"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/MatchWnd/btn_sure.png",
+                    "AssetGUID": "f87b7c087df997142896e5919947cce1"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/MatchWnd/frame_normal.png",
+                    "AssetGUID": "dc92cbebe12106c40afb016bb4a351ae"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/MatchWnd/frame_sure.png",
+                    "AssetGUID": "5050635ef789fd641a280aa12818978d"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/MatchWnd/icon_0.png",
+                    "AssetGUID": "e3b45a37f683ef74795b1a2b3084f4fe"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/MatchWnd/icon_1.png",
+                    "AssetGUID": "2d6af0b66bcef8948b24f0ab05db9522"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/MatchWnd/iconcCenter.png",
+                    "AssetGUID": "0fd3044c89b18cf42853d869eb50c15a"
+                }
+            ]
+        },
+        {
+            "BundleName": "defaultpackage_assets_assetpackage_statictextures_playwnd.bundle",
+            "FileName": "defaultpackage_assets_assetpackage_statictextures_playwnd_2dd38130abf0720208e247d867f32048.bundle",
+            "FileHash": "2dd38130abf0720208e247d867f32048",
+            "FileCRC": "009ca8af",
+            "FileSize": 354714,
+            "Encrypted": false,
+            "Tags": [
+                "ui"
+            ],
+            "DependBundles": [],
+            "ReferenceBundles": [
+                "defaultpackage_assets_assetpackage_ui_uiprefab.bundle",
+                "defaultpackage_assets_assetpackage_ui_uiprefab_dynamicitem.bundle",
+                "defaultpackage_assets_assetpackage_ui_uiprefab_selectwnd.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/battery.png",
+                    "AssetGUID": "967b0b267fddefe4298f72bcbb136899"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/bg_battleinfo.png",
+                    "AssetGUID": "f97a670ef91dc15438e6094609970919"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/bg_map.png",
+                    "AssetGUID": "523519bd86b24184d8b9936e3dec1ecb"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/btn_chat.png",
+                    "AssetGUID": "12a25d3b7306acc48bc5af9c96ada027"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/Effect/circle.png",
+                    "AssetGUID": "9cc9427ec427e2b49b2f7168c5f208d2"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/Effect/ramp.png",
+                    "AssetGUID": "544029d1280e4f3468ccc7792d56119c"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/enemytowerhpfg.png",
+                    "AssetGUID": "6d62134a743330643a86362dc5061867"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/forbid.png",
+                    "AssetGUID": "57c24aa28c4b726479be5467436dd038"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/frame_skill.png",
+                    "AssetGUID": "d5f950d1e7c3c914c96f4896fa67a3fd"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/hp_sep.png",
+                    "AssetGUID": "a56342f141f48d3418c079ba2ce3ef25"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/hpbg.png",
+                    "AssetGUID": "041f46df89d13bb4a97c22bbfb0f8873"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/income.png",
+                    "AssetGUID": "1b3ca7c2427e9774da8c6d925d583c5a"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/mapKuang.png",
+                    "AssetGUID": "91a9e96c9b476d84c9db6561b6bc27d1"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/MiniMap/blueTower.png",
+                    "AssetGUID": "db4ccf26f865cc343a929c405586fcfa"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/MiniMap/houyi_mapIcon.png",
+                    "AssetGUID": "85a85dbe25425d049824e955cc432daf"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/MiniMap/redHeroMapFrame.png",
+                    "AssetGUID": "9b9dadf8fc9d6a74485744694990415d"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/road.png",
+                    "AssetGUID": "008f54ac0c893114fad0cbf6601633e7"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/selfteamhpfg.png",
+                    "AssetGUID": "d900a9fa46e0c6c47b5ab953d6a97d89"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/selftowerhpbg.png",
+                    "AssetGUID": "58b802c20c5e2484e97bebffafefde1d"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/selftowerhpfg.png",
+                    "AssetGUID": "fd07d68da714b6c40be5e3d6f9eb5101"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/silenceIcon.png",
+                    "AssetGUID": "9d3668848e890b5409b2366f3c5015e7"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/silenceState.png",
+                    "AssetGUID": "b39c0ad3a4a7d7f4e91a60930acc29b6"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/ska.png",
+                    "AssetGUID": "8130875f166c01f4c872efcacf4cd207"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/stick_arrow.png",
+                    "AssetGUID": "97e55c20c70a72c4da11356cb1034a30"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/stick_circle.png",
+                    "AssetGUID": "5b64d3542ad2c4c4f9402040bb225d1b"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/stick_dir.png",
+                    "AssetGUID": "e0eade3e5a06a4e449ec69f03409ff49"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/stick_point.png",
+                    "AssetGUID": "be7a6df9a87580b41b1c806a56a02148"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/wifi.png",
+                    "AssetGUID": "2641aef15a0e99646811e3946da3c1e7"
+                }
+            ]
+        },
+        {
+            "BundleName": "defaultpackage_assets_assetpackage_statictextures_resultwnd.bundle",
+            "FileName": "defaultpackage_assets_assetpackage_statictextures_resultwnd_28525ad35b54e315005bf3eda8aaa3f0.bundle",
+            "FileHash": "28525ad35b54e315005bf3eda8aaa3f0",
+            "FileCRC": "7e0bd5aa",
+            "FileSize": 2998405,
+            "Encrypted": false,
+            "Tags": [
+                "ui"
+            ],
+            "DependBundles": [],
+            "ReferenceBundles": [
+                "defaultpackage_assets_assetpackage_ui_uiprefab.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/ResultWnd/win.png",
+                    "AssetGUID": "8d78a5f4953d82b4f8d89a0c48f2af52"
+                }
+            ]
+        },
+        {
+            "BundleName": "defaultpackage_assets_assetpackage_statictextures_selectwnd.bundle",
+            "FileName": "defaultpackage_assets_assetpackage_statictextures_selectwnd_1fe2e6db534fe6dbb63955731f1ac406.bundle",
+            "FileHash": "1fe2e6db534fe6dbb63955731f1ac406",
+            "FileCRC": "98df1ade",
+            "FileSize": 92521,
+            "Encrypted": false,
+            "Tags": [
+                "ui"
+            ],
+            "DependBundles": [],
+            "ReferenceBundles": [
+                "defaultpackage_assets_assetpackage_ui_uiprefab.bundle",
+                "defaultpackage_assets_assetpackage_ui_uiprefab_selectwnd.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/SelectWnd/btnSure.png",
+                    "AssetGUID": "c2aafd00ba7af594fad30c74acf32181"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/SelectWnd/clockicon.png",
+                    "AssetGUID": "b9c65604cf65ced48b730470ec728def"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/SelectWnd/herobg.png",
+                    "AssetGUID": "efd406f3feb67ec41923056f3fadbbd5"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/SelectWnd/heroselect.png",
+                    "AssetGUID": "400c6a67b6df5984bac08f1ea6770b69"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/SelectWnd/selectGlow.png",
+                    "AssetGUID": "5cd5958eade5e6c458e68b639740e4af"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/SelectWnd/selecttime.png",
+                    "AssetGUID": "854a69d4e39e50e4996aff7b48eea1bd"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/SelectWnd/英雄选择.png",
+                    "AssetGUID": "f6f15866c6e85804fb42bdcf648661d6"
+                }
+            ]
+        },
+        {
+            "BundleName": "defaultpackage_assets_assetpackage_statictextures_startwnd.bundle",
+            "FileName": "defaultpackage_assets_assetpackage_statictextures_startwnd_beb055b8daeb9e0633c3f8e1804352dd.bundle",
+            "FileHash": "beb055b8daeb9e0633c3f8e1804352dd",
+            "FileCRC": "eadf37e7",
+            "FileSize": 1028374,
+            "Encrypted": false,
+            "Tags": [
+                "ui"
+            ],
+            "DependBundles": [],
+            "ReferenceBundles": [
+                "defaultpackage_assets_assetpackage_ui_uiprefab.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/StartWnd/bg_start.jpg",
+                    "AssetGUID": "856c4b5c26e855148a28beda65a793c1"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/StartWnd/btn_area.png",
+                    "AssetGUID": "b2bf7f62d956fb24dabc38e41da76024"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/StartWnd/btn_exit.png",
+                    "AssetGUID": "95a80d06677314145b2fc4ac7fa6b7cb"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/StaticTextures/StartWnd/btn_start.png",
+                    "AssetGUID": "94ffef6888b138d429005a580a4cfc9d"
+                }
+            ]
+        },
+        {
+            "BundleName": "defaultpackage_assets_assetpackage_textures_heroshow.bundle",
+            "FileName": "defaultpackage_assets_assetpackage_textures_heroshow_23a3cc230f92b5b797669e1c8f6577fd.bundle",
+            "FileHash": "23a3cc230f92b5b797669e1c8f6577fd",
+            "FileCRC": "a6778f1b",
+            "FileSize": 10303849,
+            "Encrypted": false,
+            "Tags": [
+                "ui"
+            ],
+            "DependBundles": [],
+            "ReferenceBundles": [
+                "defaultpackage_assets_assetpackage_ui_uiprefab_selectwnd.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/AssetPackage/Textures/HeroShow/arthur_show.jpg",
+                    "AssetGUID": "5da077e7ff5732b4895587900872601e"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/Textures/HeroShow/houyi_show.jpg",
+                    "AssetGUID": "5e41c54432865984186cd2fddb4228b2"
+                }
+            ]
+        },
+        {
+            "BundleName": "defaultpackage_assets_assetpackage_ui_uiprefab.bundle",
+            "FileName": "defaultpackage_assets_assetpackage_ui_uiprefab_6717cdcb348de3d3de97fa3979679312.bundle",
+            "FileHash": "6717cdcb348de3d3de97fa3979679312",
+            "FileCRC": "548dfcf0",
+            "FileSize": 49860,
+            "Encrypted": false,
+            "Tags": [
+                "ui"
+            ],
+            "DependBundles": [
+                "defaultpackage_assets_assetpackage_sprites_skillicon_houyi.bundle",
+                "defaultpackage_assets_assetpackage_statictextures_lobbywnd.bundle",
+                "defaultpackage_assets_assetpackage_statictextures_loginwnd.bundle",
+                "defaultpackage_assets_assetpackage_statictextures_matchwnd.bundle",
+                "defaultpackage_assets_assetpackage_statictextures_playwnd.bundle",
+                "defaultpackage_assets_assetpackage_statictextures_resultwnd.bundle",
+                "defaultpackage_assets_assetpackage_statictextures_selectwnd.bundle",
+                "defaultpackage_assets_assetpackage_statictextures_startwnd.bundle",
+                "defaultpackage_share_assets_assetpackage_ui_uiani.bundle",
+                "defaultpackage_share_assets_resources_resfonts.bundle"
+            ],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/AssetPackage/UI/UIPrefab/HPWnd.prefab",
+                    "AssetGUID": "06f9ffa90171a5545b7f3827d312f77e"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/UI/UIPrefab/LobbyWnd.prefab",
+                    "AssetGUID": "a6ec242bb0287b9459a441ad78d6bdf9"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/UI/UIPrefab/LoginWnd.prefab",
+                    "AssetGUID": "1e208c013a55d4d4d8a81781cf1f0998"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/UI/UIPrefab/MatchWnd.prefab",
+                    "AssetGUID": "3338649629488f140bc31361deb1a25b"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/UI/UIPrefab/PlayWnd.prefab",
+                    "AssetGUID": "a6904fc30642caf41829d7dc95fb5aa9"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/UI/UIPrefab/ResultWnd.prefab",
+                    "AssetGUID": "38bb9b206c9793e44abd54a09c1fa3f6"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/UI/UIPrefab/StartWnd.prefab",
+                    "AssetGUID": "d020abf64d183dd4384cf425c576b171"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/UI/UIPrefab/TipsWnd.prefab",
+                    "AssetGUID": "1808475d061acfb41ac0b4dce318828c"
+                }
+            ]
+        },
+        {
+            "BundleName": "defaultpackage_assets_assetpackage_ui_uiprefab_common.bundle",
+            "FileName": "defaultpackage_assets_assetpackage_ui_uiprefab_common_2e3919448fb10140c19d8a4e4871279f.bundle",
+            "FileHash": "2e3919448fb10140c19d8a4e4871279f",
+            "FileCRC": "b625ce4e",
+            "FileSize": 8792,
+            "Encrypted": false,
+            "Tags": [
+                "ui"
+            ],
+            "DependBundles": [],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/AssetPackage/UI/UIPrefab/Common/Scroll View.prefab",
+                    "AssetGUID": "ab5c056c6e21035418e5e36473749df0"
+                }
+            ]
+        },
+        {
+            "BundleName": "defaultpackage_assets_assetpackage_ui_uiprefab_dynamicitem.bundle",
+            "FileName": "defaultpackage_assets_assetpackage_ui_uiprefab_dynamicitem_4cdf55f8ecd1dde6fedc75fcf3e4d5ae.bundle",
+            "FileHash": "4cdf55f8ecd1dde6fedc75fcf3e4d5ae",
+            "FileCRC": "3b032fe5",
+            "FileSize": 8442,
+            "Encrypted": false,
+            "Tags": [
+                "ui"
+            ],
+            "DependBundles": [
+                "defaultpackage_assets_assetpackage_statictextures_playwnd.bundle",
+                "defaultpackage_share_assets_assetpackage_ui_uiani.bundle",
+                "defaultpackage_share_assets_resources_resfonts.bundle"
+            ],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/AssetPackage/UI/UIPrefab/DynamicItem/ItemHPHero.prefab",
+                    "AssetGUID": "968364017d5864140b4e17b3bf7c9568"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/UI/UIPrefab/DynamicItem/ItemHPSoldier.prefab",
+                    "AssetGUID": "4098098ccb33dea49872daa19819648e"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/UI/UIPrefab/DynamicItem/ItemHPTower.prefab",
+                    "AssetGUID": "3899777f81263884b879c9fee20f14da"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/UI/UIPrefab/DynamicItem/ItemMapIcon.prefab",
+                    "AssetGUID": "15d3c717dd6ccb3439b8a2e1a50ce50d"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/UI/UIPrefab/DynamicItem/ItemMapIconHero.prefab",
+                    "AssetGUID": "f6038722b90ac834eba6d5ac8d510990"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/UI/UIPrefab/DynamicItem/JumpNum.prefab",
+                    "AssetGUID": "5c767d6261a18954aa4636a7fe360866"
+                }
+            ]
+        },
+        {
+            "BundleName": "defaultpackage_assets_assetpackage_ui_uiprefab_loadwnd.bundle",
+            "FileName": "defaultpackage_assets_assetpackage_ui_uiprefab_loadwnd_57cef1d6fe6f76b62778a1f85a4ba6ae.bundle",
+            "FileHash": "57cef1d6fe6f76b62778a1f85a4ba6ae",
+            "FileCRC": "ee1fe018",
+            "FileSize": 15379,
+            "Encrypted": false,
+            "Tags": [
+                "ui"
+            ],
+            "DependBundles": [
+                "defaultpackage_assets_assetpackage_sprites_heroload.bundle",
+                "defaultpackage_assets_assetpackage_statictextures_loadwnd.bundle",
+                "defaultpackage_share_assets_resources_resfonts.bundle"
+            ],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/AssetPackage/UI/UIPrefab/LoadWnd/LoadWnd.prefab",
+                    "AssetGUID": "4442970f0371dcc42a5305e927022ae9"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/UI/UIPrefab/LoadWnd/player.prefab",
+                    "AssetGUID": "b738b3a13d3adb44186d9672462458c2"
+                }
+            ]
+        },
+        {
+            "BundleName": "defaultpackage_assets_assetpackage_ui_uiprefab_selectwnd.bundle",
+            "FileName": "defaultpackage_assets_assetpackage_ui_uiprefab_selectwnd_e6930fe837313d8aa5dd8f36b8f20cc2.bundle",
+            "FileHash": "e6930fe837313d8aa5dd8f36b8f20cc2",
+            "FileCRC": "103c08fc",
+            "FileSize": 17579,
+            "Encrypted": false,
+            "Tags": [
+                "ui"
+            ],
+            "DependBundles": [
+                "defaultpackage_assets_assetpackage_sprites_headicon.bundle",
+                "defaultpackage_assets_assetpackage_sprites_skillicon_arthur.bundle",
+                "defaultpackage_assets_assetpackage_statictextures_playwnd.bundle",
+                "defaultpackage_assets_assetpackage_statictextures_selectwnd.bundle",
+                "defaultpackage_assets_assetpackage_textures_heroshow.bundle",
+                "defaultpackage_share_assets_resources_resfonts.bundle"
+            ],
+            "ReferenceBundles": [],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/AssetPackage/UI/UIPrefab/SelectWnd/ItemHero.prefab",
+                    "AssetGUID": "83b0743a2e8a7224aa88a6e4a4c5ae5c"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/UI/UIPrefab/SelectWnd/SelectWnd.prefab",
+                    "AssetGUID": "91daec01c32f76c4f98172020d3b580f"
+                }
+            ]
+        },
+        {
+            "BundleName": "defaultpackage_share_assets_art_charmodel_materials.bundle",
+            "FileName": "defaultpackage_share_assets_art_charmodel_materials_6ba2e8777cd4846b5144a42c0929ab8d.bundle",
+            "FileHash": "6ba2e8777cd4846b5144a42c0929ab8d",
+            "FileCRC": "778b2913",
+            "FileSize": 21198,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [],
+            "ReferenceBundles": [
+                "defaultpackage_assets_assetpackage_scenes.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/Art/CharModel/Materials/0742.mat",
+                    "AssetGUID": "56a8cd5651da2f547bd7e8dc7196c5bb"
+                },
+                {
+                    "AssetPath": "Assets/Art/CharModel/Materials/0742.tga",
+                    "AssetGUID": "2d1e316b79989264ca5b472e98d41b1b"
+                }
+            ]
+        },
+        {
+            "BundleName": "defaultpackage_share_assets_art_scenemodel.bundle",
+            "FileName": "defaultpackage_share_assets_art_scenemodel_38bd1d3db7408946ea79c1e7ba9c91a1.bundle",
+            "FileHash": "38bd1d3db7408946ea79c1e7ba9c91a1",
+            "FileCRC": "06de79a7",
+            "FileSize": 5345161,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [
+                "defaultpackage_share_assets_art_scenemodel_materials.bundle"
+            ],
+            "ReferenceBundles": [
+                "defaultpackage_assets_assetpackage_scenes.bundle",
+                "defaultpackage_share_assets_resources_resscenes.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/Art/SceneModel/1V1.FBX",
+                    "AssetGUID": "b0b449ee5f48db84eb5f61454c53ee32"
+                }
+            ]
+        },
+        {
+            "BundleName": "defaultpackage_share_assets_art_scenemodel_materials.bundle",
+            "FileName": "defaultpackage_share_assets_art_scenemodel_materials_1b3a9b26c3cdd28c6ffa13815a0dccff.bundle",
+            "FileHash": "1b3a9b26c3cdd28c6ffa13815a0dccff",
+            "FileCRC": "1da75106",
+            "FileSize": 3390056,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [],
+            "ReferenceBundles": [
+                "defaultpackage_assets_assetpackage_scenes.bundle",
+                "defaultpackage_share_assets_art_scenemodel.bundle",
+                "defaultpackage_share_assets_resources_resscenes.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/Art/SceneModel/Materials/1v1_b02.Out.mat",
+                    "AssetGUID": "6e94255df145a3142b59f422bf176ec1"
+                },
+                {
+                    "AssetPath": "Assets/Art/SceneModel/Materials/1v1_b02.Out.png",
+                    "AssetGUID": "7b6588887b8dd2440a113ff877728f7a"
+                },
+                {
+                    "AssetPath": "Assets/Art/SceneModel/Materials/1v1_b03.Out.mat",
+                    "AssetGUID": "1735ef2730600074ca21cef7ad4f6e3a"
+                },
+                {
+                    "AssetPath": "Assets/Art/SceneModel/Materials/1v1_b03.Out.png",
+                    "AssetGUID": "e999df9e4af141b459a48675e5ebade0"
+                },
+                {
+                    "AssetPath": "Assets/Art/SceneModel/Materials/1v1_b04.Out.mat",
+                    "AssetGUID": "7d96a45265237b54897ffaf1a39e7b67"
+                },
+                {
+                    "AssetPath": "Assets/Art/SceneModel/Materials/1v1_b04.Out.png",
+                    "AssetGUID": "a05e38daff732df42a26fd1a4cca285c"
+                },
+                {
+                    "AssetPath": "Assets/Art/SceneModel/Materials/3v3_b_plant.Out.mat",
+                    "AssetGUID": "4c4ce088aeaf7914f83943a157b26640"
+                },
+                {
+                    "AssetPath": "Assets/Art/SceneModel/Materials/3v3_b_plant.Out.png",
+                    "AssetGUID": "566cb5da8da9148438eedbb69ef4f8ed"
+                },
+                {
+                    "AssetPath": "Assets/Art/SceneModel/Materials/3v3_b01.Out.mat",
+                    "AssetGUID": "03fcae96addbfa843a8da312fa1f6b60"
+                },
+                {
+                    "AssetPath": "Assets/Art/SceneModel/Materials/3v3_b01.Out.png",
+                    "AssetGUID": "6c332835888754d40879ceb1a16b5be3"
+                },
+                {
+                    "AssetPath": "Assets/Art/SceneModel/Materials/3v3_plant.Out.mat",
+                    "AssetGUID": "8a074e1b2d4b9d94597ffb4324d46b3e"
+                },
+                {
+                    "AssetPath": "Assets/Art/SceneModel/Materials/3v3_plant.Out.png",
+                    "AssetGUID": "aea41b35e8f996a43be2a5466887366b"
+                },
+                {
+                    "AssetPath": "Assets/Art/SceneModel/Materials/cpt02_fangyuta.Out.mat",
+                    "AssetGUID": "397bf51cb81e9ed4da2d43cebdec792f"
+                },
+                {
+                    "AssetPath": "Assets/Art/SceneModel/Materials/cpt02_fangyuta.Out.png",
+                    "AssetGUID": "59f0aaa08685e3f4eb49a148f2b7fcf1"
+                },
+                {
+                    "AssetPath": "Assets/Art/SceneModel/Materials/cpt02_fangyuta_red.Out.mat",
+                    "AssetGUID": "b68a8e888d7db104eb0168be180941af"
+                },
+                {
+                    "AssetPath": "Assets/Art/SceneModel/Materials/cpt02_fangyuta_red.Out.png",
+                    "AssetGUID": "d2cbe77dfd80f6c4ba7a2d695389a6b0"
+                },
+                {
+                    "AssetPath": "Assets/Art/SceneModel/Materials/cpt02_jidi.Out.mat",
+                    "AssetGUID": "2992eb8031f183d4989aa0f2922d959a"
+                },
+                {
+                    "AssetPath": "Assets/Art/SceneModel/Materials/cpt02_jidi.Out.png",
+                    "AssetGUID": "ba33ed9081bf77241833c6ebcaac42d3"
+                },
+                {
+                    "AssetPath": "Assets/Art/SceneModel/Materials/cpt02_jidi_red.Out.mat",
+                    "AssetGUID": "1aceb32d22095734daf6dc712f2439e2"
+                },
+                {
+                    "AssetPath": "Assets/Art/SceneModel/Materials/cpt02_jidi_red.Out.png",
+                    "AssetGUID": "76aa33e5b680fae4ead41dc3a97dfc40"
+                }
+            ]
+        },
+        {
+            "BundleName": "defaultpackage_share_assets_assetpackage_ui_uiani.bundle",
+            "FileName": "defaultpackage_share_assets_assetpackage_ui_uiani_a108ab16fd5cc4ae7716932579b86ad9.bundle",
+            "FileHash": "a108ab16fd5cc4ae7716932579b86ad9",
+            "FileCRC": "6c795e77",
+            "FileSize": 12121,
+            "Encrypted": false,
+            "Tags": [
+                "ui"
+            ],
+            "DependBundles": [],
+            "ReferenceBundles": [
+                "defaultpackage_assets_assetpackage_ui_uiprefab.bundle",
+                "defaultpackage_assets_assetpackage_ui_uiprefab_dynamicitem.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/AssetPackage/UI/UIAni/ClickEffect.controller",
+                    "AssetGUID": "57033d50d2efaf242939fdc5e1b3927f"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/UI/UIAni/ClickEffectAni.anim",
+                    "AssetGUID": "ab1655a6f33317c4eb6674f5b973f79d"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/UI/UIAni/imgResult.controller",
+                    "AssetGUID": "9d02e383acafba847a860da672433685"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/UI/UIAni/JumpCenter.anim",
+                    "AssetGUID": "eb75adc74556ef94790894fd76004dc0"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/UI/UIAni/JumpLeft.anim",
+                    "AssetGUID": "96d2e9f2032b2164ea9584064190e5b0"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/UI/UIAni/JumpNum.controller",
+                    "AssetGUID": "95215239f8bc99644bd3b773507a9275"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/UI/UIAni/JumpRight.anim",
+                    "AssetGUID": "3168c580477f29c48a75af06c4c0a593"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/UI/UIAni/ResultTweenAni.anim",
+                    "AssetGUID": "72ea0fc768935f14f98df8a8c3d70335"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/UI/UIAni/TipsWindow.anim",
+                    "AssetGUID": "c2c3a7a0668f86c42bd6f35e7e268233"
+                },
+                {
+                    "AssetPath": "Assets/AssetPackage/UI/UIAni/TipsWnd.controller",
+                    "AssetGUID": "9ac791e1e04ba63469ad03aeaf719800"
+                }
+            ]
+        },
+        {
+            "BundleName": "defaultpackage_share_assets_resources_reseffects.bundle",
+            "FileName": "defaultpackage_share_assets_resources_reseffects_f67f1091162a476a0d153114116b84e9.bundle",
+            "FileHash": "f67f1091162a476a0d153114116b84e9",
+            "FileCRC": "cfb17d12",
+            "FileSize": 39092,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [
+                "defaultpackage_share_assets_resources_reseffects_material.bundle",
+                "defaultpackage_share_assets_resources_reseffects_textures.bundle"
+            ],
+            "ReferenceBundles": [
+                "defaultpackage_assets_assetpackage_scenes.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/blueCrystalBomb.prefab",
+                    "AssetGUID": "b89588f22af145f4382d746b6f5c25e9"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/blueTowerBomb.prefab",
+                    "AssetGUID": "304307d43ce9bc44e8a1c6d2086de729"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/redCrystalBomb.prefab",
+                    "AssetGUID": "cd2f6db707d1e9e4ab24966bb977e43c"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/redTowerBomb.prefab",
+                    "AssetGUID": "9be4563f97e497f4aadd82f24a936e1f"
+                }
+            ]
+        },
+        {
+            "BundleName": "defaultpackage_share_assets_resources_reseffects_material.bundle",
+            "FileName": "defaultpackage_share_assets_resources_reseffects_material_1574fb2a258c49914a0814b9cd937ca7.bundle",
+            "FileHash": "1574fb2a258c49914a0814b9cd937ca7",
+            "FileCRC": "edb5d9c6",
+            "FileSize": 21488,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [
+                "defaultpackage_share_assets_resources_reseffects_textures.bundle"
+            ],
+            "ReferenceBundles": [
+                "defaultpackage_assets_assetpackage_scenes.bundle",
+                "defaultpackage_share_assets_resources_reseffects.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Material/069lizi_blue.mat",
+                    "AssetGUID": "df6201693ad958548becaf85cf43c6c4"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Material/069lizi_red.mat",
+                    "AssetGUID": "4fe384717604acd41a2b8fd410a486fb"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Material/4Pebbles.mat",
+                    "AssetGUID": "9e0ed6f917001b84e81b1fd497bae057"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Material/burst.mat",
+                    "AssetGUID": "0d36188846815fc48909864f8ad7c066"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Material/dreamgray.mat",
+                    "AssetGUID": "c6ee64f1d1d07884cb7737344100cd9f"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Material/falloffLightbeam.mat",
+                    "AssetGUID": "be86cba599528984482e31b7e1a051c8"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Material/falloffLightbeamadd.mat",
+                    "AssetGUID": "e340d9d4560a9bc4da05665342761c31"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Material/gjs_cunbu022.mat",
+                    "AssetGUID": "1c207a1153bffdf48aa6eeef03f186c2"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Material/gjs_guangshujian02.mat",
+                    "AssetGUID": "c1d946592d72a694db841482bf4b6c42"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Material/gjs_guangshujian02_fire.mat",
+                    "AssetGUID": "f74f92e12e4f4fb43895bbad8218d7a8"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Material/Lightbeam 1.mat",
+                    "AssetGUID": "82ef56417f12a9649b38a95110f79f9c"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Material/ray_circle2.mat",
+                    "AssetGUID": "fa3033d31e3c61842bb774b58612003a"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Material/simpleSmoke3.mat",
+                    "AssetGUID": "92eacec80bc9f3f41a623ef825b23c7d"
+                }
+            ]
+        },
+        {
+            "BundleName": "defaultpackage_share_assets_resources_reseffects_textures.bundle",
+            "FileName": "defaultpackage_share_assets_resources_reseffects_textures_efbe23c7c8486bea22a8c4c309e24e34.bundle",
+            "FileHash": "efbe23c7c8486bea22a8c4c309e24e34",
+            "FileCRC": "0eb9e849",
+            "FileSize": 61244,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [],
+            "ReferenceBundles": [
+                "defaultpackage_assets_assetpackage_scenes.bundle",
+                "defaultpackage_share_assets_resources_reseffects.bundle",
+                "defaultpackage_share_assets_resources_reseffects_material.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Textures/069lizi_blue.tga",
+                    "AssetGUID": "ee8ab74bde46a8c478503c419485e3f6"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Textures/069lizi_red.tga",
+                    "AssetGUID": "9e09f052b2294f342a5263e6b022d4fe"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Textures/4pebbles.png",
+                    "AssetGUID": "aacacbc1b20d60f4394fc753c8d93d6a"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Textures/Burst.png",
+                    "AssetGUID": "25afdfc1e6f66654881a319203574f4d"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Textures/dreamgray.png",
+                    "AssetGUID": "8ba526152e05dca4db0a0ae679b42623"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Textures/falloffLightbeam.png",
+                    "AssetGUID": "c3aa1a1b74d58c44b8904b4fcb5ab548"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Textures/falloffLightbeamadd.png",
+                    "AssetGUID": "55dd8c10a2253684d94db693dc994b26"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Textures/Lightbeam 1.png",
+                    "AssetGUID": "2dba3b87835bca44c8166c8e5e79b48d"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Textures/Noise_Wave_000.tga",
+                    "AssetGUID": "ca422fa333add1f43ab5326605905660"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Textures/ray_circle2.png",
+                    "AssetGUID": "6e3c7140b5f62f442abb31d6eb674e84"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Textures/simpleSmoke3.png",
+                    "AssetGUID": "12707ac5173525e4a8d3c94ccc075120"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Textures/tx_fs_ptsdg.tga",
+                    "AssetGUID": "b684633402aaff749b7674aab2665bcf"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResEffects/Textures/tx_zhuoshao04.tga",
+                    "AssetGUID": "17b72398b22e8ca4bac8fc6c38db503d"
+                }
+            ]
+        },
+        {
+            "BundleName": "defaultpackage_share_assets_resources_resfonts.bundle",
+            "FileName": "defaultpackage_share_assets_resources_resfonts_45f6b92b1411228c799c4033223f65ed.bundle",
+            "FileHash": "45f6b92b1411228c799c4033223f65ed",
+            "FileCRC": "013d1000",
+            "FileSize": 3562096,
+            "Encrypted": false,
+            "Tags": [
+                "ui"
+            ],
+            "DependBundles": [],
+            "ReferenceBundles": [
+                "defaultpackage_assets_assetpackage_ui_uiprefab.bundle",
+                "defaultpackage_assets_assetpackage_ui_uiprefab_dynamicitem.bundle",
+                "defaultpackage_assets_assetpackage_ui_uiprefab_loadwnd.bundle",
+                "defaultpackage_assets_assetpackage_ui_uiprefab_selectwnd.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/Resources/ResFonts/fSimpleRound.ttf",
+                    "AssetGUID": "f4990f011244ac2439c68cdf72185c4c"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResFonts/fzcyt.ttf",
+                    "AssetGUID": "bf62f97d7ec290444be28ba002329e05"
+                }
+            ]
+        },
+        {
+            "BundleName": "defaultpackage_share_assets_resources_resscenes.bundle",
+            "FileName": "defaultpackage_share_assets_resources_resscenes_b7450c4f32afcdee8a4e2650666a4fb2.bundle",
+            "FileHash": "b7450c4f32afcdee8a4e2650666a4fb2",
+            "FileCRC": "02642e4e",
+            "FileSize": 91291,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundles": [
+                "defaultpackage_share_assets_art_scenemodel.bundle",
+                "defaultpackage_share_assets_art_scenemodel_materials.bundle"
+            ],
+            "ReferenceBundles": [
+                "defaultpackage_assets_assetpackage_scenes.bundle"
+            ],
+            "BundleContents": [
+                {
+                    "AssetPath": "Assets/Resources/ResScenes/1V1.prefab",
+                    "AssetGUID": "54e9c3e2cd2f306458b917a563cd7c6f"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResScenes/mat_blue.mat",
+                    "AssetGUID": "81a3ab6edaa154646b52dd188acc0c39"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResScenes/mat_floor.mat",
+                    "AssetGUID": "0a88a33f6adfe9d42998b6fdad71055a"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResScenes/mat_red.mat",
+                    "AssetGUID": "05a37835c4a1e8f4bb1792176480660d"
+                },
+                {
+                    "AssetPath": "Assets/Resources/ResScenes/mat_wall.mat",
+                    "AssetGUID": "393ffa6990bdd9243b415b97798c35f4"
+                }
+            ]
+        }
+    ],
+    "IndependAssets": [
+        {
+            "AssetPath": "Assets/AssetPackage/StaticTextures/MatchWnd/icon_2.png",
+            "AssetGUID": "7395ba240c1a03d41bfce8cc172788f6",
+            "AssetType": "UnityEngine.Texture2D",
+            "FileSize": 34917
+        },
+        {
+            "AssetPath": "Assets/AssetPackage/StaticTextures/MatchWnd/icon_3.png",
+            "AssetGUID": "4935fec6a1607af4b879ebe909d1d2b7",
+            "AssetType": "UnityEngine.Texture2D",
+            "FileSize": 31613
+        },
+        {
+            "AssetPath": "Assets/AssetPackage/StaticTextures/MatchWnd/icon_4.png",
+            "AssetGUID": "c5776da1e172eb04196491013ab7a03e",
+            "AssetType": "UnityEngine.Texture2D",
+            "FileSize": 36897
+        },
+        {
+            "AssetPath": "Assets/AssetPackage/StaticTextures/MatchWnd/icon_5.png",
+            "AssetGUID": "72c28dec401307440b411a6f7b51c9a1",
+            "AssetType": "UnityEngine.Texture2D",
+            "FileSize": 28328
+        },
+        {
+            "AssetPath": "Assets/AssetPackage/StaticTextures/MatchWnd/icon_6.png",
+            "AssetGUID": "1ce05b4c1a73c5341aaaf810b2dfe9c9",
+            "AssetType": "UnityEngine.Texture2D",
+            "FileSize": 30051
+        },
+        {
+            "AssetPath": "Assets/AssetPackage/StaticTextures/MatchWnd/icon_7.png",
+            "AssetGUID": "1060032846d025e468c8b2b937d7c7d2",
+            "AssetType": "UnityEngine.Texture2D",
+            "FileSize": 17952
+        },
+        {
+            "AssetPath": "Assets/AssetPackage/StaticTextures/MatchWnd/icon_8.png",
+            "AssetGUID": "c6b92c397b88fa649a3848b7062c8155",
+            "AssetType": "UnityEngine.Texture2D",
+            "FileSize": 31323
+        },
+        {
+            "AssetPath": "Assets/AssetPackage/StaticTextures/MatchWnd/icon_9.png",
+            "AssetGUID": "2c42847cc4a19094182ff1e2d7f16ba4",
+            "AssetType": "UnityEngine.Texture2D",
+            "FileSize": 32683
+        },
+        {
+            "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/enemyteamhpfg.png",
+            "AssetGUID": "793c9d3eedaf1e145a479ea06249c048",
+            "AssetType": "UnityEngine.Texture2D",
+            "FileSize": 1245
+        },
+        {
+            "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/enemytowerhpbg.png",
+            "AssetGUID": "a6a28a1566cd50a43bb7c569e5f8c4c1",
+            "AssetType": "UnityEngine.Texture2D",
+            "FileSize": 6411
+        },
+        {
+            "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/frame_map.png",
+            "AssetGUID": "856fe027e3eec6b48b2db51bf0877b73",
+            "AssetType": "UnityEngine.Texture2D",
+            "FileSize": 11715
+        },
+        {
+            "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/knockState.png",
+            "AssetGUID": "f20db03db9ec5c34aa6cccfcb87b4fa5",
+            "AssetType": "UnityEngine.Texture2D",
+            "FileSize": 16883
+        },
+        {
+            "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/MiniMap/arthur_mapIcon.png",
+            "AssetGUID": "b8e47a64cd9195646837411a1aae6892",
+            "AssetType": "UnityEngine.Texture2D",
+            "FileSize": 3883
+        },
+        {
+            "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/MiniMap/blueCrystal.png",
+            "AssetGUID": "d28711334a1c79544a02d68cbe821b0e",
+            "AssetType": "UnityEngine.Texture2D",
+            "FileSize": 1312
+        },
+        {
+            "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/MiniMap/blueHeroMapFrame.png",
+            "AssetGUID": "89cae37a8f695d046a293689e2ce2cdc",
+            "AssetType": "UnityEngine.Texture2D",
+            "FileSize": 5009
+        },
+        {
+            "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/MiniMap/blueSoldier_mapIcon.png",
+            "AssetGUID": "e4c2cd3d3231aa4449be50911ed6815a",
+            "AssetType": "UnityEngine.Texture2D",
+            "FileSize": 1079
+        },
+        {
+            "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/MiniMap/redCrystal.png",
+            "AssetGUID": "d3fc0483e36d7a3458304da3c271f3d8",
+            "AssetType": "UnityEngine.Texture2D",
+            "FileSize": 1183
+        },
+        {
+            "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/MiniMap/redSoldier_mapIcon.png",
+            "AssetGUID": "1d3f37f36066180499a738888676cecb",
+            "AssetType": "UnityEngine.Texture2D",
+            "FileSize": 1119
+        },
+        {
+            "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/MiniMap/redTower.png",
+            "AssetGUID": "e026321b834046f45acb20107d18380c",
+            "AssetType": "UnityEngine.Texture2D",
+            "FileSize": 957
+        },
+        {
+            "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/stunIcon.png",
+            "AssetGUID": "0f91a205cac442a419e3cd01da3a784a",
+            "AssetType": "UnityEngine.Texture2D",
+            "FileSize": 1445
+        },
+        {
+            "AssetPath": "Assets/AssetPackage/StaticTextures/PlayWnd/stunState.png",
+            "AssetGUID": "ed0d1e04652b1aa43a803258a70e129e",
+            "AssetType": "UnityEngine.Texture2D",
+            "FileSize": 17731
+        },
+        {
+            "AssetPath": "Assets/AssetPackage/StaticTextures/ResultWnd/lose.png",
+            "AssetGUID": "3757dfe5e91114a48b2286b9674b1c0b",
+            "AssetType": "UnityEngine.Texture2D",
+            "FileSize": 2008855
+        },
+        {
+            "AssetPath": "Assets/AssetPackage/StaticTextures/SelectWnd/frame1.png",
+            "AssetGUID": "57d7be18202a7ab4e92b60d4beb0b891",
+            "AssetType": "UnityEngine.Texture2D",
+            "FileSize": 3989
+        },
+        {
+            "AssetPath": "Assets/AssetPackage/StaticTextures/SkillGuide/arthur_sk3.png",
+            "AssetGUID": "9dccd310e8f6d2a4b9afe970136ed6e3",
+            "AssetType": "UnityEngine.Texture2D",
+            "FileSize": 8790
+        },
+        {
+            "AssetPath": "Assets/AssetPackage/StaticTextures/SkillGuide/circle_blue_ramp.png",
+            "AssetGUID": "87f07ac27ff42044bb413cb265204144",
+            "AssetType": "UnityEngine.Texture2D",
+            "FileSize": 52894
+        },
+        {
+            "AssetPath": "Assets/AssetPackage/StaticTextures/SkillGuide/circle_fixed.png",
+            "AssetGUID": "3a89ead281c82e545b558bb41036b758",
+            "AssetType": "UnityEngine.Texture2D",
+            "FileSize": 24162
+        },
+        {
+            "AssetPath": "Assets/AssetPackage/StaticTextures/SkillGuide/circle_red_ramp.png",
+            "AssetGUID": "3e07f56f6fba5ad498bb09d8443c3af3",
+            "AssetType": "UnityEngine.Texture2D",
+            "FileSize": 37064
+        },
+        {
+            "AssetPath": "Assets/AssetPackage/StaticTextures/SkillGuide/pos.png",
+            "AssetGUID": "af090afa4bb193945b8fc346a08192c6",
+            "AssetType": "UnityEngine.Texture2D",
+            "FileSize": 53374
+        }
+    ]
+}

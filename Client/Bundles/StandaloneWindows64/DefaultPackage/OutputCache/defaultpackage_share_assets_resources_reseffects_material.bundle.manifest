@@ -1,0 +1,37 @@
+ManifestFileVersion: 0
+CRC: 3333642310
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: aeac6104ad322d46f61e0b294810d7f4
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: b30fce1a9ad74efb72be6c308c56e365
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: aeac6104ad322d46f61e0b294810d7f4
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Resources/ResEffects/Material/gjs_guangshujian02_fire.mat
+- Assets/Resources/ResEffects/Material/ray_circle2.mat
+- Assets/Resources/ResEffects/Material/4Pebbles.mat
+- Assets/Resources/ResEffects/Material/dreamgray.mat
+- Assets/Resources/ResEffects/Material/069lizi_red.mat
+- Assets/Resources/ResEffects/Material/Lightbeam 1.mat
+- Assets/Resources/ResEffects/Material/falloffLightbeamadd.mat
+- Assets/Resources/ResEffects/Material/simpleSmoke3.mat
+- Assets/Resources/ResEffects/Material/gjs_guangshujian02.mat
+- Assets/Resources/ResEffects/Material/burst.mat
+- Assets/Resources/ResEffects/Material/falloffLightbeam.mat
+- Assets/Resources/ResEffects/Material/069lizi_blue.mat
+- Assets/Resources/ResEffects/Material/gjs_cunbu022.mat
+Dependencies:
+- D:/Project/2D_ACT/Client/Bundles/StandaloneWindows64/DefaultPackage/OutputCache/defaultpackage_share_assets_resources_reseffects_textures.bundle

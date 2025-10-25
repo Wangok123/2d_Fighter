@@ -1,0 +1,43 @@
+ManifestFileVersion: 0
+CRC: 779659866
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 55c14654da963e0bfa18689d370aa346
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: b30fce1a9ad74efb72be6c308c56e365
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 55c14654da963e0bfa18689d370aa346
+HashAppended: 0
+ClassTypes:
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/Art/SceneModel/Materials/cpt02_fangyuta_red.Out.mat
+- Assets/Art/SceneModel/Materials/3v3_b01.Out.mat
+- Assets/Art/SceneModel/Materials/cpt02_jidi.Out.mat
+- Assets/Art/SceneModel/Materials/cpt02_jidi.Out.png
+- Assets/Art/SceneModel/Materials/1v1_b04.Out.png
+- Assets/Art/SceneModel/Materials/cpt02_fangyuta_red.Out.png
+- Assets/Art/SceneModel/Materials/cpt02_jidi_red.Out.mat
+- Assets/Art/SceneModel/Materials/cpt02_fangyuta.Out.mat
+- Assets/Art/SceneModel/Materials/1v1_b03.Out.mat
+- Assets/Art/SceneModel/Materials/cpt02_jidi_red.Out.png
+- Assets/Art/SceneModel/Materials/3v3_b_plant.Out.mat
+- Assets/Art/SceneModel/Materials/3v3_plant.Out.mat
+- Assets/Art/SceneModel/Materials/1v1_b02.Out.mat
+- Assets/Art/SceneModel/Materials/1v1_b03.Out.png
+- Assets/Art/SceneModel/Materials/3v3_b_plant.Out.png
+- Assets/Art/SceneModel/Materials/3v3_b01.Out.png
+- Assets/Art/SceneModel/Materials/1v1_b02.Out.png
+- Assets/Art/SceneModel/Materials/cpt02_fangyuta.Out.png
+- Assets/Art/SceneModel/Materials/3v3_plant.Out.png
+- Assets/Art/SceneModel/Materials/1v1_b04.Out.mat
+Dependencies: []

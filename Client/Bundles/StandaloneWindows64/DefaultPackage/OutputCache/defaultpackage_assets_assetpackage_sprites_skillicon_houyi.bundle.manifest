@@ -1,0 +1,25 @@
+ManifestFileVersion: 0
+CRC: 4278486131
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 03ef28a3d5c03744ca5644629aa9e877
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 923768aebf385ad86f7762daa8034951
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 03ef28a3d5c03744ca5644629aa9e877
+HashAppended: 0
+ClassTypes:
+- Class: 213
+  Script: {instanceID: 0}
+- Class: 687078895
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/AssetPackage/Sprites/SkillIcon/houyi/houyi_sk1.png
+- Assets/AssetPackage/Sprites/SkillIcon/houyi/houyi_sk2.png
+- Assets/AssetPackage/Sprites/SkillIcon/houyi/houyi_sk0.png
+- Assets/AssetPackage/Sprites/SkillIcon/houyi/houyi_sk3.png
+Dependencies: []

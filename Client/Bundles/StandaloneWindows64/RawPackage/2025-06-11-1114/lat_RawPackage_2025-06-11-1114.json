@@ -1,0 +1,52 @@
+{
+    "FileVersion": "2.3.1",
+    "EnableAddressable": true,
+    "LocationToLower": false,
+    "IncludeAssetGUID": false,
+    "OutputNameStyle": 0,
+    "BuildBundleType": 3,
+    "BuildPipeline": "RawFileBuildPipeline",
+    "PackageName": "RawPackage",
+    "PackageVersion": "2025-06-11-1114",
+    "PackageNote": "2025/6/11 18:34:40",
+    "AssetList": [
+        {
+            "Address": "demo_tbreward",
+            "AssetPath": "Assets/GenerateDatas/bytes/demo_tbreward.bytes",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 0,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "latcfg_tbhero",
+            "AssetPath": "Assets/GenerateDatas/bytes/latcfg_tbhero.bytes",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        }
+    ],
+    "BundleList": [
+        {
+            "BundleName": "assets_generatedatas_bytes_demo_tbreward_bytes.rawfile",
+            "UnityCRC": 0,
+            "FileHash": "18bdf986d2580d74d38f98b8be526649",
+            "FileCRC": "61e20ed4",
+            "FileSize": 45,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "assets_generatedatas_bytes_latcfg_tbhero_bytes.rawfile",
+            "UnityCRC": 0,
+            "FileHash": "8d4bcafdacbcc0cc99de7a280595ab57",
+            "FileCRC": "7dac8e32",
+            "FileSize": 32,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        }
+    ]
+}

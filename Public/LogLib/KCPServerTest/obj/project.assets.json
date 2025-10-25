@@ -1,0 +1,207 @@
+{
+  "version": 3,
+  "targets": {
+    "net8.0": {
+      "Kcp/2.0.0": {
+        "type": "package",
+        "dependencies": {
+          "System.Memory": "4.5.2"
+        },
+        "compile": {
+          "lib/netstandard2.0/Kcp.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/netstandard2.0/Kcp.dll": {
+            "related": ".pdb;.xml"
+          }
+        }
+      },
+      "System.Memory/4.5.2": {
+        "type": "package",
+        "compile": {
+          "ref/netcoreapp2.1/_._": {}
+        },
+        "runtime": {
+          "lib/netcoreapp2.1/_._": {}
+        }
+      },
+      "KCPExampleProtocol/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.1",
+        "dependencies": {
+          "LATNet": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/KCPExampleProtocol.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/KCPExampleProtocol.dll": {}
+        }
+      },
+      "LATNet/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.1",
+        "dependencies": {
+          "Kcp": "2.0.0"
+        },
+        "compile": {
+          "bin/placeholder/LATNet.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/LATNet.dll": {}
+        }
+      },
+      "LogLib/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.1",
+        "compile": {
+          "bin/placeholder/LogLib.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/LogLib.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Kcp/2.0.0": {
+      "sha512": "mL175rnD6i5yV9L0zeDll04GUKjEsER1NnxJzrBqA+SPNiLX1HNmTSWFgFDit8Vdjvim3r6oCagQ9ad1yn6mew==",
+      "type": "package",
+      "path": "kcp/2.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE",
+        "kcp.2.0.0.nupkg.sha512",
+        "kcp.nuspec",
+        "lib/netstandard1.1/Kcp.dll",
+        "lib/netstandard1.1/Kcp.pdb",
+        "lib/netstandard1.1/Kcp.xml",
+        "lib/netstandard2.0/Kcp.dll",
+        "lib/netstandard2.0/Kcp.pdb",
+        "lib/netstandard2.0/Kcp.xml"
+      ]
+    },
+    "System.Memory/4.5.2": {
+      "sha512": "fvq1GNmUFwbKv+aLVYYdgu/+gc8Nu9oFujOxIjPrsf+meis9JBzTPDL6aP/eeGOz9yPj6rRLUbOjKMpsMEWpNg==",
+      "type": "package",
+      "path": "system.memory/4.5.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/netcoreapp2.1/_._",
+        "lib/netstandard1.1/System.Memory.dll",
+        "lib/netstandard1.1/System.Memory.xml",
+        "lib/netstandard2.0/System.Memory.dll",
+        "lib/netstandard2.0/System.Memory.xml",
+        "ref/netcoreapp2.1/_._",
+        "system.memory.4.5.2.nupkg.sha512",
+        "system.memory.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
+    "KCPExampleProtocol/1.0.0": {
+      "type": "project",
+      "path": "../KCPExampleProtocol/KCPExampleProtocol.csproj",
+      "msbuildProject": "../KCPExampleProtocol/KCPExampleProtocol.csproj"
+    },
+    "LATNet/1.0.0": {
+      "type": "project",
+      "path": "../LATNet/LATNet.csproj",
+      "msbuildProject": "../LATNet/LATNet.csproj"
+    },
+    "LogLib/1.0.0": {
+      "type": "project",
+      "path": "../LogLib/LogLib.csproj",
+      "msbuildProject": "../LogLib/LogLib.csproj"
+    }
+  },
+  "projectFileDependencyGroups": {
+    "net8.0": [
+      "KCPExampleProtocol >= 1.0.0",
+      "LATNet >= 1.0.0",
+      "LogLib >= 1.0.0"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\lenovo\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "D:\\Project\\2D_ACT\\Public\\LogLib\\KCPServerTest\\KCPServerTest.csproj",
+      "projectName": "KCPServerTest",
+      "projectPath": "D:\\Project\\2D_ACT\\Public\\LogLib\\KCPServerTest\\KCPServerTest.csproj",
+      "packagesPath": "C:\\Users\\lenovo\\.nuget\\packages\\",
+      "outputPath": "D:\\Project\\2D_ACT\\Public\\LogLib\\KCPServerTest\\obj\\",
+      "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
+      "configFilePaths": [
+        "C:\\Users\\lenovo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config"
+      ],
+      "originalTargetFrameworks": [
+        "net8.0"
+      ],
+      "sources": {
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net8.0": {
+          "targetAlias": "net8.0",
+          "projectReferences": {
+            "D:\\Project\\2D_ACT\\Public\\LogLib\\KCPExampleProtocol\\KCPExampleProtocol.csproj": {
+              "projectPath": "D:\\Project\\2D_ACT\\Public\\LogLib\\KCPExampleProtocol\\KCPExampleProtocol.csproj"
+            },
+            "D:\\Project\\2D_ACT\\Public\\LogLib\\LATNet\\LATNet.csproj": {
+              "projectPath": "D:\\Project\\2D_ACT\\Public\\LogLib\\LATNet\\LATNet.csproj"
+            },
+            "D:\\Project\\2D_ACT\\Public\\LogLib\\LogLib\\LogLib.csproj": {
+              "projectPath": "D:\\Project\\2D_ACT\\Public\\LogLib\\LogLib\\LogLib.csproj"
+            }
+          }
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
+      }
+    },
+    "frameworks": {
+      "net8.0": {
+        "targetAlias": "net8.0",
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48",
+          "net481"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.404/PortableRuntimeIdentifierGraph.json"
+      }
+    }
+  }
+}

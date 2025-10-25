@@ -1,0 +1,121 @@
+ManifestFileVersion: 0
+CRC: 3710946327
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: b88af424e6e5c981a66ddb5aef3647ba
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: e8103260cfa9ef1d353b6fd823d5380c
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: b88af424e6e5c981a66ddb5aef3647ba
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 91
+  Script: {instanceID: 0}
+- Class: 95
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 4e29b1a8efbd4b44bb3f3716e73f07ff, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 30649d3a9faa99c48a7b1166b86bf2a0, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: e19747de3f5aca642ab2be37e372fb86, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 537ff8a96952b0245ad2d1256be64acb, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: e3b54cfb041b41368f697fb0543f6cf3, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: d199490a83bb2b844b9695cbf13b01ef, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 8af72bca4bcb4856bcb9bf6f48b53ca6, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 9085046f02f69544eb97fd06b6048fe2, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 6c3be16a35674c7e86f62d1882695e1a, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: c4c286a4bce34a8a9eac16d02ab467cf, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 6bf6690d24c64d28a64a3a25390e972f, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1792730092ef4bac9fcdeec43bae05be, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 47a5ec104ec34c398e8d482dd58ab9c9, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: caa82a263b0642729a8ae0b594ab17f8, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 38fd3fd7c9ff7004da46074ece7296c0, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 128
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+- Class: 222
+  Script: {instanceID: 0}
+- Class: 224
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: UnityEngine.CoreModule
+  ClassName: UnityEngine.Events.ArgumentCache
+- AssemblyName: UnityEngine.CoreModule
+  ClassName: UnityEngine.Events.PersistentCallGroup
+- AssemblyName: UnityEngine.CoreModule
+  ClassName: UnityEngine.Events.PersistentListenerMode
+- AssemblyName: UnityEngine.CoreModule
+  ClassName: UnityEngine.RectOffset
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.AnimationTriggers
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.Button/ButtonClickedEvent
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.ColorBlock
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.FontData
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.InputField/EndEditEvent
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.InputField/OnChangeEvent
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.InputField/SubmitEvent
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.MaskableGraphic/CullStateChangedEvent
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.Navigation
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.SpriteState
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.Toggle/ToggleEvent
+Assets:
+- Assets/AssetPackage/UI/UIPrefab/StartWnd.prefab
+- Assets/AssetPackage/UI/UIPrefab/HPWnd.prefab
+- Assets/AssetPackage/UI/UIPrefab/MatchWnd.prefab
+- Assets/AssetPackage/UI/UIPrefab/LoginWnd.prefab
+- Assets/AssetPackage/UI/UIPrefab/ResultWnd.prefab
+- Assets/AssetPackage/UI/UIPrefab/PlayWnd.prefab
+- Assets/AssetPackage/UI/UIPrefab/LobbyWnd.prefab
+- Assets/AssetPackage/UI/UIPrefab/TipsWnd.prefab
+Dependencies:
+- D:/Project/2D_ACT/Client/Bundles/StandaloneWindows64/DefaultPackage/OutputCache/defaultpackage_assets_assetpackage_sprites_skillicon_houyi.bundle
+- D:/Project/2D_ACT/Client/Bundles/StandaloneWindows64/DefaultPackage/OutputCache/defaultpackage_assets_assetpackage_statictextures_lobbywnd.bundle
+- D:/Project/2D_ACT/Client/Bundles/StandaloneWindows64/DefaultPackage/OutputCache/defaultpackage_assets_assetpackage_statictextures_loginwnd.bundle
+- D:/Project/2D_ACT/Client/Bundles/StandaloneWindows64/DefaultPackage/OutputCache/defaultpackage_assets_assetpackage_statictextures_matchwnd.bundle
+- D:/Project/2D_ACT/Client/Bundles/StandaloneWindows64/DefaultPackage/OutputCache/defaultpackage_assets_assetpackage_statictextures_playwnd.bundle
+- D:/Project/2D_ACT/Client/Bundles/StandaloneWindows64/DefaultPackage/OutputCache/defaultpackage_assets_assetpackage_statictextures_resultwnd.bundle
+- D:/Project/2D_ACT/Client/Bundles/StandaloneWindows64/DefaultPackage/OutputCache/defaultpackage_assets_assetpackage_statictextures_selectwnd.bundle
+- D:/Project/2D_ACT/Client/Bundles/StandaloneWindows64/DefaultPackage/OutputCache/defaultpackage_assets_assetpackage_statictextures_startwnd.bundle
+- D:/Project/2D_ACT/Client/Bundles/StandaloneWindows64/DefaultPackage/OutputCache/defaultpackage_share_assets_assetpackage_ui_uiani.bundle
+- D:/Project/2D_ACT/Client/Bundles/StandaloneWindows64/DefaultPackage/OutputCache/defaultpackage_share_assets_resources_resfonts.bundle

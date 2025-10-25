@@ -1,0 +1,25 @@
+ManifestFileVersion: 0
+CRC: 4192881080
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: c41fb36b4e176bf70d3fa4e3fd480a21
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 923768aebf385ad86f7762daa8034951
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: c41fb36b4e176bf70d3fa4e3fd480a21
+HashAppended: 0
+ClassTypes:
+- Class: 213
+  Script: {instanceID: 0}
+- Class: 687078895
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/AssetPackage/Sprites/SkillIcon/arthur/arthur_sk0.png
+- Assets/AssetPackage/Sprites/SkillIcon/arthur/arthur_sk1.png
+- Assets/AssetPackage/Sprites/SkillIcon/arthur/arthur_sk3.png
+- Assets/AssetPackage/Sprites/SkillIcon/arthur/arthur_sk2.png
+Dependencies: []

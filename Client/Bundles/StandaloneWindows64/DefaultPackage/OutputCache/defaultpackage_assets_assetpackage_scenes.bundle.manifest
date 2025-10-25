@@ -1,0 +1,73 @@
+ManifestFileVersion: 0
+CRC: 975615141
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 250f2b256a561be357df9301440a8a49
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: bc56b315cb35300204318df1ab9ce993
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 250f2b256a561be357df9301440a8a49
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 20
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 23
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 33
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 65
+  Script: {instanceID: 0}
+- Class: 104
+  Script: {instanceID: 0}
+- Class: 108
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 0cd44c1031e13a943bb63640046fad76, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 2c2c4f07bb16498b9e95e5d1926ef984, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 7f45d7307b6d455b9ad70b322fa58919, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: dc42784cf147c0c48a680349fa168899, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 934d63576a8144b3810b88bb4826d422, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 136
+  Script: {instanceID: 0}
+- Class: 157
+  Script: {instanceID: 0}
+- Class: 196
+  Script: {instanceID: 0}
+- Class: 198
+  Script: {instanceID: 0}
+- Class: 199
+  Script: {instanceID: 0}
+- Class: 223
+  Script: {instanceID: 0}
+- Class: 224
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/AssetPackage/Scenes/Loading.unity
+- Assets/AssetPackage/Scenes/map_102.unity
+- Assets/AssetPackage/Scenes/map_101.unity
+Dependencies:
+- D:/Project/2D_ACT/Client/Bundles/StandaloneWindows64/DefaultPackage/OutputCache/defaultpackage_share_assets_art_charmodel_materials.bundle
+- D:/Project/2D_ACT/Client/Bundles/StandaloneWindows64/DefaultPackage/OutputCache/defaultpackage_share_assets_resources_reseffects.bundle
+- D:/Project/2D_ACT/Client/Bundles/StandaloneWindows64/DefaultPackage/OutputCache/defaultpackage_share_assets_resources_resscenes.bundle

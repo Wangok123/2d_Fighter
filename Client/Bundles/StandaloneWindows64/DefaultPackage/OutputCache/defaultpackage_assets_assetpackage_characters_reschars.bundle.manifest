@@ -1,0 +1,58 @@
+ManifestFileVersion: 0
+CRC: 1321089583
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 1725d31f8f6b76d5a2013c4158578ee9
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: 7624f22483871e2274f65bb072f70977
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 1725d31f8f6b76d5a2013c4158578ee9
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 4
+  Script: {instanceID: 0}
+- Class: 21
+  Script: {instanceID: 0}
+- Class: 43
+  Script: {instanceID: 0}
+- Class: 48
+  Script: {instanceID: 0}
+- Class: 74
+  Script: {instanceID: 0}
+- Class: 82
+  Script: {instanceID: 0}
+- Class: 111
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: 17f9a553595d4fe5a9e61ea91d926a1f, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 136
+  Script: {instanceID: 0}
+- Class: 137
+  Script: {instanceID: 0}
+- Class: 198
+  Script: {instanceID: 0}
+- Class: 199
+  Script: {instanceID: 0}
+- Class: 212
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers: []
+Assets:
+- Assets/AssetPackage/Characters/ResChars/houyi.prefab
+- Assets/AssetPackage/Characters/ResChars/xb_red_yc.prefab
+- Assets/AssetPackage/Characters/ResChars/xb_blue_yc.prefab
+- Assets/AssetPackage/Characters/ResChars/arthur.prefab
+- Assets/AssetPackage/Characters/ResChars/xb_blue_jz.prefab
+- Assets/AssetPackage/Characters/ResChars/xb_red_jz.prefab
+Dependencies:
+- D:/Project/2D_ACT/Client/Bundles/StandaloneWindows64/DefaultPackage/OutputCache/defaultpackage_assets_assetpackage_statictextures_skillguide.bundle
+- D:/Project/2D_ACT/Client/Bundles/StandaloneWindows64/DefaultPackage/OutputCache/defaultpackage_share_assets_art_charmodel.bundle
+- D:/Project/2D_ACT/Client/Bundles/StandaloneWindows64/DefaultPackage/OutputCache/defaultpackage_share_assets_art_charmodel_materials.bundle

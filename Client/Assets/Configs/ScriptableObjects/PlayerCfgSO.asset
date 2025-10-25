@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 835efb41fa51457a970b4ae3a9e28879, type: 3}
+  m_Name: PlayerCfgSO
+  m_EditorClassIdentifier: 
+  moveSpeed: 8
+  jumpForce: 15
+  airSpeedMultiplier: 0.8
+  dashTime: 0.2
+  dashSpeed: 25
+  dashCooldown: 1
+  wallSlideSpeedMultiplier: 0.7
+  wallJumpForce: {x: 5, y: 10}
+  wallJumpCooldown: 0.3
+  attackSlideTime: 0.1
+  attackMovement:
+  - {x: 3, y: 0}
+  - {x: 1, y: 0}
+  - {x: 4, y: 0}
+  comboResetTime: 0.6

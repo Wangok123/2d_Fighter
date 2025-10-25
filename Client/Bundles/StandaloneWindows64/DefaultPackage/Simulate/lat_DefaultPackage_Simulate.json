@@ -1,0 +1,786 @@
+{
+    "FileVersion": "2.3.1",
+    "EnableAddressable": true,
+    "LocationToLower": false,
+    "IncludeAssetGUID": false,
+    "OutputNameStyle": 0,
+    "BuildBundleType": 1,
+    "BuildPipeline": "EditorSimulateBuildPipeline",
+    "PackageName": "DefaultPackage",
+    "PackageVersion": "Simulate",
+    "PackageNote": "2025/7/29 20:58:51",
+    "AssetList": [
+        {
+            "Address": "headicon",
+            "AssetPath": "Assets/AssetPackage/Atlas/headicon.spriteatlasv2",
+            "AssetGUID": "",
+            "AssetTags": [
+                "ui"
+            ],
+            "BundleID": 0,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "heroload",
+            "AssetPath": "Assets/AssetPackage/Atlas/heroload.spriteatlasv2",
+            "AssetGUID": "",
+            "AssetTags": [
+                "ui"
+            ],
+            "BundleID": 0,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "skillicon",
+            "AssetPath": "Assets/AssetPackage/Atlas/skillicon.spriteatlasv2",
+            "AssetGUID": "",
+            "AssetTags": [
+                "ui"
+            ],
+            "BundleID": 0,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "audios_arthur_sk1_hit",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/arthur_sk1_hit.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "audios_arthur_sk1_rls",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/arthur_sk1_rls.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "audios_arthur_sk1_rls2",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/arthur_sk1_rls2.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "audios_arthur_sk2_rls",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/arthur_sk2_rls.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "audios_arthur_sk3_rls",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/arthur_sk3_rls.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "audios_arthur_ska_hit",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/arthur_ska_hit.wav",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "audios_arthur_ska_rls",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/arthur_ska_rls.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "audios_arthur_slogan1",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/arthur_slogan1.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "audios_arthur_slogan2",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/arthur_slogan2.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "audios_arthur_slogan3",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/arthur_slogan3.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "audios_battle",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/battle.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "audios_com_cd_ok",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/com_cd_ok.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "audios_com_click1",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/com_click1.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "audios_com_click2",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/com_click2.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "audios_com_hit1",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/com_hit1.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "audios_com_hit2",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/com_hit2.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "audios_defeat",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/defeat.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "audios_destroyenemytower",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/destroyEnemyTower.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "audios_firstblood",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/firstblood.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "audios_houyi_multi_hit",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/houyi_multi_hit.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "audios_houyi_sk1_rls",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/houyi_sk1_rls.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "audios_houyi_sk2_rls",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/houyi_sk2_rls.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "audios_houyi_sk3_hit",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/houyi_sk3_hit.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "audios_houyi_sk3_rls",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/houyi_sk3_rls.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "audios_houyi_ska_multiarrow",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/houyi_ska_multiarrow.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "audios_houyi_ska_rls",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/houyi_ska_rls.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "audios_houyi_slogan1",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/houyi_slogan1.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "audios_houyi_slogan2",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/houyi_slogan2.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "audios_houyi_slogan3",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/houyi_slogan3.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "audios_killenemy",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/killEnemy.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "audios_load",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/load.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "audios_loginbtnclick",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/loginBtnClick.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "audios_main",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/main.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "audios_matchbtnclick",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/matchBtnClick.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "audios_matchreminder",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/matchReminder.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "audios_matchsureclick",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/matchSureClick.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "audios_selectheroclick",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/selectHeroClick.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "audios_selfcrystalhurt",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/selfCrystalHurt.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "audios_selfdeath",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/selfDeath.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "audios_selftowerdestroy",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/selfTowerDestroy.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "audios_tower_ska_hit",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/tower_ska_hit.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "audios_tower_ska_rls",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/tower_ska_rls.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "audios_victory",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/victory.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "audios_welcombattle",
+            "AssetPath": "Assets/AssetPackage/Audios/ResAudio/welcombattle.mp3",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 1,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "arthur",
+            "AssetPath": "Assets/AssetPackage/Characters/ResChars/arthur.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 2,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "houyi",
+            "AssetPath": "Assets/AssetPackage/Characters/ResChars/houyi.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 2,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "xb_blue_jz",
+            "AssetPath": "Assets/AssetPackage/Characters/ResChars/xb_blue_jz.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 2,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "xb_blue_yc",
+            "AssetPath": "Assets/AssetPackage/Characters/ResChars/xb_blue_yc.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 2,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "xb_red_jz",
+            "AssetPath": "Assets/AssetPackage/Characters/ResChars/xb_red_jz.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 2,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "xb_red_yc",
+            "AssetPath": "Assets/AssetPackage/Characters/ResChars/xb_red_yc.prefab",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 2,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "Loading",
+            "AssetPath": "Assets/AssetPackage/Scenes/Loading.unity",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 3,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "map_101",
+            "AssetPath": "Assets/AssetPackage/Scenes/map_101.unity",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 3,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "map_102",
+            "AssetPath": "Assets/AssetPackage/Scenes/map_102.unity",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 3,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "arthur_show",
+            "AssetPath": "Assets/AssetPackage/Textures/HeroShow/arthur_show.jpg",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 4,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "houyi_show",
+            "AssetPath": "Assets/AssetPackage/Textures/HeroShow/houyi_show.jpg",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 4,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "UI_Joystick",
+            "AssetPath": "Assets/AssetPackage/UI/UIPrefab/Common/Joystick.prefab",
+            "AssetGUID": "",
+            "AssetTags": [
+                "ui"
+            ],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "UI_Scroll View",
+            "AssetPath": "Assets/AssetPackage/UI/UIPrefab/Common/Scroll View.prefab",
+            "AssetGUID": "",
+            "AssetTags": [
+                "ui"
+            ],
+            "BundleID": 6,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "UI_ItemHPHero",
+            "AssetPath": "Assets/AssetPackage/UI/UIPrefab/DynamicItem/ItemHPHero.prefab",
+            "AssetGUID": "",
+            "AssetTags": [
+                "ui"
+            ],
+            "BundleID": 7,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "UI_ItemHPSoldier",
+            "AssetPath": "Assets/AssetPackage/UI/UIPrefab/DynamicItem/ItemHPSoldier.prefab",
+            "AssetGUID": "",
+            "AssetTags": [
+                "ui"
+            ],
+            "BundleID": 7,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "UI_ItemHPTower",
+            "AssetPath": "Assets/AssetPackage/UI/UIPrefab/DynamicItem/ItemHPTower.prefab",
+            "AssetGUID": "",
+            "AssetTags": [
+                "ui"
+            ],
+            "BundleID": 7,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "UI_ItemMapIcon",
+            "AssetPath": "Assets/AssetPackage/UI/UIPrefab/DynamicItem/ItemMapIcon.prefab",
+            "AssetGUID": "",
+            "AssetTags": [
+                "ui"
+            ],
+            "BundleID": 7,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "UI_ItemMapIconHero",
+            "AssetPath": "Assets/AssetPackage/UI/UIPrefab/DynamicItem/ItemMapIconHero.prefab",
+            "AssetGUID": "",
+            "AssetTags": [
+                "ui"
+            ],
+            "BundleID": 7,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "UI_JumpNum",
+            "AssetPath": "Assets/AssetPackage/UI/UIPrefab/DynamicItem/JumpNum.prefab",
+            "AssetGUID": "",
+            "AssetTags": [
+                "ui"
+            ],
+            "BundleID": 7,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "UI_HPWnd",
+            "AssetPath": "Assets/AssetPackage/UI/UIPrefab/HPWnd.prefab",
+            "AssetGUID": "",
+            "AssetTags": [
+                "ui"
+            ],
+            "BundleID": 5,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "UI_LoadWnd",
+            "AssetPath": "Assets/AssetPackage/UI/UIPrefab/LoadWnd/LoadWnd.prefab",
+            "AssetGUID": "",
+            "AssetTags": [
+                "ui"
+            ],
+            "BundleID": 8,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "UI_player",
+            "AssetPath": "Assets/AssetPackage/UI/UIPrefab/LoadWnd/player.prefab",
+            "AssetGUID": "",
+            "AssetTags": [
+                "ui"
+            ],
+            "BundleID": 8,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "UI_LobbyWnd",
+            "AssetPath": "Assets/AssetPackage/UI/UIPrefab/LobbyWnd.prefab",
+            "AssetGUID": "",
+            "AssetTags": [
+                "ui"
+            ],
+            "BundleID": 5,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "UI_LoginWnd",
+            "AssetPath": "Assets/AssetPackage/UI/UIPrefab/LoginWnd.prefab",
+            "AssetGUID": "",
+            "AssetTags": [
+                "ui"
+            ],
+            "BundleID": 5,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "UI_MatchWnd",
+            "AssetPath": "Assets/AssetPackage/UI/UIPrefab/MatchWnd.prefab",
+            "AssetGUID": "",
+            "AssetTags": [
+                "ui"
+            ],
+            "BundleID": 5,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "UI_PlayWnd",
+            "AssetPath": "Assets/AssetPackage/UI/UIPrefab/PlayWnd.prefab",
+            "AssetGUID": "",
+            "AssetTags": [
+                "ui"
+            ],
+            "BundleID": 5,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "UI_ResultWnd",
+            "AssetPath": "Assets/AssetPackage/UI/UIPrefab/ResultWnd.prefab",
+            "AssetGUID": "",
+            "AssetTags": [
+                "ui"
+            ],
+            "BundleID": 5,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "UI_ItemHero",
+            "AssetPath": "Assets/AssetPackage/UI/UIPrefab/SelectWnd/ItemHero.prefab",
+            "AssetGUID": "",
+            "AssetTags": [
+                "ui"
+            ],
+            "BundleID": 9,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "UI_SelectWnd",
+            "AssetPath": "Assets/AssetPackage/UI/UIPrefab/SelectWnd/SelectWnd.prefab",
+            "AssetGUID": "",
+            "AssetTags": [
+                "ui"
+            ],
+            "BundleID": 9,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "UI_StartWnd",
+            "AssetPath": "Assets/AssetPackage/UI/UIPrefab/StartWnd.prefab",
+            "AssetGUID": "",
+            "AssetTags": [
+                "ui"
+            ],
+            "BundleID": 5,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "UI_TipsWnd",
+            "AssetPath": "Assets/AssetPackage/UI/UIPrefab/TipsWnd.prefab",
+            "AssetGUID": "",
+            "AssetTags": [
+                "ui"
+            ],
+            "BundleID": 5,
+            "DependBundleIDs": []
+        }
+    ],
+    "BundleList": [
+        {
+            "BundleName": "defaultpackage_assets_assetpackage_atlas.bundle",
+            "UnityCRC": 0,
+            "FileHash": "7d4ec2dbafbf5042d0c683362e56e31e",
+            "FileCRC": "00000000",
+            "FileSize": 1272,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
+            "UnityCRC": 0,
+            "FileHash": "7cb6e7f3d3b8c05ffca830bc95bb81b5",
+            "FileCRC": "00000000",
+            "FileSize": 10249557,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "defaultpackage_assets_assetpackage_characters_reschars.bundle",
+            "UnityCRC": 0,
+            "FileHash": "17a96d4f2193323656fe929bfef94ae8",
+            "FileCRC": "00000000",
+            "FileSize": 985664,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "defaultpackage_assets_assetpackage_scenes.bundle",
+            "UnityCRC": 0,
+            "FileHash": "684d5e568401476942884612b449b003",
+            "FileCRC": "00000000",
+            "FileSize": 223857,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "defaultpackage_assets_assetpackage_textures_heroshow.bundle",
+            "UnityCRC": 0,
+            "FileHash": "5ee933e2a6a8e29b6d664d3ff41eb77a",
+            "FileCRC": "00000000",
+            "FileSize": 323388,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "defaultpackage_assets_assetpackage_ui_uiprefab.bundle",
+            "UnityCRC": 0,
+            "FileHash": "e2d99957bb532345aa6b87e91239969b",
+            "FileCRC": "00000000",
+            "FileSize": 438190,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "defaultpackage_assets_assetpackage_ui_uiprefab_common.bundle",
+            "UnityCRC": 0,
+            "FileHash": "490f77b17dfdbc8c5c6aeb4e87245136",
+            "FileCRC": "00000000",
+            "FileSize": 23118,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "defaultpackage_assets_assetpackage_ui_uiprefab_dynamicitem.bundle",
+            "UnityCRC": 0,
+            "FileHash": "4b386fa041c22cb94232b5337011e51c",
+            "FileCRC": "00000000",
+            "FileSize": 60821,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "defaultpackage_assets_assetpackage_ui_uiprefab_loadwnd.bundle",
+            "UnityCRC": 0,
+            "FileHash": "bcc25d6602ca6bad02c049658f9e6f30",
+            "FileCRC": "00000000",
+            "FileSize": 78529,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "defaultpackage_assets_assetpackage_ui_uiprefab_selectwnd.bundle",
+            "UnityCRC": 0,
+            "FileHash": "6364741d072e1147269e6382f0fa93d2",
+            "FileCRC": "00000000",
+            "FileSize": 73272,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        }
+    ]
+}

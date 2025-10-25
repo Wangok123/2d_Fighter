@@ -1,0 +1,711 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Runtime.CompilerServices;
+
+namespace Core.Utils
+{
+    public static class ArrayUtil
+    {
+        // int[]和byte[]可提供额外支持
+
+        #region equals/hashcode
+
+        /// <summary>
+        /// 比较两个数组的相等性 -- 比较所有元素
+        /// </summary>
+        /// <param name="objA"></param>
+        /// <param name="objB"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        public static bool Equals<T>(T[]? objA, T[]? objB)
+        {
+            if (objA == objB)
+            {
+                return true;
+            }
+
+            if (objA == null || objB == null || objA.Length != objB.Length)
+            {
+                return false;
+            }
+#if NET6_0_OR_GREATER
+        ReadOnlySpan<T> first = objA;
+        ReadOnlySpan<T> second = objB;
+        return first.SequenceEqual(second);
+#else
+            EqualityComparer<T> comparer = EqualityComparer<T>.Default;
+            for (int i = 0, len = objA.Length; i < len; i++)
+            {
+                if (!comparer.Equals(objA[i], objB[i]))
+                {
+                    return false;
+                }
+            }
+
+            return true;
+#endif
+        }
+
+        public static bool Equals(byte[]? objA, byte[]? objB)
+        {
+            if (objA == objB)
+            {
+                return true;
+            }
+
+            if (objA == null || objB == null || objA.Length != objB.Length)
+            {
+                return false;
+            }
+#if NET6_0_OR_GREATER
+        ReadOnlySpan<byte> first = objA;
+        ReadOnlySpan<byte> second = objB;
+        return first.SequenceEqual(second);
+#else
+            for (int i = 0, len = objA.Length; i < len; i++)
+            {
+                if (objA[i] != objB[i])
+                {
+                    return false;
+                }
+            }
+
+            return true;
+#endif
+        }
+
+        public static bool Equals(int[]? objA, int[]? objB)
+        {
+            if (objA == objB)
+            {
+                return true;
+            }
+
+            if (objA == null || objB == null || objA.Length != objB.Length)
+            {
+                return false;
+            }
+#if NET6_0_OR_GREATER
+        ReadOnlySpan<int> first = objA;
+        ReadOnlySpan<int> second = objB;
+        return first.SequenceEqual(second);
+#else
+            for (int i = 0, len = objA.Length; i < len; i++)
+            {
+                if (objA[i] != objB[i])
+                {
+                    return false;
+                }
+            }
+
+            return true;
+#endif
+        }
+        // HashCode
+
+        public static int HashCode<T>(T?[]? array) where T : class
+        {
+            if (array == null)
+            {
+                return 0;
+            }
+
+            int r = 1;
+            for (int i = 0; i < array.Length; i++)
+            {
+                T e = array[i];
+                r = r * 31 + (e == null ? 0 : e.GetHashCode());
+            }
+
+            return r;
+        }
+
+        public static int HashCode<T>(T?[]? array, Func<T, int> hashFunc)
+        {
+            if (array == null)
+            {
+                return 0;
+            }
+
+            int r = 1;
+            for (int i = 0; i < array.Length; i++)
+            {
+                T e = array[i];
+                r = r * 31 + hashFunc(e);
+            }
+
+            return r;
+        }
+
+        public static int HashCode(byte[]? array)
+        {
+            if (array == null)
+            {
+                return 0;
+            }
+
+            int r = 1;
+            for (int i = 0; i < array.Length; i++)
+            {
+                r = r * 31 + array[i];
+            }
+
+            return r;
+        }
+
+        public static int HashCode(int[]? array)
+        {
+            if (array == null)
+            {
+                return 0;
+            }
+
+            int r = 1;
+            for (int i = 0; i < array.Length; i++)
+            {
+                r = r * 31 + array[i];
+            }
+
+            return r;
+        }
+
+        #endregion
+
+#nullable disable
+
+        #region index
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int IndexOf<T>(T[] list, T element, IEqualityComparer<T> comparer = null)
+        {
+            return IndexOf(list, element, 0, list.Length, comparer);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int LastIndexOf<T>(T[] list, T element, IEqualityComparer<T> comparer = null)
+        {
+            return LastIndexOf(list, element, 0, list.Length, comparer);
+        }
+
+        /** 查对象在数组中的下标 */
+        public static int IndexOf<T>(T[] list, T element, int start, int end, IEqualityComparer<T> comparer = null)
+        {
+            if (list == null) throw new ArgumentNullException(nameof(list));
+            if (!typeof(T).IsValueType && element == null)
+            {
+                // 否则可能装箱
+                for (int i = start; i < end; i++)
+                {
+                    if (list[i] == null)
+                    {
+                        return i;
+                    }
+                }
+            }
+            else
+            {
+                if (comparer == null)
+                {
+                    comparer = EqualityComparer<T>.Default;
+                }
+
+                for (int i = start; i < end; i++)
+                {
+                    if (comparer.Equals(element, list[i]))
+                    {
+                        return i;
+                    }
+                }
+            }
+
+            return -1;
+        }
+
+        /** 反向查对象在数组中的下标 */
+        public static int LastIndexOf<T>(T[] list, T element, int start, int end, IEqualityComparer<T> comparer = null)
+        {
+            if (!typeof(T).IsValueType && element == null)
+            {
+                // 否则可能装箱
+                for (int i = end - 1; i >= start; i--)
+                {
+                    if (list[i] == null)
+                    {
+                        return i;
+                    }
+                }
+            }
+            else
+            {
+                if (comparer == null)
+                {
+                    comparer = EqualityComparer<T>.Default;
+                }
+
+                for (int i = end - 1; i >= start; i--)
+                {
+                    if (comparer.Equals(element, list[i]))
+                    {
+                        return i;
+                    }
+                }
+            }
+
+            return -1;
+        }
+
+        #endregion
+
+        #region indexRef
+
+        /** 查询List中是否包含指定对象引用 */
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static bool ContainsRef<T>(T[] list, T element) where T : class
+        {
+            return IndexOfRef(list, element, 0, list.Length) >= 0;
+        }
+
+        /** 查对象引用在数组中的下标 */
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int IndexOfRef<T>(T[] list, object element) where T : class
+        {
+            return IndexOfRef(list, element, 0, list.Length);
+        }
+
+        /** 反向查对象引用在数组中的下标 */
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int LastIndexOfRef<T>(T[] list, object element) where T : class
+        {
+            return LastIndexOfRef(list, element, 0, list.Length);
+        }
+
+        /// <summary>
+        /// 查对象引用在数组中的下标
+        /// </summary>
+        /// <param name="list">数组</param>
+        /// <param name="element">要查找的元素</param>
+        /// <param name="start">开始下标，包含</param>
+        /// <param name="end">结束下标，不包含</param>
+        /// <typeparam name="T"></typeparam>
+        public static int IndexOfRef<T>(T[] list, object element, int start, int end) where T : class
+        {
+            if (list == null) throw new ArgumentNullException(nameof(list));
+            if (element == null)
+            {
+                for (int i = start; i < end; i++)
+                {
+                    if (list[i] == null)
+                    {
+                        return i;
+                    }
+                }
+            }
+            else
+            {
+                for (int i = start; i < end; i++)
+                {
+                    if (element == list[i])
+                    {
+                        return i;
+                    }
+                }
+            }
+
+            return -1;
+        }
+
+        /// <summary>
+        /// 反向查对象引用在数组中的下标
+        /// </summary>
+        /// <param name="list">数组</param>
+        /// <param name="element">要查找的元素</param>
+        /// <param name="start">开始下标，包含</param>
+        /// <param name="end">结束下标，不包含</param>
+        /// <typeparam name="T"></typeparam>
+        public static int LastIndexOfRef<T>(T[] list, object element, int start, int end) where T : class
+        {
+            if (element == null)
+            {
+                for (int i = end - 1; i >= start; i--)
+                {
+                    if (list[i] == null)
+                    {
+                        return i;
+                    }
+                }
+            }
+            else
+            {
+                for (int i = end - 1; i >= start; i--)
+                {
+                    if (element == list[i])
+                    {
+                        return i;
+                    }
+                }
+            }
+
+            return -1;
+        }
+
+        #endregion
+
+        #region indexCustom
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int IndexOfCustom<T>(T[] list, Predicate<T> filter)
+        {
+            return IndexOfCustom(list, filter, 0, list.Length);
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int LastIndexOfCustom<T>(T[] list, Predicate<T> filter)
+        {
+            return LastIndexOfCustom(list, filter, 0, list.Length);
+        }
+
+        /// <summary>
+        /// 查对象引用在数组中的下标
+        /// </summary>
+        /// <param name="list">数组</param>
+        /// <param name="filter">筛选条件</param>
+        /// <param name="start">开始下标，包含</param>
+        /// <param name="end">结束下标，不包含</param>
+        /// <typeparam name="T"></typeparam>
+        public static int IndexOfCustom<T>(T[] list, Predicate<T> filter, int start, int end)
+        {
+            for (int idx = start; idx < end; idx++)
+            {
+                if (filter(list[idx]))
+                {
+                    return idx;
+                }
+            }
+
+            return -1;
+        }
+
+        /// <summary>
+        /// 反向查对象引用在数组中的下标
+        /// </summary>
+        /// <param name="list">数组</param>
+        /// <param name="filter">筛选条件</param>
+        /// <param name="start">开始下标，包含</param>
+        /// <param name="end">结束下标，不包含</param>
+        /// <typeparam name="T"></typeparam>
+        public static int LastIndexOfCustom<T>(T[] list, Predicate<T> filter, int start, int end)
+        {
+            for (int i = end - 1; i >= start; i--)
+            {
+                if (filter(list[i]))
+                {
+                    return i;
+                }
+            }
+
+            return -1;
+        }
+
+        #endregion
+
+        #region binary-search
+
+        /// <summary>
+        /// 如果元素存在，则返回元素对应的下标；
+        /// 如果元素不存在，则返回(-(insertion point) - 1)
+        /// 即： (index + 1) * -1 可得应当插入的下标。 
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int BinarySearch(int[] array, int value)
+        {
+            return ArraySortHelper.BinarySearch(array, 0, array.Length, value);
+        }
+
+        /// <summary>
+        /// 二分搜索
+        /// </summary>
+        /// <param name="array">数组</param>
+        /// <param name="value">要查找的元素</param>
+        /// <param name="fromIndex">包含</param>
+        /// <param name="toIndex">不包含</param>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int BinarySearch(int[] array, int value, int fromIndex, int toIndex)
+        {
+            RangeCheck(array.Length, fromIndex, toIndex);
+            return ArraySortHelper.BinarySearch(array, fromIndex, toIndex, value);
+        }
+
+        /// <summary>
+        /// 如果元素存在，则返回元素对应的下标；
+        /// 如果元素不存在，则返回(-(insertion point) - 1)
+        /// 即： (index + 1) * -1 可得应当插入的下标。 
+        /// </summary>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int BinarySearch<T>(T[] array, T value, Comparer<T> comparer)
+        {
+            return ArraySortHelper.BinarySearch(array, 0, array.Length, value, comparer);
+        }
+
+        /// <summary>
+        /// 二分搜索
+        /// </summary>
+        /// <param name="array">数组</param>
+        /// <param name="value">要查找的元素</param>
+        /// <param name="comparer">比较器</param>
+        /// <param name="fromIndex">包含</param>
+        /// <param name="toIndex">不包含</param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int BinarySearch<T>(T[] array, T value, Comparer<T> comparer, int fromIndex, int toIndex)
+        {
+            RangeCheck(array.Length, fromIndex, toIndex);
+            return ArraySortHelper.BinarySearch(array, fromIndex, toIndex, value, comparer);
+        }
+
+        /// <summary>
+        /// 自定义二分查找(适用无法构建T时)
+        /// </summary>
+        /// <param name="array"></param>
+        /// <param name="comparer">比较器</param>
+        /// <typeparam name="T">mid</typeparam>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int BinarySearch<T>(T[] array, Func<T, int> comparer)
+        {
+            return ArraySortHelper.BinarySearch(array, 0, array.Length, comparer);
+        }
+
+        /// <summary>
+        /// 自定义二分查找(适用无法构建T时)
+        /// </summary>
+        /// <param name="array">数组</param>
+        /// <param name="comparer">比较器</param>
+        /// <param name="fromIndex">包含</param>
+        /// <param name="toIndex">不包含</param>
+        /// <typeparam name="T">mid</typeparam>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static int BinarySearch<T>(T[] array, Func<T, int> comparer, int fromIndex, int toIndex)
+        {
+            RangeCheck(array.Length, fromIndex, toIndex);
+            return ArraySortHelper.BinarySearch(array, fromIndex, toIndex, comparer);
+        }
+
+        #endregion
+
+#nullable disable
+
+        /// <summary>
+        /// 拷贝数组
+        /// </summary>
+        /// <param name="src"></param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T[] Copy<T>(this T[] src)
+        {
+            return CopyOf(src);
+        }
+
+        /// <summary>
+        /// 拷贝数组
+        /// </summary>
+        /// <param name="src">原始数组</param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T[] CopyOf<T>(T[] src)
+        {
+            if (src == null) throw new ArgumentNullException(nameof(src));
+            if (src.Length == 0)
+            {
+                return src;
+            }
+
+            T[] result = new T[src.Length];
+            Array.Copy(src, result, src.Length);
+            return result;
+        }
+
+        /// <summary>
+        /// 拷贝数组
+        /// </summary>
+        /// <param name="src">原始数组</param>
+        /// <param name="offset">拷贝的起始偏移量</param>
+        /// <param name="len">要拷贝的长度；可大于或小于原始数组长度</param>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static T[] CopyOf<T>(T[] src, int offset, int len)
+        {
+            if (src == null) throw new ArgumentNullException(nameof(src));
+            T[] result = new T[len];
+            int copyLen = Math.Min(src.Length - offset, len);
+            Array.Copy(src, offset, result, 0, copyLen);
+            return result;
+        }
+
+        /// <summary>
+        /// java风格的Fill
+        /// </summary>
+        /// <param name="src"></param>
+        /// <param name="startIndex">开始下标(包含)</param>
+        /// <param name="endIndex">结束下标（不包含）</param>
+        /// <param name="value">要填充的值</param>
+        /// <typeparam name="T"></typeparam>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void Fill2<T>(T[] src, int startIndex, int endIndex, T value)
+        {
+            int count = endIndex - startIndex;
+            Array.Fill(src, value, startIndex, count);
+        }
+
+        /// <summary>
+        /// 交换两个位置的元素
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void Swap<T>(this T[] list, int i, int j)
+        {
+            T a = list[i];
+            T b = list[j];
+            list[i] = b;
+            list[j] = a;
+        }
+
+        /// <summary>
+        /// 交换两个位置的元素
+        /// </summary>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        public static void Swap<T>(this Span<T> list, int i, int j)
+        {
+            T a = list[i];
+            T b = list[j];
+            list[i] = b;
+            list[j] = a;
+        }
+#nullable enable
+
+        /// <summary>
+        /// 洗牌算法
+        /// </summary>
+        /// <param name="list">要打乱的列表</param>
+        /// <param name="rnd">随机种子</param>
+        /// <typeparam name="T"></typeparam>
+        public static void Shuffle<T>(T[] list, Random? rnd = null)
+        {
+            rnd ??= MathCommon.SharedRandom;
+            int size = list.Length;
+            for (int i = size; i > 1; i--)
+            {
+                Swap(list, i - 1, rnd.Next(i));
+            }
+        }
+
+        /// <summary>
+        /// 洗牌算法
+        /// </summary>
+        public static void Shuffle<T>(Span<T> list, Random? rnd = null)
+        {
+            rnd ??= MathCommon.SharedRandom;
+            int size = list.Length;
+            for (int i = size; i > 1; i--)
+            {
+                Swap(list, i - 1, rnd.Next(i));
+            }
+        }
+
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static void CheckIndex(int index, int length)
+        {
+            if (index < 0 || index >= length)
+            {
+                throw new IndexOutOfRangeException($"length: {length}, index {index}");
+            }
+        }
+
+        /// <summary>
+        /// 检查索引合法性
+        /// </summary>
+        /// <param name="arrayLength">数组长度</param>
+        /// <param name="fromIndex">包含</param>
+        /// <param name="toIndex">不包含</param>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
+        internal static void RangeCheck(int arrayLength, int fromIndex, int toIndex)
+        {
+            if (fromIndex > toIndex)
+            {
+                throw new ArgumentException($"fromIndex({fromIndex}) > toIndex({toIndex})");
+            }
+
+            if (fromIndex < 0)
+            {
+                throw new IndexOutOfRangeException($"fromIndex: {fromIndex} < 0");
+            }
+
+            if (toIndex > arrayLength)
+            {
+                throw new IndexOutOfRangeException($"toIndex: {toIndex} > arrayLength: {arrayLength}");
+            }
+        }
+
+        /** 最大支持9阶 - 我都没见过3阶以上的数组... */
+        private static readonly string[] arrayRankSymbols =
+        {
+            "[]",
+            "[][]",
+            "[][][]",
+            "[][][][]",
+            "[][][][][]",
+            "[][][][][][]",
+            "[][][][][][][]",
+            "[][][][][][][][]",
+            "[][][][][][][][][]"
+        };
+
+        /// <summary>
+        /// 获取数组阶数对应的符号
+        /// </summary>
+        /// <param name="rank"></param>
+        /// <returns></returns>
+        /// <exception cref="ArgumentException"></exception>
+        public static string ArrayRankSymbol(int rank)
+        {
+            if (rank < 1 || rank > 9)
+            {
+                throw new ArgumentException("rank: " + rank);
+            }
+
+            return arrayRankSymbols[rank - 1];
+        }
+
+        /** 获取根元素的类型 -- 如果Type是数组，则返回最底层的元素类型；如果不是数组，则返回type */
+        public static Type GetRootElementType(Type type)
+        {
+            while (type.IsArray)
+            {
+                type = type.GetElementType()!;
+            }
+
+            return type;
+        }
+
+        /** 获取数组的阶数 -- 如果不是数组，则返回0 */
+        public static int GetArrayRank(Type type)
+        {
+            int r = 0;
+            while (type.IsArray)
+            {
+                r++;
+                type = type.GetElementType()!;
+            }
+
+            return r;
+        }
+    }
+}

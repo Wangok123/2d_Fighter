@@ -1,0 +1,91 @@
+ManifestFileVersion: 0
+CRC: 3726073076
+Hashes:
+  AssetFileHash:
+    serializedVersion: 2
+    Hash: 3e3bdb2bb2eeec5bc67d17321dc176bb
+  TypeTreeHash:
+    serializedVersion: 2
+    Hash: c93a260ebcce8fe0d4f59a983f95011f
+  IncrementalBuildHash:
+    serializedVersion: 2
+    Hash: 3e3bdb2bb2eeec5bc67d17321dc176bb
+HashAppended: 0
+ClassTypes:
+- Class: 1
+  Script: {instanceID: 0}
+- Class: 28
+  Script: {instanceID: 0}
+- Class: 114
+  Script: {fileID: 11500000, guid: fe87c0e1cc204ed48ad3b37840f39efc, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1344c3c82d62a2a41a3576d8abb8e3ea, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 1aa08ab6e0800fa44ae55d278d1423e3, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: e3b54cfb041b41368f697fb0543f6cf3, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 532a7ab37605443c939002a1893f822d, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: efef8de44ed2474a87fcd1dc38725d95, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 8a8695521f0d02e499659fee002a26c2, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 6c3be16a35674c7e86f62d1882695e1a, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 59f8146938fff824cb5fd77236b75775, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 9c1b74f910281224a8cae6d8e4fc1f43, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: b7a8a78406b74ee4b0bb9c70d9baa759, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 168168ecc70e41679396f8af106e3cfc, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 31a19414c41e5ae4aae2af33fee712f6, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 3c3ce804191346deb2c5a1b1fabb1b38, type: 3}
+- Class: 114
+  Script: {fileID: 11500000, guid: 2dfe1a9ead174221a0e6523d4fa656e0, type: 3}
+- Class: 115
+  Script: {instanceID: 0}
+- Class: 128
+  Script: {instanceID: 0}
+- Class: 213
+  Script: {instanceID: 0}
+- Class: 222
+  Script: {instanceID: 0}
+- Class: 224
+  Script: {instanceID: 0}
+SerializeReferenceClassIdentifiers:
+- AssemblyName: UnityEngine.CoreModule
+  ClassName: UnityEngine.Events.PersistentCallGroup
+- AssemblyName: UnityEngine.CoreModule
+  ClassName: UnityEngine.RectOffset
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.AnimationTriggers
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.Button/ButtonClickedEvent
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.ColorBlock
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.FontData
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.MaskableGraphic/CullStateChangedEvent
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.Navigation
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.ScrollRect/ScrollRectEvent
+- AssemblyName: UnityEngine.UI
+  ClassName: UnityEngine.UI.SpriteState
+Assets:
+- Assets/AssetPackage/UI/UIPrefab/SelectWnd/SelectWnd.prefab
+- Assets/AssetPackage/UI/UIPrefab/SelectWnd/ItemHero.prefab
+Dependencies:
+- D:/Project/2D_ACT/Client/Bundles/StandaloneWindows64/DefaultPackage/OutputCache/defaultpackage_assets_assetpackage_sprites_headicon.bundle
+- D:/Project/2D_ACT/Client/Bundles/StandaloneWindows64/DefaultPackage/OutputCache/defaultpackage_assets_assetpackage_sprites_skillicon_arthur.bundle
+- D:/Project/2D_ACT/Client/Bundles/StandaloneWindows64/DefaultPackage/OutputCache/defaultpackage_assets_assetpackage_statictextures_playwnd.bundle
+- D:/Project/2D_ACT/Client/Bundles/StandaloneWindows64/DefaultPackage/OutputCache/defaultpackage_assets_assetpackage_statictextures_selectwnd.bundle
+- D:/Project/2D_ACT/Client/Bundles/StandaloneWindows64/DefaultPackage/OutputCache/defaultpackage_assets_assetpackage_textures_heroshow.bundle
+- D:/Project/2D_ACT/Client/Bundles/StandaloneWindows64/DefaultPackage/OutputCache/defaultpackage_share_assets_resources_resfonts.bundle

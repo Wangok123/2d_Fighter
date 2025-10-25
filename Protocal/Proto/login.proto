@@ -1,0 +1,21 @@
+syntax = "proto3";
+
+import "common.proto";
+package GameProtocol;  // 协议包名，按需修改
+
+message LoginRequest {
+  string account = 1;    // 账号（邮箱/手机号/用户名）
+  string password = 2;   // 密码（建议传输加密后的密文）
+  string platform = 3;   // 平台（0=PC, 1=Android, 2=iOS...）
+  string device_id = 4;  // 设备ID
+  string version = 5;    // 客户端版本号
+}
+
+message LoginResponse {
+  uint32 code = 1;       // 状态码（0=成功，非0=错误码）
+  UserDto user_data = 3; // 用户数据（登录成功时返回）
+  repeated HeroDto hero_data = 4; // 可选英雄数据（登录成功时返回）
+}
+
+
+
