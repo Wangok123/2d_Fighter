@@ -1,5 +1,5 @@
 [ExcludeFromPrototype]
-struct SimpleInput {
+struct SimpleInput2D {
     FPVector2 AimDirection;
     button Left;
     button Right;

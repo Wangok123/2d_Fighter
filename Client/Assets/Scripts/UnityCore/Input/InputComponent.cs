@@ -9,6 +9,7 @@ namespace UnityCore.Input
 {
     public class InputComponent : LatComponent
     {
+        // todo: 后面要改成类的形式，而非Asset引用
         [SerializeField] private InputActionAsset _inputActions;
         private Dictionary<string, IInputModule> _modules = new Dictionary<string, IInputModule>();
         

@@ -51,6 +51,18 @@ namespace Quantum {
   
   [System.FlagsAttribute()]
   public enum InputButtons : int {
+    _left = 1 << 0,
+    _right = 1 << 1,
+    _up = 1 << 2,
+    _down = 1 << 3,
+    _a = 1 << 4,
+    _b = 1 << 5,
+    _c = 1 << 6,
+    _d = 1 << 7,
+    _l1 = 1 << 8,
+    _r1 = 1 << 9,
+    _select = 1 << 10,
+    _start = 1 << 11,
   }
   public static unsafe partial class FlagsExtensions {
     public static Boolean IsFlagSet(this InputButtons self, InputButtons flag) {
@@ -511,13 +523,56 @@ namespace Quantum {
   }
   [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct Input {
-    public const Int32 SIZE = 4;
+    public const Int32 SIZE = 160;
     public const Int32 ALIGNMENT = 4;
+    [FieldOffset(76)]
+    public Button _left;
+    [FieldOffset(100)]
+    public Button _right;
+    [FieldOffset(136)]
+    public Button _up;
+    [FieldOffset(52)]
+    public Button _down;
+    [FieldOffset(4)]
+    public Button _a;
+    [FieldOffset(16)]
+    public Button _b;
+    [FieldOffset(28)]
+    public Button _c;
+    [FieldOffset(40)]
+    public Button _d;
+    [FieldOffset(64)]
+    public Button _l1;
+    [FieldOffset(88)]
+    public Button _r1;
+    [FieldOffset(112)]
+    public Button _select;
+    [FieldOffset(124)]
+    public Button _start;
+    [FieldOffset(1)]
+    public Byte _analogRightTrigger;
     [FieldOffset(0)]
-    private fixed Byte _alignment_padding_[4];
+    public Byte _analogLeftTrigger;
+    [FieldOffset(148)]
+    public QuantumThumbSticks ThumbSticks;
     public override readonly Int32 GetHashCode() {
       unchecked { 
         var hash = 19249;
+        hash = hash * 31 + _left.GetHashCode();
+        hash = hash * 31 + _right.GetHashCode();
+        hash = hash * 31 + _up.GetHashCode();
+        hash = hash * 31 + _down.GetHashCode();
+        hash = hash * 31 + _a.GetHashCode();
+        hash = hash * 31 + _b.GetHashCode();
+        hash = hash * 31 + _c.GetHashCode();
+        hash = hash * 31 + _d.GetHashCode();
+        hash = hash * 31 + _l1.GetHashCode();
+        hash = hash * 31 + _r1.GetHashCode();
+        hash = hash * 31 + _select.GetHashCode();
+        hash = hash * 31 + _start.GetHashCode();
+        hash = hash * 31 + _analogRightTrigger.GetHashCode();
+        hash = hash * 31 + _analogLeftTrigger.GetHashCode();
+        hash = hash * 31 + ThumbSticks.GetHashCode();
         return hash;
       }
     }
@@ -526,21 +581,122 @@ namespace Quantum {
     }
     public Boolean IsDown(InputButtons button) {
       switch (button) {
+        case InputButtons._left: return _left.IsDown;
+        case InputButtons._right: return _right.IsDown;
+        case InputButtons._up: return _up.IsDown;
+        case InputButtons._down: return _down.IsDown;
+        case InputButtons._a: return _a.IsDown;
+        case InputButtons._b: return _b.IsDown;
+        case InputButtons._c: return _c.IsDown;
+        case InputButtons._d: return _d.IsDown;
+        case InputButtons._l1: return _l1.IsDown;
+        case InputButtons._r1: return _r1.IsDown;
+        case InputButtons._select: return _select.IsDown;
+        case InputButtons._start: return _start.IsDown;
         default: return false;
       }
     }
     public Boolean WasPressed(InputButtons button) {
       switch (button) {
+        case InputButtons._left: return _left.WasPressed;
+        case InputButtons._right: return _right.WasPressed;
+        case InputButtons._up: return _up.WasPressed;
+        case InputButtons._down: return _down.WasPressed;
+        case InputButtons._a: return _a.WasPressed;
+        case InputButtons._b: return _b.WasPressed;
+        case InputButtons._c: return _c.WasPressed;
+        case InputButtons._d: return _d.WasPressed;
+        case InputButtons._l1: return _l1.WasPressed;
+        case InputButtons._r1: return _r1.WasPressed;
+        case InputButtons._select: return _select.WasPressed;
+        case InputButtons._start: return _start.WasPressed;
         default: return false;
       }
     }
     static partial void SerializeCodeGen(void* ptr, FrameSerializer serializer) {
         var p = (Input*)ptr;
+        serializer.Stream.Serialize(&p->_analogLeftTrigger);
+        serializer.Stream.Serialize(&p->_analogRightTrigger);
+        Button.Serialize(&p->_a, serializer);
+        Button.Serialize(&p->_b, serializer);
+        Button.Serialize(&p->_c, serializer);
+        Button.Serialize(&p->_d, serializer);
+        Button.Serialize(&p->_down, serializer);
+        Button.Serialize(&p->_l1, serializer);
+        Button.Serialize(&p->_left, serializer);
+        Button.Serialize(&p->_r1, serializer);
+        Button.Serialize(&p->_right, serializer);
+        Button.Serialize(&p->_select, serializer);
+        Button.Serialize(&p->_start, serializer);
+        Button.Serialize(&p->_up, serializer);
+        Quantum.QuantumThumbSticks.Serialize(&p->ThumbSticks, serializer);
     }
   }
   [StructLayout(LayoutKind.Explicit)]
   [ExcludeFromPrototype()]
-  public unsafe partial struct SimpleInput {
+  public unsafe partial struct QuantumHighresThumbSticks {
+    public const Int32 SIZE = 6;
+    public const Int32 ALIGNMENT = 2;
+    [FieldOffset(0)]
+    public Byte _leftThumbAngle;
+    [FieldOffset(1)]
+    public Byte _leftThumbMagnitude;
+    [FieldOffset(2)]
+    public Int16 _rightThumbX;
+    [FieldOffset(4)]
+    public Int16 _rightThumbY;
+    public override readonly Int32 GetHashCode() {
+      unchecked { 
+        var hash = 18181;
+        hash = hash * 31 + _leftThumbAngle.GetHashCode();
+        hash = hash * 31 + _leftThumbMagnitude.GetHashCode();
+        hash = hash * 31 + _rightThumbX.GetHashCode();
+        hash = hash * 31 + _rightThumbY.GetHashCode();
+        return hash;
+      }
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+        var p = (QuantumHighresThumbSticks*)ptr;
+        serializer.Stream.Serialize(&p->_leftThumbAngle);
+        serializer.Stream.Serialize(&p->_leftThumbMagnitude);
+        serializer.Stream.Serialize(&p->_rightThumbX);
+        serializer.Stream.Serialize(&p->_rightThumbY);
+    }
+  }
+  [StructLayout(LayoutKind.Explicit)]
+  [ExcludeFromPrototype()]
+  public unsafe partial struct QuantumRegularThumbSticks {
+    public const Int32 SIZE = 4;
+    public const Int32 ALIGNMENT = 1;
+    [FieldOffset(0)]
+    public Byte _leftThumbAngle;
+    [FieldOffset(1)]
+    public Byte _leftThumbMagnitude;
+    [FieldOffset(2)]
+    public Byte _rightThumbAngle;
+    [FieldOffset(3)]
+    public Byte _rightThumbMagnitude;
+    public override readonly Int32 GetHashCode() {
+      unchecked { 
+        var hash = 2731;
+        hash = hash * 31 + _leftThumbAngle.GetHashCode();
+        hash = hash * 31 + _leftThumbMagnitude.GetHashCode();
+        hash = hash * 31 + _rightThumbAngle.GetHashCode();
+        hash = hash * 31 + _rightThumbMagnitude.GetHashCode();
+        return hash;
+      }
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+        var p = (QuantumRegularThumbSticks*)ptr;
+        serializer.Stream.Serialize(&p->_leftThumbAngle);
+        serializer.Stream.Serialize(&p->_leftThumbMagnitude);
+        serializer.Stream.Serialize(&p->_rightThumbAngle);
+        serializer.Stream.Serialize(&p->_rightThumbMagnitude);
+    }
+  }
+  [StructLayout(LayoutKind.Explicit)]
+  [ExcludeFromPrototype()]
+  public unsafe partial struct SimpleInput2D {
     public const Int32 SIZE = 128;
     public const Int32 ALIGNMENT = 8;
     [FieldOffset(112)]
@@ -565,7 +721,7 @@ namespace Quantum {
     public Button Use;
     public override readonly Int32 GetHashCode() {
       unchecked { 
-        var hash = 3529;
+        var hash = 7369;
         hash = hash * 31 + AimDirection.GetHashCode();
         hash = hash * 31 + Left.GetHashCode();
         hash = hash * 31 + Right.GetHashCode();
@@ -580,7 +736,7 @@ namespace Quantum {
       }
     }
     public static void Serialize(void* ptr, FrameSerializer serializer) {
-        var p = (SimpleInput*)ptr;
+        var p = (SimpleInput2D*)ptr;
         Button.Serialize(&p->Dash, serializer);
         Button.Serialize(&p->Down, serializer);
         Button.Serialize(&p->HP, serializer);
@@ -595,7 +751,7 @@ namespace Quantum {
   }
   [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct _globals_ {
-    public const Int32 SIZE = 640;
+    public const Int32 SIZE = 1576;
     public const Int32 ALIGNMENT = 8;
     [FieldOffset(0)]
     public AssetRef<Map> Map;
@@ -619,12 +775,12 @@ namespace Quantum {
     public Int32 PlayerConnectedCount;
     [FieldOffset(604)]
     [FramePrinter.FixedArrayAttribute(typeof(Input), 6)]
-    private fixed Byte _input_[24];
-    [FieldOffset(632)]
+    private fixed Byte _input_[960];
+    [FieldOffset(1568)]
     public BitSet6 PlayerLastConnectionState;
     public readonly FixedArray<Input> input {
       get {
-        fixed (byte* p = _input_) { return new FixedArray<Input>(p, 4, 6); }
+        fixed (byte* p = _input_) { return new FixedArray<Input>(p, 160, 6); }
       }
     }
     public override readonly Int32 GetHashCode() {
@@ -659,6 +815,77 @@ namespace Quantum {
         serializer.Stream.Serialize(&p->PlayerConnectedCount);
         FixedArray.Serialize(p->input, serializer, Statics.SerializeInput);
         Quantum.BitSet6.Serialize(&p->PlayerLastConnectionState, serializer);
+    }
+  }
+  [StructLayout(LayoutKind.Explicit)]
+  [Union()]
+  [ExcludeFromPrototype()]
+  public unsafe partial struct QuantumThumbSticks {
+    public const Int32 SIZE = 12;
+    public const Int32 ALIGNMENT = 4;
+    [FieldOffset(10)]
+    private fixed Byte _alignment_padding_[2];
+    [FieldOffset(0)]
+    private Int32 _field_used_;
+    [FieldOffset(4)]
+    [FieldOverlap(4)]
+    [FramePrinter.PrintIf("_field_used_", Quantum.QuantumThumbSticks.REGULAR)]
+    private QuantumRegularThumbSticks _Regular;
+    [FieldOffset(4)]
+    [FieldOverlap(4)]
+    [FramePrinter.PrintIf("_field_used_", Quantum.QuantumThumbSticks.HIGHRES)]
+    private QuantumHighresThumbSticks _HighRes;
+    public const Int32 REGULAR = 1;
+    public const Int32 HIGHRES = 2;
+    public readonly Int32 Field {
+      get {
+        return _field_used_;
+      }
+    }
+    public QuantumRegularThumbSticks* Regular {
+      get {
+        fixed (QuantumRegularThumbSticks* p = &_Regular) {
+          if (_field_used_ != REGULAR) {
+            Native.Utils.Clear(p, 4);
+            _field_used_ = REGULAR;
+          }
+          return p;
+        }
+      }
+    }
+    public QuantumHighresThumbSticks* HighRes {
+      get {
+        fixed (QuantumHighresThumbSticks* p = &_HighRes) {
+          if (_field_used_ != HIGHRES) {
+            Native.Utils.Clear(p, 6);
+            _field_used_ = HIGHRES;
+          }
+          return p;
+        }
+      }
+    }
+    public override readonly Int32 GetHashCode() {
+      unchecked { 
+        var hash = 8867;
+        hash = hash * 31 + _field_used_.GetHashCode();
+        hash = hash * 31 + _Regular.GetHashCode();
+        hash = hash * 31 + _HighRes.GetHashCode();
+        return hash;
+      }
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+        var p = (QuantumThumbSticks*)ptr;
+        if (serializer.InputMode) {
+          serializer.Stream.SerializeBuffer((byte*)p, Quantum.QuantumThumbSticks.SIZE);
+          return;
+        }
+        serializer.Stream.Serialize(&p->_field_used_);
+        if (p->_field_used_ == HIGHRES) {
+          Quantum.QuantumHighresThumbSticks.Serialize(&p->_HighRes, serializer);
+        }
+        if (p->_field_used_ == REGULAR) {
+          Quantum.QuantumRegularThumbSticks.Serialize(&p->_Regular, serializer);
+        }
     }
   }
   [StructLayout(LayoutKind.Explicit)]
@@ -739,6 +966,21 @@ namespace Quantum {
     partial void SetPlayerInputCodeGen(PlayerRef player, Input input) {
       if ((int)player >= (int)_globals->input.Length) { throw new System.ArgumentOutOfRangeException("player"); }
       var i = _globals->input.GetPointer(player);
+      i->_left = i->_left.Update(this.Number, input._left);
+      i->_right = i->_right.Update(this.Number, input._right);
+      i->_up = i->_up.Update(this.Number, input._up);
+      i->_down = i->_down.Update(this.Number, input._down);
+      i->_a = i->_a.Update(this.Number, input._a);
+      i->_b = i->_b.Update(this.Number, input._b);
+      i->_c = i->_c.Update(this.Number, input._c);
+      i->_d = i->_d.Update(this.Number, input._d);
+      i->_l1 = i->_l1.Update(this.Number, input._l1);
+      i->_r1 = i->_r1.Update(this.Number, input._r1);
+      i->_select = i->_select.Update(this.Number, input._select);
+      i->_start = i->_start.Update(this.Number, input._start);
+      i->_analogRightTrigger = input._analogRightTrigger;
+      i->_analogLeftTrigger = input._analogLeftTrigger;
+      i->ThumbSticks = input.ThumbSticks;
     }
     public Input* GetPlayerInput(PlayerRef player) {
       if ((int)player >= (int)_globals->input.Length) { throw new System.ArgumentOutOfRangeException("player"); }
@@ -832,11 +1074,14 @@ namespace Quantum {
       typeRegistry.Register(typeof(Ptr), Ptr.SIZE);
       typeRegistry.Register(typeof(QBoolean), QBoolean.SIZE);
       typeRegistry.Register(typeof(Quantum.Ptr), Quantum.Ptr.SIZE);
+      typeRegistry.Register(typeof(Quantum.QuantumHighresThumbSticks), Quantum.QuantumHighresThumbSticks.SIZE);
+      typeRegistry.Register(typeof(Quantum.QuantumRegularThumbSticks), Quantum.QuantumRegularThumbSticks.SIZE);
+      typeRegistry.Register(typeof(Quantum.QuantumThumbSticks), Quantum.QuantumThumbSticks.SIZE);
       typeRegistry.Register(typeof(QueryOptions), 2);
       typeRegistry.Register(typeof(RNGSession), RNGSession.SIZE);
       typeRegistry.Register(typeof(Shape2D), Shape2D.SIZE);
       typeRegistry.Register(typeof(Shape3D), Shape3D.SIZE);
-      typeRegistry.Register(typeof(Quantum.SimpleInput), Quantum.SimpleInput.SIZE);
+      typeRegistry.Register(typeof(Quantum.SimpleInput2D), Quantum.SimpleInput2D.SIZE);
       typeRegistry.Register(typeof(SpringJoint), SpringJoint.SIZE);
       typeRegistry.Register(typeof(SpringJoint3D), SpringJoint3D.SIZE);
       typeRegistry.Register(typeof(Transform2D), Transform2D.SIZE);

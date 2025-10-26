@@ -1,6 +1,7 @@
 ﻿namespace Quantum
 {
-    public partial struct SimpleInput
+    using Photon.Deterministic;
+    unsafe partial struct SimpleInput
     {
         
     }

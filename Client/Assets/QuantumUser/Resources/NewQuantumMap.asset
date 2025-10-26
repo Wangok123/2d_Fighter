@@ -84,8 +84,64 @@ MonoBehaviour:
       ColliderIndex: 0
       MutableMode: 0
   StaticColliders3D: []
-  MapEntities: []
+  MapEntities:
+  - Components:
+    - rid: 2517545784786812928
+    - rid: 2517545784786812929
+    - rid: 2517545784786812930
   SerializedTriangleDataUncompressedSize: 8
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 2517545784786812928
+      type: {class: Transform2DPrototype, ns: Quantum.Prototypes, asm: Quantum.Engine}
+      data:
+        Position:
+          X:
+            RawValue: 0
+          Y:
+            RawValue: 0
+        Rotation:
+          RawValue: 0
+    - rid: 2517545784786812929
+      type: {class: PhysicsCollider2DPrototype, ns: Quantum.Prototypes, asm: Quantum.Engine}
+      data:
+        ShapeConfig:
+          ShapeType: 32
+          PolygonCollider:
+            Id:
+              Value: 0
+          CircleRadius:
+            RawValue: 32768
+          CapsuleSize:
+            X:
+              RawValue: 65536
+            Y:
+              RawValue: 131072
+          EdgeExtent:
+            RawValue: 32768
+          BoxExtents:
+            X:
+              RawValue: 32768
+            Y:
+              RawValue: 32768
+          PositionOffset:
+            X:
+              RawValue: 0
+            Y:
+              RawValue: 0
+          RotationOffset:
+            RawValue: 0
+          UserTag: 0
+          IsPersistent: 1
+          CompoundShapes: []
+        Layer: 0
+        IsTrigger: 0
+        PhysicsMaterial:
+          Id:
+            Value: 0
+    - rid: 2517545784786812930
+      type: {class: PhysicsCallbacks2DPrototype, ns: Quantum.Prototypes, asm: Quantum.Engine}
+      data:
+        CallbackFlags:
+          Value: 0
