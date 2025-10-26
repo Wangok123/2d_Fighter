@@ -1,0 +1,13 @@
+[ExcludeFromPrototype]
+struct SimpleInput {
+    FPVector2 AimDirection;
+    button Left;
+    button Right;
+    button Up;
+    button Down;
+    button Jump;
+    button Dash;
+    button LP;
+    button HP;
+    button Use;
+}
