@@ -30,6 +30,12 @@ namespace Quantum
                     direction.Y += FP._1;
                 }
                 
+                // 避免对零向量进行归一化
+                if (direction == FPVector2.Zero)
+                {
+                    return FPVector2.Zero;
+                }
+                
                 return direction.Normalized;
             }
         }
