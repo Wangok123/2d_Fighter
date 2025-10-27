@@ -88,6 +88,160 @@ namespace Quantum.Prototypes {
     }
   }
   [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.KCC2D))]
+  public unsafe partial class KCC2DPrototype : ComponentPrototype<Quantum.KCC2D> {
+    public AssetRef<KCC2DConfig> Config;
+    partial void MaterializeUser(Frame frame, ref Quantum.KCC2D result, in PrototypeMaterializationContext context);
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+        Quantum.KCC2D component = default;
+        Materialize((Frame)f, ref component, in context);
+        return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref Quantum.KCC2D result, in PrototypeMaterializationContext context = default) {
+        result.Config = this.Config;
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.KCC2DSettings))]
+  public unsafe partial class KCC2DSettingsPrototype : StructPrototype {
+    public FP CapsuleRadius;
+    public FP CapsuleHeight;
+    public FPVector2 Offset;
+    public LayerMask Mask;
+    [Space(10)]
+    public Int32 SolverIterations;
+    [RangeEx(0, 1)]
+    public FP IterationCorrectionRate;
+    [RangeEx(0, 1)]
+    public FP AllowedPenetration;
+    public QBoolean CCD;
+    [RangeEx(4, 60)]
+    public FP Acceleration;
+    [RangeEx(1, 10)]
+    public FP FlipDirectionMultiplier;
+    [RangeEx(4, 60)]
+    public FP Deceleration;
+    [RangeEx(1, 10)]
+    public FP MaxBaseSpeed;
+    [Space(5)]
+    public Quantum.QEnum32<DashDirection> DirectionType;
+    public QBoolean DashSuspendsGravity;
+    [RangeEx(0, 1)]
+    public FP DashDuration;
+    [RangeEx(5, 20)]
+    public FP MaxDashSpeed;
+    [Space(5)]
+    public FP BaseGravity;
+    [RangeEx(1, 4)]
+    public FP DownGravityMultiplier;
+    public FP MaxSlopeAngle;
+    [RangeEx(4, 25)]
+    public FP SlopeMaxSpeed;
+    [RangeEx(10, 100)]
+    public FP FreeFallMaxSpeed;
+    [Space(5)]
+    public FP JumpImpulse;
+    [RangeEx(0, 1)]
+    public FP AirControlFactor;
+    public QBoolean FastFlipOnAir;
+    public QBoolean DownGravityOnRelease;
+    [RangeEx(0, 1)]
+    public FP CoyoteTime;
+    [RangeEx(0, 1)]
+    public FP InputBufferTime;
+    public QBoolean DoubleJumpEnabled;
+    public QBoolean DoubleJumpWhenFreeFalling;
+    [RangeEx(0, 10)]
+    public FP DecelerationOnAir;
+    [Space(5)]
+    public QBoolean WallJumpEnabled;
+    public QBoolean RequiresOppositeInput;
+    [RangeEx(0, 1)]
+    public FP WalledStateExtention;
+    public FP MinWallAngle;
+    public FP MaxWallAngle;
+    public FPVector2 WallJumpImpulse;
+    [RangeEx(1, 10)]
+    public FP WallMaxSpeed;
+    partial void MaterializeUser(Frame frame, ref Quantum.KCC2DSettings result, in PrototypeMaterializationContext context);
+    public void Materialize(Frame frame, ref Quantum.KCC2DSettings result, in PrototypeMaterializationContext context = default) {
+        result.CapsuleRadius = this.CapsuleRadius;
+        result.CapsuleHeight = this.CapsuleHeight;
+        result.Offset = this.Offset;
+        result.Mask = this.Mask;
+        result.SolverIterations = this.SolverIterations;
+        result.IterationCorrectionRate = this.IterationCorrectionRate;
+        result.AllowedPenetration = this.AllowedPenetration;
+        result.CCD = this.CCD;
+        result.Acceleration = this.Acceleration;
+        result.FlipDirectionMultiplier = this.FlipDirectionMultiplier;
+        result.Deceleration = this.Deceleration;
+        result.MaxBaseSpeed = this.MaxBaseSpeed;
+        result.DirectionType = this.DirectionType;
+        result.DashSuspendsGravity = this.DashSuspendsGravity;
+        result.DashDuration = this.DashDuration;
+        result.MaxDashSpeed = this.MaxDashSpeed;
+        result.BaseGravity = this.BaseGravity;
+        result.DownGravityMultiplier = this.DownGravityMultiplier;
+        result.MaxSlopeAngle = this.MaxSlopeAngle;
+        result.SlopeMaxSpeed = this.SlopeMaxSpeed;
+        result.FreeFallMaxSpeed = this.FreeFallMaxSpeed;
+        result.JumpImpulse = this.JumpImpulse;
+        result.AirControlFactor = this.AirControlFactor;
+        result.FastFlipOnAir = this.FastFlipOnAir;
+        result.DownGravityOnRelease = this.DownGravityOnRelease;
+        result.CoyoteTime = this.CoyoteTime;
+        result.InputBufferTime = this.InputBufferTime;
+        result.DoubleJumpEnabled = this.DoubleJumpEnabled;
+        result.DoubleJumpWhenFreeFalling = this.DoubleJumpWhenFreeFalling;
+        result.DecelerationOnAir = this.DecelerationOnAir;
+        result.WallJumpEnabled = this.WallJumpEnabled;
+        result.RequiresOppositeInput = this.RequiresOppositeInput;
+        result.WalledStateExtention = this.WalledStateExtention;
+        result.MinWallAngle = this.MinWallAngle;
+        result.MaxWallAngle = this.MaxWallAngle;
+        result.WallJumpImpulse = this.WallJumpImpulse;
+        result.WallMaxSpeed = this.WallMaxSpeed;
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.KCCQueryResult))]
+  public unsafe partial class KCCQueryResultPrototype : StructPrototype {
+    public FPVector2 SurfaceTangent;
+    public FP ContactAngle;
+    public QBoolean Overlapping;
+    public QBoolean Ignore;
+    public Hit Contact;
+    public Quantum.QEnum32<KCCContactType> ContactType;
+    partial void MaterializeUser(Frame frame, ref Quantum.KCCQueryResult result, in PrototypeMaterializationContext context);
+    public void Materialize(Frame frame, ref Quantum.KCCQueryResult result, in PrototypeMaterializationContext context = default) {
+        result.SurfaceTangent = this.SurfaceTangent;
+        result.ContactAngle = this.ContactAngle;
+        result.Overlapping = this.Overlapping;
+        result.Ignore = this.Ignore;
+        result.Contact = this.Contact;
+        result.ContactType = this.ContactType;
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.MovementData))]
+  public unsafe partial class MovementDataPrototype : ComponentPrototype<Quantum.MovementData> {
+    public QBoolean IsFacingRight;
+    partial void MaterializeUser(Frame frame, ref Quantum.MovementData result, in PrototypeMaterializationContext context);
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+        Quantum.MovementData component = default;
+        Materialize((Frame)f, ref component, in context);
+        return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref Quantum.MovementData result, in PrototypeMaterializationContext context = default) {
+        result.IsFacingRight = this.IsFacingRight;
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.PlayerLink))]
   public unsafe partial class PlayerLinkPrototype : ComponentPrototype<Quantum.PlayerLink> {
     public PlayerRef Player;
@@ -180,6 +334,33 @@ namespace Quantum.Prototypes {
         result.LP = this.LP;
         result.HP = this.HP;
         result.Use = this.Use;
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.Status))]
+  public unsafe partial class StatusPrototype : ComponentPrototype<Quantum.Status> {
+    public AssetRef<StatusData> StatusData;
+    public FP CurrentHealth;
+    public QBoolean IsDead;
+    public Quantum.Prototypes.FrameTimerPrototype RespawnTimer;
+    public Quantum.Prototypes.FrameTimerPrototype RegenTimer;
+    public Quantum.Prototypes.FrameTimerPrototype InvincibleTimer;
+    public Quantum.Prototypes.FrameTimerPrototype DisconnectedTimer;
+    partial void MaterializeUser(Frame frame, ref Quantum.Status result, in PrototypeMaterializationContext context);
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+        Quantum.Status component = default;
+        Materialize((Frame)f, ref component, in context);
+        return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref Quantum.Status result, in PrototypeMaterializationContext context = default) {
+        result.StatusData = this.StatusData;
+        result.CurrentHealth = this.CurrentHealth;
+        result.IsDead = this.IsDead;
+        this.RespawnTimer.Materialize(frame, ref result.RespawnTimer, in context);
+        this.RegenTimer.Materialize(frame, ref result.RegenTimer, in context);
+        this.InvincibleTimer.Materialize(frame, ref result.InvincibleTimer, in context);
+        this.DisconnectedTimer.Materialize(frame, ref result.DisconnectedTimer, in context);
         MaterializeUser(frame, ref result, in context);
     }
   }

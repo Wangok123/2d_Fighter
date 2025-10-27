@@ -2,3 +2,19 @@ component PlayerLink
 {
 	player_ref Player;
 }
+
+component Status
+{
+    asset_ref<StatusData> StatusData;
+	FP CurrentHealth;
+	Boolean IsDead;
+	FrameTimer RespawnTimer;
+	FrameTimer RegenTimer;
+	FrameTimer InvincibleTimer;
+	FrameTimer DisconnectedTimer;
+}
+
+component MovementData
+{
+	Boolean IsFacingRight;
+}
