@@ -20,7 +20,7 @@ MonoBehaviour:
     CapsuleRadius:
       RawValue: 16384
     CapsuleHeight:
-      RawValue: 65536
+      RawValue: 131072
     Offset:
       X:
         RawValue: 0
@@ -36,23 +36,23 @@ MonoBehaviour:
     CCD:
       Value: 1
     Acceleration:
-      RawValue: 1966080
+      RawValue: 3932160
     FlipDirectionMultiplier:
       RawValue: 65536
     Deceleration:
       RawValue: 655360
     MaxBaseSpeed:
-      RawValue: 393216
+      RawValue: 458752
     DirectionType:
       Value: 1
     DashSuspendsGravity:
       Value: 1
     DashDuration:
-      RawValue: 16384
+      RawValue: 9830
     MaxDashSpeed:
-      RawValue: 655360
+      RawValue: 1310720
     BaseGravity:
-      RawValue: -655360
+      RawValue: -1638400
     DownGravityMultiplier:
       RawValue: 131072
     MaxSlopeAngle:
@@ -62,9 +62,11 @@ MonoBehaviour:
     FreeFallMaxSpeed:
       RawValue: 1638400
     JumpImpulse:
+      RawValue: 786432
+    DoubleJumpImpulse:
       RawValue: 655360
     AirControlFactor:
-      RawValue: 65536
+      RawValue: 32768
     FastFlipOnAir:
       Value: 1
     DownGravityOnRelease:
@@ -78,7 +80,7 @@ MonoBehaviour:
     DoubleJumpWhenFreeFalling:
       Value: 1
     DecelerationOnAir:
-      RawValue: 327680
+      RawValue: 655360
     WallJumpEnabled:
       Value: 1
     RequiresOppositeInput:

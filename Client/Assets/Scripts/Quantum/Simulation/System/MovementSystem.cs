@@ -34,7 +34,11 @@ namespace Quantum
         
         private void UpdateIsFacingRight(Frame frame, ref Filter filter, SimpleInput2D input)
         {
-            filter.MovementData->IsFacingRight = input.AimDirection.X > FP._0;
+            bool noInput = !input.Left.IsDown && !input.Right.IsDown;
+            if (noInput)
+                return;
+            
+            filter.MovementData->IsFacingRight = input.Right.IsDown;
         }
     }
 }

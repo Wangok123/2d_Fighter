@@ -654,20 +654,20 @@ namespace Quantum {
   }
   [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct KCC2DSettings {
-    public const Int32 SIZE = 272;
+    public const Int32 SIZE = 280;
     public const Int32 ALIGNMENT = 8;
     [FieldOffset(88)]
     public FP CapsuleRadius;
     [FieldOffset(80)]
     public FP CapsuleHeight;
-    [FieldOffset(240)]
+    [FieldOffset(248)]
     public FPVector2 Offset;
     [FieldOffset(8)]
     public LayerMask Mask;
     [FieldOffset(4)]
     [Space(10)]
     public Int32 SolverIterations;
-    [FieldOffset(160)]
+    [FieldOffset(168)]
     [RangeEx(0, 1)]
     public FP IterationCorrectionRate;
     [FieldOffset(64)]
@@ -678,13 +678,13 @@ namespace Quantum {
     [FieldOffset(48)]
     [RangeEx(4, 60)]
     public FP Acceleration;
-    [FieldOffset(136)]
+    [FieldOffset(144)]
     [RangeEx(1, 10)]
     public FP FlipDirectionMultiplier;
     [FieldOffset(112)]
     [RangeEx(4, 60)]
     public FP Deceleration;
-    [FieldOffset(176)]
+    [FieldOffset(184)]
     [RangeEx(1, 10)]
     public FP MaxBaseSpeed;
     [FieldOffset(0)]
@@ -695,26 +695,28 @@ namespace Quantum {
     [FieldOffset(104)]
     [RangeEx(0, 1)]
     public FP DashDuration;
-    [FieldOffset(184)]
+    [FieldOffset(192)]
     [RangeEx(5, 20)]
     public FP MaxDashSpeed;
     [FieldOffset(72)]
     [Space(5)]
     public FP BaseGravity;
-    [FieldOffset(128)]
+    [FieldOffset(136)]
     [RangeEx(1, 4)]
     public FP DownGravityMultiplier;
-    [FieldOffset(192)]
+    [FieldOffset(200)]
     public FP MaxSlopeAngle;
-    [FieldOffset(216)]
+    [FieldOffset(224)]
     [RangeEx(4, 25)]
     public FP SlopeMaxSpeed;
-    [FieldOffset(144)]
+    [FieldOffset(152)]
     [RangeEx(10, 100)]
     public FP FreeFallMaxSpeed;
-    [FieldOffset(168)]
+    [FieldOffset(176)]
     [Space(5)]
     public FP JumpImpulse;
+    [FieldOffset(128)]
+    public FP DoubleJumpImpulse;
     [FieldOffset(56)]
     [RangeEx(0, 1)]
     public FP AirControlFactor;
@@ -725,7 +727,7 @@ namespace Quantum {
     [FieldOffset(96)]
     [RangeEx(0, 1)]
     public FP CoyoteTime;
-    [FieldOffset(152)]
+    [FieldOffset(160)]
     [RangeEx(0, 1)]
     public FP InputBufferTime;
     [FieldOffset(20)]
@@ -740,16 +742,16 @@ namespace Quantum {
     public QBoolean WallJumpEnabled;
     [FieldOffset(36)]
     public QBoolean RequiresOppositeInput;
-    [FieldOffset(232)]
+    [FieldOffset(240)]
     [RangeEx(0, 1)]
     public FP WalledStateExtention;
-    [FieldOffset(208)]
+    [FieldOffset(216)]
     public FP MinWallAngle;
-    [FieldOffset(200)]
+    [FieldOffset(208)]
     public FP MaxWallAngle;
-    [FieldOffset(256)]
+    [FieldOffset(264)]
     public FPVector2 WallJumpImpulse;
-    [FieldOffset(224)]
+    [FieldOffset(232)]
     [RangeEx(1, 10)]
     public FP WallMaxSpeed;
     public override readonly Int32 GetHashCode() {
@@ -777,6 +779,7 @@ namespace Quantum {
         hash = hash * 31 + SlopeMaxSpeed.GetHashCode();
         hash = hash * 31 + FreeFallMaxSpeed.GetHashCode();
         hash = hash * 31 + JumpImpulse.GetHashCode();
+        hash = hash * 31 + DoubleJumpImpulse.GetHashCode();
         hash = hash * 31 + AirControlFactor.GetHashCode();
         hash = hash * 31 + FastFlipOnAir.GetHashCode();
         hash = hash * 31 + DownGravityOnRelease.GetHashCode();
@@ -818,6 +821,7 @@ namespace Quantum {
         FP.Serialize(&p->DashDuration, serializer);
         FP.Serialize(&p->Deceleration, serializer);
         FP.Serialize(&p->DecelerationOnAir, serializer);
+        FP.Serialize(&p->DoubleJumpImpulse, serializer);
         FP.Serialize(&p->DownGravityMultiplier, serializer);
         FP.Serialize(&p->FlipDirectionMultiplier, serializer);
         FP.Serialize(&p->FreeFallMaxSpeed, serializer);

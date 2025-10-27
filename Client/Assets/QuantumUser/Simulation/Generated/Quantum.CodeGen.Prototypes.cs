@@ -142,6 +142,7 @@ namespace Quantum.Prototypes {
     public FP FreeFallMaxSpeed;
     [Space(5)]
     public FP JumpImpulse;
+    public FP DoubleJumpImpulse;
     [RangeEx(0, 1)]
     public FP AirControlFactor;
     public QBoolean FastFlipOnAir;
@@ -188,6 +189,7 @@ namespace Quantum.Prototypes {
         result.SlopeMaxSpeed = this.SlopeMaxSpeed;
         result.FreeFallMaxSpeed = this.FreeFallMaxSpeed;
         result.JumpImpulse = this.JumpImpulse;
+        result.DoubleJumpImpulse = this.DoubleJumpImpulse;
         result.AirControlFactor = this.AirControlFactor;
         result.FastFlipOnAir = this.FastFlipOnAir;
         result.DownGravityOnRelease = this.DownGravityOnRelease;

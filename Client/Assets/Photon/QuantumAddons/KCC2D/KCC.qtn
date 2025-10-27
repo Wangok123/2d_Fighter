@@ -74,6 +74,7 @@ struct KCC2DSettings {
 
     [Space(5)]
     FP JumpImpulse;
+    FP DoubleJumpImpulse;
     [RangeEx(0, 1)]
     FP AirControlFactor;
     bool FastFlipOnAir;

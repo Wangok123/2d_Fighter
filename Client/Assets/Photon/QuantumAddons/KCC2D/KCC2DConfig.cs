@@ -42,6 +42,7 @@ namespace Quantum
       SlopeMaxSpeed = 10,
       FreeFallMaxSpeed = 25,
       JumpImpulse = 10,
+      DoubleJumpImpulse = 5,
       AirControlFactor = 1,
       FastFlipOnAir = true,
       DownGravityOnRelease = true,
@@ -200,6 +201,8 @@ namespace Quantum
           case KCCState.JUMPED:
             if (_context.Settings.DoubleJumpEnabled)
             {
+              impulse = new FPVector2(_context.KCC->KinematicHorizontalSpeed, _context.Settings.DoubleJumpImpulse);
+
               _context.KCC->Jump(_context.Frame, _context.Entity, impulse);
               _context.Frame.Events.Jumped(_context.Entity, KCCState.DOUBLE_JUMPED, KCCState.JUMPED, impulse);
               _context.KCC->SetState(_context.Frame, KCCState.DOUBLE_JUMPED, 1);
@@ -217,6 +220,8 @@ namespace Quantum
           case KCCState.FREE_FALLING:
             if (_context.Settings.DoubleJumpEnabled && _context.Settings.DoubleJumpWhenFreeFalling)
             {
+              impulse = new FPVector2(_context.KCC->KinematicHorizontalSpeed, _context.Settings.DoubleJumpImpulse);
+              
               _context.KCC->Jump(_context.Frame, _context.Entity, impulse);
               _context.Frame.Events.Jumped(_context.Entity, KCCState.DOUBLE_JUMPED, KCCState.FREE_FALLING, impulse);
               _context.KCC->SetState(_context.Frame, KCCState.DOUBLE_JUMPED, 1);
