@@ -8,25 +8,45 @@ namespace Core.AnimationSystem
     /// <summary>
     /// 动画状态管理器 - 用于管理大量动画状态，避免手动连接复杂的Animator状态机
     /// Animation State Manager - Used to manage many animation states, avoiding manual connection of complex Animator state machines
+    /// 
+    /// 性能优化说明 / Performance Optimization:
+    /// - 使用int哈希值作为字典键，避免字符串比较开销
+    /// - Uses int hash as dictionary key to avoid string comparison overhead
+    /// - 字符串仅用于调试和错误日志
+    /// - Strings only used for debugging and error logging
     /// </summary>
     public class AnimationStateManager
     {
         private readonly Animator _animator;
-        private readonly Dictionary<string, AnimationStateInfo> _animations;
-        private string _currentState;
-        private string _defaultState;
+        private readonly Dictionary<int, AnimationStateInfo> _animations;
+        private int _currentStateHash;
+        private int _defaultStateHash;
         private bool _isTransitioning;
 
-        public string CurrentState => _currentState;
+        public string CurrentState => GetStateNameByHash(_currentStateHash);
         public Animator Animator => _animator;
 
         public AnimationStateManager(Animator animator)
         {
             _animator = animator ?? throw new ArgumentNullException(nameof(animator));
-            _animations = new Dictionary<string, AnimationStateInfo>(50);
-            _currentState = string.Empty;
-            _defaultState = string.Empty;
+            _animations = new Dictionary<int, AnimationStateInfo>(50);
+            _currentStateHash = 0;
+            _defaultStateHash = 0;
             _isTransitioning = false;
+        }
+
+        /// <summary>
+        /// 根据Hash获取状态名称（用于调试）
+        /// Get state name by hash (for debugging)
+        /// </summary>
+        private string GetStateNameByHash(int hash)
+        {
+            if (hash == 0) return string.Empty;
+            if (_animations.TryGetValue(hash, out var info))
+            {
+                return info.StateName;
+            }
+            return string.Empty;
         }
 
         /// <summary>
@@ -45,7 +65,9 @@ namespace Core.AnimationSystem
                 return;
             }
 
-            if (_animations.ContainsKey(stateName))
+            int stateHash = Animator.StringToHash(stateName);
+
+            if (_animations.ContainsKey(stateHash))
             {
                 GameDebug.LogWarning($"Animation state already registered: {stateName}");
                 return;
@@ -56,14 +78,14 @@ namespace Core.AnimationSystem
                 StateName = stateName,
                 Layer = layer,
                 CrossfadeDuration = crossfadeDuration,
-                StateHash = Animator.StringToHash(stateName)
+                StateHash = stateHash
             };
 
-            _animations.Add(stateName, stateInfo);
+            _animations.Add(stateHash, stateInfo);
 
             if (isDefault)
             {
-                _defaultState = stateName;
+                _defaultStateHash = stateHash;
             }
         }
 
@@ -93,21 +115,33 @@ namespace Core.AnimationSystem
                 return;
             }
 
+            int stateHash = Animator.StringToHash(stateName);
+            PlayAnimationByHash(stateHash, stateName, forceReplay);
+        }
+
+        /// <summary>
+        /// 通过Hash播放动画（性能优化版本）
+        /// Play animation by hash (performance optimized version)
+        /// </summary>
+        /// <param name="stateHash">状态Hash值</param>
+        /// <param name="forceReplay">是否强制重新播放</param>
+        private void PlayAnimationByHash(int stateHash, string stateNameForLog, bool forceReplay = false)
+        {
             // 如果已经在播放相同的动画且不强制重播，则忽略
-            if (_currentState == stateName && !forceReplay)
+            if (_currentStateHash == stateHash && !forceReplay)
             {
                 return;
             }
 
-            if (!_animations.TryGetValue(stateName, out var stateInfo))
+            if (!_animations.TryGetValue(stateHash, out var stateInfo))
             {
-                GameDebug.LogError($"Animation state not registered: {stateName}");
+                GameDebug.LogError($"Animation state not registered: {stateNameForLog}");
                 return;
             }
 
             // 使用CrossFade实现平滑过渡
             _animator.CrossFade(stateInfo.StateHash, stateInfo.CrossfadeDuration, stateInfo.Layer);
-            _currentState = stateName;
+            _currentStateHash = stateHash;
         }
 
         /// <summary>
@@ -122,14 +156,16 @@ namespace Core.AnimationSystem
                 return;
             }
 
-            if (!_animations.TryGetValue(stateName, out var stateInfo))
+            int stateHash = Animator.StringToHash(stateName);
+
+            if (!_animations.TryGetValue(stateHash, out var stateInfo))
             {
                 GameDebug.LogError($"Animation state not registered: {stateName}");
                 return;
             }
 
             _animator.Play(stateInfo.StateHash, stateInfo.Layer);
-            _currentState = stateName;
+            _currentStateHash = stateHash;
         }
 
         /// <summary>
@@ -138,13 +174,20 @@ namespace Core.AnimationSystem
         /// </summary>
         public void PlayDefaultState()
         {
-            if (string.IsNullOrEmpty(_defaultState))
+            if (_defaultStateHash == 0)
             {
                 GameDebug.LogWarning("No default state set");
                 return;
             }
 
-            PlayAnimation(_defaultState);
+            if (!_animations.TryGetValue(_defaultStateHash, out var stateInfo))
+            {
+                GameDebug.LogError("Default state not found in registered animations");
+                return;
+            }
+
+            _animator.CrossFade(_defaultStateHash, stateInfo.CrossfadeDuration, stateInfo.Layer);
+            _currentStateHash = _defaultStateHash;
         }
 
         /// <summary>
@@ -162,7 +205,8 @@ namespace Core.AnimationSystem
         /// </summary>
         public bool IsPlaying(string stateName)
         {
-            return _currentState == stateName;
+            int stateHash = Animator.StringToHash(stateName);
+            return _currentStateHash == stateHash;
         }
 
         /// <summary>
@@ -216,8 +260,8 @@ namespace Core.AnimationSystem
         public void Clear()
         {
             _animations.Clear();
-            _currentState = string.Empty;
-            _defaultState = string.Empty;
+            _currentStateHash = 0;
+            _defaultStateHash = 0;
         }
     }
 
