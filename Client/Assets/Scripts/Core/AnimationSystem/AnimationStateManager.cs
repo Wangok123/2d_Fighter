@@ -23,8 +23,55 @@ namespace Core.AnimationSystem
         private int _defaultStateHash;
         private bool _isTransitioning;
 
+        // 辅助工具 / Helper Tools
+        private AnimatorParameterHelper _parameterHelper;
+        private AnimatorLayerHelper _layerHelper;
+        private AnimatorExtendedHelper _extendedHelper;
+
         public string CurrentState => GetStateNameByHash(_currentStateHash);
         public Animator Animator => _animator;
+
+        /// <summary>
+        /// 参数辅助工具（延迟初始化）
+        /// Parameter helper (lazy initialization)
+        /// </summary>
+        public AnimatorParameterHelper ParameterHelper
+        {
+            get
+            {
+                if (_parameterHelper == null)
+                    _parameterHelper = new AnimatorParameterHelper(_animator);
+                return _parameterHelper;
+            }
+        }
+
+        /// <summary>
+        /// 层级辅助工具（延迟初始化）
+        /// Layer helper (lazy initialization)
+        /// </summary>
+        public AnimatorLayerHelper LayerHelper
+        {
+            get
+            {
+                if (_layerHelper == null)
+                    _layerHelper = new AnimatorLayerHelper(_animator);
+                return _layerHelper;
+            }
+        }
+
+        /// <summary>
+        /// 扩展辅助工具（延迟初始化）
+        /// Extended helper (lazy initialization)
+        /// </summary>
+        public AnimatorExtendedHelper ExtendedHelper
+        {
+            get
+            {
+                if (_extendedHelper == null)
+                    _extendedHelper = new AnimatorExtendedHelper(_animator);
+                return _extendedHelper;
+            }
+        }
 
         public AnimationStateManager(Animator animator)
         {

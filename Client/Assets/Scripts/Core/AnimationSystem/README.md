@@ -13,7 +13,12 @@ This system solves the problem of managing 24+ animation states in the Warrior A
 - `Client/Assets/Scripts/Core/AnimationSystem/AnimationStateConfig.cs` - ScriptableObject configuration
 - `Client/Assets/Scripts/Core/AnimationSystem/AnimationStateController.cs` - MonoBehaviour component
 
-### Extensible Base Class / 可扩展基类 ⭐ NEW
+### Helper Classes / 辅助类 ⭐ NEW
+- `Client/Assets/Scripts/Core/AnimationSystem/AnimatorParameterHelper.cs` - Parameter management (SetBool, SetTrigger, etc.)
+- `Client/Assets/Scripts/Core/AnimationSystem/AnimatorLayerHelper.cs` - Layer weight management
+- `Client/Assets/Scripts/Core/AnimationSystem/AnimatorExtendedHelper.cs` - IK, state queries, advanced features
+
+### Extensible Base Class / 可扩展基类
 - `Client/Assets/Scripts/Quantum/QuantumView/CharacterAnimationManager.cs` - Extensible base class for character animations
 
 ### Character Implementations / 角色实现
@@ -150,8 +155,84 @@ public class MyCharacterAnimationManager : CharacterAnimationManager
 4. **High Performance** - Hash-based lookups instead of string comparisons (~5x faster)
    **高性能** - 基于哈希查找而非字符串比较（约5倍性能提升）
 
-5. **Extensible Base Class** - CharacterAnimationManager provides reusable foundation for all characters ⭐
-   **可扩展基类** - CharacterAnimationManager为所有角色提供可重用基础 ⭐
+5. **Extensible Base Class** - CharacterAnimationManager provides reusable foundation for all characters
+   **可扩展基类** - CharacterAnimationManager为所有角色提供可重用基础
+
+6. **Rich Helper Classes** - AnimatorParameterHelper, LayerHelper, ExtendedHelper for advanced features ⭐ NEW
+   **丰富的辅助类** - AnimatorParameterHelper、LayerHelper、ExtendedHelper提供高级功能 ⭐ 新增
+
+## Helper Classes Usage / 辅助类使用方法 ⭐ NEW
+
+The system now includes powerful helper classes for advanced Animator features:
+
+### AnimatorParameterHelper - 参数管理
+
+```csharp
+// Access via AnimationStateManager
+var paramHelper = stateManager.ParameterHelper;
+
+// Set parameters (with hash caching for performance)
+paramHelper.SetBool("isGrounded", true);
+paramHelper.SetInt("weaponType", 2);
+paramHelper.SetFloat("speed", 5.5f);
+paramHelper.SetTrigger("attack");
+
+// Get parameter values
+bool isGrounded = paramHelper.GetBool("isGrounded");
+int weaponType = paramHelper.GetInt("weaponType");
+float speed = paramHelper.GetFloat("speed");
+
+// Batch operations
+paramHelper.SetBools(new Dictionary<string, bool> {
+    { "isGrounded", true },
+    { "isRunning", false }
+});
+
+// Reset all triggers
+paramHelper.ResetAllTriggers();
+```
+
+### AnimatorLayerHelper - 层级管理
+
+```csharp
+var layerHelper = stateManager.LayerHelper;
+
+// Set layer weight
+layerHelper.SetLayerWeight("UpperBody", 1.0f);
+layerHelper.SetLayerWeight(1, 0.5f); // By index
+
+// Smooth transitions
+layerHelper.FadeInLayer(1, 2.0f, Time.deltaTime);
+layerHelper.FadeOutLayer(1, 2.0f, Time.deltaTime);
+
+// Enable/Disable layers
+layerHelper.EnableLayer(1);
+layerHelper.DisableLayer(2);
+```
+
+### AnimatorExtendedHelper - 高级功能
+
+```csharp
+var extendedHelper = stateManager.ExtendedHelper;
+
+// State queries
+bool isInAttack = extendedHelper.IsInState("Attack");
+bool isTransitioning = extendedHelper.IsInTransition();
+float progress = extendedHelper.GetNormalizedTime();
+
+// IK control
+extendedHelper.SetIKPositionWeight(AvatarIKGoal.RightHand, 1.0f);
+extendedHelper.SetIKPosition(AvatarIKGoal.RightHand, targetPosition);
+
+// Look At
+extendedHelper.SetLookAtWeight(1.0f);
+extendedHelper.SetLookAtPosition(enemyPosition);
+
+// Speed control
+extendedHelper.Pause();
+extendedHelper.Resume();
+extendedHelper.SetSpeed(2.0f);
+```
 
 ## Warrior Animation States / Warrior动画状态
 
