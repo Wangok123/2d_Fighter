@@ -1,0 +1,71 @@
+// 动画状态组件 - 存储当前动画状态
+// Animation State Component - Stores current animation state
+component AnimationState
+{
+    // 当前动画状态哈希值 (使用Animator.StringToHash生成)
+    Int32 CurrentStateHash;
+    
+    // 动画优先级 (0=Idle, 10=Movement, 20=Jump, 30=Attack, 40=Skill, 50=Throw, 60=Hit, 70=Knockdown, 100=Death)
+    Int32 Priority;
+    
+    // 动画开始时间
+    FPAnimationTime StartTime;
+    
+    // 是否正在过渡
+    Boolean IsTransitioning;
+    
+    // 过渡持续时间
+    FP TransitionDuration;
+}
+
+// 动画配置组件 - 引用动画配置资源
+// Animation Config Component - References animation config asset
+component AnimationConfig
+{
+    asset_ref<AnimationConfigData> ConfigAsset;
+}
+
+// 投技状态组件 - 存储投技相关状态
+// Throw State Component - Stores throw-related state
+component ThrowState
+{
+    // 投技状态 (0=Idle, 1=GrabAttempt, 2=Holding, 3=Executing, 4=Recovery)
+    Int32 State;
+    
+    // 被抓取的目标实体
+    EntityRef GrabbedTarget;
+    
+    // 投技开始时间
+    FPAnimationTime ThrowStartTime;
+    
+    // 是否正在执行投技
+    Boolean IsExecuting;
+}
+
+// 受击状态组件 - 存储受击相关信息
+// Hit State Component - Stores hit-related information
+component HitReaction
+{
+    // 是否在地面
+    Boolean IsGrounded;
+    
+    // 硬直计时器
+    FrameTimer HitStunTimer;
+    
+    // 击退速度
+    FPVector2 KnockbackVelocity;
+}
+
+// 连招数据组件 - 存储连招相关信息
+// Combo Data Component - Stores combo-related information
+component ComboData
+{
+    // 当前连招计数
+    Int32 ComboCount;
+    
+    // 连招窗口计时器
+    FrameTimer ComboWindowTimer;
+    
+    // 上次攻击的哈希值
+    Int32 LastAttackHash;
+}
