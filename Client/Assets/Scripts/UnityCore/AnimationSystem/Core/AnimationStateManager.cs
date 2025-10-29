@@ -104,7 +104,17 @@ namespace UnityCore.AnimationSystem
         /// <param name="layer">动画层级，默认为0</param>
         /// <param name="crossfadeDuration">过渡时间，默认0.1秒</param>
         /// <param name="isDefault">是否为默认状态</param>
-        public void RegisterState(string stateName, int layer = 0, float crossfadeDuration = 0.1f, bool isDefault = false)
+        /// <param name="priority">动画优先级，用于取消机制</param>
+        /// <param name="cancelPolicy">取消策略</param>
+        /// <param name="cancelWindows">取消窗口列表</param>
+        public void RegisterState(
+            string stateName, 
+            int layer = 0, 
+            float crossfadeDuration = 0.1f, 
+            bool isDefault = false,
+            AnimationPriority priority = AnimationPriority.Idle,
+            AnimationCancelPolicy cancelPolicy = AnimationCancelPolicy.AlwaysCancellable,
+            CancelWindow[] cancelWindows = null)
         {
             if (string.IsNullOrEmpty(stateName))
             {
@@ -125,7 +135,10 @@ namespace UnityCore.AnimationSystem
                 StateName = stateName,
                 Layer = layer,
                 CrossfadeDuration = crossfadeDuration,
-                StateHash = stateHash
+                StateHash = stateHash,
+                Priority = priority,
+                CancelPolicy = cancelPolicy,
+                CancelWindows = cancelWindows
             };
 
             _animations.Add(stateHash, stateInfo);
@@ -154,7 +167,8 @@ namespace UnityCore.AnimationSystem
         /// </summary>
         /// <param name="stateName">状态名称</param>
         /// <param name="forceReplay">是否强制重新播放（即使当前已经是这个动画）</param>
-        public void PlayAnimation(string stateName, bool forceReplay = false)
+        /// <param name="ignoreCancelRules">是否忽略取消规则（用于强制切换）</param>
+        public void PlayAnimation(string stateName, bool forceReplay = false, bool ignoreCancelRules = false)
         {
             if (string.IsNullOrEmpty(stateName))
             {
@@ -163,7 +177,7 @@ namespace UnityCore.AnimationSystem
             }
 
             int stateHash = Animator.StringToHash(stateName);
-            PlayAnimationByHash(stateHash, stateName, forceReplay);
+            PlayAnimationByHash(stateHash, stateName, forceReplay, ignoreCancelRules);
         }
 
         /// <summary>
@@ -172,7 +186,8 @@ namespace UnityCore.AnimationSystem
         /// </summary>
         /// <param name="stateHash">状态Hash值</param>
         /// <param name="forceReplay">是否强制重新播放</param>
-        private void PlayAnimationByHash(int stateHash, string stateNameForLog, bool forceReplay = false)
+        /// <param name="ignoreCancelRules">是否忽略取消规则</param>
+        private void PlayAnimationByHash(int stateHash, string stateNameForLog, bool forceReplay = false, bool ignoreCancelRules = false)
         {
             // 如果已经在播放相同的动画且不强制重播，则忽略
             if (_currentStateHash == stateHash && !forceReplay)
@@ -180,15 +195,100 @@ namespace UnityCore.AnimationSystem
                 return;
             }
 
-            if (!_animations.TryGetValue(stateHash, out var stateInfo))
+            if (!_animations.TryGetValue(stateHash, out var targetStateInfo))
             {
                 GameDebug.LogError($"Animation state not registered: {stateNameForLog}");
                 return;
             }
 
+            // 检查是否可以取消当前动画 / Check if current animation can be cancelled
+            if (!ignoreCancelRules && _currentStateHash != 0 && !CanCancelCurrentAnimation(targetStateInfo))
+            {
+                GameDebug.LogWarning($"Cannot cancel current animation to play: {stateNameForLog}");
+                return;
+            }
+
             // 使用CrossFade实现平滑过渡
-            _animator.CrossFade(stateInfo.StateHash, stateInfo.CrossfadeDuration, stateInfo.Layer);
+            _animator.CrossFade(targetStateInfo.StateHash, targetStateInfo.CrossfadeDuration, targetStateInfo.Layer);
             _currentStateHash = stateHash;
+        }
+
+        /// <summary>
+        /// 检查当前动画是否可以被取消
+        /// Check if current animation can be cancelled
+        /// </summary>
+        private bool CanCancelCurrentAnimation(AnimationStateInfo targetState)
+        {
+            // 如果没有当前状态，直接返回true
+            if (_currentStateHash == 0)
+                return true;
+
+            // 获取当前动画状态信息
+            if (!_animations.TryGetValue(_currentStateHash, out var currentState))
+                return true;
+
+            // 1. 检查优先级 / Check priority
+            if (targetState.Priority > currentState.Priority)
+            {
+                // 目标动画优先级更高，可以打断
+                return true;
+            }
+
+            if (targetState.Priority < currentState.Priority)
+            {
+                // 目标动画优先级更低，不能打断
+                return false;
+            }
+
+            // 2. 优先级相同，检查取消策略 / Same priority, check cancel policy
+            switch (currentState.CancelPolicy)
+            {
+                case AnimationCancelPolicy.NonCancellable:
+                    // 不可取消
+                    return false;
+
+                case AnimationCancelPolicy.AlwaysCancellable:
+                    // 总是可以取消
+                    return true;
+
+                case AnimationCancelPolicy.OnlyByHigherPriority:
+                    // 仅可被更高优先级打断（已经在优先级检查中处理）
+                    return false;
+
+                case AnimationCancelPolicy.CancellableOnEnd:
+                    // 检查是否接近结束
+                    float normalizedTime = GetNormalizedTime(currentState.Layer);
+                    return normalizedTime >= 0.8f; // 80%以上可以取消
+
+                case AnimationCancelPolicy.CancellableInWindow:
+                    // 检查是否在取消窗口内
+                    return IsInCancelWindow(currentState, targetState.StateName);
+
+                default:
+                    return true;
+            }
+        }
+
+        /// <summary>
+        /// 检查当前动画是否在取消窗口内
+        /// Check if current animation is in cancel window
+        /// </summary>
+        private bool IsInCancelWindow(AnimationStateInfo currentState, string targetAnimationName)
+        {
+            if (currentState.CancelWindows == null || currentState.CancelWindows.Length == 0)
+                return false;
+
+            float normalizedTime = GetNormalizedTime(currentState.Layer);
+
+            foreach (var window in currentState.CancelWindows)
+            {
+                if (window.IsInWindow(normalizedTime) && window.CanCancelTo(targetAnimationName))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -301,6 +401,56 @@ namespace UnityCore.AnimationSystem
         }
 
         /// <summary>
+        /// 获取当前动画的优先级
+        /// Get current animation priority
+        /// </summary>
+        public AnimationPriority GetCurrentPriority()
+        {
+            if (_currentStateHash == 0)
+                return AnimationPriority.Idle;
+
+            if (_animations.TryGetValue(_currentStateHash, out var stateInfo))
+            {
+                return stateInfo.Priority;
+            }
+
+            return AnimationPriority.Idle;
+        }
+
+        /// <summary>
+        /// 获取指定动画的优先级
+        /// Get priority of specified animation
+        /// </summary>
+        public AnimationPriority GetPriority(string stateName)
+        {
+            int stateHash = Animator.StringToHash(stateName);
+            if (_animations.TryGetValue(stateHash, out var stateInfo))
+            {
+                return stateInfo.Priority;
+            }
+
+            return AnimationPriority.Idle;
+        }
+
+        /// <summary>
+        /// 检查是否可以播放指定动画（不实际播放）
+        /// Check if specified animation can be played (without actually playing)
+        /// </summary>
+        public bool CanPlayAnimation(string stateName)
+        {
+            int stateHash = Animator.StringToHash(stateName);
+            if (!_animations.TryGetValue(stateHash, out var targetStateInfo))
+            {
+                return false;
+            }
+
+            if (_currentStateHash == 0)
+                return true;
+
+            return CanCancelCurrentAnimation(targetStateInfo);
+        }
+
+        /// <summary>
         /// 清除所有已注册的状态
         /// Clear all registered states
         /// </summary>
@@ -322,5 +472,10 @@ namespace UnityCore.AnimationSystem
         public int Layer;
         public float CrossfadeDuration;
         public int StateHash;
+        
+        // 取消机制相关字段 / Cancel mechanism related fields
+        public AnimationPriority Priority = AnimationPriority.Idle;
+        public AnimationCancelPolicy CancelPolicy = AnimationCancelPolicy.AlwaysCancellable;
+        public CancelWindow[] CancelWindows = null;
     }
 }

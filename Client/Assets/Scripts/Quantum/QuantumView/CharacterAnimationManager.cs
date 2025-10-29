@@ -81,9 +81,10 @@ namespace Quantum.QuantumView
         /// 播放指定动画
         /// Play specified animation
         /// </summary>
-        public virtual void PlayAnimation(string stateName, bool forceReplay = false)
+        /// <param name="ignoreCancelRules">是否忽略取消规则</param>
+        public virtual void PlayAnimation(string stateName, bool forceReplay = false, bool ignoreCancelRules = false)
         {
-            _stateManager?.PlayAnimation(stateName, forceReplay);
+            _stateManager?.PlayAnimation(stateName, forceReplay, ignoreCancelRules);
         }
 
         /// <summary>
@@ -140,6 +141,24 @@ namespace Quantum.QuantumView
             return _stateManager?.GetNormalizedTime(layer) ?? 0f;
         }
 
+        /// <summary>
+        /// 检查是否可以播放指定动画（基于取消规则）
+        /// Check if specified animation can be played (based on cancel rules)
+        /// </summary>
+        public virtual bool CanPlayAnimation(string stateName)
+        {
+            return _stateManager?.CanPlayAnimation(stateName) ?? true;
+        }
+
+        /// <summary>
+        /// 获取当前动画的优先级
+        /// Get current animation priority
+        /// </summary>
+        public virtual AnimationPriority GetCurrentPriority()
+        {
+            return _stateManager?.GetCurrentPriority() ?? AnimationPriority.Idle;
+        }
+
         #endregion
 
         #region Helper Methods / 辅助方法
@@ -157,12 +176,19 @@ namespace Quantum.QuantumView
         }
 
         /// <summary>
-        /// 注册单个动画状态
-        /// Register a single animation state
+        /// 注册单个动画状态（支持取消机制）
+        /// Register a single animation state (with cancel mechanism support)
         /// </summary>
-        protected void RegisterState(string stateName, int layer = 0, float crossfadeDuration = 0.1f, bool isDefault = false)
+        protected void RegisterState(
+            string stateName, 
+            int layer = 0, 
+            float crossfadeDuration = 0.1f, 
+            bool isDefault = false,
+            AnimationPriority priority = AnimationPriority.Idle,
+            AnimationCancelPolicy cancelPolicy = AnimationCancelPolicy.AlwaysCancellable,
+            CancelWindow[] cancelWindows = null)
         {
-            _stateManager.RegisterState(stateName, layer, crossfadeDuration, isDefault);
+            _stateManager.RegisterState(stateName, layer, crossfadeDuration, isDefault, priority, cancelPolicy, cancelWindows);
         }
 
         #endregion
