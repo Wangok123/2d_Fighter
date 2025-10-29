@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Core.AnimationSystem
+namespace UnityCore.AnimationSystem
 {
     /// <summary>
     /// Animator层级辅助类 - 管理动画层级

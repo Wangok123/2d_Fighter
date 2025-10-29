@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Core.AnimationSystem
+namespace UnityCore.AnimationSystem
 {
     /// <summary>
     /// 动画状态配置 - 用于在Inspector中配置动画状态

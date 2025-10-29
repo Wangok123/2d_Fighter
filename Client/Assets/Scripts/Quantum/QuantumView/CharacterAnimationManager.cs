@@ -1,4 +1,4 @@
-using Core.AnimationSystem;
+using UnityCore.AnimationSystem;
 using UnityEngine;
 
 namespace Quantum.QuantumView

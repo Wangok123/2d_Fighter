@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using LATLog;
 
-namespace Core.AnimationSystem
+namespace UnityCore.AnimationSystem
 {
     /// <summary>
     /// 动画状态管理器 - 用于管理大量动画状态，避免手动连接复杂的Animator状态机

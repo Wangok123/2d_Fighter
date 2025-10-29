@@ -1,7 +1,7 @@
 using UnityEngine;
 using LATLog;
 
-namespace Core.AnimationSystem
+namespace UnityCore.AnimationSystem
 {
     /// <summary>
     /// 动画状态控制器组件 - 简化在Unity中使用AnimationStateManager

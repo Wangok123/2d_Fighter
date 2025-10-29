@@ -1,5 +1,5 @@
 using UnityEngine;
-using Core.AnimationSystem;
+using UnityCore.AnimationSystem;
 
 namespace Examples
 {

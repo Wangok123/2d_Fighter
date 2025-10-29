@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Core.AnimationSystem
+namespace UnityCore.AnimationSystem
 {
     /// <summary>
     /// Animator扩展辅助类 - 提供IK、状态查询等高级功能
