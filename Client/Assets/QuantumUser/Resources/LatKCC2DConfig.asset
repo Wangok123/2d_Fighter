@@ -18,7 +18,7 @@ MonoBehaviour:
       Value: 335552892607164892
   BaseSettings:
     CapsuleRadius:
-      RawValue: 16384
+      RawValue: 32768
     CapsuleHeight:
       RawValue: 131072
     Offset:
@@ -93,7 +93,7 @@ MonoBehaviour:
       RawValue: 6553600
     WallJumpImpulse:
       X:
-        RawValue: 65536
+        RawValue: 655360
       Y:
         RawValue: 393216
     WallMaxSpeed:

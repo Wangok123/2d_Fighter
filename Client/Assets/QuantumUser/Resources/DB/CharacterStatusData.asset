@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: CharacterStatusData
   m_EditorClassIdentifier: 
   Identifier:
-    Path: QuantumUser/Resources/AssetObjects/CharacterStatusData
+    Path: QuantumUser/Resources/DB/CharacterStatusData
     Guid:
       Value: 336468280525922348
   MaxHealth:
