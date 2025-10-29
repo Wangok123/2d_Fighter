@@ -13,8 +13,12 @@ This system solves the problem of managing 24+ animation states in the Warrior A
 - `Client/Assets/Scripts/Core/AnimationSystem/AnimationStateConfig.cs` - ScriptableObject configuration
 - `Client/Assets/Scripts/Core/AnimationSystem/AnimationStateController.cs` - MonoBehaviour component
 
-### Warrior Implementation / Warrior实现
+### Extensible Base Class / 可扩展基类 ⭐ NEW
+- `Client/Assets/Scripts/Quantum/QuantumView/CharacterAnimationManager.cs` - Extensible base class for character animations
+
+### Character Implementations / 角色实现
 - `Client/Assets/Scripts/Quantum/QuantumView/WarriorAnimationManager.cs` - Warrior-specific implementation
+- `Client/Assets/Scripts/Quantum/QuantumView/EnemyAnimationManager.cs` - Enemy example implementation
 
 ### Examples / 示例
 - `Client/Assets/Scripts/Examples/AnimationSystemExample.cs` - Usage example
@@ -79,6 +83,59 @@ public class CustomController : MonoBehaviour
 }
 ```
 
+## Option 3: Create Your Own Character Animation Manager (Extensible) ⭐ NEW / 创建自定义角色动画管理器（可扩展）
+
+The system now includes `CharacterAnimationManager` base class for easy extensibility:
+系统现在包含`CharacterAnimationManager`基类，便于扩展：
+
+```csharp
+using Quantum.QuantumView;
+using UnityEngine;
+
+// 1. Inherit from CharacterAnimationManager
+// 1. 继承CharacterAnimationManager
+public class MyCharacterAnimationManager : CharacterAnimationManager
+{
+    // 2. Define animation state constants
+    // 2. 定义动画状态常量
+    public static class AnimationStates
+    {
+        public const string Idle = "Idle";
+        public const string Walk = "Walk";
+        public const string Attack = "Attack";
+        // ... add more states
+    }
+    
+    // 3. Implement RegisterAnimationStates method
+    // 3. 实现RegisterAnimationStates方法
+    protected override void RegisterAnimationStates()
+    {
+        RegisterState(AnimationStates.Idle, isDefault: true);
+        RegisterState(AnimationStates.Walk, crossfadeDuration: 0.15f);
+        RegisterState(AnimationStates.Attack, crossfadeDuration: 0.05f);
+        // ... register more states
+    }
+    
+    // 4. Optional: Add convenience methods
+    // 4. 可选：添加便捷方法
+    public void PlayIdle() => PlayAnimation(AnimationStates.Idle);
+    public void PlayWalk() => PlayAnimation(AnimationStates.Walk);
+    public void PlayAttack() => PlayAnimation(AnimationStates.Attack);
+}
+```
+
+**Benefits of using CharacterAnimationManager base class:**
+- Reusable code for all character types
+- Consistent API across different characters
+- Less boilerplate code
+- Easy to create new character animation managers
+
+**使用CharacterAnimationManager基类的好处：**
+- 所有角色类型可重用代码
+- 不同角色间一致的API
+- 更少的样板代码
+- 轻松创建新的角色动画管理器
+
 ## Key Features / 主要特性
 
 1. **No Manual Transitions** - No need to connect states in Unity Animator
@@ -92,6 +149,9 @@ public class CustomController : MonoBehaviour
 
 4. **High Performance** - Hash-based lookups instead of string comparisons (~5x faster)
    **高性能** - 基于哈希查找而非字符串比较（约5倍性能提升）
+
+5. **Extensible Base Class** - CharacterAnimationManager provides reusable foundation for all characters ⭐
+   **可扩展基类** - CharacterAnimationManager为所有角色提供可重用基础 ⭐
 
 ## Warrior Animation States / Warrior动画状态
 
