@@ -1,6 +1,7 @@
+using Quantum.QuantumView;
 using UnityEngine;
 
-namespace Quantum.QuantumView
+namespace UnityCore.AnimationSystem
 {
     /// <summary>
     /// Warrior角色动画管理器

@@ -1,11 +1,12 @@
-﻿using Quantum.QuantumView.Base;
+﻿using Photon.Deterministic;
+using Quantum.QuantumView.Base;
+using UnityCore.AnimationSystem;
 using UnityEngine;
 
 namespace Quantum.QuantumView
 {
     public unsafe class PlayerViewController : QuantumEntityViewComponent<CustomViewContext>
     {
-        private static readonly int IsFacingRight = Animator.StringToHash("IsFacingRight");
         private readonly Vector3 _rightRotation = Vector3.zero;
         private readonly Vector3 _leftRotation = new(0, 180, 0);
         
@@ -14,11 +15,20 @@ namespace Quantum.QuantumView
         /// </summary>
         [HideInInspector] public int LookDirection; 
         [SerializeField] private Transform _playerCenterTransform;
-        [SerializeField] private Animator _animator;
-        
+        [SerializeField] private WarriorAnimationManager _manager;
+
+        public override void OnActivate(Frame frame)
+        {
+            base.OnActivate(frame);
+        }
+
         public override void OnUpdateView()
         {
+            KCC2D* kcc = VerifiedFrame.Unsafe.GetPointer<KCC2D>(EntityRef);
+            KCC2DConfig config = VerifiedFrame.FindAsset(kcc->Config);
             UpdateRightFace();
+            UpdateAnimatorMovementSpeed(kcc, config);
+            UpdateAnimatorJumpState(kcc);
         }
 
         private void UpdateRightFace()
@@ -36,17 +46,38 @@ namespace Quantum.QuantumView
             }
         }
         
-        // private void UpdateAnimatorMovementSpeed(KCC2D* kcc, KCC2DConfig config)
-        // {
-        //     float normalizedSpeed = kcc->Ve->Velocity.ToUnityVector3().X0Z().magnitude / defaultKCCConfig.MaxSpeed.AsFloat;
-        //     _animator.SetFloat(NORMALIZED_SPEED_ANIM_HASH, normalizedSpeed);
-        // }
-        //
-        // private void UpdateAnimatorMovementSpeed(CharacterController3D* kcc, CharacterController2DConfig defaultKCCConfig)
-        // {
-        //     float normalizedSpeed = kcc->Velocity.ToUnityVector3().X0Z().magnitude / defaultKCCConfig.MaxSpeed.AsFloat;
-        //     _animator.SetFloat(NORMALIZED_SPEED_ANIM_HASH, normalizedSpeed);
-        // }
+        private void UpdateAnimatorMovementSpeed(KCC2D* kcc, KCC2DConfig config)
+        {
+            var isGrounded = kcc->State == KCCState.GROUNDED;
+            FP normalizedSpeed = kcc->_kinematicVelocity.Magnitude / config.BaseSettings.MaxBaseSpeed;
+            if (isGrounded)
+            {
+                if (normalizedSpeed <= 0.5f.ToFP())
+                {
+                    _manager.PlayIdle();
+                }
+                else
+                {
+                    _manager.PlayRun();
+                }
+            }
+        }
+
+        private void UpdateAnimatorJumpState(KCC2D* kcc)
+        {
+            var isGrounded = kcc->State == KCCState.GROUNDED;
+            if (!isGrounded)
+            {
+                if (kcc->_kinematicVelocity.Y > 0)
+                {
+                    _manager.PlayJump();
+                }
+                else
+                {
+                    _manager.PlayFall();
+                }
+            }
+        }
 
     }
 }
