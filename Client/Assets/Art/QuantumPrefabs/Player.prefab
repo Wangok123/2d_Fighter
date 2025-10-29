@@ -11,12 +11,12 @@ GameObject:
   - component: {fileID: 4506917322675575740}
   - component: {fileID: 2905312832402192909}
   - component: {fileID: 2924809605513461826}
-  - component: {fileID: 2397844459217927139}
   - component: {fileID: 2376690383729190282}
   - component: {fileID: 5428458400057698225}
   - component: {fileID: 5949349565070652282}
   - component: {fileID: 3351024916982054779}
   - component: {fileID: 4225920870206189311}
+  - component: {fileID: 8595205649062271519}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -304,18 +304,6 @@ MonoBehaviour:
   OnEntityDestroyed:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &2397844459217927139
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 747601124680124256}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 04a1f74c0f284b57a8be0af2e7423374, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &2376690383729190282
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -417,6 +405,18 @@ MonoBehaviour:
   LookDirection: 0
   _playerCenterTransform: {fileID: 8015249240277242128}
   _manager: {fileID: 664570513622321090}
+--- !u!114 &8595205649062271519
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 747601124680124256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 04a1f74c0f284b57a8be0af2e7423374, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4774830198564325150
 GameObject:
   m_ObjectHideFlags: 0

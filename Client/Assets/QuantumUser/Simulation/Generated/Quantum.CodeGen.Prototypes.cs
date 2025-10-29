@@ -50,6 +50,18 @@ namespace Quantum.Prototypes {
   #endif //;
   
   [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.CountdownTimer))]
+  public unsafe partial class CountdownTimerPrototype : StructPrototype {
+    public FP TimeLeft;
+    public FP StartTime;
+    partial void MaterializeUser(Frame frame, ref Quantum.CountdownTimer result, in PrototypeMaterializationContext context);
+    public void Materialize(Frame frame, ref Quantum.CountdownTimer result, in PrototypeMaterializationContext context = default) {
+        result.TimeLeft = this.TimeLeft;
+        result.StartTime = this.StartTime;
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.Input))]
   public unsafe partial class InputPrototype : StructPrototype {
     public Button _left;
@@ -255,6 +267,21 @@ namespace Quantum.Prototypes {
     }
     public void Materialize(Frame frame, ref Quantum.PlayerLink result, in PrototypeMaterializationContext context = default) {
         result.Player = this.Player;
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.PlayerStatus))]
+  public unsafe partial class PlayerStatusPrototype : ComponentPrototype<Quantum.PlayerStatus> {
+    [HideInInspector()]
+    public Int32 _empty_prototype_dummy_field_;
+    partial void MaterializeUser(Frame frame, ref Quantum.PlayerStatus result, in PrototypeMaterializationContext context);
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+        Quantum.PlayerStatus component = default;
+        Materialize((Frame)f, ref component, in context);
+        return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref Quantum.PlayerStatus result, in PrototypeMaterializationContext context = default) {
         MaterializeUser(frame, ref result, in context);
     }
   }

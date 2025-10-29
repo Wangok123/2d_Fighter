@@ -1,0 +1,16 @@
+enum PlayerTeam
+{
+    Blue, Red
+}
+
+component PlayerLink
+{
+	player_ref Player;
+}
+
+component PlayerStatus
+{
+    [ExcludeFromPrototype] player_ref PlayerRef;
+    [ExcludeFromPrototype] entity_ref SpawnerEntityRef;
+    [ExcludeFromPrototype] PlayerTeam PlayerTeam;
+}

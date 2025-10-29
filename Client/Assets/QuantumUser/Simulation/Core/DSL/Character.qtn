@@ -1,8 +1,3 @@
-component PlayerLink
-{
-	player_ref Player;
-}
-
 component Status
 {
     asset_ref<StatusData> StatusData;
