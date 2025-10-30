@@ -35,3 +35,18 @@ component AttackData
 	[ExcludeFromPrototype] FrameTimer AttackCooldown;
 	[ExcludeFromPrototype] bool IsAttacking;
 }
+
+event LevelUp
+{
+	EntityRef Entity;
+	Int32 NewLevel;
+	Int32 OldLevel;
+}
+
+event AttackPerformed
+{
+	EntityRef Attacker;
+	Boolean IsHeavyAttack;
+	Int32 ComboCount;
+	FP Damage;
+}

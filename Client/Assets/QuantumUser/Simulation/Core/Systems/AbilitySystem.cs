@@ -73,6 +73,9 @@ namespace Quantum
             filter.AttackData->AttackCooldown = FrameTimer.FromSeconds(frame, config.LightAttackCooldown);
             filter.AttackData->ComboResetTimer = FrameTimer.FromSeconds(frame, config.ComboWindow);
 
+            // Fire attack event
+            frame.Events.AttackPerformed(filter.Entity, false, filter.AttackData->ComboCounter, damage);
+
             // Log attack for debugging
             Log.Debug($"Light Attack - Combo: {filter.AttackData->ComboCounter}, Damage: {damage}");
 
@@ -87,6 +90,9 @@ namespace Quantum
             // Apply heavy attack
             filter.AttackData->IsAttacking = true;
             filter.AttackData->AttackCooldown = FrameTimer.FromSeconds(frame, config.HeavyAttackCooldown);
+
+            // Fire attack event
+            frame.Events.AttackPerformed(filter.Entity, true, 0, config.HeavyAttackDamage);
 
             // Log attack for debugging
             Log.Debug($"Heavy Attack - Damage: {config.HeavyAttackDamage}");
