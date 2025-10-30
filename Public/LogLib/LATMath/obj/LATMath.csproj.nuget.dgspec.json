@@ -1,24 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "D:\\Project\\2D_ACT\\Public\\LogLib\\LATMath\\LATMath.csproj": {}
+    "/home/runner/work/2d_Fighter/2d_Fighter/Public/LogLib/LATMath/LATMath.csproj": {}
   },
   "projects": {
-    "D:\\Project\\2D_ACT\\Public\\LogLib\\LATMath\\LATMath.csproj": {
+    "/home/runner/work/2d_Fighter/2d_Fighter/Public/LogLib/LATMath/LATMath.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "D:\\Project\\2D_ACT\\Public\\LogLib\\LATMath\\LATMath.csproj",
+        "projectUniqueName": "/home/runner/work/2d_Fighter/2d_Fighter/Public/LogLib/LATMath/LATMath.csproj",
         "projectName": "LATMath",
-        "projectPath": "D:\\Project\\2D_ACT\\Public\\LogLib\\LATMath\\LATMath.csproj",
-        "packagesPath": "C:\\Users\\lenovo\\.nuget\\packages\\",
-        "outputPath": "D:\\Project\\2D_ACT\\Public\\LogLib\\LATMath\\obj\\",
+        "projectPath": "/home/runner/work/2d_Fighter/2d_Fighter/Public/LogLib/LATMath/LATMath.csproj",
+        "packagesPath": "/home/runner/work/2d_Fighter/.codeql-scratch/dbs/csharp/working/packages",
+        "outputPath": "/home/runner/work/2d_Fighter/2d_Fighter/Public/LogLib/LATMath/obj/",
         "projectStyle": "PackageReference",
-        "fallbackFolders": [
-          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-        ],
         "configFilePaths": [
-          "C:\\Users\\lenovo\\AppData\\Roaming\\NuGet\\NuGet.Config",
-          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config"
+          "/home/runner/.nuget/NuGet/NuGet.Config"
         ],
         "originalTargetFrameworks": [
           "netstandard2.1"
@@ -41,7 +37,8 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "netstandard2.1": {
@@ -57,12 +54,18 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "NETStandard.Library.Ref",
+              "version": "[2.1.0, 2.1.0]"
+            }
+          ],
           "frameworkReferences": {
             "NETStandard.Library": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.404\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.305/RuntimeIdentifierGraph.json"
         }
       }
     }

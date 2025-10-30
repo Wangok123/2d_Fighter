@@ -223,34 +223,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\wanghan\\.nuget\\packages\\": {},
-    "C:\\Users\\wanghan\\AppData\\Roaming\\Godot\\mono\\GodotNuGetFallbackFolder": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "/home/runner/work/2d_Fighter/.codeql-scratch/dbs/csharp/working/packages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\UnityProject\\2-d_-act\\Public\\LogLib\\LatNetProtobuffer\\LatNetProtobuffer.csproj",
+      "projectUniqueName": "/home/runner/work/2d_Fighter/2d_Fighter/Public/LogLib/LatNetProtobuffer/LatNetProtobuffer.csproj",
       "projectName": "LatNetProtobuffer",
-      "projectPath": "D:\\UnityProject\\2-d_-act\\Public\\LogLib\\LatNetProtobuffer\\LatNetProtobuffer.csproj",
-      "packagesPath": "C:\\Users\\wanghan\\.nuget\\packages\\",
-      "outputPath": "D:\\UnityProject\\2-d_-act\\Public\\LogLib\\LatNetProtobuffer\\obj\\",
+      "projectPath": "/home/runner/work/2d_Fighter/2d_Fighter/Public/LogLib/LatNetProtobuffer/LatNetProtobuffer.csproj",
+      "packagesPath": "/home/runner/work/2d_Fighter/.codeql-scratch/dbs/csharp/working/packages",
+      "outputPath": "/home/runner/work/2d_Fighter/2d_Fighter/Public/LogLib/LatNetProtobuffer/obj/",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Users\\wanghan\\AppData\\Roaming\\Godot\\mono\\GodotNuGetFallbackFolder",
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\wanghan\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Users\\wanghan\\AppData\\Roaming\\NuGet\\config\\Godot.Offline.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        "/home/runner/.nuget/NuGet/NuGet.Config"
       ],
       "originalTargetFrameworks": [
         "netstandard2.1"
       ],
       "sources": {
-        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
         "https://api.nuget.org/v3/index.json": {}
       },
       "frameworks": {
@@ -263,7 +253,13 @@
         "warnAsError": [
           "NU1605"
         ]
-      }
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "direct"
+      },
+      "SdkAnalysisLevel": "9.0.300"
     },
     "frameworks": {
       "netstandard2.1": {
@@ -285,12 +281,18 @@
         ],
         "assetTargetFallback": true,
         "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "NETStandard.Library.Ref",
+            "version": "[2.1.0, 2.1.0]"
+          }
+        ],
         "frameworkReferences": {
           "NETStandard.Library": {
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.404\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.305/RuntimeIdentifierGraph.json"
       }
     }
   }
