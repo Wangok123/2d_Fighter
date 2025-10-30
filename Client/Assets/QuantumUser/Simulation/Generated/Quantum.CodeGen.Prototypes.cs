@@ -50,6 +50,33 @@ namespace Quantum.Prototypes {
   #endif //;
   
   [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.CharacterStatus))]
+  public unsafe partial class CharacterStatusPrototype : ComponentPrototype<Quantum.CharacterStatus> {
+    public AssetRef<StatusData> StatusData;
+    public FP CurrentHealth;
+    public QBoolean IsDead;
+    public Quantum.Prototypes.FrameTimerPrototype RespawnTimer;
+    public Quantum.Prototypes.FrameTimerPrototype RegenTimer;
+    public Quantum.Prototypes.FrameTimerPrototype InvincibleTimer;
+    public Quantum.Prototypes.FrameTimerPrototype DisconnectedTimer;
+    partial void MaterializeUser(Frame frame, ref Quantum.CharacterStatus result, in PrototypeMaterializationContext context);
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+        Quantum.CharacterStatus component = default;
+        Materialize((Frame)f, ref component, in context);
+        return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref Quantum.CharacterStatus result, in PrototypeMaterializationContext context = default) {
+        result.StatusData = this.StatusData;
+        result.CurrentHealth = this.CurrentHealth;
+        result.IsDead = this.IsDead;
+        this.RespawnTimer.Materialize(frame, ref result.RespawnTimer, in context);
+        this.RegenTimer.Materialize(frame, ref result.RegenTimer, in context);
+        this.InvincibleTimer.Materialize(frame, ref result.InvincibleTimer, in context);
+        this.DisconnectedTimer.Materialize(frame, ref result.DisconnectedTimer, in context);
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.CountdownTimer))]
   public unsafe partial class CountdownTimerPrototype : StructPrototype {
     public FP TimeLeft;
@@ -243,7 +270,8 @@ namespace Quantum.Prototypes {
   [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.MovementData))]
   public unsafe partial class MovementDataPrototype : ComponentPrototype<Quantum.MovementData> {
-    public QBoolean IsFacingRight;
+    [HideInInspector()]
+    public Int32 _empty_prototype_dummy_field_;
     partial void MaterializeUser(Frame frame, ref Quantum.MovementData result, in PrototypeMaterializationContext context);
     public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
         Quantum.MovementData component = default;
@@ -251,7 +279,6 @@ namespace Quantum.Prototypes {
         return f.Set(entity, component) == SetResult.ComponentAdded;
     }
     public void Materialize(Frame frame, ref Quantum.MovementData result, in PrototypeMaterializationContext context = default) {
-        result.IsFacingRight = this.IsFacingRight;
         MaterializeUser(frame, ref result, in context);
     }
   }
@@ -271,17 +298,19 @@ namespace Quantum.Prototypes {
     }
   }
   [System.SerializableAttribute()]
-  [Quantum.Prototypes.Prototype(typeof(Quantum.PlayerStatus))]
-  public unsafe partial class PlayerStatusPrototype : ComponentPrototype<Quantum.PlayerStatus> {
-    [HideInInspector()]
-    public Int32 _empty_prototype_dummy_field_;
-    partial void MaterializeUser(Frame frame, ref Quantum.PlayerStatus result, in PrototypeMaterializationContext context);
+  [Quantum.Prototypes.Prototype(typeof(Quantum.PlayerSpawner))]
+  public unsafe partial class PlayerSpawnerPrototype : ComponentPrototype<Quantum.PlayerSpawner> {
+    public PlayerRef PlayerRef;
+    public Quantum.QEnum32<CharacterTeam> PlayerTeam;
+    partial void MaterializeUser(Frame frame, ref Quantum.PlayerSpawner result, in PrototypeMaterializationContext context);
     public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
-        Quantum.PlayerStatus component = default;
+        Quantum.PlayerSpawner component = default;
         Materialize((Frame)f, ref component, in context);
         return f.Set(entity, component) == SetResult.ComponentAdded;
     }
-    public void Materialize(Frame frame, ref Quantum.PlayerStatus result, in PrototypeMaterializationContext context = default) {
+    public void Materialize(Frame frame, ref Quantum.PlayerSpawner result, in PrototypeMaterializationContext context = default) {
+        result.PlayerRef = this.PlayerRef;
+        result.PlayerTeam = this.PlayerTeam;
         MaterializeUser(frame, ref result, in context);
     }
   }
@@ -363,33 +392,6 @@ namespace Quantum.Prototypes {
         result.LP = this.LP;
         result.HP = this.HP;
         result.Use = this.Use;
-        MaterializeUser(frame, ref result, in context);
-    }
-  }
-  [System.SerializableAttribute()]
-  [Quantum.Prototypes.Prototype(typeof(Quantum.Status))]
-  public unsafe partial class StatusPrototype : ComponentPrototype<Quantum.Status> {
-    public AssetRef<StatusData> StatusData;
-    public FP CurrentHealth;
-    public QBoolean IsDead;
-    public Quantum.Prototypes.FrameTimerPrototype RespawnTimer;
-    public Quantum.Prototypes.FrameTimerPrototype RegenTimer;
-    public Quantum.Prototypes.FrameTimerPrototype InvincibleTimer;
-    public Quantum.Prototypes.FrameTimerPrototype DisconnectedTimer;
-    partial void MaterializeUser(Frame frame, ref Quantum.Status result, in PrototypeMaterializationContext context);
-    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
-        Quantum.Status component = default;
-        Materialize((Frame)f, ref component, in context);
-        return f.Set(entity, component) == SetResult.ComponentAdded;
-    }
-    public void Materialize(Frame frame, ref Quantum.Status result, in PrototypeMaterializationContext context = default) {
-        result.StatusData = this.StatusData;
-        result.CurrentHealth = this.CurrentHealth;
-        result.IsDead = this.IsDead;
-        this.RespawnTimer.Materialize(frame, ref result.RespawnTimer, in context);
-        this.RegenTimer.Materialize(frame, ref result.RegenTimer, in context);
-        this.InvincibleTimer.Materialize(frame, ref result.InvincibleTimer, in context);
-        this.DisconnectedTimer.Materialize(frame, ref result.DisconnectedTimer, in context);
         MaterializeUser(frame, ref result, in context);
     }
   }

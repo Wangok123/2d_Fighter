@@ -172,6 +172,7 @@ namespace Quantum
       if (_context.KCC->Input.Dash.WasPressed)
       {
         _context.KCC->SetState(_context.Frame, KCCState.DASHING, _context.Settings.DashDuration);
+
         switch (_context.Settings.DirectionType)
         {
           case DashDirection.Velocity:

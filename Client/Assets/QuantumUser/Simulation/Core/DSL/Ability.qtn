@@ -1,0 +1,4 @@
+enum AbilityType
+{
+    Block, Jump, Dash, Attack
+}

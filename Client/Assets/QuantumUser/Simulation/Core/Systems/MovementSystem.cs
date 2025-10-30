@@ -9,7 +9,7 @@ namespace Quantum
             public EntityRef Entity;
             public Transform2D* Transform;
             public PlayerLink* PlayerLink;
-            public Status* Status;
+            public CharacterStatus* Status;
             public MovementData* MovementData;
             public KCC2D* KCC;
         }

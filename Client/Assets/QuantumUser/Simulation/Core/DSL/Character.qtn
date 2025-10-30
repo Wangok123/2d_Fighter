@@ -1,8 +1,15 @@
-component Status
+enum CharacterTeam
+{
+    None, Blue, Red, Neutral
+}
+
+component CharacterStatus
 {
     asset_ref<StatusData> StatusData;
 	FP CurrentHealth;
 	Boolean IsDead;
+	
+	
 	FrameTimer RespawnTimer;
 	FrameTimer RegenTimer;
 	FrameTimer InvincibleTimer;
@@ -11,5 +18,6 @@ component Status
 
 component MovementData
 {
-	Boolean IsFacingRight;
+	[ExcludeFromPrototype] bool IsFacingRight;
+	[ExcludeFromPrototype] bool HasAirJump;
 }

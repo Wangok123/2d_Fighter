@@ -13,10 +13,11 @@ GameObject:
   - component: {fileID: 2924809605513461826}
   - component: {fileID: 2376690383729190282}
   - component: {fileID: 5428458400057698225}
-  - component: {fileID: 5949349565070652282}
   - component: {fileID: 3351024916982054779}
   - component: {fileID: 4225920870206189311}
   - component: {fileID: 8595205649062271519}
+  - component: {fileID: 66741204932193226}
+  - component: {fileID: 8665276627128132852}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -335,46 +336,6 @@ MonoBehaviour:
     Config:
       Id:
         Value: 335552892607164892
---- !u!114 &5949349565070652282
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 747601124680124256}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ec11d975f31ab614889089c34dd715e1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Prototype:
-    StatusData:
-      Id:
-        Value: 336468280525922348
-    CurrentHealth:
-      RawValue: 0
-    IsDead:
-      Value: 0
-    RespawnTimer:
-      Mode: 0
-      Frames: 0
-      Seconds:
-        RawValue: 0
-    RegenTimer:
-      Mode: 0
-      Frames: 0
-      Seconds:
-        RawValue: 0
-    InvincibleTimer:
-      Mode: 0
-      Frames: 0
-      Seconds:
-        RawValue: 0
-    DisconnectedTimer:
-      Mode: 0
-      Frames: 0
-      Seconds:
-        RawValue: 0
 --- !u!114 &3351024916982054779
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -388,8 +349,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Prototype:
-    IsFacingRight:
-      Value: 0
+    _empty_prototype_dummy_field_: 0
 --- !u!114 &4225920870206189311
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -417,6 +377,60 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04a1f74c0f284b57a8be0af2e7423374, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &66741204932193226
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 747601124680124256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fd6cdbdaa27a5a147976b4d7dfbcd3dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Prototype:
+    _empty_prototype_dummy_field_: 0
+--- !u!114 &8665276627128132852
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 747601124680124256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 96117ecf85a51b245883ec41a84b85c2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Prototype:
+    StatusData:
+      Id:
+        Value: 0
+    CurrentHealth:
+      RawValue: 0
+    IsDead:
+      Value: 0
+    RespawnTimer:
+      Mode: 0
+      Frames: 0
+      Seconds:
+        RawValue: 0
+    RegenTimer:
+      Mode: 0
+      Frames: 0
+      Seconds:
+        RawValue: 0
+    InvincibleTimer:
+      Mode: 0
+      Frames: 0
+      Seconds:
+        RawValue: 0
+    DisconnectedTimer:
+      Mode: 0
+      Frames: 0
+      Seconds:
+        RawValue: 0
 --- !u!1 &4774830198564325150
 GameObject:
   m_ObjectHideFlags: 0

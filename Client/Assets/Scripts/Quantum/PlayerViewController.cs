@@ -50,7 +50,7 @@ namespace Quantum.QuantumView
         {
             var isGrounded = kcc->State == KCCState.GROUNDED;
             FP normalizedSpeed = kcc->_kinematicVelocity.Magnitude / config.BaseSettings.MaxBaseSpeed;
-            if (isGrounded)
+            if (isGrounded) 
             {
                 if (normalizedSpeed <= 0.5f.ToFP())
                 {
