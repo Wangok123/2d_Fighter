@@ -61,13 +61,39 @@ namespace Quantum {
       }
       static partial void GetEventTypeCodeGen(Int32 eventID, ref System.Type result) {
         switch (eventID) {
-          case EventJumped.ID: result = typeof(EventJumped); return;
-          case EventLanded.ID: result = typeof(EventLanded); return;
           case EventLevelUp.ID: result = typeof(EventLevelUp); return;
           case EventAttackPerformed.ID: result = typeof(EventAttackPerformed); return;
           case EventSpecialMovePerformed.ID: result = typeof(EventSpecialMovePerformed); return;
+          case EventJumped.ID: result = typeof(EventJumped); return;
+          case EventLanded.ID: result = typeof(EventLanded); return;
           default: break;
         }
+      }
+      public EventLevelUp LevelUp(EntityRef Entity, Int32 NewLevel, Int32 OldLevel) {
+        var ev = _f.Context.AcquireEvent<EventLevelUp>(EventLevelUp.ID);
+        ev.Entity = Entity;
+        ev.NewLevel = NewLevel;
+        ev.OldLevel = OldLevel;
+        _f.AddEvent(ev);
+        return ev;
+      }
+      public EventAttackPerformed AttackPerformed(EntityRef Attacker, QBoolean IsHeavyAttack, Int32 ComboCount, FP Damage, FP ChargeLevel) {
+        var ev = _f.Context.AcquireEvent<EventAttackPerformed>(EventAttackPerformed.ID);
+        ev.Attacker = Attacker;
+        ev.IsHeavyAttack = IsHeavyAttack;
+        ev.ComboCount = ComboCount;
+        ev.Damage = Damage;
+        ev.ChargeLevel = ChargeLevel;
+        _f.AddEvent(ev);
+        return ev;
+      }
+      public EventSpecialMovePerformed SpecialMovePerformed(EntityRef Attacker, Int32 MoveId, FP Damage) {
+        var ev = _f.Context.AcquireEvent<EventSpecialMovePerformed>(EventSpecialMovePerformed.ID);
+        ev.Attacker = Attacker;
+        ev.MoveId = MoveId;
+        ev.Damage = Damage;
+        _f.AddEvent(ev);
+        return ev;
       }
       public EventJumped Jumped(EntityRef Entity, KCCState State, KCCState PreviousState, FPVector2 Impulse) {
         var ev = _f.Context.AcquireEvent<EventJumped>(EventJumped.ID);
@@ -86,44 +112,17 @@ namespace Quantum {
         _f.AddEvent(ev);
         return ev;
       }
-      public EventLevelUp LevelUp(EntityRef Entity, Int32 NewLevel, Int32 OldLevel) {
-        var ev = _f.Context.AcquireEvent<EventLevelUp>(EventLevelUp.ID);
-        ev.Entity = Entity;
-        ev.NewLevel = NewLevel;
-        ev.OldLevel = OldLevel;
-        _f.AddEvent(ev);
-        return ev;
-      }
-      public EventAttackPerformed AttackPerformed(EntityRef Attacker, Boolean IsHeavyAttack, Int32 ComboCount, FP Damage, FP ChargeLevel) {
-        var ev = _f.Context.AcquireEvent<EventAttackPerformed>(EventAttackPerformed.ID);
-        ev.Attacker = Attacker;
-        ev.IsHeavyAttack = IsHeavyAttack;
-        ev.ComboCount = ComboCount;
-        ev.Damage = Damage;
-        ev.ChargeLevel = ChargeLevel;
-        _f.AddEvent(ev);
-        return ev;
-      }
-      public EventSpecialMovePerformed SpecialMovePerformed(EntityRef Attacker, Int32 MoveId, FP Damage) {
-        var ev = _f.Context.AcquireEvent<EventSpecialMovePerformed>(EventSpecialMovePerformed.ID);
-        ev.Attacker = Attacker;
-        ev.MoveId = MoveId;
-        ev.Damage = Damage;
-        _f.AddEvent(ev);
-        return ev;
-      }
     }
   }
-  public unsafe partial class EventJumped : EventBase {
+  public unsafe partial class EventLevelUp : EventBase {
     public new const Int32 ID = 1;
     public EntityRef Entity;
-    public KCCState State;
-    public KCCState PreviousState;
-    public FPVector2 Impulse;
-    protected EventJumped(Int32 id, EventFlags flags) : 
+    public Int32 NewLevel;
+    public Int32 OldLevel;
+    protected EventLevelUp(Int32 id, EventFlags flags) : 
         base(id, flags) {
     }
-    public EventJumped() : 
+    public EventLevelUp() : 
         base(1, EventFlags.Server|EventFlags.Client) {
     }
     public new QuantumGame Game {
@@ -138,22 +137,23 @@ namespace Quantum {
       unchecked {
         var hash = 41;
         hash = hash * 31 + Entity.GetHashCode();
-        hash = hash * 31 + State.GetHashCode();
-        hash = hash * 31 + PreviousState.GetHashCode();
-        hash = hash * 31 + Impulse.GetHashCode();
+        hash = hash * 31 + NewLevel.GetHashCode();
+        hash = hash * 31 + OldLevel.GetHashCode();
         return hash;
       }
     }
   }
-  public unsafe partial class EventLanded : EventBase {
+  public unsafe partial class EventAttackPerformed : EventBase {
     public new const Int32 ID = 2;
-    public EntityRef Entity;
-    public FP Velocity;
-    public KCCState State;
-    protected EventLanded(Int32 id, EventFlags flags) : 
+    public EntityRef Attacker;
+    public QBoolean IsHeavyAttack;
+    public Int32 ComboCount;
+    public FP Damage;
+    public FP ChargeLevel;
+    protected EventAttackPerformed(Int32 id, EventFlags flags) : 
         base(id, flags) {
     }
-    public EventLanded() : 
+    public EventAttackPerformed() : 
         base(2, EventFlags.Server|EventFlags.Client) {
     }
     public new QuantumGame Game {
@@ -167,54 +167,25 @@ namespace Quantum {
     public override Int32 GetHashCode() {
       unchecked {
         var hash = 43;
-        hash = hash * 31 + Entity.GetHashCode();
-        hash = hash * 31 + Velocity.GetHashCode();
-        hash = hash * 31 + State.GetHashCode();
+        hash = hash * 31 + Attacker.GetHashCode();
+        hash = hash * 31 + IsHeavyAttack.GetHashCode();
+        hash = hash * 31 + ComboCount.GetHashCode();
+        hash = hash * 31 + Damage.GetHashCode();
+        hash = hash * 31 + ChargeLevel.GetHashCode();
         return hash;
       }
     }
   }
-  public unsafe partial class EventLevelUp : EventBase {
+  public unsafe partial class EventSpecialMovePerformed : EventBase {
     public new const Int32 ID = 3;
-    public EntityRef Entity;
-    public Int32 NewLevel;
-    public Int32 OldLevel;
-    protected EventLevelUp(Int32 id, EventFlags flags) : 
-        base(id, flags) {
-    }
-    public EventLevelUp() : 
-        base(3, EventFlags.Server|EventFlags.Client) {
-    }
-    public new QuantumGame Game {
-      get {
-        return (QuantumGame)base.Game;
-      }
-      set {
-        base.Game = value;
-      }
-    }
-    public override Int32 GetHashCode() {
-      unchecked {
-        var hash = 45;
-        hash = hash * 31 + Entity.GetHashCode();
-        hash = hash * 31 + NewLevel.GetHashCode();
-        hash = hash * 31 + OldLevel.GetHashCode();
-        return hash;
-      }
-    }
-  }
-  public unsafe partial class EventAttackPerformed : EventBase {
-    public new const Int32 ID = 4;
     public EntityRef Attacker;
-    public Boolean IsHeavyAttack;
-    public Int32 ComboCount;
+    public Int32 MoveId;
     public FP Damage;
-    public FP ChargeLevel;
-    protected EventAttackPerformed(Int32 id, EventFlags flags) : 
+    protected EventSpecialMovePerformed(Int32 id, EventFlags flags) : 
         base(id, flags) {
     }
-    public EventAttackPerformed() : 
-        base(4, EventFlags.Server|EventFlags.Client) {
+    public EventSpecialMovePerformed() : 
+        base(3, EventFlags.Server|EventFlags.Client) {
     }
     public new QuantumGame Game {
       get {
@@ -228,23 +199,52 @@ namespace Quantum {
       unchecked {
         var hash = 47;
         hash = hash * 31 + Attacker.GetHashCode();
-        hash = hash * 31 + IsHeavyAttack.GetHashCode();
-        hash = hash * 31 + ComboCount.GetHashCode();
+        hash = hash * 31 + MoveId.GetHashCode();
         hash = hash * 31 + Damage.GetHashCode();
-        hash = hash * 31 + ChargeLevel.GetHashCode();
         return hash;
       }
     }
   }
-  public unsafe partial class EventSpecialMovePerformed : EventBase {
-    public new const Int32 ID = 5;
-    public EntityRef Attacker;
-    public Int32 MoveId;
-    public FP Damage;
-    protected EventSpecialMovePerformed(Int32 id, EventFlags flags) : 
+  public unsafe partial class EventJumped : EventBase {
+    public new const Int32 ID = 4;
+    public EntityRef Entity;
+    public KCCState State;
+    public KCCState PreviousState;
+    public FPVector2 Impulse;
+    protected EventJumped(Int32 id, EventFlags flags) : 
         base(id, flags) {
     }
-    public EventSpecialMovePerformed() : 
+    public EventJumped() : 
+        base(4, EventFlags.Server|EventFlags.Client) {
+    }
+    public new QuantumGame Game {
+      get {
+        return (QuantumGame)base.Game;
+      }
+      set {
+        base.Game = value;
+      }
+    }
+    public override Int32 GetHashCode() {
+      unchecked {
+        var hash = 53;
+        hash = hash * 31 + Entity.GetHashCode();
+        hash = hash * 31 + State.GetHashCode();
+        hash = hash * 31 + PreviousState.GetHashCode();
+        hash = hash * 31 + Impulse.GetHashCode();
+        return hash;
+      }
+    }
+  }
+  public unsafe partial class EventLanded : EventBase {
+    public new const Int32 ID = 5;
+    public EntityRef Entity;
+    public FP Velocity;
+    public KCCState State;
+    protected EventLanded(Int32 id, EventFlags flags) : 
+        base(id, flags) {
+    }
+    public EventLanded() : 
         base(5, EventFlags.Server|EventFlags.Client) {
     }
     public new QuantumGame Game {
@@ -257,10 +257,10 @@ namespace Quantum {
     }
     public override Int32 GetHashCode() {
       unchecked {
-        var hash = 49;
-        hash = hash * 31 + Attacker.GetHashCode();
-        hash = hash * 31 + MoveId.GetHashCode();
-        hash = hash * 31 + Damage.GetHashCode();
+        var hash = 59;
+        hash = hash * 31 + Entity.GetHashCode();
+        hash = hash * 31 + Velocity.GetHashCode();
+        hash = hash * 31 + State.GetHashCode();
         return hash;
       }
     }

@@ -50,6 +50,41 @@ namespace Quantum.Prototypes {
   #endif //;
   
   [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.AttackData))]
+  public unsafe partial class AttackDataPrototype : ComponentPrototype<Quantum.AttackData> {
+    public AssetRef<AttackConfig> AttackConfig;
+    [ArrayLengthAttribute(4)]
+    public AssetRef<SpecialMoveConfig>[] SpecialMoves = new AssetRef<SpecialMoveConfig>[4];
+    partial void MaterializeUser(Frame frame, ref Quantum.AttackData result, in PrototypeMaterializationContext context);
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+        Quantum.AttackData component = default;
+        Materialize((Frame)f, ref component, in context);
+        return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref Quantum.AttackData result, in PrototypeMaterializationContext context = default) {
+        result.AttackConfig = this.AttackConfig;
+        for (int i = 0, count = PrototypeValidator.CheckLength(SpecialMoves, 4, in context); i < count; ++i) {
+          *result.SpecialMoves.GetPointer(i) = this.SpecialMoves[i];
+        }
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.CharacterLevel))]
+  public unsafe partial class CharacterLevelPrototype : ComponentPrototype<Quantum.CharacterLevel> {
+    public Int32 CurrentLevel;
+    partial void MaterializeUser(Frame frame, ref Quantum.CharacterLevel result, in PrototypeMaterializationContext context);
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+        Quantum.CharacterLevel component = default;
+        Materialize((Frame)f, ref component, in context);
+        return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref Quantum.CharacterLevel result, in PrototypeMaterializationContext context = default) {
+        result.CurrentLevel = this.CurrentLevel;
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.CharacterStatus))]
   public unsafe partial class CharacterStatusPrototype : ComponentPrototype<Quantum.CharacterStatus> {
     public AssetRef<StatusData> StatusData;
@@ -73,6 +108,21 @@ namespace Quantum.Prototypes {
         this.RegenTimer.Materialize(frame, ref result.RegenTimer, in context);
         this.InvincibleTimer.Materialize(frame, ref result.InvincibleTimer, in context);
         this.DisconnectedTimer.Materialize(frame, ref result.DisconnectedTimer, in context);
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.CommandInputData))]
+  public unsafe partial class CommandInputDataPrototype : ComponentPrototype<Quantum.CommandInputData> {
+    [HideInInspector()]
+    public Int32 _empty_prototype_dummy_field_;
+    partial void MaterializeUser(Frame frame, ref Quantum.CommandInputData result, in PrototypeMaterializationContext context);
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+        Quantum.CommandInputData component = default;
+        Materialize((Frame)f, ref component, in context);
+        return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref Quantum.CommandInputData result, in PrototypeMaterializationContext context = default) {
         MaterializeUser(frame, ref result, in context);
     }
   }
@@ -283,58 +333,6 @@ namespace Quantum.Prototypes {
     }
   }
   [System.SerializableAttribute()]
-  [Quantum.Prototypes.Prototype(typeof(Quantum.CharacterLevel))]
-  public unsafe partial class CharacterLevelPrototype : ComponentPrototype<Quantum.CharacterLevel> {
-    public Int32 CurrentLevel;
-    partial void MaterializeUser(Frame frame, ref Quantum.CharacterLevel result, in PrototypeMaterializationContext context);
-    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
-        Quantum.CharacterLevel component = default;
-        Materialize((Frame)f, ref component, in context);
-        return f.Set(entity, component) == SetResult.ComponentAdded;
-    }
-    public void Materialize(Frame frame, ref Quantum.CharacterLevel result, in PrototypeMaterializationContext context = default) {
-        result.CurrentLevel = this.CurrentLevel;
-        MaterializeUser(frame, ref result, in context);
-    }
-  }
-  [System.SerializableAttribute()]
-  [Quantum.Prototypes.Prototype(typeof(Quantum.AttackData))]
-  public unsafe partial class AttackDataPrototype : ComponentPrototype<Quantum.AttackData> {
-    public AssetRef<AttackConfig> AttackConfig;
-    public AssetRef<SpecialMoveConfig>[] SpecialMoves;
-    partial void MaterializeUser(Frame frame, ref Quantum.AttackData result, in PrototypeMaterializationContext context);
-    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
-        Quantum.AttackData component = default;
-        Materialize((Frame)f, ref component, in context);
-        return f.Set(entity, component) == SetResult.ComponentAdded;
-    }
-    public void Materialize(Frame frame, ref Quantum.AttackData result, in PrototypeMaterializationContext context = default) {
-        result.AttackConfig = this.AttackConfig;
-        if (this.SpecialMoves != null) {
-            result.SpecialMoves = frame.AllocateList<AssetRef<SpecialMoveConfig>>(this.SpecialMoves.Length);
-            for (int i = 0; i < this.SpecialMoves.Length; i++) {
-                result.SpecialMoves[i] = this.SpecialMoves[i];
-            }
-        }
-        MaterializeUser(frame, ref result, in context);
-    }
-  }
-  [System.SerializableAttribute()]
-  [Quantum.Prototypes.Prototype(typeof(Quantum.CommandInputData))]
-  public unsafe partial class CommandInputDataPrototype : ComponentPrototype<Quantum.CommandInputData> {
-    [HideInInspector()]
-    public Int32 _empty_prototype_dummy_field_;
-    partial void MaterializeUser(Frame frame, ref Quantum.CommandInputData result, in PrototypeMaterializationContext context);
-    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
-        Quantum.CommandInputData component = default;
-        Materialize((Frame)f, ref component, in context);
-        return f.Set(entity, component) == SetResult.ComponentAdded;
-    }
-    public void Materialize(Frame frame, ref Quantum.CommandInputData result, in PrototypeMaterializationContext context = default) {
-        MaterializeUser(frame, ref result, in context);
-    }
-  }
-  [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.PlayerLink))]
   public unsafe partial class PlayerLinkPrototype : ComponentPrototype<Quantum.PlayerLink> {
     public PlayerRef Player;
@@ -444,6 +442,25 @@ namespace Quantum.Prototypes {
         result.LP = this.LP;
         result.HP = this.HP;
         result.Use = this.Use;
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.SpecialMove))]
+  public unsafe partial class SpecialMovePrototype : StructPrototype {
+    [ArrayLengthAttribute(8)]
+    public Int32[] InputSequence = new Int32[8];
+    public Int32 SequenceLength;
+    public Int32 MoveId;
+    public FP Damage;
+    partial void MaterializeUser(Frame frame, ref Quantum.SpecialMove result, in PrototypeMaterializationContext context);
+    public void Materialize(Frame frame, ref Quantum.SpecialMove result, in PrototypeMaterializationContext context = default) {
+        for (int i = 0, count = PrototypeValidator.CheckLength(InputSequence, 8, in context); i < count; ++i) {
+          result.InputSequence[i] = this.InputSequence[i];
+        }
+        result.SequenceLength = this.SequenceLength;
+        result.MoveId = this.MoveId;
+        result.Damage = this.Damage;
         MaterializeUser(frame, ref result, in context);
     }
   }

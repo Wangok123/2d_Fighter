@@ -1,0 +1,44 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 469715c780344bf3b590c82613a857c8, type: 3}
+  m_Name: LatAttackConfig
+  m_EditorClassIdentifier: 
+  Identifier:
+    Path: QuantumUser/Resources/DB/LatAttackConfig
+    Guid:
+      Value: 366878205152105084
+  LightAttackDamage:
+    RawValue: 655360
+  LightAttackCooldown:
+    RawValue: 16384
+  ComboWindow:
+    RawValue: 65536
+  MaxComboCount: 3
+  ComboDamageMultipliers:
+  - RawValue: 65536
+  - RawValue: 81920
+  - RawValue: 98304
+  HeavyAttackDamage:
+    RawValue: 1638400
+  HeavyAttackCooldown:
+    RawValue: 32768
+  MaxChargeTime:
+    RawValue: 131072
+  MinChargeTime:
+    RawValue: 32768
+  FullChargeDamageMultiplier:
+    RawValue: 131072
+  CommandInputWindow:
+    RawValue: 32768
+  MaxInputBufferSize: 8
+  DoubleJumpUnlockLevel: 5
+  DashUnlockLevel: 5

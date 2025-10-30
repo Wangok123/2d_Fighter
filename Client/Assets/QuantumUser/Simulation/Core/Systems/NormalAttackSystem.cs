@@ -2,7 +2,7 @@ namespace Quantum
 {
     using Photon.Deterministic;
 
-    public unsafe class AbilitySystem : SystemMainThreadFilter<AbilitySystem.Filter>
+    public unsafe class NormalAttackSystem : SystemMainThreadFilter<NormalAttackSystem.Filter>
     {
         public override void Update(Frame frame, ref Filter filter)
         {
