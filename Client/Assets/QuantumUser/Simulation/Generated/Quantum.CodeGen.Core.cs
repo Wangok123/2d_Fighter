@@ -61,6 +61,21 @@ namespace Quantum {
     Red,
     Neutral,
   }
+  public enum CommandInput : int {
+    None = 0,
+    Down = 1,
+    DownRight = 2,
+    Right = 3,
+    UpRight = 4,
+    Up = 5,
+    UpLeft = 6,
+    Left = 7,
+    DownLeft = 8,
+    LP = 9,
+    HP = 10,
+    Dash = 11,
+    Jump = 12,
+  }
   public enum DashDirection : int {
     Velocity,
     Input,
@@ -1303,6 +1318,110 @@ namespace Quantum {
     }
   }
   [StructLayout(LayoutKind.Explicit)]
+  public unsafe partial struct CharacterLevel : Quantum.IComponent {
+    public const Int32 SIZE = 4;
+    public const Int32 ALIGNMENT = 4;
+    [FieldOffset(0)]
+    public Int32 CurrentLevel;
+    public override readonly Int32 GetHashCode() {
+      unchecked { 
+        var hash = 22817;
+        hash = hash * 31 + CurrentLevel.GetHashCode();
+        return hash;
+      }
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+        var p = (CharacterLevel*)ptr;
+        serializer.Stream.Serialize(&p->CurrentLevel);
+    }
+  }
+  [StructLayout(LayoutKind.Explicit)]
+  public unsafe partial struct AttackData : Quantum.IComponent {
+    public const Int32 SIZE = 88;
+    public const Int32 ALIGNMENT = 8;
+    [FieldOffset(0)]
+    public AssetRef<AttackConfig> AttackConfig;
+    [FieldOffset(8)]
+    public QList<AssetRef<SpecialMoveConfig>> SpecialMoves;
+    [FieldOffset(24)]
+    [ExcludeFromPrototype()]
+    public Int32 ComboCounter;
+    [FieldOffset(28)]
+    [ExcludeFromPrototype()]
+    public FrameTimer ComboResetTimer;
+    [FieldOffset(36)]
+    [ExcludeFromPrototype()]
+    public FrameTimer AttackCooldown;
+    [FieldOffset(44)]
+    [ExcludeFromPrototype()]
+    public QBoolean IsAttacking;
+    [FieldOffset(48)]
+    [ExcludeFromPrototype()]
+    public FP HeavyChargeTime;
+    [FieldOffset(56)]
+    [ExcludeFromPrototype()]
+    public QBoolean IsChargingHeavy;
+    public override readonly Int32 GetHashCode() {
+      unchecked { 
+        var hash = 23519;
+        hash = hash * 31 + AttackConfig.GetHashCode();
+        hash = hash * 31 + SpecialMoves.GetHashCode();
+        hash = hash * 31 + ComboCounter.GetHashCode();
+        hash = hash * 31 + ComboResetTimer.GetHashCode();
+        hash = hash * 31 + AttackCooldown.GetHashCode();
+        hash = hash * 31 + IsAttacking.GetHashCode();
+        hash = hash * 31 + HeavyChargeTime.GetHashCode();
+        hash = hash * 31 + IsChargingHeavy.GetHashCode();
+        return hash;
+      }
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+        var p = (AttackData*)ptr;
+        AssetRef.Serialize(&p->AttackConfig, serializer);
+        QList.Serialize(&p->SpecialMoves, serializer);
+        serializer.Stream.Serialize(&p->ComboCounter);
+        FrameTimer.Serialize(&p->ComboResetTimer, serializer);
+        FrameTimer.Serialize(&p->AttackCooldown, serializer);
+        QBoolean.Serialize(&p->IsAttacking, serializer);
+        FP.Serialize(&p->HeavyChargeTime, serializer);
+        QBoolean.Serialize(&p->IsChargingHeavy, serializer);
+    }
+  }
+  [StructLayout(LayoutKind.Explicit)]
+  public unsafe partial struct CommandInputData : Quantum.IComponent {
+    public const Int32 SIZE = 48;
+    public const Int32 ALIGNMENT = 8;
+    [FieldOffset(0)]
+    [ExcludeFromPrototype()]
+    public Int32 InputBufferSize;
+    [FieldOffset(4)]
+    [ExcludeFromPrototype()]
+    public QList<Int32> InputBuffer;
+    [FieldOffset(20)]
+    [ExcludeFromPrototype()]
+    public Int32 InputBufferIndex;
+    [FieldOffset(24)]
+    [ExcludeFromPrototype()]
+    public FrameTimer InputExpiryTimer;
+    public override readonly Int32 GetHashCode() {
+      unchecked { 
+        var hash = 24317;
+        hash = hash * 31 + InputBufferSize.GetHashCode();
+        hash = hash * 31 + InputBuffer.GetHashCode();
+        hash = hash * 31 + InputBufferIndex.GetHashCode();
+        hash = hash * 31 + InputExpiryTimer.GetHashCode();
+        return hash;
+      }
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+        var p = (CommandInputData*)ptr;
+        serializer.Stream.Serialize(&p->InputBufferSize);
+        QList.Serialize(&p->InputBuffer, serializer);
+        serializer.Stream.Serialize(&p->InputBufferIndex);
+        FrameTimer.Serialize(&p->InputExpiryTimer, serializer);
+    }
+  }
+  [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct PlayerLink : Quantum.IComponent {
     public const Int32 SIZE = 4;
     public const Int32 ALIGNMENT = 4;
@@ -1617,11 +1736,14 @@ namespace Quantum {
       typeRegistry.Register(typeof(Quantum._globals_), Quantum._globals_.SIZE);
     }
     static partial void InitComponentTypeIdGen() {
-      ComponentTypeId.Reset(ComponentTypeId.BuiltInComponentCount + 5)
+      ComponentTypeId.Reset(ComponentTypeId.BuiltInComponentCount + 8)
         .AddBuiltInComponents()
         .Add<Quantum.CharacterStatus>(Quantum.CharacterStatus.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.KCC2D>(Quantum.KCC2D.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.MovementData>(Quantum.MovementData.Serialize, null, null, ComponentFlags.None)
+        .Add<Quantum.CharacterLevel>(Quantum.CharacterLevel.Serialize, null, null, ComponentFlags.None)
+        .Add<Quantum.AttackData>(Quantum.AttackData.Serialize, null, null, ComponentFlags.None)
+        .Add<Quantum.CommandInputData>(Quantum.CommandInputData.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.PlayerLink>(Quantum.PlayerLink.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.PlayerSpawner>(Quantum.PlayerSpawner.Serialize, null, null, ComponentFlags.None)
         .Finish();

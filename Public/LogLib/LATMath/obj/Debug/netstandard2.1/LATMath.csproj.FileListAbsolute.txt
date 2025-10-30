@@ -1,9 +1,0 @@
-D:\Project\2D_ACT\Public\LogLib\LATMath\bin\Debug\netstandard2.1\LATMath.deps.json
-D:\Project\2D_ACT\Public\LogLib\LATMath\bin\Debug\netstandard2.1\LATMath.dll
-D:\Project\2D_ACT\Public\LogLib\LATMath\bin\Debug\netstandard2.1\LATMath.pdb
-D:\Project\2D_ACT\Public\LogLib\LATMath\obj\Debug\netstandard2.1\LATMath.GeneratedMSBuildEditorConfig.editorconfig
-D:\Project\2D_ACT\Public\LogLib\LATMath\obj\Debug\netstandard2.1\LATMath.AssemblyInfoInputs.cache
-D:\Project\2D_ACT\Public\LogLib\LATMath\obj\Debug\netstandard2.1\LATMath.AssemblyInfo.cs
-D:\Project\2D_ACT\Public\LogLib\LATMath\obj\Debug\netstandard2.1\LATMath.csproj.CoreCompileInputs.cache
-D:\Project\2D_ACT\Public\LogLib\LATMath\obj\Debug\netstandard2.1\LATMath.dll
-D:\Project\2D_ACT\Public\LogLib\LATMath\obj\Debug\netstandard2.1\LATMath.pdb

@@ -1,0 +1,39 @@
+# Build artifacts
+**/obj/
+**/bin/
+*.exe
+*.dll
+*.so
+*.dylib
+
+# NuGet
+.nuget/
+*.nupkg
+packages/
+project.lock.json
+project.assets.json
+*.nuget.props
+*.nuget.targets
+
+# Unity generated
+Library/
+Temp/
+Logs/
+*.sln
+*.csproj
+*.unityproj
+*.suo
+*.user
+*.userprefs
+*.pidb
+*.booproj
+.vs/
+.vscode/
+
+# Build results
+[Bb]uild/
+[Bb]uilding/
+
+# OS specific
+.DS_Store
+Thumbs.db

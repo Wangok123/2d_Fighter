@@ -21,3 +21,51 @@ component MovementData
 	[ExcludeFromPrototype] bool IsFacingRight;
 	[ExcludeFromPrototype] bool HasAirJump;
 }
+
+component CharacterLevel
+{
+	Int32 CurrentLevel;
+}
+
+component AttackData
+{
+	asset_ref<AttackConfig> AttackConfig;
+	array<asset_ref<SpecialMoveConfig>>[4] SpecialMoves;
+	[ExcludeFromPrototype] Int32 ComboCounter;
+	[ExcludeFromPrototype] FrameTimer ComboResetTimer;
+	[ExcludeFromPrototype] FrameTimer AttackCooldown;
+	[ExcludeFromPrototype] bool IsAttacking;
+	[ExcludeFromPrototype] FP HeavyChargeTime;
+	[ExcludeFromPrototype] bool IsChargingHeavy;
+}
+
+component CommandInputData
+{
+	[ExcludeFromPrototype] Int32 InputBufferSize;
+	[ExcludeFromPrototype] array<Int32>[8] InputBuffer;
+	[ExcludeFromPrototype] Int32 InputBufferIndex;
+	[ExcludeFromPrototype] FrameTimer InputExpiryTimer;
+}
+
+event LevelUp
+{
+	EntityRef Entity;
+	Int32 NewLevel;
+	Int32 OldLevel;
+}
+
+event AttackPerformed
+{
+	EntityRef Attacker;
+	Boolean IsHeavyAttack;
+	Int32 ComboCount;
+	FP Damage;
+	FP ChargeLevel;
+}
+
+event SpecialMovePerformed
+{
+	EntityRef Attacker;
+	Int32 MoveId;
+	FP Damage;
+}
