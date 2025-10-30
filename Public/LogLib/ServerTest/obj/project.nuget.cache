@@ -1,12 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "b1f4832KP2g=",
+  "dgSpecHash": "RYgBW7FTjjY=",
   "success": true,
-  "projectFilePath": "/home/runner/work/2d_Fighter/2d_Fighter/Public/LogLib/ServerTest/ServerTest.csproj",
-  "expectedPackageFiles": [
-    "/home/runner/work/2d_Fighter/.codeql-scratch/dbs/csharp/working/packages/microsoft.netcore.app.ref/8.0.20/microsoft.netcore.app.ref.8.0.20.nupkg.sha512",
-    "/home/runner/work/2d_Fighter/.codeql-scratch/dbs/csharp/working/packages/microsoft.aspnetcore.app.ref/8.0.20/microsoft.aspnetcore.app.ref.8.0.20.nupkg.sha512",
-    "/home/runner/work/2d_Fighter/.codeql-scratch/dbs/csharp/working/packages/microsoft.netcore.app.host.linux-x64/8.0.20/microsoft.netcore.app.host.linux-x64.8.0.20.nupkg.sha512"
-  ],
+  "projectFilePath": "D:\\Project\\2D_ACT\\Public\\LogLib\\ServerTest\\ServerTest.csproj",
+  "expectedPackageFiles": [],
   "logs": []
 }

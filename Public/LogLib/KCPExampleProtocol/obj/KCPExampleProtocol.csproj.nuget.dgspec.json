@@ -1,20 +1,24 @@
 {
   "format": 1,
   "restore": {
-    "/home/runner/work/2d_Fighter/2d_Fighter/Public/LogLib/KCPExampleProtocol/KCPExampleProtocol.csproj": {}
+    "D:\\Project\\2D_ACT\\Public\\LogLib\\KCPExampleProtocol\\KCPExampleProtocol.csproj": {}
   },
   "projects": {
-    "/home/runner/work/2d_Fighter/2d_Fighter/Public/LogLib/KCPExampleProtocol/KCPExampleProtocol.csproj": {
+    "D:\\Project\\2D_ACT\\Public\\LogLib\\KCPExampleProtocol\\KCPExampleProtocol.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/runner/work/2d_Fighter/2d_Fighter/Public/LogLib/KCPExampleProtocol/KCPExampleProtocol.csproj",
+        "projectUniqueName": "D:\\Project\\2D_ACT\\Public\\LogLib\\KCPExampleProtocol\\KCPExampleProtocol.csproj",
         "projectName": "KCPExampleProtocol",
-        "projectPath": "/home/runner/work/2d_Fighter/2d_Fighter/Public/LogLib/KCPExampleProtocol/KCPExampleProtocol.csproj",
-        "packagesPath": "/home/runner/work/2d_Fighter/.codeql-scratch/dbs/csharp/working/packages",
-        "outputPath": "/home/runner/work/2d_Fighter/2d_Fighter/Public/LogLib/KCPExampleProtocol/obj/",
+        "projectPath": "D:\\Project\\2D_ACT\\Public\\LogLib\\KCPExampleProtocol\\KCPExampleProtocol.csproj",
+        "packagesPath": "C:\\Users\\lenovo\\.nuget\\packages\\",
+        "outputPath": "D:\\Project\\2D_ACT\\Public\\LogLib\\KCPExampleProtocol\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/home/runner/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\lenovo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config"
         ],
         "originalTargetFrameworks": [
           "netstandard2.1"
@@ -26,8 +30,8 @@
           "netstandard2.1": {
             "targetAlias": "netstandard2.1",
             "projectReferences": {
-              "/home/runner/work/2d_Fighter/2d_Fighter/Public/LogLib/LATNet/LATNet.csproj": {
-                "projectPath": "/home/runner/work/2d_Fighter/2d_Fighter/Public/LogLib/LATNet/LATNet.csproj"
+              "D:\\Project\\2D_ACT\\Public\\LogLib\\LATNet\\LATNet.csproj": {
+                "projectPath": "D:\\Project\\2D_ACT\\Public\\LogLib\\LATNet\\LATNet.csproj"
               }
             }
           }
@@ -41,8 +45,7 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        },
-        "SdkAnalysisLevel": "9.0.300"
+        }
       },
       "frameworks": {
         "netstandard2.1": {
@@ -58,32 +61,30 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "NETStandard.Library.Ref",
-              "version": "[2.1.0, 2.1.0]"
-            }
-          ],
           "frameworkReferences": {
             "NETStandard.Library": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.305/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.404\\RuntimeIdentifierGraph.json"
         }
       }
     },
-    "/home/runner/work/2d_Fighter/2d_Fighter/Public/LogLib/LATNet/LATNet.csproj": {
+    "D:\\Project\\2D_ACT\\Public\\LogLib\\LATNet\\LATNet.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/home/runner/work/2d_Fighter/2d_Fighter/Public/LogLib/LATNet/LATNet.csproj",
+        "projectUniqueName": "D:\\Project\\2D_ACT\\Public\\LogLib\\LATNet\\LATNet.csproj",
         "projectName": "LATNet",
-        "projectPath": "/home/runner/work/2d_Fighter/2d_Fighter/Public/LogLib/LATNet/LATNet.csproj",
-        "packagesPath": "/home/runner/work/2d_Fighter/.codeql-scratch/dbs/csharp/working/packages",
-        "outputPath": "/home/runner/work/2d_Fighter/2d_Fighter/Public/LogLib/LATNet/obj/",
+        "projectPath": "D:\\Project\\2D_ACT\\Public\\LogLib\\LATNet\\LATNet.csproj",
+        "packagesPath": "C:\\Users\\lenovo\\.nuget\\packages\\",
+        "outputPath": "D:\\Project\\2D_ACT\\Public\\LogLib\\LATNet\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/home/runner/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\lenovo\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config"
         ],
         "originalTargetFrameworks": [
           "netstandard2.1"
@@ -106,8 +107,7 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        },
-        "SdkAnalysisLevel": "9.0.300"
+        }
       },
       "frameworks": {
         "netstandard2.1": {
@@ -129,18 +129,12 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
-          "downloadDependencies": [
-            {
-              "name": "NETStandard.Library.Ref",
-              "version": "[2.1.0, 2.1.0]"
-            }
-          ],
           "frameworkReferences": {
             "NETStandard.Library": {
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/share/dotnet/sdk/9.0.305/RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.404\\RuntimeIdentifierGraph.json"
         }
       }
     }
