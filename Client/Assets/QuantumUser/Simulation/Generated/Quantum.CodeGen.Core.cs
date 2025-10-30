@@ -1303,6 +1303,62 @@ namespace Quantum {
     }
   }
   [StructLayout(LayoutKind.Explicit)]
+  public unsafe partial struct CharacterLevel : Quantum.IComponent {
+    public const Int32 SIZE = 4;
+    public const Int32 ALIGNMENT = 4;
+    [FieldOffset(0)]
+    public Int32 CurrentLevel;
+    public override readonly Int32 GetHashCode() {
+      unchecked { 
+        var hash = 22817;
+        hash = hash * 31 + CurrentLevel.GetHashCode();
+        return hash;
+      }
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+        var p = (CharacterLevel*)ptr;
+        serializer.Stream.Serialize(&p->CurrentLevel);
+    }
+  }
+  [StructLayout(LayoutKind.Explicit)]
+  public unsafe partial struct AttackData : Quantum.IComponent {
+    public const Int32 SIZE = 32;
+    public const Int32 ALIGNMENT = 8;
+    [FieldOffset(0)]
+    public AssetRef<AttackConfig> AttackConfig;
+    [FieldOffset(8)]
+    [ExcludeFromPrototype()]
+    public Int32 ComboCounter;
+    [FieldOffset(12)]
+    [ExcludeFromPrototype()]
+    public FrameTimer ComboResetTimer;
+    [FieldOffset(20)]
+    [ExcludeFromPrototype()]
+    public FrameTimer AttackCooldown;
+    [FieldOffset(28)]
+    [ExcludeFromPrototype()]
+    public QBoolean IsAttacking;
+    public override readonly Int32 GetHashCode() {
+      unchecked { 
+        var hash = 23519;
+        hash = hash * 31 + AttackConfig.GetHashCode();
+        hash = hash * 31 + ComboCounter.GetHashCode();
+        hash = hash * 31 + ComboResetTimer.GetHashCode();
+        hash = hash * 31 + AttackCooldown.GetHashCode();
+        hash = hash * 31 + IsAttacking.GetHashCode();
+        return hash;
+      }
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+        var p = (AttackData*)ptr;
+        AssetRef.Serialize(&p->AttackConfig, serializer);
+        serializer.Stream.Serialize(&p->ComboCounter);
+        FrameTimer.Serialize(&p->ComboResetTimer, serializer);
+        FrameTimer.Serialize(&p->AttackCooldown, serializer);
+        QBoolean.Serialize(&p->IsAttacking, serializer);
+    }
+  }
+  [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct PlayerLink : Quantum.IComponent {
     public const Int32 SIZE = 4;
     public const Int32 ALIGNMENT = 4;
@@ -1617,11 +1673,13 @@ namespace Quantum {
       typeRegistry.Register(typeof(Quantum._globals_), Quantum._globals_.SIZE);
     }
     static partial void InitComponentTypeIdGen() {
-      ComponentTypeId.Reset(ComponentTypeId.BuiltInComponentCount + 5)
+      ComponentTypeId.Reset(ComponentTypeId.BuiltInComponentCount + 7)
         .AddBuiltInComponents()
         .Add<Quantum.CharacterStatus>(Quantum.CharacterStatus.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.KCC2D>(Quantum.KCC2D.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.MovementData>(Quantum.MovementData.Serialize, null, null, ComponentFlags.None)
+        .Add<Quantum.CharacterLevel>(Quantum.CharacterLevel.Serialize, null, null, ComponentFlags.None)
+        .Add<Quantum.AttackData>(Quantum.AttackData.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.PlayerLink>(Quantum.PlayerLink.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.PlayerSpawner>(Quantum.PlayerSpawner.Serialize, null, null, ComponentFlags.None)
         .Finish();
