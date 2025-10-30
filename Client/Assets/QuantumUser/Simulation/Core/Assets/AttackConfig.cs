@@ -29,6 +29,23 @@ namespace Quantum
         [Tooltip("Cooldown for heavy attack")]
         public FP HeavyAttackCooldown = FP._0_50;
         
+        [Header("Heavy Charge Settings")]
+        [Tooltip("Maximum charge time for heavy attack")]
+        public FP MaxChargeTime = FP._2;
+        
+        [Tooltip("Minimum charge time to get bonus damage")]
+        public FP MinChargeTime = FP._0_50;
+        
+        [Tooltip("Damage multiplier at full charge")]
+        public FP FullChargeDamageMultiplier = FP._2;
+        
+        [Header("Command Input Settings")]
+        [Tooltip("Time window for command input sequence")]
+        public FP CommandInputWindow = FP._0_50;
+        
+        [Tooltip("Maximum number of inputs to track")]
+        public int MaxInputBufferSize = 8;
+        
         [Header("Unlock Settings")]
         [Tooltip("Level required to unlock double jump")]
         public int DoubleJumpUnlockLevel = 5;

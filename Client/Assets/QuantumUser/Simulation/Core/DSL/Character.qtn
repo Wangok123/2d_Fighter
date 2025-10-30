@@ -30,10 +30,21 @@ component CharacterLevel
 component AttackData
 {
 	asset_ref<AttackConfig> AttackConfig;
+	array<asset_ref<SpecialMoveConfig>>[4] SpecialMoves;
 	[ExcludeFromPrototype] Int32 ComboCounter;
 	[ExcludeFromPrototype] FrameTimer ComboResetTimer;
 	[ExcludeFromPrototype] FrameTimer AttackCooldown;
 	[ExcludeFromPrototype] bool IsAttacking;
+	[ExcludeFromPrototype] FP HeavyChargeTime;
+	[ExcludeFromPrototype] bool IsChargingHeavy;
+}
+
+component CommandInputData
+{
+	[ExcludeFromPrototype] Int32 InputBufferSize;
+	[ExcludeFromPrototype] array<Int32>[8] InputBuffer;
+	[ExcludeFromPrototype] Int32 InputBufferIndex;
+	[ExcludeFromPrototype] FrameTimer InputExpiryTimer;
 }
 
 event LevelUp
@@ -48,5 +59,13 @@ event AttackPerformed
 	EntityRef Attacker;
 	Boolean IsHeavyAttack;
 	Int32 ComboCount;
+	FP Damage;
+	FP ChargeLevel;
+}
+
+event SpecialMovePerformed
+{
+	EntityRef Attacker;
+	Int32 MoveId;
 	FP Damage;
 }
