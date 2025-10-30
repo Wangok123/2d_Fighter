@@ -21,3 +21,17 @@ component MovementData
 	[ExcludeFromPrototype] bool IsFacingRight;
 	[ExcludeFromPrototype] bool HasAirJump;
 }
+
+component CharacterLevel
+{
+	Int32 CurrentLevel;
+}
+
+component AttackData
+{
+	asset_ref<AttackConfig> AttackConfig;
+	[ExcludeFromPrototype] Int32 ComboCounter;
+	[ExcludeFromPrototype] FrameTimer ComboResetTimer;
+	[ExcludeFromPrototype] FrameTimer AttackCooldown;
+	[ExcludeFromPrototype] bool IsAttacking;
+}
