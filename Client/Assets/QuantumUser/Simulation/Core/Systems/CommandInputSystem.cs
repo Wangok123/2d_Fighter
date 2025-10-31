@@ -17,16 +17,9 @@ namespace Quantum
 
         public override void Update(Frame frame, ref Filter filter)
         {
-            // Get attack config
-            var attackConfig = frame.FindAsset(filter.AttackData->AttackConfig);
-            if (attackConfig == null)
-            {
-                return;
-            }
-
-            // Get command input config
-            var commandConfig = frame.FindAsset(attackConfig.CommandInputConfig);
-            if (commandConfig == null)
+            // Get character attack config
+            var characterConfig = frame.FindAsset(filter.AttackData->AttackConfig);
+            if (characterConfig == null)
             {
                 return;
             }
@@ -44,7 +37,7 @@ namespace Quantum
             // Add to buffer if it's a new input
             if (currentInput != (int)CommandInput.None)
             {
-                AddInputToBuffer(frame, ref filter, currentInput, commandConfig);
+                AddInputToBuffer(frame, ref filter, currentInput, characterConfig);
             }
 
             // Expire old inputs
@@ -86,7 +79,7 @@ namespace Quantum
             return (int)CommandInput.None;
         }
 
-        private void AddInputToBuffer(Frame frame, ref Filter filter, int input, CommandInputConfig config)
+        private void AddInputToBuffer(Frame frame, ref Filter filter, int input, CharacterAttackConfig config)
         {
             // Don't add duplicate inputs
             if (filter.CommandData->InputBufferIndex > 0)
@@ -115,7 +108,7 @@ namespace Quantum
             }
 
             // Reset expiry timer
-            filter.CommandData->InputExpiryTimer = FrameTimer.FromSeconds(frame, config.InputWindow);
+            filter.CommandData->InputExpiryTimer = FrameTimer.FromSeconds(frame, config.CommandInputWindow);
         }
 
         /// <summary>

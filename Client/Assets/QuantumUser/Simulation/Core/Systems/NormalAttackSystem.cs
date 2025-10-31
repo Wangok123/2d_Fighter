@@ -3,15 +3,15 @@ namespace Quantum
     using Photon.Deterministic;
 
     /// <summary>
-    /// System for handling different attack types with modular, configurable components.
+    /// System for handling different attack types with inheritance-based configuration.
     /// 
-    /// Each attack type now has its own dedicated configuration:
-    /// - LightAttackConfig: Fast combo attacks (default priority: 10)
-    /// - HeavyAttackConfig: Powerful charged attacks (default priority: 50)
-    /// - CommandInputConfig: Special move system (default priority: 100)
+    /// Attack types inherit from AttackConfig base class:
+    /// - LightAttackConfig: Fast combo attacks (inherits Priority, Damage, Cooldown + adds combo system)
+    /// - HeavyAttackConfig: Powerful charged attacks (inherits base + adds charge system)
+    /// - Future: SpecialAttackConfig, RangedAttackConfig, etc. can be added similarly
     /// 
-    /// This modular design allows for easy composition and customization of attack behaviors
-    /// while maintaining Quantum's deterministic execution model.
+    /// This inheritance-based design provides a consistent base while allowing specific behaviors
+    /// to be added through derived classes, maintaining Quantum's deterministic execution model.
     /// </summary>
     public unsafe class NormalAttackSystem : SystemMainThreadFilter<NormalAttackSystem.Filter>
     {
@@ -37,15 +37,15 @@ namespace Quantum
                 input = *frame.GetPlayerInput(playerLink->Player);
             }
 
-            // Get main attack config
-            var attackConfig = frame.FindAsset(filter.AttackData->AttackConfig);
-            if (attackConfig == null)
+            // Get character attack config
+            var characterConfig = frame.FindAsset(filter.AttackData->AttackConfig);
+            if (characterConfig == null)
             {
                 return;
             }
 
             // Update timers
-            UpdateAttackTimers(frame, ref filter, attackConfig);
+            UpdateAttackTimers(frame, ref filter, characterConfig);
 
             // Early return if on cooldown
             if (filter.AttackData->AttackCooldown.IsRunning(frame))
@@ -55,7 +55,7 @@ namespace Quantum
             }
 
             // Process attacks based on configured priority order
-            ProcessAttacksByPriority(frame, ref filter, input, attackConfig);
+            ProcessAttacksByPriority(frame, ref filter, input, characterConfig);
         }
 
         /// <summary>
@@ -63,15 +63,14 @@ namespace Quantum
         /// Higher priority values are processed first.
         /// Loads each attack type's config and processes them by priority.
         /// </summary>
-        private void ProcessAttacksByPriority(Frame frame, ref Filter filter, SimpleInput2D input, AttackConfig mainConfig)
+        private void ProcessAttacksByPriority(Frame frame, ref Filter filter, SimpleInput2D input, CharacterAttackConfig characterConfig)
         {
             // Load individual attack configs
-            var lightConfig = frame.FindAsset(mainConfig.LightAttackConfig);
-            var heavyConfig = frame.FindAsset(mainConfig.HeavyAttackConfig);
-            var commandConfig = frame.FindAsset(mainConfig.CommandInputConfig);
+            var lightConfig = frame.FindAsset(characterConfig.LightAttack);
+            var heavyConfig = frame.FindAsset(characterConfig.HeavyAttack);
 
             // Determine priorities (use default if config is missing)
-            int specialPriority = commandConfig != null ? commandConfig.Priority : 100;
+            int specialPriority = characterConfig.SpecialMovePriority;
             int heavyPriority = heavyConfig != null ? heavyConfig.Priority : 50;
             int lightPriority = lightConfig != null ? lightConfig.Priority : 10;
 
@@ -82,11 +81,11 @@ namespace Quantum
             for (int currentPriority = maxPriority; currentPriority >= 0; currentPriority--)
             {
                 // Check and execute special moves
-                if (specialPriority == currentPriority && commandConfig != null)
+                if (specialPriority == currentPriority)
                 {
                     if (frame.Unsafe.TryGetPointer(filter.Entity, out CommandInputData* commandData))
                     {
-                        if (TryExecuteSpecialMove(frame, ref filter, commandData, commandConfig))
+                        if (TryExecuteSpecialMove(frame, ref filter, commandData, characterConfig))
                         {
                             return; // Attack executed, stop processing
                         }
@@ -116,10 +115,9 @@ namespace Quantum
         // Timer Management
         // ============================================================================
 
-        private void UpdateAttackTimers(Frame frame, ref Filter filter, AttackConfig mainConfig)
+        private void UpdateAttackTimers(Frame frame, ref Filter filter, CharacterAttackConfig characterConfig)
         {
             // Reset combo if timer expired
-            var lightConfig = frame.FindAsset(mainConfig.LightAttackConfig);
             if (filter.AttackData->ComboResetTimer.IsRunning(frame) == false && filter.AttackData->ComboCounter > 0)
             {
                 filter.AttackData->ComboCounter = 0;
@@ -127,19 +125,24 @@ namespace Quantum
         }
 
         // ============================================================================
-        // Special Move System (Priority: Configurable via CommandInputConfig.Priority)
+        // Special Move System (Priority: Configurable via CharacterAttackConfig.SpecialMovePriority)
         // ============================================================================
 
         /// <summary>
         /// Try to execute a special move if input sequence matches.
-        /// Priority is configurable via CommandInputConfig.Priority (default: 100).
+        /// Priority is configurable via CharacterAttackConfig.SpecialMovePriority (default: 100).
         /// </summary>
-        private bool TryExecuteSpecialMove(Frame frame, ref Filter filter, CommandInputData* commandData, CommandInputConfig config)
+        private bool TryExecuteSpecialMove(Frame frame, ref Filter filter, CommandInputData* commandData, CharacterAttackConfig characterConfig)
         {
             // Check each configured special move
-            for (int i = 0; i < filter.AttackData->SpecialMoves.Length; i++)
+            if (characterConfig.SpecialMoves == null || characterConfig.SpecialMoves.Length == 0)
             {
-                var moveRef = filter.AttackData->SpecialMoves[i];
+                return false;
+            }
+
+            for (int i = 0; i < characterConfig.SpecialMoves.Length; i++)
+            {
+                var moveRef = characterConfig.SpecialMoves[i];
                 if (moveRef.Id.IsValid == false)
                 {
                     continue;

@@ -5,26 +5,20 @@ namespace Quantum
     using Photon.Deterministic;
 
     /// <summary>
-    /// Main attack configuration that composes different attack type configs.
-    /// Each attack type has its own dedicated configuration for better modularity.
+    /// Base class for all attack configurations.
+    /// Defines common properties shared by all attack types.
+    /// Inherit from this class to create specific attack configurations (Light, Heavy, Special, etc.)
     /// </summary>
-    public class AttackConfig : AssetObject
+    public abstract class AttackConfig : AssetObject
     {
-        [Header("Attack Type Configurations")]
-        [Tooltip("Configuration for light attacks")]
-        public AssetRef<LightAttackConfig> LightAttackConfig;
+        [Header("Common Attack Properties")]
+        [Tooltip("Priority for this attack type (higher value = higher priority)")]
+        public int Priority = 50;
         
-        [Tooltip("Configuration for heavy attacks")]
-        public AssetRef<HeavyAttackConfig> HeavyAttackConfig;
+        [Tooltip("Base damage for this attack")]
+        public FP Damage = 10;
         
-        [Tooltip("Configuration for command input system")]
-        public AssetRef<CommandInputConfig> CommandInputConfig;
-        
-        [Header("Unlock Settings")]
-        [Tooltip("Level required to unlock double jump")]
-        public int DoubleJumpUnlockLevel = 5;
-        
-        [Tooltip("Level required to unlock dash")]
-        public int DashUnlockLevel = 5;
+        [Tooltip("Cooldown after using this attack")]
+        public FP Cooldown = FP._0_50;
     }
 }
