@@ -7,6 +7,10 @@ namespace Quantum
     /// <summary>
     /// Manager that coordinates different attack handlers using the Strategy Pattern.
     /// Provides explicit priority management and better extensibility.
+    /// 
+    /// Note: Sorting is performed in constructor and when adding handlers.
+    /// For typical usage (3-5 handlers, rarely modified at runtime), this is efficient.
+    /// If handlers are frequently added/removed at runtime, consider using a priority queue.
     /// </summary>
     public unsafe class AttackHandlerManager
     {

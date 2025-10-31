@@ -122,9 +122,11 @@ namespace Quantum
         public bool CanExecute(Frame frame, ref NormalAttackSystem.Filter filter, SimpleInput2D input, AttackConfig config)
         {
             // Example: Forward + LP simultaneously
-            // (This is just for demonstration - you'd want better input handling)
-            bool movingForward = filter.Entity.IsFacingRight() ? input.Right.IsDown : input.Left.IsDown;
-            return movingForward && input.LP.WasPressed;
+            // Note: In a real implementation, you would check the MovementData component
+            // to determine which direction the entity is facing
+            // For this example, we'll use a simplified check
+            bool forwardPressed = input.Right.IsDown || input.Left.IsDown;
+            return forwardPressed && input.LP.WasPressed;
         }
 
         public bool Execute(Frame frame, ref NormalAttackSystem.Filter filter, SimpleInput2D input, AttackConfig config)
@@ -152,17 +154,6 @@ namespace Quantum
             // etc.
 
             return true;
-        }
-    }
-
-    // Extension method helper (optional)
-    public static class EntityRefExtensions
-    {
-        public static unsafe bool IsFacingRight(this EntityRef entity)
-        {
-            // This is a helper - you'd need to implement based on your MovementData
-            // Just showing the pattern
-            return true; // Placeholder
         }
     }
 }
