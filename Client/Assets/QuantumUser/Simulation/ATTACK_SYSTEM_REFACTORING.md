@@ -319,7 +319,7 @@ public override void Update(Frame frame, ref Filter filter)
 
 4. **行为逻辑** - 完全相同
    - 攻击优先级保持一致
-   - 所有攻击逻辑逻辑保持不变
+   - 所有攻击逻辑保持不变
 
 ### 需要的步骤
 
