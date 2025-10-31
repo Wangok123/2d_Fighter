@@ -1,4 +1,4 @@
-# 攻击系统重构文档 (Attack System Refactoring)
+# 攻击系统重构文档 (Quantum格式) / Attack System Refactoring (Quantum Format)
 
 ## 问题分析 (Problem Analysis)
 
@@ -23,65 +23,262 @@ if (input.LP.WasPressed) {
 
 #### 主要问题：
 
-1. **紧耦合 (Tight Coupling)**
-   - 优先级逻辑与攻击处理逻辑混在一起
-   - 攻击类型之间的优先级是隐式的，通过代码执行顺序体现
-   - 修改优先级需要重组代码结构
+1. **隐式优先级 (Implicit Priority)**
+   - 优先级通过代码执行顺序体现，不够明确
+   - 需要仔细阅读代码才能理解优先级关系
 
-2. **扩展性差 (Poor Extensibility)**
-   - 添加新攻击类型需要修改核心 Update 方法
-   - 无法在运行时动态添加或移除攻击类型
-   - 违反开闭原则（对扩展开放，对修改封闭）
+2. **代码组织 (Code Organization)**
+   - 所有攻击逻辑混在一个Update方法中
+   - 缺少清晰的分区和注释
+   - 方法名称不够描述性
 
-3. **可测试性差 (Poor Testability)**
-   - 各攻击类型的逻辑无法独立测试
-   - 必须模拟整个系统上下文才能测试单个攻击类型
-   - 单元测试难以实现
+3. **可维护性 (Maintainability)**
+   - 修改一种攻击类型可能影响其他代码
+   - 缺少文档说明设计意图
 
-4. **可维护性差 (Poor Maintainability)**
-   - 所有攻击逻辑集中在一个大文件中（214行）
-   - 优先级不明确，需要仔细阅读代码才能理解
-   - 修改一个攻击类型可能影响其他攻击类型
+## 改进方案 (Improvement Solution)
 
-5. **灵活性不足 (Lack of Flexibility)**
-   - 优先级固定，无法根据游戏状态动态调整
-   - 无法为不同角色配置不同的攻击处理器
-   - 难以实现条件性的攻击启用/禁用
+### 遵循Quantum引擎格式的重构
 
-## 重构方案 (Refactoring Solution)
+由于Quantum是确定性模拟引擎，不适合使用传统的设计模式（如策略模式）。
+改进方案采用以下方式：
 
-### 策略模式 (Strategy Pattern)
+1. **显式优先级注释** - 明确标注每种攻击的优先级
+2. **清晰的代码分区** - 使用注释分隔不同的攻击系统
+3. **更好的方法命名** - 方法名清楚表明其用途
+4. **详细的文档注释** - 说明每个部分的作用
 
-采用策略模式将每种攻击类型封装为独立的处理器：
+### 改进后的结构
 
+```csharp
+/// <summary>
+/// System for handling different attack types with explicit priority.
+/// 
+/// Attack Priority (explicit order):
+/// 1. Special Moves - Command input sequences (highest priority)
+/// 2. Heavy Attack - Chargeable attack with damage scaling
+/// 3. Light Attack - Fast combo attack (lowest priority)
+/// </summary>
+public unsafe class NormalAttackSystem : SystemMainThreadFilter<NormalAttackSystem.Filter>
+{
+    public override void Update(Frame frame, ref Filter filter)
+    {
+        // 处理攻击的明确顺序
+        
+        // Priority 1: Special Moves
+        if (TryExecuteSpecialMove(...))
+        {
+            return; // 特殊招式执行，跳过其他攻击
+        }
+
+        // Priority 2: Heavy Attack
+        ProcessHeavyAttack(...);
+
+        // Priority 3: Light Attack
+        if (input.LP.WasPressed)
+        {
+            ProcessLightAttack(...);
+        }
+    }
+
+    // ========================================
+    // Priority 1: Special Move System
+    // ========================================
+    private bool TryExecuteSpecialMove(...) { }
+    private void ExecuteSpecialMove(...) { }
+
+    // ========================================
+    // Priority 2: Heavy Attack System
+    // ========================================
+    private void ProcessHeavyAttack(...) { }
+    private void ExecuteChargedHeavyAttack(...) { }
+
+    // ========================================
+    // Priority 3: Light Attack System
+    // ========================================
+    private void ProcessLightAttack(...) { }
+}
 ```
-┌─────────────────────────┐
-│  NormalAttackSystem     │
-│  (System)               │
-└───────────┬─────────────┘
-            │
-            │ 使用 (uses)
-            ▼
-┌─────────────────────────┐
-│ AttackHandlerManager    │
-│ (Coordinator)           │
-└───────────┬─────────────┘
-            │
-            │ 管理 (manages)
-            ▼
-┌─────────────────────────┐
-│   IAttackHandler        │◄─────────┐
-│   (Interface)           │          │
-└───────────┬─────────────┘          │
-            │                        │
-            │ 实现 (implements)       │
-            ▼                        │
-┌──────────────────┬──────────────┬──────────────┐
-│SpecialMove       │ HeavyAttack  │ LightAttack  │
-│Handler           │ Handler      │ Handler      │
-│ (Priority: 100)  │ (Priority: 50)│(Priority: 10)│
-└──────────────────┴──────────────┴──────────────┘
+
+## 改进内容 (Improvements Made)
+
+### 1. 添加清晰的文档注释
+
+**之前：**
+```csharp
+public unsafe class NormalAttackSystem : SystemMainThreadFilter<...>
+{
+    // 没有类级别的说明
+}
 ```
+
+**之后：**
+```csharp
+/// <summary>
+/// System for handling different attack types with explicit priority.
+/// 
+/// Attack Priority (explicit order):
+/// 1. Special Moves - Command input sequences (highest priority)
+/// 2. Heavy Attack - Chargeable attack with damage scaling
+/// 3. Light Attack - Fast combo attack (lowest priority)
+/// 
+/// This system uses private methods to separate concerns while maintaining
+/// Quantum's deterministic execution model.
+/// </summary>
+public unsafe class NormalAttackSystem : SystemMainThreadFilter<...>
+```
+
+### 2. 使用分隔符组织代码
+
+添加了清晰的分区注释：
+
+```csharp
+// ============================================================================
+// Priority 1: Special Move System
+// ============================================================================
+
+// ============================================================================
+// Priority 2: Heavy Attack System (with Charging)
+// ============================================================================
+
+// ============================================================================
+// Priority 3: Light Attack System (with Combo)
+// ============================================================================
+```
+
+### 3. 改进方法命名
+
+**之前：**
+- `ProcessHeavyCharging()` - 不清楚这是处理蓄力还是执行攻击
+- `ProcessChargedHeavyAttack()` - 名称过长
+
+**之后：**
+- `ProcessHeavyAttack()` - 清楚表明处理重击的主方法
+- `ExecuteChargedHeavyAttack()` - 清楚表明这是执行蓄力后的重击
+
+### 4. 添加详细的方法注释
+
+每个关键方法都有详细的注释说明：
+
+```csharp
+/// <summary>
+/// Process heavy attack with charging mechanics.
+/// Holding HP button charges the attack, releasing executes it.
+/// This has medium priority.
+/// </summary>
+private void ProcessHeavyAttack(...)
+```
+
+### 5. 明确的优先级注释
+
+在Update方法中添加明确的优先级标注：
+
+```csharp
+// Priority 1: Special Moves
+if (TryExecuteSpecialMove(...))
+{
+    return; // Special move executed, skip other attacks
+}
+
+// Priority 2: Heavy Attack (with charging)
+ProcessHeavyAttack(...);
+
+// Priority 3: Light Attack
+if (input.LP.WasPressed)
+{
+    ProcessLightAttack(...);
+}
+```
+
+### 6. 提取计时器更新逻辑
+
+**之前：**
+```csharp
+// 计时器更新逻辑混在Update方法中
+if (filter.AttackData->ComboResetTimer.IsRunning(frame) == false && ...)
+{
+    filter.AttackData->ComboCounter = 0;
+}
+```
+
+**之后：**
+```csharp
+// 提取到专门的方法
+UpdateAttackTimers(frame, ref filter);
+
+// ============================================================================
+// Timer Management
+// ============================================================================
+private void UpdateAttackTimers(Frame frame, ref Filter filter)
+{
+    // Reset combo if timer expired
+    if (filter.AttackData->ComboResetTimer.IsRunning(frame) == false && ...)
+    {
+        filter.AttackData->ComboCounter = 0;
+    }
+}
+```
+
+## 对比总结 (Comparison Summary)
+
+| 方面 | 改进前 | 改进后 |
+|------|--------|--------|
+| 优先级可见性 | 隐式（需要读代码） | 显式（文档和注释） |
+| 代码组织 | 混在一起 | 清晰分区 |
+| 文档注释 | 缺少 | 完整详细 |
+| 方法命名 | 一般 | 更清晰描述性 |
+| 可维护性 | 中等 | 良好 |
+| Quantum兼容 | 是 | 是 ✅ |
+| 确定性保证 | 是 | 是 ✅ |
+
+## 为什么不使用策略模式 (Why Not Strategy Pattern)
+
+Quantum引擎是确定性模拟框架，有以下限制：
+
+1. **不能使用实例状态** - 系统应该是无状态的
+2. **不能使用System.Collections.Generic** - 可能导致非确定性行为
+3. **不能使用LINQ** - 非确定性
+4. **避免使用new创建对象** - 可能导致垃圾回收问题
+
+因此，我们采用：
+- ✅ 私有方法分离关注点
+- ✅ 清晰的注释和文档
+- ✅ 明确的优先级标注
+- ✅ 保持代码简洁可读
+
+而不是：
+- ❌ 策略模式（需要实例对象）
+- ❌ 管理器类（需要List和对象实例）
+- ❌ 接口和多态（增加复杂度）
+
+## 使用建议 (Usage Recommendations)
+
+1. **添加新攻击类型**
+   - 在适当的优先级位置添加检查
+   - 创建新的私有方法
+   - 添加清晰的注释和分隔符
+
+2. **修改优先级**
+   - 调整Update方法中的顺序
+   - 更新文档注释中的优先级说明
+
+3. **维护代码**
+   - 保持分区注释的清晰
+   - 确保方法名称描述性强
+   - 更新文档注释
+
+## 结论 (Conclusion)
+
+这次重构通过以下方式改进了代码质量：
+
+1. ✅ **显式优先级** - 通过注释和文档明确标注
+2. ✅ **更好的组织** - 使用分隔符和分区
+3. ✅ **清晰的文档** - 详细的注释说明
+4. ✅ **遵循Quantum格式** - 保持确定性和无状态
+5. ✅ **易于维护** - 清晰的结构和命名
+
+这种方法在保持Quantum引擎兼容性的同时，显著提高了代码的可读性和可维护性。
+
 
 ### 新架构组件 (New Architecture Components)
 

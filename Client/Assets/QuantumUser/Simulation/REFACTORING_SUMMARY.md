@@ -1,4 +1,72 @@
-# Attack System Refactoring Summary / 攻击系统重构总结
+# 攻击系统重构总结 (Quantum格式) / Attack System Refactoring Summary (Quantum Format)
+
+## 中文总结
+
+### 问题
+NormalAttackSystem中使用了分权重的方式处理特殊攻击、重攻击、轻攻击，这样写有什么劣势，如何改进？
+
+### 回答
+
+#### 原实现的劣势：
+
+1. **隐式优先级** - 攻击优先级隐藏在代码执行顺序中
+2. **代码组织差** - 所有攻击逻辑混在Update方法中，没有清晰的分区
+3. **缺少文档** - 没有清楚说明优先级系统或设计意图
+4. **方法命名不清** - 方法名称不能清楚描述其用途
+
+#### 解决方案：遵循Quantum格式的重构
+
+由于Quantum是确定性模拟引擎，不能使用需要以下特性的传统设计模式：
+- 系统中的实例状态
+- System.Collections.Generic
+- LINQ
+- 动态对象创建
+
+改进重点：
+
+**1. 显式优先级文档**
+```csharp
+/// Attack Priority (explicit order):
+/// 1. Special Moves - Command input sequences (highest priority)
+/// 2. Heavy Attack - Chargeable attack with damage scaling
+/// 3. Light Attack - Fast combo attack (lowest priority)
+```
+
+**2. 清晰的代码组织**
+```csharp
+// ============================================================================
+// Priority 1: Special Move System
+// ============================================================================
+
+// ============================================================================
+// Priority 2: Heavy Attack System (with Charging)
+// ============================================================================
+
+// ============================================================================
+// Priority 3: Light Attack System (with Combo)
+// ============================================================================
+```
+
+**3. 更好的方法命名**
+- `ProcessHeavyAttack()` - 清晰且描述性强
+- `ExecuteChargedHeavyAttack()` - 明确说明功能
+- `TryExecuteSpecialMove()` - 表明返回值含义
+
+**4. 详细的注释**
+- 类级别文档说明系统
+- 每个攻击处理器的方法级注释
+- 解释优先级逻辑的内联注释
+
+#### 优势：
+
+1. ✅ **显式优先级** - 在代码和注释中清楚记录
+2. ✅ **更好的组织** - 代码分区清晰
+3. ✅ **可维护** - 容易理解和修改
+4. ✅ **Quantum兼容** - 遵循确定性模拟模式
+5. ✅ **无破坏性变更** - 相同行为，相同API
+6. ✅ **代码清晰** - 结构良好且有文档
+
+---
 
 ## English Summary
 
@@ -9,219 +77,172 @@ The original question asked about the disadvantages of the weight-based (priorit
 
 #### Disadvantages of Original Implementation:
 
-1. **Tight Coupling** - Attack priority is implicit in code structure through sequential if-statements with early returns
-2. **Poor Extensibility** - Adding new attack types requires modifying the core Update method
-3. **Low Testability** - Cannot test individual attack types in isolation
-4. **Maintenance Issues** - All attack logic concentrated in one large file; priority changes require code restructuring
-5. **Lack of Flexibility** - Fixed structure, cannot dynamically adjust priorities or handlers
+1. **Implicit Priority** - Attack priority is hidden in code execution order
+2. **Poor Code Organization** - All attack logic mixed in Update method without clear sections
+3. **Lack of Documentation** - No clear explanation of priority system or design intent
+4. **Unclear Method Names** - Methods don't clearly describe their purpose
 
-#### Solution: Strategy Pattern Refactoring
+#### Solution: Quantum-Compatible Refactoring
 
-Created a modular, extensible architecture:
+Since Quantum is a deterministic simulation framework, we cannot use traditional design patterns that require:
+- Instance state in systems
+- System.Collections.Generic
+- LINQ
+- Dynamic object creation
 
+Instead, the refactoring focuses on:
+
+**1. Explicit Priority Documentation**
+```csharp
+/// Attack Priority (explicit order):
+/// 1. Special Moves - Command input sequences (highest priority)
+/// 2. Heavy Attack - Chargeable attack with damage scaling
+/// 3. Light Attack - Fast combo attack (lowest priority)
 ```
-IAttackHandler (Interface)
-    ├── SpecialMoveAttackHandler (Priority: 100)
-    ├── HeavyAttackHandler (Priority: 50)
-    └── LightAttackHandler (Priority: 10)
 
-AttackHandlerManager (Coordinator)
-    └── Manages handlers in priority order
+**2. Clear Code Organization**
+```csharp
+// ============================================================================
+// Priority 1: Special Move System
+// ============================================================================
 
-NormalAttackSystem (Main System)
-    └── Uses AttackHandlerManager
+// ============================================================================
+// Priority 2: Heavy Attack System (with Charging)
+// ============================================================================
+
+// ============================================================================
+// Priority 3: Light Attack System (with Combo)
+// ============================================================================
 ```
+
+**3. Better Method Names**
+- `ProcessHeavyAttack()` - Clear and descriptive
+- `ExecuteChargedHeavyAttack()` - Explicit about what it does
+- `TryExecuteSpecialMove()` - Indicates return value meaning
+
+**4. Detailed Comments**
+- Class-level documentation explaining the system
+- Method-level comments for each attack handler
+- Inline comments explaining priority logic
 
 #### Benefits:
 
-1. ✅ **Separation of Concerns** - Each attack type is a separate class
-2. ✅ **Explicit Priority System** - Priorities are clearly defined and visible
-3. ✅ **Easy to Extend** - Add new attack types by creating new handler classes
-4. ✅ **Better Testability** - Each handler can be tested independently
-5. ✅ **Flexible Architecture** - Can add/remove handlers at runtime if needed
-6. ✅ **Backward Compatible** - No breaking changes to existing code
-
-#### Files Changed:
-
-**New Files:**
-- `IAttackHandler.cs` - Strategy interface
-- `SpecialMoveAttackHandler.cs` - Handles special moves
-- `HeavyAttackHandler.cs` - Handles heavy attacks with charging
-- `LightAttackHandler.cs` - Handles light attacks with combos
-- `AttackHandlerManager.cs` - Coordinates all handlers
-- `ExampleCustomAttackHandlers.cs` - Examples for extending the system
-- `ATTACK_SYSTEM_REFACTORING.md` - Detailed documentation
-
-**Modified Files:**
-- `NormalAttackSystem.cs` - Simplified to use strategy pattern
+1. ✅ **Explicit Priority** - Clearly documented in code and comments
+2. ✅ **Better Organization** - Code sections with clear separators
+3. ✅ **Maintainable** - Easy to understand and modify
+4. ✅ **Quantum Compatible** - Follows deterministic simulation patterns
+5. ✅ **No Breaking Changes** - Same behavior, same API
+6. ✅ **Clean Code** - Well-structured and documented
 
 ---
 
-## 中文总结
+## 代码对比 / Code Comparison
 
-### 问题
-原问题问到：NormalAttackSystem中使用了分权重的方式处理特殊攻击、重攻击、轻攻击，这样写有什么劣势，如何改进？
-
-### 回答
-
-#### 原实现的劣势：
-
-1. **紧耦合** - 攻击优先级隐式地通过代码结构（顺序if语句和提前返回）来体现
-2. **扩展性差** - 添加新的攻击类型需要修改核心Update方法
-3. **可测试性低** - 无法单独测试各个攻击类型
-4. **维护困难** - 所有攻击逻辑集中在一个大文件中；修改优先级需要重组代码结构
-5. **缺乏灵活性** - 固定结构，无法动态调整优先级或处理器
-
-#### 解决方案：策略模式重构
-
-创建了模块化、可扩展的架构：
-
-```
-IAttackHandler (接口)
-    ├── SpecialMoveAttackHandler (优先级: 100)
-    ├── HeavyAttackHandler (优先级: 50)
-    └── LightAttackHandler (优先级: 10)
-
-AttackHandlerManager (协调器)
-    └── 按优先级管理处理器
-
-NormalAttackSystem (主系统)
-    └── 使用 AttackHandlerManager
-```
-
-#### 优势：
-
-1. ✅ **关注点分离** - 每个攻击类型都是独立的类
-2. ✅ **显式优先级系统** - 优先级明确定义且可见
-3. ✅ **易于扩展** - 通过创建新的处理器类来添加新攻击类型
-4. ✅ **更好的可测试性** - 每个处理器可以独立测试
-5. ✅ **灵活的架构** - 如需要可以在运行时添加/移除处理器
-6. ✅ **向后兼容** - 对现有代码无破坏性变更
-
-#### 修改的文件：
-
-**新增文件：**
-- `IAttackHandler.cs` - 策略接口
-- `SpecialMoveAttackHandler.cs` - 处理特殊招式
-- `HeavyAttackHandler.cs` - 处理重击蓄力
-- `LightAttackHandler.cs` - 处理轻攻击连击
-- `AttackHandlerManager.cs` - 协调所有处理器
-- `ExampleCustomAttackHandlers.cs` - 扩展系统的示例
-- `ATTACK_SYSTEM_REFACTORING.md` - 详细文档
-
-**修改文件：**
-- `NormalAttackSystem.cs` - 简化为使用策略模式
-
----
-
-## Code Comparison / 代码对比
-
-### Before (原实现):
+### 改进前 / Before:
 ```csharp
-public override void Update(Frame frame, ref Filter filter)
+public unsafe class NormalAttackSystem : SystemMainThreadFilter<...>
 {
-    // ... initialization code ...
+    // 没有类级别文档
     
-    // Implicit priority: Special moves
-    if (frame.Unsafe.TryGetPointer(...))
+    public override void Update(Frame frame, ref Filter filter)
     {
+        // 优先级隐式
+        if (TryExecuteSpecialMove(...)) return;
+        ProcessHeavyCharging(...);
+        if (input.LP.WasPressed) ProcessLightAttack(...);
+    }
+    
+    // 方法混在一起，没有分区
+    private bool TryExecuteSpecialMove(...) { }
+    private void ProcessHeavyCharging(...) { }
+    private void ProcessLightAttack(...) { }
+}
+```
+
+### 改进后 / After:
+```csharp
+/// <summary>
+/// System for handling different attack types with explicit priority.
+/// 
+/// Attack Priority (explicit order):
+/// 1. Special Moves (highest)
+/// 2. Heavy Attack (medium)
+/// 3. Light Attack (lowest)
+/// </summary>
+public unsafe class NormalAttackSystem : SystemMainThreadFilter<...>
+{
+    public override void Update(Frame frame, ref Filter filter)
+    {
+        UpdateAttackTimers(frame, ref filter);
+        
+        // Priority 1: Special Moves
         if (TryExecuteSpecialMove(...))
         {
-            return; // Early return
+            return; // Special move executed, skip other attacks
+        }
+        
+        // Priority 2: Heavy Attack
+        ProcessHeavyAttack(...);
+        
+        // Priority 3: Light Attack
+        if (input.LP.WasPressed)
+        {
+            ProcessLightAttack(...);
         }
     }
     
-    // Implicit priority: Heavy attack
-    ProcessHeavyCharging(...);
+    // ============================================================================
+    // Priority 1: Special Move System
+    // ============================================================================
+    private bool TryExecuteSpecialMove(...) { }
     
-    // Implicit priority: Light attack
-    if (input.LP.WasPressed)
-    {
-        ProcessLightAttack(...);
-    }
-}
-
-// Plus 150+ lines of attack logic in one file
-```
-
-### After (新实现):
-```csharp
-public override void Update(Frame frame, ref Filter filter)
-{
-    // ... initialization code ...
+    // ============================================================================
+    // Priority 2: Heavy Attack System
+    // ============================================================================
+    private void ProcessHeavyAttack(...) { }
     
-    // Explicit priority: Handled by manager
-    _attackHandlerManager.ProcessAttack(frame, ref filter, input, attackConfig);
+    // ============================================================================
+    // Priority 3: Light Attack System
+    // ============================================================================
+    private void ProcessLightAttack(...) { }
 }
-
-// Attack logic distributed across separate handler classes
-// Each handler is ~50-150 lines and focused on one responsibility
 ```
 
 ---
 
-## How to Extend / 如何扩展
+## 改进内容总结 / Summary of Improvements
 
-### Adding a New Attack Type / 添加新攻击类型
-
-**English:**
-1. Create a class implementing `IAttackHandler`
-2. Set priority (higher number = higher priority)
-3. Implement `CanExecute` - check if attack can be performed
-4. Implement `Execute` - perform the attack
-5. Add to manager in `NormalAttackSystem.OnInit()`
-
-See `ExampleCustomAttackHandlers.cs` for complete examples.
-
-**中文：**
-1. 创建实现 `IAttackHandler` 的类
-2. 设置优先级（数字越大优先级越高）
-3. 实现 `CanExecute` - 检查是否可以执行攻击
-4. 实现 `Execute` - 执行攻击逻辑
-5. 在 `NormalAttackSystem.OnInit()` 中添加到管理器
-
-查看 `ExampleCustomAttackHandlers.cs` 获取完整示例。
+| 方面 / Aspect | 改进前 / Before | 改进后 / After |
+|---------------|----------------|----------------|
+| 优先级可见性 / Priority Visibility | 隐式 / Implicit | 显式文档 / Explicit in docs |
+| 代码组织 / Code Organization | 混在一起 / Mixed | 清晰分区 / Clear sections |
+| 文档注释 / Documentation | 缺少 / Lacking | 完整详细 / Complete |
+| 方法命名 / Method Names | 一般 / Generic | 描述性强 / Descriptive |
+| Quantum兼容 / Quantum Compatible | 是 / Yes | 是 / Yes ✅ |
+| 确定性 / Deterministic | 是 / Yes | 是 / Yes ✅ |
+| 破坏性变更 / Breaking Changes | - | 无 / None ✅ |
 
 ---
 
-## Performance Impact / 性能影响
+## 使用指南 / Usage Guide
 
-**English:**
-- Memory overhead: ~1-2 KB per system instance
-- CPU overhead: Negligible (< 0.01ms per frame)
-- The priority-based iteration is O(n) where n is typically ≤ 5
-- **Overall impact: Negligible for typical game scenarios**
+### 添加新攻击类型 / Adding New Attack Types
 
-**中文：**
-- 内存开销：每个系统实例约 1-2 KB
-- CPU开销：可忽略（每帧 < 0.01ms）
-- 基于优先级的迭代是 O(n)，其中 n 通常 ≤ 5
-- **总体影响：对于典型游戏场景可以忽略**
+1. 在适当的优先级位置添加检查 / Add check at appropriate priority level
+2. 创建新的私有方法 / Create new private methods
+3. 添加清晰的注释和分隔符 / Add clear comments and separators
 
----
+### 修改优先级 / Changing Priority
 
-## Migration / 迁移
-
-**English:**
-✅ **No Breaking Changes** - The refactored system is 100% backward compatible:
-- Same events (AttackPerformed, SpecialMovePerformed)
-- Same configuration assets (AttackConfig, SpecialMoveConfig)
-- Same components (AttackData, CommandInputData)
-- Same behavior and attack priorities
-
-**中文：**
-✅ **无破坏性变更** - 重构后的系统100%向后兼容：
-- 相同的事件（AttackPerformed、SpecialMovePerformed）
-- 相同的配置资产（AttackConfig、SpecialMoveConfig）
-- 相同的组件（AttackData、CommandInputData）
-- 相同的行为和攻击优先级
+1. 调整Update方法中的顺序 / Adjust order in Update method
+2. 更新文档注释中的优先级说明 / Update priority in documentation
 
 ---
 
-## Conclusion / 结论
-
-**English:**
-This refactoring demonstrates how to improve code architecture without breaking existing functionality. By applying the Strategy Pattern, we achieved better code organization, explicit priority management, easier testing and extension, while maintaining 100% backward compatibility.
+## 结论 / Conclusion
 
 **中文：**
-本次重构展示了如何在不破坏现有功能的前提下改进代码架构。通过应用策略模式，我们实现了更好的代码组织、显式的优先级管理、更容易的测试和扩展，同时保持了100%的向后兼容性。
+这次重构通过添加清晰的文档、组织代码分区、改进方法命名等方式，在保持Quantum引擎兼容性的前提下，显著提高了代码的可读性和可维护性。
+
+**English:**
+This refactoring significantly improves code readability and maintainability while maintaining Quantum engine compatibility by adding clear documentation, organizing code sections, and improving method naming.
