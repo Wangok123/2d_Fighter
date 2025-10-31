@@ -4,53 +4,21 @@ namespace Quantum
 {
     using Photon.Deterministic;
 
-    public class AttackConfig : AssetObject
+    /// <summary>
+    /// Base class for all attack configurations.
+    /// Defines common properties shared by all attack types.
+    /// Inherit from this class to create specific attack configurations (Light, Heavy, Special, etc.)
+    /// </summary>
+    public abstract class AttackConfig : AssetObject
     {
-        [Header("Light Attack Settings")]
-        [Tooltip("Damage for light attack")]
-        public FP LightAttackDamage = 10;
+        [Header("Common Attack Properties")]
+        [Tooltip("Priority for this attack type (higher value = higher priority)")]
+        public int Priority = 50;
         
-        [Tooltip("Cooldown between light attacks")]
-        public FP LightAttackCooldown = FP._0_25;
+        [Tooltip("Base damage for this attack")]
+        public FP Damage = 10;
         
-        [Tooltip("Time window for combo continuation")]
-        public FP ComboWindow = FP._1;
-        
-        [Tooltip("Max combo count for light attacks")]
-        public int MaxComboCount = 3;
-        
-        [Tooltip("Damage multiplier per combo level")]
-        public FP[] ComboDamageMultipliers = new FP[] { FP._1, FP._1_25, FP._1_50 };
-        
-        [Header("Heavy Attack Settings")]
-        [Tooltip("Damage for heavy attack")]
-        public FP HeavyAttackDamage = 25;
-        
-        [Tooltip("Cooldown for heavy attack")]
-        public FP HeavyAttackCooldown = FP._0_50;
-        
-        [Header("Heavy Charge Settings")]
-        [Tooltip("Maximum charge time for heavy attack")]
-        public FP MaxChargeTime = FP._2;
-        
-        [Tooltip("Minimum charge time to get bonus damage")]
-        public FP MinChargeTime = FP._0_50;
-        
-        [Tooltip("Damage multiplier at full charge")]
-        public FP FullChargeDamageMultiplier = FP._2;
-        
-        [Header("Command Input Settings")]
-        [Tooltip("Time window for command input sequence")]
-        public FP CommandInputWindow = FP._0_50;
-        
-        [Tooltip("Maximum number of inputs to track")]
-        public int MaxInputBufferSize = 8;
-        
-        [Header("Unlock Settings")]
-        [Tooltip("Level required to unlock double jump")]
-        public int DoubleJumpUnlockLevel = 5;
-        
-        [Tooltip("Level required to unlock dash")]
-        public int DashUnlockLevel = 5;
+        [Tooltip("Cooldown after using this attack")]
+        public FP Cooldown = FP._0_50;
     }
 }

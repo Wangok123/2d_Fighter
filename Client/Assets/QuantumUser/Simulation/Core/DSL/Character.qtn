@@ -29,8 +29,7 @@ component CharacterLevel
 
 component AttackData
 {
-	asset_ref<AttackConfig> AttackConfig;
-	array<asset_ref<SpecialMoveConfig>>[4] SpecialMoves;
+	asset_ref<CharacterAttackConfig> AttackConfig;
 	[ExcludeFromPrototype] Int32 ComboCounter;
 	[ExcludeFromPrototype] FrameTimer ComboResetTimer;
 	[ExcludeFromPrototype] FrameTimer AttackCooldown;
