@@ -3,15 +3,16 @@ namespace Quantum
     using Photon.Deterministic;
 
     /// <summary>
-    /// System for handling different attack types with explicit priority.
+    /// System for handling different attack types with configurable priority.
     /// 
-    /// Attack Priority (explicit order):
-    /// 1. Special Moves - Command input sequences (highest priority)
-    /// 2. Heavy Attack - Chargeable attack with damage scaling
-    /// 3. Light Attack - Fast combo attack (lowest priority)
+    /// Attack priorities are now configurable via AttackConfig:
+    /// - SpecialMovePriority (default: 100, highest)
+    /// - HeavyAttackPriority (default: 50, medium)
+    /// - LightAttackPriority (default: 10, lowest)
     /// 
     /// This system uses private methods to separate concerns while maintaining
-    /// Quantum's deterministic execution model.
+    /// Quantum's deterministic execution model. Priority values can be adjusted
+    /// in the AttackConfig asset to change attack execution order.
     /// </summary>
     public unsafe class NormalAttackSystem : SystemMainThreadFilter<NormalAttackSystem.Filter>
     {
@@ -54,23 +55,58 @@ namespace Quantum
                 return;
             }
 
-            // Process attacks in priority order (explicit)
-            // Priority 1: Special Moves
-            if (frame.Unsafe.TryGetPointer(filter.Entity, out CommandInputData* commandData))
+            // Process attacks based on configured priority order
+            ProcessAttacksByPriority(frame, ref filter, input, attackConfig);
+        }
+
+        /// <summary>
+        /// Process attacks in order of their configured priority values.
+        /// Higher priority values are processed first.
+        /// </summary>
+        private void ProcessAttacksByPriority(Frame frame, ref Filter filter, SimpleInput2D input, AttackConfig config)
+        {
+            // Determine the highest priority attack type
+            int specialPriority = config.SpecialMovePriority;
+            int heavyPriority = config.HeavyAttackPriority;
+            int lightPriority = config.LightAttackPriority;
+
+            // Process in order: highest to lowest priority
+            // We need to check all three and process them in the right order
+            
+            // Find highest priority
+            int maxPriority = FPMath.Max(FPMath.Max(specialPriority, heavyPriority), lightPriority);
+            
+            // Process attacks from highest to lowest priority
+            for (int currentPriority = maxPriority; currentPriority >= 0; currentPriority--)
             {
-                if (TryExecuteSpecialMove(frame, ref filter, commandData, attackConfig))
+                // Check and execute special moves
+                if (specialPriority == currentPriority)
                 {
-                    return; // Special move executed, skip other attacks
+                    if (frame.Unsafe.TryGetPointer(filter.Entity, out CommandInputData* commandData))
+                    {
+                        if (TryExecuteSpecialMove(frame, ref filter, commandData, config))
+                        {
+                            return; // Attack executed, stop processing
+                        }
+                    }
                 }
-            }
 
-            // Priority 2: Heavy Attack (with charging)
-            ProcessHeavyAttack(frame, ref filter, input, attackConfig);
+                // Check and execute heavy attack
+                if (heavyPriority == currentPriority)
+                {
+                    bool heavyExecuted = ProcessHeavyAttack(frame, ref filter, input, config);
+                    if (heavyExecuted)
+                    {
+                        return; // Attack executed, stop processing
+                    }
+                }
 
-            // Priority 3: Light Attack
-            if (input.LP.WasPressed)
-            {
-                ProcessLightAttack(frame, ref filter, attackConfig);
+                // Check and execute light attack
+                if (lightPriority == currentPriority && input.LP.WasPressed)
+                {
+                    ProcessLightAttack(frame, ref filter, config);
+                    return; // Attack executed, stop processing
+                }
             }
         }
 
@@ -88,16 +124,12 @@ namespace Quantum
         }
 
         // ============================================================================
-        // Priority 1: Special Move System
-        // ============================================================================
-
-        // ============================================================================
-        // Priority 1: Special Move System
+        // Special Move System (Priority: Configurable via AttackConfig.SpecialMovePriority)
         // ============================================================================
 
         /// <summary>
         /// Try to execute a special move if input sequence matches.
-        /// This has the highest priority among all attack types.
+        /// Priority is configurable via AttackConfig.SpecialMovePriority (default: 100).
         /// </summary>
         private bool TryExecuteSpecialMove(Frame frame, ref Filter filter, CommandInputData* commandData, AttackConfig attackConfig)
         {
@@ -155,15 +187,16 @@ namespace Quantum
         }
 
         // ============================================================================
-        // Priority 2: Heavy Attack System (with Charging)
+        // Heavy Attack System (Priority: Configurable via AttackConfig.HeavyAttackPriority)
         // ============================================================================
 
         /// <summary>
         /// Process heavy attack with charging mechanics.
         /// Holding HP button charges the attack, releasing executes it.
-        /// This has medium priority.
+        /// Priority is configurable via AttackConfig.HeavyAttackPriority (default: 50).
         /// </summary>
-        private void ProcessHeavyAttack(Frame frame, ref Filter filter, SimpleInput2D input, AttackConfig config)
+        /// <returns>True if attack was executed, false otherwise</returns>
+        private bool ProcessHeavyAttack(Frame frame, ref Filter filter, SimpleInput2D input, AttackConfig config)
         {
             if (input.HP.IsDown)
             {
@@ -184,6 +217,7 @@ namespace Quantum
                         filter.AttackData->HeavyChargeTime = config.MaxChargeTime;
                     }
                 }
+                return false; // Charging, not executing yet
             }
             else if (filter.AttackData->IsChargingHeavy)
             {
@@ -191,7 +225,10 @@ namespace Quantum
                 ExecuteChargedHeavyAttack(frame, ref filter, config);
                 filter.AttackData->IsChargingHeavy = false;
                 filter.AttackData->HeavyChargeTime = 0;
+                return true; // Attack executed
             }
+            
+            return false; // No heavy attack input
         }
 
         private void ExecuteChargedHeavyAttack(Frame frame, ref Filter filter, AttackConfig config)
@@ -223,13 +260,13 @@ namespace Quantum
         }
 
         // ============================================================================
-        // Priority 3: Light Attack System (with Combo)
+        // Light Attack System (Priority: Configurable via AttackConfig.LightAttackPriority)
         // ============================================================================
 
         /// <summary>
         /// Process light attack with combo system.
         /// Consecutive light attacks within combo window increase damage.
-        /// This has the lowest priority.
+        /// Priority is configurable via AttackConfig.LightAttackPriority (default: 10).
         /// </summary>
         private void ProcessLightAttack(Frame frame, ref Filter filter, AttackConfig config)
         {

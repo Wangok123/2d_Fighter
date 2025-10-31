@@ -6,6 +6,16 @@ namespace Quantum
 
     public class AttackConfig : AssetObject
     {
+        [Header("Attack Priority Settings")]
+        [Tooltip("Priority for special moves (higher value = higher priority)")]
+        public int SpecialMovePriority = 100;
+        
+        [Tooltip("Priority for heavy attack (higher value = higher priority)")]
+        public int HeavyAttackPriority = 50;
+        
+        [Tooltip("Priority for light attack (higher value = higher priority)")]
+        public int LightAttackPriority = 10;
+        
         [Header("Light Attack Settings")]
         [Tooltip("Damage for light attack")]
         public FP LightAttackDamage = 10;

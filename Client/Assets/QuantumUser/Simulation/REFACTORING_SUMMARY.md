@@ -1,4 +1,4 @@
-# 攻击系统重构总结 (Quantum格式) / Attack System Refactoring Summary (Quantum Format)
+# 攻击系统重构总结 (Quantum格式 - 可配置优先级) / Attack System Refactoring Summary (Quantum Format - Configurable Priority)
 
 ## 中文总结
 
@@ -11,60 +11,53 @@ NormalAttackSystem中使用了分权重的方式处理特殊攻击、重攻击�
 
 1. **隐式优先级** - 攻击优先级隐藏在代码执行顺序中
 2. **代码组织差** - 所有攻击逻辑混在Update方法中，没有清晰的分区
-3. **缺少文档** - 没有清楚说明优先级系统或设计意图
-4. **方法命名不清** - 方法名称不能清楚描述其用途
+3. **优先级固定** - 优先级硬编码在代码中，无法灵活配置
+4. **缺少文档** - 没有清楚说明优先级系统或设计意图
 
-#### 解决方案：遵循Quantum格式的重构
+#### 解决方案：可配置优先级系统
 
-由于Quantum是确定性模拟引擎，不能使用需要以下特性的传统设计模式：
-- 系统中的实例状态
-- System.Collections.Generic
-- LINQ
-- 动态对象创建
+通过在AttackConfig中添加优先级配置，使系统更加灵活：
 
-改进重点：
-
-**1. 显式优先级文档**
+**1. 在AttackConfig中添加优先级字段**
 ```csharp
-/// Attack Priority (explicit order):
-/// 1. Special Moves - Command input sequences (highest priority)
-/// 2. Heavy Attack - Chargeable attack with damage scaling
-/// 3. Light Attack - Fast combo attack (lowest priority)
+[Header("Attack Priority Settings")]
+[Tooltip("Priority for special moves (higher value = higher priority)")]
+public int SpecialMovePriority = 100;
+
+[Tooltip("Priority for heavy attack (higher value = higher priority)")]
+public int HeavyAttackPriority = 50;
+
+[Tooltip("Priority for light attack (higher value = higher priority)")]
+public int LightAttackPriority = 10;
 ```
 
-**2. 清晰的代码组织**
+**2. 基于配置的优先级处理**
 ```csharp
-// ============================================================================
-// Priority 1: Special Move System
-// ============================================================================
-
-// ============================================================================
-// Priority 2: Heavy Attack System (with Charging)
-// ============================================================================
-
-// ============================================================================
-// Priority 3: Light Attack System (with Combo)
-// ============================================================================
+/// <summary>
+/// Process attacks in order of their configured priority values.
+/// Higher priority values are processed first.
+/// </summary>
+private void ProcessAttacksByPriority(Frame frame, ref Filter filter, 
+                                      SimpleInput2D input, AttackConfig config)
+{
+    // 根据配置的优先级值处理攻击
+    // 从最高优先级到最低优先级依次检查和执行
+}
 ```
 
-**3. 更好的方法命名**
-- `ProcessHeavyAttack()` - 清晰且描述性强
-- `ExecuteChargedHeavyAttack()` - 明确说明功能
-- `TryExecuteSpecialMove()` - 表明返回值含义
-
-**4. 详细的注释**
-- 类级别文档说明系统
-- 每个攻击处理器的方法级注释
-- 解释优先级逻辑的内联注释
+**3. 清晰的代码组织**
+- 使用分隔符标注每个攻击系统
+- 在注释中说明优先级可通过配置调整
+- 每个方法都有详细注释
 
 #### 优势：
 
-1. ✅ **显式优先级** - 在代码和注释中清楚记录
-2. ✅ **更好的组织** - 代码分区清晰
-3. ✅ **可维护** - 容易理解和修改
-4. ✅ **Quantum兼容** - 遵循确定性模拟模式
-5. ✅ **无破坏性变更** - 相同行为，相同API
-6. ✅ **代码清晰** - 结构良好且有文档
+1. ✅ **可配置优先级** - 通过AttackConfig设置，无需修改代码
+2. ✅ **灵活性强** - 可以为不同角色设置不同的攻击优先级
+3. ✅ **清晰的文档** - 在代码和配置中都明确标注优先级
+4. ✅ **更好的组织** - 代码分区清晰，易于维护
+5. ✅ **Quantum兼容** - 完全遵循确定性模拟模式
+6. ✅ **无破坏性变更** - 相同行为，相同API
 
 ---
 
@@ -79,60 +72,53 @@ The original question asked about the disadvantages of the weight-based (priorit
 
 1. **Implicit Priority** - Attack priority is hidden in code execution order
 2. **Poor Code Organization** - All attack logic mixed in Update method without clear sections
-3. **Lack of Documentation** - No clear explanation of priority system or design intent
-4. **Unclear Method Names** - Methods don't clearly describe their purpose
+3. **Fixed Priority** - Priority is hard-coded, cannot be configured flexibly
+4. **Lack of Documentation** - No clear explanation of priority system or design intent
 
-#### Solution: Quantum-Compatible Refactoring
+#### Solution: Configurable Priority System
 
-Since Quantum is a deterministic simulation framework, we cannot use traditional design patterns that require:
-- Instance state in systems
-- System.Collections.Generic
-- LINQ
-- Dynamic object creation
+By adding priority configuration to AttackConfig, the system becomes more flexible:
 
-Instead, the refactoring focuses on:
-
-**1. Explicit Priority Documentation**
+**1. Priority Fields in AttackConfig**
 ```csharp
-/// Attack Priority (explicit order):
-/// 1. Special Moves - Command input sequences (highest priority)
-/// 2. Heavy Attack - Chargeable attack with damage scaling
-/// 3. Light Attack - Fast combo attack (lowest priority)
+[Header("Attack Priority Settings")]
+[Tooltip("Priority for special moves (higher value = higher priority)")]
+public int SpecialMovePriority = 100;
+
+[Tooltip("Priority for heavy attack (higher value = higher priority)")]
+public int HeavyAttackPriority = 50;
+
+[Tooltip("Priority for light attack (higher value = higher priority)")]
+public int LightAttackPriority = 10;
 ```
 
-**2. Clear Code Organization**
+**2. Config-Based Priority Processing**
 ```csharp
-// ============================================================================
-// Priority 1: Special Move System
-// ============================================================================
-
-// ============================================================================
-// Priority 2: Heavy Attack System (with Charging)
-// ============================================================================
-
-// ============================================================================
-// Priority 3: Light Attack System (with Combo)
-// ============================================================================
+/// <summary>
+/// Process attacks in order of their configured priority values.
+/// Higher priority values are processed first.
+/// </summary>
+private void ProcessAttacksByPriority(Frame frame, ref Filter filter, 
+                                      SimpleInput2D input, AttackConfig config)
+{
+    // Process attacks based on configured priority values
+    // Check and execute from highest to lowest priority
+}
 ```
 
-**3. Better Method Names**
-- `ProcessHeavyAttack()` - Clear and descriptive
-- `ExecuteChargedHeavyAttack()` - Explicit about what it does
-- `TryExecuteSpecialMove()` - Indicates return value meaning
-
-**4. Detailed Comments**
-- Class-level documentation explaining the system
-- Method-level comments for each attack handler
-- Inline comments explaining priority logic
+**3. Clear Code Organization**
+- Use separators to mark each attack system
+- Comments indicate priority is configurable
+- Detailed comments for each method
 
 #### Benefits:
 
-1. ✅ **Explicit Priority** - Clearly documented in code and comments
-2. ✅ **Better Organization** - Code sections with clear separators
-3. ✅ **Maintainable** - Easy to understand and modify
-4. ✅ **Quantum Compatible** - Follows deterministic simulation patterns
-5. ✅ **No Breaking Changes** - Same behavior, same API
-6. ✅ **Clean Code** - Well-structured and documented
+1. ✅ **Configurable Priority** - Set via AttackConfig, no code changes needed
+2. ✅ **Highly Flexible** - Different characters can have different attack priorities
+3. ✅ **Clear Documentation** - Priority explicitly marked in code and config
+4. ✅ **Better Organization** - Code sections are clear and maintainable
+5. ✅ **Quantum Compatible** - Fully follows deterministic simulation patterns
+6. ✅ **No Breaking Changes** - Same behavior, same API
 
 ---
 
@@ -140,72 +126,73 @@ Instead, the refactoring focuses on:
 
 ### 改进前 / Before:
 ```csharp
-public unsafe class NormalAttackSystem : SystemMainThreadFilter<...>
+public override void Update(Frame frame, ref Filter filter)
 {
-    // 没有类级别文档
-    
-    public override void Update(Frame frame, ref Filter filter)
-    {
-        // 优先级隐式
-        if (TryExecuteSpecialMove(...)) return;
-        ProcessHeavyCharging(...);
-        if (input.LP.WasPressed) ProcessLightAttack(...);
-    }
-    
-    // 方法混在一起，没有分区
-    private bool TryExecuteSpecialMove(...) { }
-    private void ProcessHeavyCharging(...) { }
-    private void ProcessLightAttack(...) { }
+    // 优先级硬编码
+    if (TryExecuteSpecialMove(...)) return;
+    ProcessHeavyCharging(...);
+    if (input.LP.WasPressed) ProcessLightAttack(...);
 }
 ```
 
 ### 改进后 / After:
 ```csharp
-/// <summary>
-/// System for handling different attack types with explicit priority.
-/// 
-/// Attack Priority (explicit order):
-/// 1. Special Moves (highest)
-/// 2. Heavy Attack (medium)
-/// 3. Light Attack (lowest)
-/// </summary>
-public unsafe class NormalAttackSystem : SystemMainThreadFilter<...>
+/// Attack priorities configurable via AttackConfig:
+/// - SpecialMovePriority (default: 100)
+/// - HeavyAttackPriority (default: 50)
+/// - LightAttackPriority (default: 10)
+public override void Update(Frame frame, ref Filter filter)
 {
-    public override void Update(Frame frame, ref Filter filter)
-    {
-        UpdateAttackTimers(frame, ref filter);
-        
-        // Priority 1: Special Moves
-        if (TryExecuteSpecialMove(...))
-        {
-            return; // Special move executed, skip other attacks
-        }
-        
-        // Priority 2: Heavy Attack
-        ProcessHeavyAttack(...);
-        
-        // Priority 3: Light Attack
-        if (input.LP.WasPressed)
-        {
-            ProcessLightAttack(...);
-        }
-    }
+    UpdateAttackTimers(frame, ref filter);
     
-    // ============================================================================
-    // Priority 1: Special Move System
-    // ============================================================================
-    private bool TryExecuteSpecialMove(...) { }
-    
-    // ============================================================================
-    // Priority 2: Heavy Attack System
-    // ============================================================================
-    private void ProcessHeavyAttack(...) { }
-    
-    // ============================================================================
-    // Priority 3: Light Attack System
-    // ============================================================================
-    private void ProcessLightAttack(...) { }
+    // Process attacks based on configured priority
+    ProcessAttacksByPriority(frame, ref filter, input, attackConfig);
 }
+
+private void ProcessAttacksByPriority(...)
+{
+    // Dynamically process based on priority values
+    for (int currentPriority = maxPriority; currentPriority >= 0; currentPriority--)
+    {
+        if (specialPriority == currentPriority) { ... }
+        if (heavyPriority == currentPriority) { ... }
+        if (lightPriority == currentPriority) { ... }
+    }
+}
+```
+
+---
+
+## 配置示例 / Configuration Examples
+
+### 默认配置 / Default Configuration
+```
+SpecialMovePriority = 100  (最高 / Highest)
+HeavyAttackPriority = 50   (中等 / Medium)
+LightAttackPriority = 10   (最低 / Lowest)
+```
+
+### 自定义配置示例 / Custom Configuration Examples
+
+**示例1：重击优先级更高的角色**
+```
+SpecialMovePriority = 100
+HeavyAttackPriority = 90   // 提高重击优先级
+LightAttackPriority = 10
+```
+
+**示例2：所有攻击同等优先级**
+```
+SpecialMovePriority = 50
+HeavyAttackPriority = 50
+LightAttackPriority = 50
+```
+
+**示例3：轻攻击优先的快速角色**
+```
+SpecialMovePriority = 100
+HeavyAttackPriority = 30
+LightAttackPriority = 60   // 提高轻攻击优先级
 ```
 
 ---
@@ -214,35 +201,40 @@ public unsafe class NormalAttackSystem : SystemMainThreadFilter<...>
 
 | 方面 / Aspect | 改进前 / Before | 改进后 / After |
 |---------------|----------------|----------------|
-| 优先级可见性 / Priority Visibility | 隐式 / Implicit | 显式文档 / Explicit in docs |
-| 代码组织 / Code Organization | 混在一起 / Mixed | 清晰分区 / Clear sections |
-| 文档注释 / Documentation | 缺少 / Lacking | 完整详细 / Complete |
-| 方法命名 / Method Names | 一般 / Generic | 描述性强 / Descriptive |
-| Quantum兼容 / Quantum Compatible | 是 / Yes | 是 / Yes ✅ |
-| 确定性 / Deterministic | 是 / Yes | 是 / Yes ✅ |
+| 优先级配置 / Priority Config | 硬编码 / Hard-coded | 可配置 / Configurable |
+| 灵活性 / Flexibility | 固定 / Fixed | 高度灵活 / Highly flexible |
+| 文档 / Documentation | 缺少 / Lacking | 完整详细 / Complete |
+| 代码组织 / Code Organization | 一般 / Average | 清晰分区 / Clear sections |
+| Quantum兼容 / Quantum Compatible | ✅ | ✅ |
+| 确定性 / Deterministic | ✅ | ✅ |
 | 破坏性变更 / Breaking Changes | - | 无 / None ✅ |
 
 ---
 
 ## 使用指南 / Usage Guide
 
+### 如何调整攻击优先级 / How to Adjust Attack Priority
+
+1. 在Unity编辑器中打开AttackConfig资产
+2. 找到"Attack Priority Settings"部分
+3. 调整优先级数值：
+   - 数值越大，优先级越高
+   - 相同数值表示同等优先级
+4. 保存配置即可生效
+
 ### 添加新攻击类型 / Adding New Attack Types
 
-1. 在适当的优先级位置添加检查 / Add check at appropriate priority level
-2. 创建新的私有方法 / Create new private methods
-3. 添加清晰的注释和分隔符 / Add clear comments and separators
-
-### 修改优先级 / Changing Priority
-
-1. 调整Update方法中的顺序 / Adjust order in Update method
-2. 更新文档注释中的优先级说明 / Update priority in documentation
+1. 在AttackConfig中添加新的优先级字段
+2. 在ProcessAttacksByPriority中添加检查逻辑
+3. 创建对应的处理方法
+4. 更新文档说明
 
 ---
 
 ## 结论 / Conclusion
 
 **中文：**
-这次重构通过添加清晰的文档、组织代码分区、改进方法命名等方式，在保持Quantum引擎兼容性的前提下，显著提高了代码的可读性和可维护性。
+通过在AttackConfig中添加可配置的优先级字段，系统变得更加灵活和数据驱动。设计师可以在Unity编辑器中轻松调整不同角色的攻击优先级，无需修改代码。这种方法既保持了Quantum引擎的兼容性，又提供了更好的可配置性。
 
 **English:**
-This refactoring significantly improves code readability and maintainability while maintaining Quantum engine compatibility by adding clear documentation, organizing code sections, and improving method naming.
+By adding configurable priority fields to AttackConfig, the system becomes more flexible and data-driven. Designers can easily adjust attack priorities for different characters in the Unity editor without code changes. This approach maintains Quantum engine compatibility while providing better configurability.
