@@ -3,16 +3,15 @@ namespace Quantum
     using Photon.Deterministic;
 
     /// <summary>
-    /// System for handling different attack types with configurable priority.
+    /// System for handling different attack types with modular, configurable components.
     /// 
-    /// Attack priorities are now configurable via AttackConfig:
-    /// - SpecialMovePriority (default: 100, highest)
-    /// - HeavyAttackPriority (default: 50, medium)
-    /// - LightAttackPriority (default: 10, lowest)
+    /// Each attack type now has its own dedicated configuration:
+    /// - LightAttackConfig: Fast combo attacks (default priority: 10)
+    /// - HeavyAttackConfig: Powerful charged attacks (default priority: 50)
+    /// - CommandInputConfig: Special move system (default priority: 100)
     /// 
-    /// This system uses private methods to separate concerns while maintaining
-    /// Quantum's deterministic execution model. Priority values can be adjusted
-    /// in the AttackConfig asset to change attack execution order.
+    /// This modular design allows for easy composition and customization of attack behaviors
+    /// while maintaining Quantum's deterministic execution model.
     /// </summary>
     public unsafe class NormalAttackSystem : SystemMainThreadFilter<NormalAttackSystem.Filter>
     {
@@ -38,7 +37,7 @@ namespace Quantum
                 input = *frame.GetPlayerInput(playerLink->Player);
             }
 
-            // Get attack config
+            // Get main attack config
             var attackConfig = frame.FindAsset(filter.AttackData->AttackConfig);
             if (attackConfig == null)
             {
@@ -46,7 +45,7 @@ namespace Quantum
             }
 
             // Update timers
-            UpdateAttackTimers(frame, ref filter);
+            UpdateAttackTimers(frame, ref filter, attackConfig);
 
             // Early return if on cooldown
             if (filter.AttackData->AttackCooldown.IsRunning(frame))
@@ -62,17 +61,20 @@ namespace Quantum
         /// <summary>
         /// Process attacks in order of their configured priority values.
         /// Higher priority values are processed first.
+        /// Loads each attack type's config and processes them by priority.
         /// </summary>
-        private void ProcessAttacksByPriority(Frame frame, ref Filter filter, SimpleInput2D input, AttackConfig config)
+        private void ProcessAttacksByPriority(Frame frame, ref Filter filter, SimpleInput2D input, AttackConfig mainConfig)
         {
-            // Determine the highest priority attack type
-            int specialPriority = config.SpecialMovePriority;
-            int heavyPriority = config.HeavyAttackPriority;
-            int lightPriority = config.LightAttackPriority;
+            // Load individual attack configs
+            var lightConfig = frame.FindAsset(mainConfig.LightAttackConfig);
+            var heavyConfig = frame.FindAsset(mainConfig.HeavyAttackConfig);
+            var commandConfig = frame.FindAsset(mainConfig.CommandInputConfig);
 
-            // Process in order: highest to lowest priority
-            // We need to check all three and process them in the right order
-            
+            // Determine priorities (use default if config is missing)
+            int specialPriority = commandConfig != null ? commandConfig.Priority : 100;
+            int heavyPriority = heavyConfig != null ? heavyConfig.Priority : 50;
+            int lightPriority = lightConfig != null ? lightConfig.Priority : 10;
+
             // Find highest priority
             int maxPriority = FPMath.Max(FPMath.Max(specialPriority, heavyPriority), lightPriority);
             
@@ -80,11 +82,11 @@ namespace Quantum
             for (int currentPriority = maxPriority; currentPriority >= 0; currentPriority--)
             {
                 // Check and execute special moves
-                if (specialPriority == currentPriority)
+                if (specialPriority == currentPriority && commandConfig != null)
                 {
                     if (frame.Unsafe.TryGetPointer(filter.Entity, out CommandInputData* commandData))
                     {
-                        if (TryExecuteSpecialMove(frame, ref filter, commandData, config))
+                        if (TryExecuteSpecialMove(frame, ref filter, commandData, commandConfig))
                         {
                             return; // Attack executed, stop processing
                         }
@@ -92,9 +94,9 @@ namespace Quantum
                 }
 
                 // Check and execute heavy attack
-                if (heavyPriority == currentPriority)
+                if (heavyPriority == currentPriority && heavyConfig != null)
                 {
-                    bool heavyExecuted = ProcessHeavyAttack(frame, ref filter, input, config);
+                    bool heavyExecuted = ProcessHeavyAttack(frame, ref filter, input, heavyConfig);
                     if (heavyExecuted)
                     {
                         return; // Attack executed, stop processing
@@ -102,9 +104,9 @@ namespace Quantum
                 }
 
                 // Check and execute light attack
-                if (lightPriority == currentPriority && input.LP.WasPressed)
+                if (lightPriority == currentPriority && lightConfig != null && input.LP.WasPressed)
                 {
-                    ProcessLightAttack(frame, ref filter, config);
+                    ProcessLightAttack(frame, ref filter, lightConfig);
                     return; // Attack executed, stop processing
                 }
             }
@@ -114,9 +116,10 @@ namespace Quantum
         // Timer Management
         // ============================================================================
 
-        private void UpdateAttackTimers(Frame frame, ref Filter filter)
+        private void UpdateAttackTimers(Frame frame, ref Filter filter, AttackConfig mainConfig)
         {
             // Reset combo if timer expired
+            var lightConfig = frame.FindAsset(mainConfig.LightAttackConfig);
             if (filter.AttackData->ComboResetTimer.IsRunning(frame) == false && filter.AttackData->ComboCounter > 0)
             {
                 filter.AttackData->ComboCounter = 0;
@@ -124,14 +127,14 @@ namespace Quantum
         }
 
         // ============================================================================
-        // Special Move System (Priority: Configurable via AttackConfig.SpecialMovePriority)
+        // Special Move System (Priority: Configurable via CommandInputConfig.Priority)
         // ============================================================================
 
         /// <summary>
         /// Try to execute a special move if input sequence matches.
-        /// Priority is configurable via AttackConfig.SpecialMovePriority (default: 100).
+        /// Priority is configurable via CommandInputConfig.Priority (default: 100).
         /// </summary>
-        private bool TryExecuteSpecialMove(Frame frame, ref Filter filter, CommandInputData* commandData, AttackConfig attackConfig)
+        private bool TryExecuteSpecialMove(Frame frame, ref Filter filter, CommandInputData* commandData, CommandInputConfig config)
         {
             // Check each configured special move
             for (int i = 0; i < filter.AttackData->SpecialMoves.Length; i++)
@@ -187,16 +190,16 @@ namespace Quantum
         }
 
         // ============================================================================
-        // Heavy Attack System (Priority: Configurable via AttackConfig.HeavyAttackPriority)
+        // Heavy Attack System (Priority: Configurable via HeavyAttackConfig.Priority)
         // ============================================================================
 
         /// <summary>
         /// Process heavy attack with charging mechanics.
         /// Holding HP button charges the attack, releasing executes it.
-        /// Priority is configurable via AttackConfig.HeavyAttackPriority (default: 50).
+        /// Priority is configurable via HeavyAttackConfig.Priority (default: 50).
         /// </summary>
         /// <returns>True if attack was executed, false otherwise</returns>
-        private bool ProcessHeavyAttack(Frame frame, ref Filter filter, SimpleInput2D input, AttackConfig config)
+        private bool ProcessHeavyAttack(Frame frame, ref Filter filter, SimpleInput2D input, HeavyAttackConfig config)
         {
             if (input.HP.IsDown)
             {
@@ -231,7 +234,7 @@ namespace Quantum
             return false; // No heavy attack input
         }
 
-        private void ExecuteChargedHeavyAttack(Frame frame, ref Filter filter, AttackConfig config)
+        private void ExecuteChargedHeavyAttack(Frame frame, ref Filter filter, HeavyAttackConfig config)
         {
             // Reset combo on heavy attack
             filter.AttackData->ComboCounter = 0;
@@ -246,11 +249,11 @@ namespace Quantum
 
             // Calculate damage with charge multiplier
             FP damageMultiplier = FP._1 + (chargeLevel * (config.FullChargeDamageMultiplier - FP._1));
-            FP damage = config.HeavyAttackDamage * damageMultiplier;
+            FP damage = config.Damage * damageMultiplier;
 
             // Apply heavy attack
             filter.AttackData->IsAttacking = true;
-            filter.AttackData->AttackCooldown = FrameTimer.FromSeconds(frame, config.HeavyAttackCooldown);
+            filter.AttackData->AttackCooldown = FrameTimer.FromSeconds(frame, config.Cooldown);
 
             // Fire attack event with charge level
             frame.Events.AttackPerformed(filter.Entity, true, 0, damage, chargeLevel);
@@ -260,15 +263,15 @@ namespace Quantum
         }
 
         // ============================================================================
-        // Light Attack System (Priority: Configurable via AttackConfig.LightAttackPriority)
+        // Light Attack System (Priority: Configurable via LightAttackConfig.Priority)
         // ============================================================================
 
         /// <summary>
         /// Process light attack with combo system.
         /// Consecutive light attacks within combo window increase damage.
-        /// Priority is configurable via AttackConfig.LightAttackPriority (default: 10).
+        /// Priority is configurable via LightAttackConfig.Priority (default: 10).
         /// </summary>
-        private void ProcessLightAttack(Frame frame, ref Filter filter, AttackConfig config)
+        private void ProcessLightAttack(Frame frame, ref Filter filter, LightAttackConfig config)
         {
             // Increment or reset combo counter
             if (filter.AttackData->ComboCounter < config.MaxComboCount)
@@ -282,11 +285,11 @@ namespace Quantum
 
             // Calculate damage based on combo multiplier
             int comboIndex = FPMath.Clamp(filter.AttackData->ComboCounter - 1, 0, config.ComboDamageMultipliers.Length - 1);
-            FP damage = config.LightAttackDamage * config.ComboDamageMultipliers[comboIndex];
+            FP damage = config.Damage * config.ComboDamageMultipliers[comboIndex];
 
             // Apply attack
             filter.AttackData->IsAttacking = true;
-            filter.AttackData->AttackCooldown = FrameTimer.FromSeconds(frame, config.LightAttackCooldown);
+            filter.AttackData->AttackCooldown = FrameTimer.FromSeconds(frame, config.Cooldown);
             filter.AttackData->ComboResetTimer = FrameTimer.FromSeconds(frame, config.ComboWindow);
 
             // Fire attack event

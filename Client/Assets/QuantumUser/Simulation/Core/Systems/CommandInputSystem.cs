@@ -24,6 +24,13 @@ namespace Quantum
                 return;
             }
 
+            // Get command input config
+            var commandConfig = frame.FindAsset(attackConfig.CommandInputConfig);
+            if (commandConfig == null)
+            {
+                return;
+            }
+
             // Get input
             SimpleInput2D input = default;
             if (frame.Unsafe.TryGetPointer(filter.Entity, out PlayerLink* playerLink))
@@ -37,7 +44,7 @@ namespace Quantum
             // Add to buffer if it's a new input
             if (currentInput != (int)CommandInput.None)
             {
-                AddInputToBuffer(frame, ref filter, currentInput, attackConfig);
+                AddInputToBuffer(frame, ref filter, currentInput, commandConfig);
             }
 
             // Expire old inputs
@@ -79,7 +86,7 @@ namespace Quantum
             return (int)CommandInput.None;
         }
 
-        private void AddInputToBuffer(Frame frame, ref Filter filter, int input, AttackConfig config)
+        private void AddInputToBuffer(Frame frame, ref Filter filter, int input, CommandInputConfig config)
         {
             // Don't add duplicate inputs
             if (filter.CommandData->InputBufferIndex > 0)
@@ -108,7 +115,7 @@ namespace Quantum
             }
 
             // Reset expiry timer
-            filter.CommandData->InputExpiryTimer = FrameTimer.FromSeconds(frame, config.CommandInputWindow);
+            filter.CommandData->InputExpiryTimer = FrameTimer.FromSeconds(frame, config.InputWindow);
         }
 
         /// <summary>
