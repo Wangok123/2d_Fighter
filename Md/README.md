@@ -47,8 +47,24 @@ Md/
 ├── 07-开发指南.md           # 开发指南
 ├── 08-部署指南.md           # 部署指南
 ├── LAT框架.md               # LAT框架说明
+├── ModularCharacterSystem.md   # 模块化角色系统
+├── ExampleCharacters.md    # 角色配置示例
+├── IntegrationGuide.md     # 系统集成指南
+├── Architecture.md         # 系统架构总览
 ├── Core/                    # Core模块文档
+│   ├── 概述.md
+│   ├── 动画状态管理系统.md
+│   ├── 动画系统快速开始.md
+│   └── ...
 ├── PublicLib/               # 公共库文档
+│   ├── 概述.md
+│   ├── Timer/
+│   └── FixedNum/
+├── Systems/                 # 游戏系统文档
+│   ├── README.md
+│   ├── 战斗系统.md
+│   ├── 攻击系统重构.md
+│   └── ...
 ├── images/                  # 文档图片资源
 │   ├── architecture/        # 架构图
 │   ├── protocol/            # 协议图
@@ -87,4 +103,4 @@ Md/
 
 ---
 
-**最后更新**: 2024-10-25
+**最后更新**: 2024-11-01
