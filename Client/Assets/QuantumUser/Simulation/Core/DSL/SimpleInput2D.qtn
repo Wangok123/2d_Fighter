@@ -10,4 +10,5 @@ struct SimpleInput2D {
     button LP;
     button HP;
     button Use;
+    button Block;
 }

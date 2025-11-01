@@ -37,7 +37,7 @@ namespace Quantum
         public FP ActiveTime = FP._0_20;
         
         [Tooltip("Attack recovery time (frames before character can act again)")]
-        public FP RecoveryTime = FP._0_30;
+        public FP RecoveryTime = FP._0_33;
         
         [Header("Combo System")]
         [Tooltip("Can this attack chain into a combo?")]

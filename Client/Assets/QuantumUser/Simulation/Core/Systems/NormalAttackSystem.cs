@@ -1,3 +1,5 @@
+using UnityEngine;
+
 namespace Quantum
 {
     using Photon.Deterministic;
@@ -75,7 +77,7 @@ namespace Quantum
             int lightPriority = lightConfig != null ? lightConfig.Priority : 10;
 
             // Find highest priority
-            int maxPriority = FPMath.Max(FPMath.Max(specialPriority, heavyPriority), lightPriority);
+            int maxPriority = Mathf.Max(Mathf.Max(specialPriority, heavyPriority), lightPriority);
             
             // Process attacks from highest to lowest priority
             for (int currentPriority = maxPriority; currentPriority >= 0; currentPriority--)

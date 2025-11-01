@@ -52,9 +52,7 @@ namespace Quantum.Prototypes {
   [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.AttackData))]
   public unsafe partial class AttackDataPrototype : ComponentPrototype<Quantum.AttackData> {
-    public AssetRef<AttackConfig> AttackConfig;
-    [ArrayLengthAttribute(4)]
-    public AssetRef<SpecialMoveConfig>[] SpecialMoves = new AssetRef<SpecialMoveConfig>[4];
+    public AssetRef<CharacterAttackConfig> AttackConfig;
     partial void MaterializeUser(Frame frame, ref Quantum.AttackData result, in PrototypeMaterializationContext context);
     public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
         Quantum.AttackData component = default;
@@ -63,9 +61,6 @@ namespace Quantum.Prototypes {
     }
     public void Materialize(Frame frame, ref Quantum.AttackData result, in PrototypeMaterializationContext context = default) {
         result.AttackConfig = this.AttackConfig;
-        for (int i = 0, count = PrototypeValidator.CheckLength(SpecialMoves, 4, in context); i < count; ++i) {
-          *result.SpecialMoves.GetPointer(i) = this.SpecialMoves[i];
-        }
         MaterializeUser(frame, ref result, in context);
     }
   }
@@ -430,6 +425,7 @@ namespace Quantum.Prototypes {
     public Button LP;
     public Button HP;
     public Button Use;
+    public Button Block;
     partial void MaterializeUser(Frame frame, ref Quantum.SimpleInput2D result, in PrototypeMaterializationContext context);
     public void Materialize(Frame frame, ref Quantum.SimpleInput2D result, in PrototypeMaterializationContext context = default) {
         result.AimDirection = this.AimDirection;
@@ -442,6 +438,7 @@ namespace Quantum.Prototypes {
         result.LP = this.LP;
         result.HP = this.HP;
         result.Use = this.Use;
+        result.Block = this.Block;
         MaterializeUser(frame, ref result, in context);
     }
   }

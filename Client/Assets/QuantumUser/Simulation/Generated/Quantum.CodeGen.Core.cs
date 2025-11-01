@@ -992,28 +992,30 @@ namespace Quantum {
   [StructLayout(LayoutKind.Explicit)]
   [ExcludeFromPrototype()]
   public unsafe partial struct SimpleInput2D {
-    public const Int32 SIZE = 128;
+    public const Int32 SIZE = 136;
     public const Int32 ALIGNMENT = 8;
-    [FieldOffset(112)]
+    [FieldOffset(120)]
     public FPVector2 AimDirection;
-    [FieldOffset(60)]
-    public Button Left;
     [FieldOffset(72)]
-    public Button Right;
+    public Button Left;
     [FieldOffset(84)]
-    public Button Up;
-    [FieldOffset(12)]
-    public Button Down;
-    [FieldOffset(36)]
-    public Button Jump;
-    [FieldOffset(0)]
-    public Button Dash;
-    [FieldOffset(48)]
-    public Button LP;
-    [FieldOffset(24)]
-    public Button HP;
+    public Button Right;
     [FieldOffset(96)]
+    public Button Up;
+    [FieldOffset(24)]
+    public Button Down;
+    [FieldOffset(48)]
+    public Button Jump;
+    [FieldOffset(12)]
+    public Button Dash;
+    [FieldOffset(60)]
+    public Button LP;
+    [FieldOffset(36)]
+    public Button HP;
+    [FieldOffset(108)]
     public Button Use;
+    [FieldOffset(0)]
+    public Button Block;
     public override readonly Int32 GetHashCode() {
       unchecked { 
         var hash = 7369;
@@ -1027,11 +1029,13 @@ namespace Quantum {
         hash = hash * 31 + LP.GetHashCode();
         hash = hash * 31 + HP.GetHashCode();
         hash = hash * 31 + Use.GetHashCode();
+        hash = hash * 31 + Block.GetHashCode();
         return hash;
       }
     }
     public static void Serialize(void* ptr, FrameSerializer serializer) {
         var p = (SimpleInput2D*)ptr;
+        Button.Serialize(&p->Block, serializer);
         Button.Serialize(&p->Dash, serializer);
         Button.Serialize(&p->Down, serializer);
         Button.Serialize(&p->HP, serializer);
@@ -1215,41 +1219,32 @@ namespace Quantum {
   }
   [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct AttackData : Quantum.IComponent {
-    public const Int32 SIZE = 80;
+    public const Int32 SIZE = 48;
     public const Int32 ALIGNMENT = 8;
     [FieldOffset(16)]
-    public AssetRef<AttackConfig> AttackConfig;
-    [FieldOffset(24)]
-    [FramePrinter.FixedArrayAttribute(typeof(AssetRef<SpecialMoveConfig>), 4)]
-    private fixed Byte _SpecialMoves_[32];
+    public AssetRef<CharacterAttackConfig> AttackConfig;
     [FieldOffset(0)]
     [ExcludeFromPrototype()]
     public Int32 ComboCounter;
-    [FieldOffset(72)]
+    [FieldOffset(40)]
     [ExcludeFromPrototype()]
     public FrameTimer ComboResetTimer;
-    [FieldOffset(64)]
+    [FieldOffset(32)]
     [ExcludeFromPrototype()]
     public FrameTimer AttackCooldown;
     [FieldOffset(4)]
     [ExcludeFromPrototype()]
     public QBoolean IsAttacking;
-    [FieldOffset(56)]
+    [FieldOffset(24)]
     [ExcludeFromPrototype()]
     public FP HeavyChargeTime;
     [FieldOffset(8)]
     [ExcludeFromPrototype()]
     public QBoolean IsChargingHeavy;
-    public readonly FixedArray<AssetRef<SpecialMoveConfig>> SpecialMoves {
-      get {
-        fixed (byte* p = _SpecialMoves_) { return new FixedArray<AssetRef<SpecialMoveConfig>>(p, 8, 4); }
-      }
-    }
     public override readonly Int32 GetHashCode() {
       unchecked { 
         var hash = 8563;
         hash = hash * 31 + AttackConfig.GetHashCode();
-        hash = hash * 31 + HashCodeUtils.GetArrayHashCode(SpecialMoves);
         hash = hash * 31 + ComboCounter.GetHashCode();
         hash = hash * 31 + ComboResetTimer.GetHashCode();
         hash = hash * 31 + AttackCooldown.GetHashCode();
@@ -1265,7 +1260,6 @@ namespace Quantum {
         QBoolean.Serialize(&p->IsAttacking, serializer);
         QBoolean.Serialize(&p->IsChargingHeavy, serializer);
         AssetRef.Serialize(&p->AttackConfig, serializer);
-        FixedArray.Serialize(p->SpecialMoves, serializer, Statics.SerializeAssetRef);
         FP.Serialize(&p->HeavyChargeTime, serializer);
         FrameTimer.Serialize(&p->AttackCooldown, serializer);
         FrameTimer.Serialize(&p->ComboResetTimer, serializer);
@@ -1367,7 +1361,7 @@ namespace Quantum {
   }
   [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct KCC2D : Quantum.IComponent {
-    public const Int32 SIZE = 328;
+    public const Int32 SIZE = 336;
     public const Int32 ALIGNMENT = 8;
     [FieldOffset(16)]
     public AssetRef<KCC2DConfig> Config;
@@ -1672,10 +1666,8 @@ namespace Quantum {
     }
   }
   public unsafe partial class Statics {
-    public static FrameSerializer.Delegate SerializeAssetRef;
     public static FrameSerializer.Delegate SerializeInput;
     static partial void InitStaticDelegatesGen() {
-      SerializeAssetRef = AssetRef.Serialize;
       SerializeInput = Quantum.Input.Serialize;
     }
     static partial void RegisterSimulationTypesGen(TypeRegistry typeRegistry) {

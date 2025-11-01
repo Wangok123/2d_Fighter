@@ -12,6 +12,7 @@ namespace Quantum {
       input._c = pInput.LP;
       input._d = pInput.HP;
       input._r1 = pInput.Use;
+      input._l1 = pInput.Block;
 
       byte encodedAngle = default;
       if (pInput.AimDirection != default) {
@@ -34,6 +35,7 @@ namespace Quantum {
       pInput.LP = input._c;
       pInput.HP = input._d;
       pInput.Use = input._r1;
+      pInput.Block = input._l1;
 
       var encoded = input.ThumbSticks.Regular->_leftThumbAngle;
       if (encoded != default) {
