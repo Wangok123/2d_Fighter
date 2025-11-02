@@ -4,13 +4,6 @@ namespace Quantum
 
     public unsafe class MovementSystem : SystemMainThreadFilter<MovementSystem.Filter>
     {
-        // Ability ID constants
-        private static class AbilityIds
-        {
-            public const string DoubleJump = "movement_double_jump";
-            public const string Dash = "movement_dash";
-        }
-        
         public struct Filter
         {
             public EntityRef Entity;
@@ -63,7 +56,8 @@ namespace Quantum
         /// </summary>
         private ModularCharacterConfig TryGetModularConfig(Frame frame, ref Filter filter)
         {
-            if (filter.AttackData != null && filter.AttackData->ModularConfig.Id.IsValid)
+            // Note: AttackData is part of the filter, so it's guaranteed to exist
+            if (filter.AttackData->ModularConfig.Id.IsValid)
             {
                 return frame.FindAsset(filter.AttackData->ModularConfig);
             }
@@ -127,7 +121,7 @@ namespace Quantum
             kccConfig.BaseSettings.Materialize(frame, ref settings);
             
             // Check if double jump ability is unlocked based on modular config
-            bool doubleJumpUnlocked = IsAbilityUnlocked(filter.Level, modularConfig, AbilityIds.DoubleJump);
+            bool doubleJumpUnlocked = IsAbilityUnlocked(filter.Level, modularConfig, AbilityConstants.Movement.DoubleJump);
             if (!doubleJumpUnlocked)
             {
                 settings.DoubleJumpEnabled = false;
@@ -167,7 +161,7 @@ namespace Quantum
             if (modularConfig != null)
             {
                 // Check dash unlock
-                bool dashUnlocked = IsAbilityUnlocked(filter.Level, modularConfig, AbilityIds.Dash);
+                bool dashUnlocked = IsAbilityUnlocked(filter.Level, modularConfig, AbilityConstants.Movement.Dash);
                 
                 // Filter dash input if not unlocked
                 if (!dashUnlocked && input.Dash.WasPressed)
