@@ -3,47 +3,8 @@ enum AbilityType
     Block, Jump, Dash, Attack
 }
 
-// Movement ability identifiers
-enum MovementAbilityId
-{
-    None = 0,
-    DoubleJump = 1,
-    Dash = 2,
-    WallJump = 3,
-    AirDash = 4,
-    Glide = 5
-}
-
-// Attack ability identifiers
-enum AttackAbilityId
-{
-    None = 0,
-    LightAttack = 1,
-    HeavyAttack = 2,
-    RangedAttack = 3,
-    AreaAttack = 4
-}
-
-// Defense ability identifiers
-enum DefenseAbilityId
-{
-    None = 0,
-    Block = 1,
-    Parry = 2,
-    Dodge = 3,
-    Shield = 4
-}
-
-// Special ability identifiers
-enum SpecialAbilityId
-{
-    None = 0,
-    Ultimate = 1,
-    Transformation = 2,
-    Summon = 3
-}
-
-// Combined ability ID enum for general use
+// Ability identifier enum for all ability types
+// Organized by value ranges for different categories
 enum AbilityId
 {
     None = 0,
