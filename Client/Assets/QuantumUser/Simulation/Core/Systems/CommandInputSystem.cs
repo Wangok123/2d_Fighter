@@ -17,9 +17,15 @@ namespace Quantum
 
         public override void Update(Frame frame, ref Filter filter)
         {
-            // Get character attack config
-            var characterConfig = frame.FindAsset(filter.AttackData->AttackConfig);
-            if (characterConfig == null)
+            // Validate modular config reference before proceeding
+            if (!filter.AttackData->ModularConfig.Id.IsValid)
+            {
+                return;
+            }
+            
+            // Get modular character config
+            var modularConfig = frame.FindAsset(filter.AttackData->ModularConfig);
+            if (modularConfig == null)
             {
                 return;
             }
@@ -37,7 +43,7 @@ namespace Quantum
             // Add to buffer if it's a new input
             if (currentInput != (int)CommandInput.None)
             {
-                AddInputToBuffer(frame, ref filter, currentInput, characterConfig);
+                AddInputToBuffer(frame, ref filter, currentInput, modularConfig);
             }
 
             // Expire old inputs
@@ -79,7 +85,7 @@ namespace Quantum
             return (int)CommandInput.None;
         }
 
-        private void AddInputToBuffer(Frame frame, ref Filter filter, int input, CharacterAttackConfig config)
+        private void AddInputToBuffer(Frame frame, ref Filter filter, int input, ModularCharacterConfig config)
         {
             // Don't add duplicate inputs
             if (filter.CommandData->InputBufferIndex > 0)

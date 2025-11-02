@@ -2,7 +2,11 @@ namespace Quantum
 {
     using Photon.Deterministic;
 
-    public unsafe class MovementSystem : SystemMainThreadFilter<MovementSystem.Filter>
+    /// <summary>
+    /// Lightweight system that handles player input and movement execution
+    /// Replaces the monolithic MovementSystem with better separation of concerns
+    /// </summary>
+    public unsafe class MovementInputSystem : SystemMainThreadFilter<MovementInputSystem.Filter>
     {
         public struct Filter
         {
@@ -23,11 +27,8 @@ namespace Quantum
                 return;
             }
 
-            SimpleInput2D input = default;
-            if(frame.Unsafe.TryGetPointer(filter.Entity, out PlayerLink* playerLink))
-            {
-                input = *frame.GetPlayerInput(playerLink->Player);
-            }
+            // Get input
+            SimpleInput2D input = *frame.GetPlayerInput(filter.PlayerLink->Player);
             
             // Apply ability unlock filtering
             input = FilterInputByUnlocks(frame, filter, input);
@@ -48,20 +49,7 @@ namespace Quantum
                 config.Move(frame, filter.Entity, filter.Transform, filter.KCC);
             }
             
-            UpdateIsFacingRight(frame, ref filter, input);
-        }
-        
-        /// <summary>
-        /// Try to get modular character config from entity
-        /// </summary>
-        private ModularCharacterConfig TryGetModularConfig(Frame frame, ref Filter filter)
-        {
-            // Note: AttackData is part of the filter, so it's guaranteed to exist
-            if (filter.AttackData->ModularConfig.Id.IsValid)
-            {
-                return frame.FindAsset(filter.AttackData->ModularConfig);
-            }
-            return null;
+            UpdateIsFacingRight(input, filter.MovementData);
         }
         
         private KCC2DSettings? GetModifiedSettingsByUnlocks(Frame frame, ref Filter filter)
@@ -72,43 +60,18 @@ namespace Quantum
                 return null;
             }
             
-            // Try modular config first
-            var modularConfig = TryGetModularConfig(frame, ref filter);
-            if (modularConfig != null)
+            // Get modular config
+            if (!filter.AttackData->ModularConfig.Id.IsValid)
             {
-                return GetModifiedSettingsFromModularConfig(frame, ref filter, modularConfig);
+                return null;
             }
-            
-            // Fall back to legacy attack config
-            var attackConfig = frame.FindAsset(filter.AttackData->AttackConfig);
-            if (attackConfig == null)
+
+            var modularConfig = frame.FindAsset(filter.AttackData->ModularConfig);
+            if (modularConfig == null)
             {
                 return null;
             }
             
-            // Get base KCC config
-            var kccConfig = frame.FindAsset(filter.KCC->Config);
-            if (kccConfig == null)
-            {
-                return null;
-            }
-            
-            // Create modified settings
-            KCC2DSettings settings = default;
-            kccConfig.BaseSettings.Materialize(frame, ref settings);
-            
-            // Check double jump unlock
-            bool doubleJumpUnlocked = filter.Level->CurrentLevel >= attackConfig.DoubleJumpUnlockLevel;
-            if (!doubleJumpUnlocked)
-            {
-                settings.DoubleJumpEnabled = false;
-            }
-            
-            return settings;
-        }
-        
-        private KCC2DSettings? GetModifiedSettingsFromModularConfig(Frame frame, ref Filter filter, ModularCharacterConfig modularConfig)
-        {
             // Get base KCC config
             var kccConfig = frame.FindAsset(filter.KCC->Config);
             if (kccConfig == null)
@@ -156,51 +119,42 @@ namespace Quantum
                 return input;
             }
             
-            // Try modular config first
-            var modularConfig = TryGetModularConfig(frame, ref filter);
-            if (modularConfig != null)
+            // Get modular config
+            if (!filter.AttackData->ModularConfig.Id.IsValid)
             {
-                // Check dash unlock
-                bool dashUnlocked = IsAbilityUnlocked(filter.Level, modularConfig, AbilityId.MovementDash);
-                
-                // Filter dash input if not unlocked
-                if (!dashUnlocked && input.Dash.WasPressed)
-                {
-                    input.Dash = default;
-                }
-                
                 return input;
             }
-            
-            // Fall back to legacy attack config
-            var attackConfig = frame.FindAsset(filter.AttackData->AttackConfig);
-            if (attackConfig == null)
+
+            var modularConfig = frame.FindAsset(filter.AttackData->ModularConfig);
+            if (modularConfig == null)
             {
                 return input;
             }
             
             // Check dash unlock
-            {
-                bool dashUnlocked = filter.Level->CurrentLevel >= attackConfig.DashUnlockLevel;
+            bool dashUnlocked = IsAbilityUnlocked(filter.Level, modularConfig, AbilityId.MovementDash);
             
-                // Filter dash input if not unlocked
-                if (!dashUnlocked && input.Dash.WasPressed)
-                {
-                    // Clear dash button state
-                    input.Dash = default;
-                }
+            // Filter dash input if not unlocked
+            if (!dashUnlocked && input.Dash.WasPressed)
+            {
+                input.Dash = default;
             }
             
             return input;
         }
         
-        private void UpdateIsFacingRight(Frame frame, ref Filter filter, SimpleInput2D input)
+        private void UpdateIsFacingRight(SimpleInput2D input, MovementData* movementData)
         {
             bool noInput = !input.Left.IsDown && !input.Right.IsDown;
             if (noInput)
                 return;
             
-            filter.MovementData->IsFacingRight = input.Right.IsDown;
+            // When both directions are pressed simultaneously, maintain current facing direction
+            // This prevents rapid direction flipping and maintains control consistency
+            if (input.Left.IsDown && input.Right.IsDown)
+                return;
+            
+            movementData->IsFacingRight = input.Right.IsDown;
         }
     }
 }

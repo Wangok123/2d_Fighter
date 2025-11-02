@@ -29,7 +29,7 @@ component CharacterLevel
 
 component AttackData
 {
-	asset_ref<CharacterAttackConfig> AttackConfig;
+	// Single source of character configuration - ModularCharacterConfig replaces legacy AttackConfig
 	asset_ref<ModularCharacterConfig> ModularConfig;
 	[ExcludeFromPrototype] Int32 ComboCounter;
 	[ExcludeFromPrototype] FrameTimer ComboResetTimer;
