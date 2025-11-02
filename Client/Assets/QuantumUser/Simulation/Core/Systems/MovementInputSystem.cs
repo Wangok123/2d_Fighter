@@ -149,7 +149,8 @@ namespace Quantum
             if (noInput)
                 return;
             
-            // When both directions are pressed, maintain current facing direction
+            // When both directions are pressed simultaneously, maintain current facing direction
+            // This prevents rapid direction flipping and maintains control consistency
             if (input.Left.IsDown && input.Right.IsDown)
                 return;
             
