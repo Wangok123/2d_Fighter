@@ -68,12 +68,6 @@ namespace Quantum {
     SpecialTransformation = 301,
     SpecialSummon = 302,
   }
-  public enum AbilityType : int {
-    Block,
-    Jump,
-    Dash,
-    Attack,
-  }
   public enum CharacterTeam : int {
     None,
     Blue,
@@ -1237,26 +1231,102 @@ namespace Quantum {
     }
   }
   [StructLayout(LayoutKind.Explicit)]
+  public unsafe partial struct AbilityEnable : Quantum.IComponent {
+    public const Int32 SIZE = 64;
+    public const Int32 ALIGNMENT = 4;
+    [FieldOffset(40)]
+    public QBoolean MovementDoubleJumpEnabled;
+    [FieldOffset(36)]
+    public QBoolean MovementDashEnabled;
+    [FieldOffset(48)]
+    public QBoolean MovementWallJumpEnabled;
+    [FieldOffset(32)]
+    public QBoolean MovementAirDashEnabled;
+    [FieldOffset(44)]
+    public QBoolean MovementGlideEnabled;
+    [FieldOffset(8)]
+    public QBoolean AttackLightEnabled;
+    [FieldOffset(4)]
+    public QBoolean AttackHeavyEnabled;
+    [FieldOffset(12)]
+    public QBoolean AttackRangedEnabled;
+    [FieldOffset(0)]
+    public QBoolean AttackAreaEnabled;
+    [FieldOffset(16)]
+    public QBoolean DefenseBlockEnabled;
+    [FieldOffset(24)]
+    public QBoolean DefenseParryEnabled;
+    [FieldOffset(20)]
+    public QBoolean DefenseDodgeEnabled;
+    [FieldOffset(28)]
+    public QBoolean DefenseShieldEnabled;
+    [FieldOffset(60)]
+    public QBoolean SpecialUltimateEnabled;
+    [FieldOffset(56)]
+    public QBoolean SpecialTransformationEnabled;
+    [FieldOffset(52)]
+    public QBoolean SpecialSummonEnabled;
+    public override readonly Int32 GetHashCode() {
+      unchecked { 
+        var hash = 9539;
+        hash = hash * 31 + MovementDoubleJumpEnabled.GetHashCode();
+        hash = hash * 31 + MovementDashEnabled.GetHashCode();
+        hash = hash * 31 + MovementWallJumpEnabled.GetHashCode();
+        hash = hash * 31 + MovementAirDashEnabled.GetHashCode();
+        hash = hash * 31 + MovementGlideEnabled.GetHashCode();
+        hash = hash * 31 + AttackLightEnabled.GetHashCode();
+        hash = hash * 31 + AttackHeavyEnabled.GetHashCode();
+        hash = hash * 31 + AttackRangedEnabled.GetHashCode();
+        hash = hash * 31 + AttackAreaEnabled.GetHashCode();
+        hash = hash * 31 + DefenseBlockEnabled.GetHashCode();
+        hash = hash * 31 + DefenseParryEnabled.GetHashCode();
+        hash = hash * 31 + DefenseDodgeEnabled.GetHashCode();
+        hash = hash * 31 + DefenseShieldEnabled.GetHashCode();
+        hash = hash * 31 + SpecialUltimateEnabled.GetHashCode();
+        hash = hash * 31 + SpecialTransformationEnabled.GetHashCode();
+        hash = hash * 31 + SpecialSummonEnabled.GetHashCode();
+        return hash;
+      }
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+        var p = (AbilityEnable*)ptr;
+        QBoolean.Serialize(&p->AttackAreaEnabled, serializer);
+        QBoolean.Serialize(&p->AttackHeavyEnabled, serializer);
+        QBoolean.Serialize(&p->AttackLightEnabled, serializer);
+        QBoolean.Serialize(&p->AttackRangedEnabled, serializer);
+        QBoolean.Serialize(&p->DefenseBlockEnabled, serializer);
+        QBoolean.Serialize(&p->DefenseDodgeEnabled, serializer);
+        QBoolean.Serialize(&p->DefenseParryEnabled, serializer);
+        QBoolean.Serialize(&p->DefenseShieldEnabled, serializer);
+        QBoolean.Serialize(&p->MovementAirDashEnabled, serializer);
+        QBoolean.Serialize(&p->MovementDashEnabled, serializer);
+        QBoolean.Serialize(&p->MovementDoubleJumpEnabled, serializer);
+        QBoolean.Serialize(&p->MovementGlideEnabled, serializer);
+        QBoolean.Serialize(&p->MovementWallJumpEnabled, serializer);
+        QBoolean.Serialize(&p->SpecialSummonEnabled, serializer);
+        QBoolean.Serialize(&p->SpecialTransformationEnabled, serializer);
+        QBoolean.Serialize(&p->SpecialUltimateEnabled, serializer);
+    }
+  }
+  [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct AttackData : Quantum.IComponent {
-    public const Int32 SIZE = 56;
+    public const Int32 SIZE = 48;
     public const Int32 ALIGNMENT = 8;
     [FieldOffset(16)]
-    public AssetRef<CharacterAttackConfig> AttackConfig;
-    [FieldOffset(24)]
     public AssetRef<ModularCharacterConfig> ModularConfig;
     [FieldOffset(0)]
     [ExcludeFromPrototype()]
     public Int32 ComboCounter;
-    [FieldOffset(48)]
+    [FieldOffset(40)]
     [ExcludeFromPrototype()]
     public FrameTimer ComboResetTimer;
-    [FieldOffset(40)]
+    [FieldOffset(32)]
     [ExcludeFromPrototype()]
     public FrameTimer AttackCooldown;
     [FieldOffset(4)]
     [ExcludeFromPrototype()]
     public QBoolean IsAttacking;
-    [FieldOffset(32)]
+    [FieldOffset(24)]
     [ExcludeFromPrototype()]
     public FP HeavyChargeTime;
     [FieldOffset(8)]
@@ -1265,7 +1335,6 @@ namespace Quantum {
     public override readonly Int32 GetHashCode() {
       unchecked { 
         var hash = 8563;
-        hash = hash * 31 + AttackConfig.GetHashCode();
         hash = hash * 31 + ModularConfig.GetHashCode();
         hash = hash * 31 + ComboCounter.GetHashCode();
         hash = hash * 31 + ComboResetTimer.GetHashCode();
@@ -1281,7 +1350,6 @@ namespace Quantum {
         serializer.Stream.Serialize(&p->ComboCounter);
         QBoolean.Serialize(&p->IsAttacking, serializer);
         QBoolean.Serialize(&p->IsChargingHeavy, serializer);
-        AssetRef.Serialize(&p->AttackConfig, serializer);
         AssetRef.Serialize(&p->ModularConfig, serializer);
         FP.Serialize(&p->HeavyChargeTime, serializer);
         FrameTimer.Serialize(&p->AttackCooldown, serializer);
@@ -1514,6 +1582,12 @@ namespace Quantum {
         PlayerRef.Serialize(&p->PlayerRef, serializer);
     }
   }
+  public unsafe partial interface ISignalCheckAbilityEnabled : ISignal {
+    void CheckAbilityEnabled(Frame f, AbilityId abilityId);
+  }
+  public unsafe partial interface ISignalOnClearInputBuffer : ISignal {
+    void OnClearInputBuffer(Frame f, EntityRef playerEntityRef);
+  }
   public unsafe partial interface ISignalOnKCC2DPreCollision : ISignal {
     void OnKCC2DPreCollision(Frame f, EntityRef entity, KCC2D* kcc, ref KCC2DSettings settings, KCCQueryResult* collision);
   }
@@ -1532,6 +1606,8 @@ namespace Quantum {
   public static unsafe partial class Constants {
   }
   public unsafe partial class Frame {
+    private ISignalCheckAbilityEnabled[] _ISignalCheckAbilityEnabledSystems;
+    private ISignalOnClearInputBuffer[] _ISignalOnClearInputBufferSystems;
     private ISignalOnKCC2DPreCollision[] _ISignalOnKCC2DPreCollisionSystems;
     private ISignalOnKCC2DTrigger[] _ISignalOnKCC2DTriggerSystems;
     private ISignalOnKCC2DSolverCollision[] _ISignalOnKCC2DSolverCollisionSystems;
@@ -1548,6 +1624,8 @@ namespace Quantum {
     }
     partial void InitGen() {
       Initialize(this, this.SimulationConfig.Entities, 256);
+      _ISignalCheckAbilityEnabledSystems = BuildSignalsArray<ISignalCheckAbilityEnabled>();
+      _ISignalOnClearInputBufferSystems = BuildSignalsArray<ISignalOnClearInputBuffer>();
       _ISignalOnKCC2DPreCollisionSystems = BuildSignalsArray<ISignalOnKCC2DPreCollision>();
       _ISignalOnKCC2DTriggerSystems = BuildSignalsArray<ISignalOnKCC2DTrigger>();
       _ISignalOnKCC2DSolverCollisionSystems = BuildSignalsArray<ISignalOnKCC2DSolverCollision>();
@@ -1555,6 +1633,8 @@ namespace Quantum {
       _ISignalOnKCC2DAfterStateSystems = BuildSignalsArray<ISignalOnKCC2DAfterState>();
       _ComponentSignalsOnAdded = new ComponentReactiveCallbackInvoker[ComponentTypeId.Type.Length];
       _ComponentSignalsOnRemoved = new ComponentReactiveCallbackInvoker[ComponentTypeId.Type.Length];
+      BuildSignalsArrayOnComponentAdded<Quantum.AbilityEnable>();
+      BuildSignalsArrayOnComponentRemoved<Quantum.AbilityEnable>();
       BuildSignalsArrayOnComponentAdded<Quantum.AttackData>();
       BuildSignalsArrayOnComponentRemoved<Quantum.AttackData>();
       BuildSignalsArrayOnComponentAdded<CharacterController2D>();
@@ -1641,6 +1721,24 @@ namespace Quantum {
       Physics3D?.Init(_globals->PhysicsState3D.MapStaticCollidersState.TrackedMap);
     }
     public unsafe partial struct FrameSignals {
+      public void CheckAbilityEnabled(AbilityId abilityId) {
+        var array = _f._ISignalCheckAbilityEnabledSystems;
+        for (Int32 i = 0; i < array.Length; ++i) {
+          var s = array[i];
+          if (_f.SystemIsEnabledInHierarchy((SystemBase)s)) {
+            s.CheckAbilityEnabled(_f, abilityId);
+          }
+        }
+      }
+      public void OnClearInputBuffer(EntityRef playerEntityRef) {
+        var array = _f._ISignalOnClearInputBufferSystems;
+        for (Int32 i = 0; i < array.Length; ++i) {
+          var s = array[i];
+          if (_f.SystemIsEnabledInHierarchy((SystemBase)s)) {
+            s.OnClearInputBuffer(_f, playerEntityRef);
+          }
+        }
+      }
       public void OnKCC2DPreCollision(EntityRef entity, KCC2D* kcc, ref KCC2DSettings settings, KCCQueryResult* collision) {
         var array = _f._ISignalOnKCC2DPreCollisionSystems;
         for (Int32 i = 0; i < array.Length; ++i) {
@@ -1694,8 +1792,8 @@ namespace Quantum {
       SerializeInput = Quantum.Input.Serialize;
     }
     static partial void RegisterSimulationTypesGen(TypeRegistry typeRegistry) {
+      typeRegistry.Register(typeof(Quantum.AbilityEnable), Quantum.AbilityEnable.SIZE);
       typeRegistry.Register(typeof(Quantum.AbilityId), 4);
-      typeRegistry.Register(typeof(Quantum.AbilityType), 4);
       typeRegistry.Register(typeof(AssetGuid), AssetGuid.SIZE);
       typeRegistry.Register(typeof(AssetRef), AssetRef.SIZE);
       typeRegistry.Register(typeof(Quantum.AttackData), Quantum.AttackData.SIZE);
@@ -1801,8 +1899,9 @@ namespace Quantum {
       typeRegistry.Register(typeof(Quantum._globals_), Quantum._globals_.SIZE);
     }
     static partial void InitComponentTypeIdGen() {
-      ComponentTypeId.Reset(ComponentTypeId.BuiltInComponentCount + 8)
+      ComponentTypeId.Reset(ComponentTypeId.BuiltInComponentCount + 9)
         .AddBuiltInComponents()
+        .Add<Quantum.AbilityEnable>(Quantum.AbilityEnable.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.AttackData>(Quantum.AttackData.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.CharacterLevel>(Quantum.CharacterLevel.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.CharacterStatus>(Quantum.CharacterStatus.Serialize, null, null, ComponentFlags.None)
@@ -1817,7 +1916,6 @@ namespace Quantum {
     public static void EnsureNotStrippedGen() {
       FramePrinter.EnsureNotStripped();
       FramePrinter.EnsurePrimitiveNotStripped<Quantum.AbilityId>();
-      FramePrinter.EnsurePrimitiveNotStripped<Quantum.AbilityType>();
       FramePrinter.EnsurePrimitiveNotStripped<CallbackFlags>();
       FramePrinter.EnsurePrimitiveNotStripped<Quantum.CharacterTeam>();
       FramePrinter.EnsurePrimitiveNotStripped<Quantum.CommandInput>();

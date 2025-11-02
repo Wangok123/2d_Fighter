@@ -5,7 +5,7 @@ namespace Quantum
     /// <summary>
     /// System for tracking command inputs for special moves (Street Fighter style)
     /// </summary>
-    public unsafe class CommandInputSystem : SystemMainThreadFilter<CommandInputSystem.Filter>
+    public unsafe class CommandInputSystem : SystemMainThreadFilter<CommandInputSystem.Filter>, ISignalOnClearInputBuffer
     {
         public struct Filter
         {
@@ -148,12 +148,10 @@ namespace Quantum
             return true;
         }
 
-        /// <summary>
-        /// Clear the input buffer (called after executing a special move)
-        /// </summary>
-        public static void ClearInputBuffer(CommandInputData* commandData)
+        public void OnClearInputBuffer(Frame f, EntityRef playerEntityRef)
         {
-            commandData->InputBufferIndex = 0;
+            var data = f.Unsafe.GetPointer<CommandInputData>(playerEntityRef);
+            data->InputBufferIndex = 0;
         }
     }
 }

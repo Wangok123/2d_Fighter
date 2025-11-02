@@ -50,9 +50,53 @@ namespace Quantum.Prototypes {
   #endif //;
   
   [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.AbilityEnable))]
+  public unsafe partial class AbilityEnablePrototype : ComponentPrototype<Quantum.AbilityEnable> {
+    public QBoolean MovementDoubleJumpEnabled;
+    public QBoolean MovementDashEnabled;
+    public QBoolean MovementWallJumpEnabled;
+    public QBoolean MovementAirDashEnabled;
+    public QBoolean MovementGlideEnabled;
+    public QBoolean AttackLightEnabled;
+    public QBoolean AttackHeavyEnabled;
+    public QBoolean AttackRangedEnabled;
+    public QBoolean AttackAreaEnabled;
+    public QBoolean DefenseBlockEnabled;
+    public QBoolean DefenseParryEnabled;
+    public QBoolean DefenseDodgeEnabled;
+    public QBoolean DefenseShieldEnabled;
+    public QBoolean SpecialUltimateEnabled;
+    public QBoolean SpecialTransformationEnabled;
+    public QBoolean SpecialSummonEnabled;
+    partial void MaterializeUser(Frame frame, ref Quantum.AbilityEnable result, in PrototypeMaterializationContext context);
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+        Quantum.AbilityEnable component = default;
+        Materialize((Frame)f, ref component, in context);
+        return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref Quantum.AbilityEnable result, in PrototypeMaterializationContext context = default) {
+        result.MovementDoubleJumpEnabled = this.MovementDoubleJumpEnabled;
+        result.MovementDashEnabled = this.MovementDashEnabled;
+        result.MovementWallJumpEnabled = this.MovementWallJumpEnabled;
+        result.MovementAirDashEnabled = this.MovementAirDashEnabled;
+        result.MovementGlideEnabled = this.MovementGlideEnabled;
+        result.AttackLightEnabled = this.AttackLightEnabled;
+        result.AttackHeavyEnabled = this.AttackHeavyEnabled;
+        result.AttackRangedEnabled = this.AttackRangedEnabled;
+        result.AttackAreaEnabled = this.AttackAreaEnabled;
+        result.DefenseBlockEnabled = this.DefenseBlockEnabled;
+        result.DefenseParryEnabled = this.DefenseParryEnabled;
+        result.DefenseDodgeEnabled = this.DefenseDodgeEnabled;
+        result.DefenseShieldEnabled = this.DefenseShieldEnabled;
+        result.SpecialUltimateEnabled = this.SpecialUltimateEnabled;
+        result.SpecialTransformationEnabled = this.SpecialTransformationEnabled;
+        result.SpecialSummonEnabled = this.SpecialSummonEnabled;
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.AttackData))]
   public unsafe partial class AttackDataPrototype : ComponentPrototype<Quantum.AttackData> {
-    public AssetRef<CharacterAttackConfig> AttackConfig;
     public AssetRef<ModularCharacterConfig> ModularConfig;
     partial void MaterializeUser(Frame frame, ref Quantum.AttackData result, in PrototypeMaterializationContext context);
     public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
@@ -61,7 +105,6 @@ namespace Quantum.Prototypes {
         return f.Set(entity, component) == SetResult.ComponentAdded;
     }
     public void Materialize(Frame frame, ref Quantum.AttackData result, in PrototypeMaterializationContext context = default) {
-        result.AttackConfig = this.AttackConfig;
         result.ModularConfig = this.ModularConfig;
         MaterializeUser(frame, ref result, in context);
     }

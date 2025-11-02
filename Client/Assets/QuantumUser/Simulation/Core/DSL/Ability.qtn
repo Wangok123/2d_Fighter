@@ -1,8 +1,3 @@
-enum AbilityType
-{
-    Block, Jump, Dash, Attack
-}
-
 // Ability identifier enum for all ability types
 // Organized by value ranges for different categories
 enum AbilityId
@@ -33,3 +28,25 @@ enum AbilityId
     SpecialTransformation = 301,
     SpecialSummon = 302
 }
+
+component AbilityEnable
+{
+     bool MovementDoubleJumpEnabled;
+     bool MovementDashEnabled;
+     bool MovementWallJumpEnabled;
+     bool MovementAirDashEnabled;
+     bool MovementGlideEnabled;
+     bool AttackLightEnabled;
+     bool AttackHeavyEnabled;
+     bool AttackRangedEnabled;
+     bool AttackAreaEnabled;
+     bool DefenseBlockEnabled;
+     bool DefenseParryEnabled;
+     bool DefenseDodgeEnabled;
+     bool DefenseShieldEnabled;
+     bool SpecialUltimateEnabled;
+     bool SpecialTransformationEnabled;
+     bool SpecialSummonEnabled;
+}
+
+signal CheckAbilityEnabled(AbilityId abilityId);

@@ -22,3 +22,5 @@ struct SpecialMove
     Int32 MoveId;
     FP Damage;
 }
+
+signal OnClearInputBuffer(entity_ref playerEntityRef);
