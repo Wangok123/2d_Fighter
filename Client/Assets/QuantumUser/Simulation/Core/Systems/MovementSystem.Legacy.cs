@@ -1,7 +1,6 @@
-// DEPRECATED: This system has been replaced by signal-based systems:
-// - MovementInputSystem: Handles player input processing
-// - MovementExecutionSystem: Executes movement with KCC
-// - MovementUnlockSystem: Validates ability unlocks
+// DEPRECATED: This system has been replaced by MovementInputSystem
+// The new system uses ModularCharacterConfig as the single source of configuration
+// and removes dependency on legacy AttackConfig
 // This file is kept for backward compatibility but should not be used in new code.
 
 namespace Quantum

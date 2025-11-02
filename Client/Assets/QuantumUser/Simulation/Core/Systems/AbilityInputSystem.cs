@@ -1,10 +1,12 @@
 namespace Quantum
 {
     using Photon.Deterministic;
+    using System.Collections.Generic;
 
     /// <summary>
-    /// Signal-based system that processes ability inputs
-    /// Fires ability execution signals based on player input
+    /// Focused system that handles modular ability execution
+    /// Replaces the monolithic ModularAbilitySystem with better code organization
+    /// Processes abilities from ModularCharacterConfig using priority-based execution
     /// </summary>
     public unsafe class AbilityInputSystem : SystemMainThreadFilter<AbilityInputSystem.Filter>
     {
@@ -13,7 +15,7 @@ namespace Quantum
             public EntityRef Entity;
             public CharacterStatus* Status;
             public AttackData* AttackData;
-            public PlayerLink* PlayerLink;
+            public CharacterLevel* Level;
         }
 
         public override void Update(Frame frame, ref Filter filter)
@@ -30,8 +32,18 @@ namespace Quantum
                 return; // No modular config, skip
             }
 
+            var modularConfig = frame.FindAsset(filter.AttackData->ModularConfig);
+            if (modularConfig == null)
+            {
+                return;
+            }
+
             // Get input
-            SimpleInput2D input = *frame.GetPlayerInput(filter.PlayerLink->Player);
+            SimpleInput2D input = default;
+            if (frame.Unsafe.TryGetPointer(filter.Entity, out PlayerLink* playerLink))
+            {
+                input = *frame.GetPlayerInput(playerLink->Player);
+            }
 
             // Update timers
             UpdateAbilityTimers(frame, ref filter);
@@ -43,9 +55,8 @@ namespace Quantum
                 return;
             }
 
-            // Fire ability execute signal for other systems to handle
-            // The signal will be processed by specialized ability execution systems
-            frame.Signals.OnAbilityExecute(filter.Entity, AbilityId.None, input);
+            // Process abilities by priority
+            ProcessAbilitiesByPriority(frame, filter.Entity, filter.AttackData, filter.Level, input, modularConfig);
         }
 
         private void UpdateAbilityTimers(Frame frame, ref Filter filter)
@@ -56,5 +67,186 @@ namespace Quantum
                 filter.AttackData->ComboCounter = 0;
             }
         }
+
+        private void ProcessAbilitiesByPriority(Frame frame, EntityRef entityRef, AttackData* attackData,
+            CharacterLevel* level, SimpleInput2D input, ModularCharacterConfig config)
+        {
+            // Collect all abilities with their priorities
+            var abilitiesToProcess = new List<(int priority, System.Action action)>();
+
+            // Add attack abilities
+            if (config.AttackAbilities != null)
+            {
+                foreach (var abilityRef in config.AttackAbilities)
+                {
+                    var ability = frame.FindAsset(abilityRef);
+                    if (ability != null && IsAbilityUnlocked(level, ability))
+                    {
+                        if (ShouldExecuteAttackAbility(input, ability))
+                        {
+                            abilitiesToProcess.Add((ability.Priority,
+                                () => ExecuteAttackAbility(frame, attackData, entityRef, level, input, ability)));
+                        }
+                    }
+                }
+            }
+
+            // Add special abilities
+            if (config.SpecialAbilities != null)
+            {
+                foreach (var abilityRef in config.SpecialAbilities)
+                {
+                    var ability = frame.FindAsset(abilityRef);
+                    if (ability != null && IsAbilityUnlocked(level, ability))
+                    {
+                        if (frame.Unsafe.TryGetPointer(entityRef, out CommandInputData* commandData))
+                        {
+                            if (ShouldExecuteSpecialAbility(commandData, ability))
+                            {
+                                abilitiesToProcess.Add((ability.Priority,
+                                    () => ExecuteSpecialAbility(frame, attackData, entityRef, commandData, ability)));
+                            }
+                        }
+                    }
+                }
+            }
+
+            // Sort by priority (highest first) and execute first match
+            abilitiesToProcess.Sort((a, b) => b.priority.CompareTo(a.priority));
+
+            foreach (var (priority, action) in abilitiesToProcess)
+            {
+                action();
+                return; // Only execute one ability per frame
+            }
+        }
+
+        #region Ability Unlock Check
+        
+        private bool IsAbilityUnlocked(CharacterLevel* level, AbilityComponentBase ability)
+        {
+            if (level == null) return ability.UnlockedByDefault;
+            return ability.UnlockedByDefault || level->CurrentLevel >= ability.RequiredLevel;
+        }
+        
+        #endregion
+
+        #region Attack Ability Execution
+
+        private bool ShouldExecuteAttackAbility(SimpleInput2D input, AttackAbilityComponent ability)
+        {
+            switch (ability.AttackType)
+            {
+                case AttackAbilityType.LightMelee:
+                    return input.LP.WasPressed;
+                case AttackAbilityType.HeavyMelee:
+                    return input.HP.WasPressed || input.HP.IsDown;
+                default:
+                    return false;
+            }
+        }
+
+        private void ExecuteAttackAbility(Frame frame, AttackData* attackData, EntityRef entity, CharacterLevel* level,
+            SimpleInput2D input, AttackAbilityComponent ability)
+        {
+            // Handle combo system
+            if (ability.CanCombo)
+            {
+                if (attackData->ComboCounter < ability.MaxComboCount)
+                {
+                    attackData->ComboCounter++;
+                }
+                else
+                {
+                    attackData->ComboCounter = 1;
+                }
+            }
+            else
+            {
+                attackData->ComboCounter = 0;
+            }
+
+            // Calculate damage
+            FP damage = ability.BaseDamage;
+            if (level != null)
+            {
+                damage += ability.DamagePerLevel * level->CurrentLevel;
+            }
+
+            // Apply combo multiplier
+            if (ability.CanCombo && attackData->ComboCounter > 0)
+            {
+                int comboIndex = FPMath.Clamp(attackData->ComboCounter - 1, 0,
+                    ability.ComboDamageMultipliers.Length - 1);
+                damage *= ability.ComboDamageMultipliers[comboIndex];
+            }
+
+            // Apply charge multiplier for heavy attacks
+            if (ability.CanCharge && input.HP.IsDown)
+            {
+                // Charging logic
+                attackData->IsChargingHeavy = true;
+                attackData->HeavyChargeTime += frame.DeltaTime;
+                return; // Don't execute yet, still charging
+            }
+            else if (ability.CanCharge && attackData->IsChargingHeavy)
+            {
+                // Release charged attack
+                FP chargeLevel = FPMath.Clamp01((attackData->HeavyChargeTime - ability.MinChargeTime) /
+                                                (ability.MaxChargeTime - ability.MinChargeTime));
+                FP chargeMultiplier = FP._1 + (chargeLevel * (ability.FullChargeDamageMultiplier - FP._1));
+                damage *= chargeMultiplier;
+
+                attackData->IsChargingHeavy = false;
+                attackData->HeavyChargeTime = 0;
+            }
+
+            // Apply attack
+            attackData->IsAttacking = true;
+            attackData->AttackCooldown = FrameTimer.FromSeconds(frame, ability.Cooldown);
+
+            if (ability.CanCombo)
+            {
+                attackData->ComboResetTimer = FrameTimer.FromSeconds(frame, ability.ComboWindow);
+            }
+
+            // Fire event
+            bool isHeavy = ability.AttackType == AttackAbilityType.HeavyMelee;
+            frame.Events.AttackPerformed(entity, isHeavy, attackData->ComboCounter, damage, 0);
+
+            Log.Debug($"Attack Ability: {ability.AbilityName} - Type: {ability.AttackType}, Damage: {damage}");
+        }
+
+        #endregion
+
+        #region Special Ability Execution
+
+        private bool ShouldExecuteSpecialAbility(CommandInputData* commandData, SpecialAbilityComponent ability)
+        {
+            if (ability.InputSequence == null || ability.InputSequence.Length == 0)
+            {
+                return false;
+            }
+
+            return CommandInputSystem.MatchesSequence(commandData, ability.InputSequence);
+        }
+
+        private void ExecuteSpecialAbility(Frame frame, AttackData* attackData, EntityRef entity,
+            CommandInputData* commandData, SpecialAbilityComponent ability)
+        {
+            // Clear input buffer
+            CommandInputSystem.ClearInputBuffer(commandData);
+
+            // Apply cooldown
+            attackData->IsAttacking = true;
+            attackData->AttackCooldown = FrameTimer.FromSeconds(frame, ability.Cooldown);
+
+            // Fire event
+            frame.Events.SpecialMovePerformed(entity, 0, ability.Damage);
+
+            Log.Info($"Special Ability: {ability.AbilityName} - Type: {ability.SpecialType}, Damage: {ability.Damage}");
+        }
+
+        #endregion
     }
 }

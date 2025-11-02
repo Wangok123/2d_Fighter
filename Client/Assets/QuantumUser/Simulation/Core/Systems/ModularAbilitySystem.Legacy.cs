@@ -1,7 +1,6 @@
-// DEPRECATED: This system has been replaced by signal-based systems:
-// - AbilityInputSystem: Handles ability input processing  
-// - AttackAbilityExecutionSystem: Executes attack abilities
-// - SpecialAbilityExecutionSystem: Executes special abilities
+// DEPRECATED: This system has been replaced by AbilityInputSystem
+// The new system uses ModularCharacterConfig as the single source of configuration
+// and provides better code organization with focused responsibility
 // This file is kept for backward compatibility but should not be used in new code.
 
 namespace Quantum
