@@ -149,6 +149,10 @@ namespace Quantum
             if (noInput)
                 return;
             
+            // When both directions are pressed, maintain current facing direction
+            if (input.Left.IsDown && input.Right.IsDown)
+                return;
+            
             movementData->IsFacingRight = input.Right.IsDown;
         }
     }

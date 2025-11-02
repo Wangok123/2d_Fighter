@@ -17,6 +17,12 @@ namespace Quantum
 
         public override void Update(Frame frame, ref Filter filter)
         {
+            // Validate modular config reference before proceeding
+            if (!filter.AttackData->ModularConfig.Id.IsValid)
+            {
+                return;
+            }
+            
             // Get modular character config
             var modularConfig = frame.FindAsset(filter.AttackData->ModularConfig);
             if (modularConfig == null)

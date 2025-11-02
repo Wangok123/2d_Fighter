@@ -1,8 +1,7 @@
 namespace Quantum
 {
     using Photon.Deterministic;
-    using System.Collections.Generic;
-
+    
     /// <summary>
     /// Focused system that handles modular ability execution
     /// Replaces the monolithic ModularAbilitySystem with better code organization
@@ -71,10 +70,11 @@ namespace Quantum
         private void ProcessAbilitiesByPriority(Frame frame, EntityRef entityRef, AttackData* attackData,
             CharacterLevel* level, SimpleInput2D input, ModularCharacterConfig config)
         {
-            // Collect all abilities with their priorities
-            var abilitiesToProcess = new List<(int priority, System.Action action)>();
+            // Track the highest priority ability to execute
+            int highestPriority = int.MinValue;
+            System.Action abilityToExecute = null;
 
-            // Add attack abilities
+            // Check attack abilities
             if (config.AttackAbilities != null)
             {
                 foreach (var abilityRef in config.AttackAbilities)
@@ -84,14 +84,17 @@ namespace Quantum
                     {
                         if (ShouldExecuteAttackAbility(input, ability))
                         {
-                            abilitiesToProcess.Add((ability.Priority,
-                                () => ExecuteAttackAbility(frame, attackData, entityRef, level, input, ability)));
+                            if (ability.Priority > highestPriority)
+                            {
+                                highestPriority = ability.Priority;
+                                abilityToExecute = () => ExecuteAttackAbility(frame, attackData, entityRef, level, input, ability);
+                            }
                         }
                     }
                 }
             }
 
-            // Add special abilities
+            // Check special abilities
             if (config.SpecialAbilities != null)
             {
                 foreach (var abilityRef in config.SpecialAbilities)
@@ -103,21 +106,21 @@ namespace Quantum
                         {
                             if (ShouldExecuteSpecialAbility(commandData, ability))
                             {
-                                abilitiesToProcess.Add((ability.Priority,
-                                    () => ExecuteSpecialAbility(frame, attackData, entityRef, commandData, ability)));
+                                if (ability.Priority > highestPriority)
+                                {
+                                    highestPriority = ability.Priority;
+                                    abilityToExecute = () => ExecuteSpecialAbility(frame, attackData, entityRef, commandData, ability);
+                                }
                             }
                         }
                     }
                 }
             }
 
-            // Sort by priority (highest first) and execute first match
-            abilitiesToProcess.Sort((a, b) => b.priority.CompareTo(a.priority));
-
-            foreach (var (priority, action) in abilitiesToProcess)
+            // Execute the highest priority ability if any
+            if (abilityToExecute != null)
             {
-                action();
-                return; // Only execute one ability per frame
+                abilityToExecute();
             }
         }
 
