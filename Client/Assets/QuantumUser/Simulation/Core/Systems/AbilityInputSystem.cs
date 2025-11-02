@@ -87,7 +87,7 @@ namespace Quantum
 
                     if (ability != null && IsAbilityUnlocked(filter.Level, ability))
                     {
-                        if (ShouldExecuteAttackAbility(input, ability))
+                        if (ShouldExecuteAttackAbility(frame, filter.Entity, input, ability))
                         {
                             if (ability.Priority > pendingAbility.Priority)
                             {
@@ -110,8 +110,8 @@ namespace Quantum
 
                     if (ability != null && IsAbilityUnlocked(filter.Level, ability))
                     {
-                        if (ShouldExecuteSpecialAbility(frame.Unsafe.GetPointer<CommandInputData>(filter.Entity),
-                                ability))
+                        if (ShouldExecuteSpecialAbility(frame, filter.Entity, 
+                                frame.Unsafe.GetPointer<CommandInputData>(filter.Entity), ability))
                         {
                             if (ability.Priority > pendingAbility.Priority)
                             {
@@ -156,8 +156,14 @@ namespace Quantum
 
         #region Attack Ability Execution
 
-        private bool ShouldExecuteAttackAbility(SimpleInput2D input, AttackAbilityComponent ability)
+        private bool ShouldExecuteAttackAbility(Frame frame, EntityRef entity, SimpleInput2D input, AttackAbilityComponent ability)
         {
+            // Check if ability is enabled in AbilityEnable component
+            if (!KCCAbilityIntegration.IsAbilityEnabled(frame, entity, ability.AbilityId))
+            {
+                return false;
+            }
+
             switch (ability.AttackType)
             {
                 case AttackAbilityType.LightMelee:
@@ -244,9 +250,15 @@ namespace Quantum
 
         #region Special Ability Execution
 
-        private bool ShouldExecuteSpecialAbility(CommandInputData* commandData, SpecialAbilityComponent ability)
+        private bool ShouldExecuteSpecialAbility(Frame frame, EntityRef entity, CommandInputData* commandData, SpecialAbilityComponent ability)
         {
             if (ability.InputSequence == null || ability.InputSequence.Length == 0)
+            {
+                return false;
+            }
+
+            // Check if ability is enabled in AbilityEnable component
+            if (!KCCAbilityIntegration.IsAbilityEnabled(frame, entity, ability.AbilityId))
             {
                 return false;
             }

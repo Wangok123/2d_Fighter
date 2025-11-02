@@ -85,7 +85,16 @@ namespace Quantum
       }
       else
       {
-        BaseSettings.Materialize(_context.Frame, ref _context.Settings);
+        // Try to get settings with ability overrides first
+        var abilitySettings = KCCAbilityIntegration.GetSettingsWithAbilityOverrides(frame, e, this);
+        if (abilitySettings.HasValue)
+        {
+          _context.Settings = abilitySettings.Value;
+        }
+        else
+        {
+          BaseSettings.Materialize(_context.Frame, ref _context.Settings);
+        }
       }
       _context.KCC = KCC;
       
@@ -95,6 +104,9 @@ namespace Quantum
         _context.KCC->IgnoreStep = false;
         return;
       }
+
+      // Apply custom input filtering (with AbilityEnable support)
+      _context.KCC->Input = OnFilterInput(_context.KCC->Input);
 
       _capsuleShape = Shape2D.CreateCapsule(_context.Settings.CapsuleRadius, _context.Settings.CapsuleHeight / 2 - _context.Settings.CapsuleRadius);
       var position = transform->Position + _context.Settings.Offset;
@@ -188,6 +200,13 @@ namespace Quantum
 
     private void ProcessJump()
     {
+      // Allow custom jump processing
+      if (OnProcessJump())
+      {
+        // Custom jump was handled
+        return;
+      }
+
       var prematureJump = _context.KCC->GroundedJumpTimer.IsRunning(_context.Frame);
       if (_context.KCC->Input.Jump.WasPressed || prematureJump)
       {
@@ -239,6 +258,13 @@ namespace Quantum
 
     private void ComputeState()
     {
+      // Allow custom pre-processing
+      if (OnPreComputeState())
+      {
+        // Custom state was handled, skip default processing
+        return;
+      }
+
       // grounded and walled have priority and always switch
       var forceSwitch = ShouldForcedSwitch(_context.KCC->State, _context.KCC->Closest.ContactType);
       var previousState = _context.KCC->State;
@@ -325,6 +351,9 @@ namespace Quantum
         _context.KCC->KinematicVerticalSpeed = 0;
       
       _context.Frame.Signals.OnKCC2DAfterState(_context.Entity, _context.KCC, ref _context.Settings);
+
+      // Allow custom post-processing
+      OnPostComputeState();
     }
 
     private static bool ShouldForcedSwitch(KCCState currentState, KCCContactType contactType)
@@ -481,6 +510,9 @@ namespace Quantum
       ApplyGravity();
 
       ClampVelocity();
+
+      // Allow custom force integration
+      OnIntegrateForces();
     }
 
     private void ClampVelocity()
@@ -577,6 +609,64 @@ namespace Quantum
         hit.Point = hits[0].Point;
         return true;
       }
+      return false;
+    }
+
+    /// <summary>
+    /// Virtual method for custom state processing before state computation.
+    /// Override this in derived classes to add custom KCC states and behaviors.
+    /// Inspired by Sports Arena Brawler's extensible state system.
+    /// </summary>
+    /// <returns>True if custom state was handled and default state computation should be skipped</returns>
+    protected virtual bool OnPreComputeState()
+    {
+      return false;
+    }
+
+    /// <summary>
+    /// Virtual method for custom state processing after state computation.
+    /// Override this in derived classes to add post-processing logic.
+    /// </summary>
+    protected virtual void OnPostComputeState()
+    {
+    }
+
+    /// <summary>
+    /// Virtual method for filtering input based on abilities or custom conditions.
+    /// Override this to add custom input filtering logic.
+    /// </summary>
+    /// <param name="input">Original input</param>
+    /// <returns>Filtered input</returns>
+    protected virtual SimpleInput2D OnFilterInput(SimpleInput2D input)
+    {
+      // Check if entity has AbilityEnable component and filter accordingly
+      if (_context.Frame.Unsafe.TryGetPointer<AbilityEnable>(_context.Entity, out var abilityEnable))
+      {
+        // Filter dash input if not enabled
+        if (!abilityEnable->MovementDashEnabled && input.Dash.WasPressed)
+        {
+          input.Dash = default;
+        }
+      }
+      
+      return input;
+    }
+
+    /// <summary>
+    /// Virtual method called during force integration.
+    /// Override this to add custom forces or modify velocity.
+    /// </summary>
+    protected virtual void OnIntegrateForces()
+    {
+    }
+
+    /// <summary>
+    /// Virtual method for custom jump processing.
+    /// Override this to add custom jump types or modify jump behavior.
+    /// </summary>
+    /// <returns>True if custom jump was handled and default jump should be skipped</returns>
+    protected virtual bool OnProcessJump()
+    {
       return false;
     }
   }

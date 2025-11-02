@@ -77,6 +77,63 @@ namespace Quantum
     {
       _kinematicVelocity = impulse;
     }
+
+    /// <summary>
+    /// Gets the current grounded state of the character.
+    /// Useful for ability systems to check if character is on ground.
+    /// </summary>
+    public bool IsGrounded
+    {
+      get { return _state == KCCState.GROUNDED; }
+    }
+
+    /// <summary>
+    /// Gets the current airborne state of the character.
+    /// Useful for ability systems to check if character is in air.
+    /// </summary>
+    public bool IsAirborne
+    {
+      get 
+      { 
+        return _state == KCCState.JUMPED || 
+               _state == KCCState.DOUBLE_JUMPED || 
+               _state == KCCState.FREE_FALLING; 
+      }
+    }
+
+    /// <summary>
+    /// Checks if the character is currently dashing.
+    /// </summary>
+    public bool IsDashing
+    {
+      get { return _state == KCCState.DASHING; }
+    }
+
+    /// <summary>
+    /// Checks if the character is on a wall.
+    /// </summary>
+    public bool IsWalled
+    {
+      get { return _state == KCCState.WALLED; }
+    }
+
+    /// <summary>
+    /// Applies an impulse force to the character.
+    /// Useful for knockback, wind, or other external forces.
+    /// </summary>
+    public void ApplyImpulse(FPVector2 impulse)
+    {
+      _kinematicVelocity += impulse;
+    }
+
+    /// <summary>
+    /// Applies a dynamic velocity (non-kinematic) to the character.
+    /// This velocity is separate from kinematic movement and can be used for physics effects.
+    /// </summary>
+    public void ApplyDynamicVelocity(FPVector2 velocity)
+    {
+      _dynamicVelocity += velocity;
+    }
   }
 }
 
