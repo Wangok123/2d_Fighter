@@ -121,7 +121,7 @@ namespace Quantum
             kccConfig.BaseSettings.Materialize(frame, ref settings);
             
             // Check if double jump ability is unlocked based on modular config
-            bool doubleJumpUnlocked = IsAbilityUnlocked(filter.Level, modularConfig, AbilityConstants.Movement.DoubleJump);
+            bool doubleJumpUnlocked = IsAbilityUnlocked(filter.Level, modularConfig, AbilityId.MovementDoubleJump);
             if (!doubleJumpUnlocked)
             {
                 settings.DoubleJumpEnabled = false;
@@ -130,7 +130,7 @@ namespace Quantum
             return settings;
         }
         
-        private bool IsAbilityUnlocked(CharacterLevel* level, ModularCharacterConfig config, string abilityId)
+        private bool IsAbilityUnlocked(CharacterLevel* level, ModularCharacterConfig config, AbilityId abilityId)
         {
             if (config.AbilityUnlocks == null || config.AbilityUnlocks.Length == 0)
             {
@@ -161,7 +161,7 @@ namespace Quantum
             if (modularConfig != null)
             {
                 // Check dash unlock
-                bool dashUnlocked = IsAbilityUnlocked(filter.Level, modularConfig, AbilityConstants.Movement.Dash);
+                bool dashUnlocked = IsAbilityUnlocked(filter.Level, modularConfig, AbilityId.MovementDash);
                 
                 // Filter dash input if not unlocked
                 if (!dashUnlocked && input.Dash.WasPressed)

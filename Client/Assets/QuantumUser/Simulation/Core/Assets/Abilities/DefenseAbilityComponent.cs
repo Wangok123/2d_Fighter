@@ -53,7 +53,7 @@ namespace Quantum
         
         public DefenseAbilityComponent()
         {
-            AbilityId = "defense_basic";
+            AbilityId = AbilityId.None;
             AbilityName = "Basic Block";
             Priority = 30;
             DamageReduction = FP._0_50;

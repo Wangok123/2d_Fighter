@@ -74,7 +74,7 @@ namespace Quantum
         
         public SpecialAbilityComponent()
         {
-            AbilityId = "special_basic";
+            AbilityId = AbilityId.None;
             AbilityName = "Special Move";
             Priority = 100;
             Damage = 30;

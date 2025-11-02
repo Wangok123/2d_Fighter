@@ -90,7 +90,7 @@ namespace Quantum
         
         public AttackAbilityComponent()
         {
-            AbilityId = "attack_basic";
+            AbilityId = AbilityId.None;
             AbilityName = "Basic Attack";
             Priority = 20;
             BaseDamage = 10;

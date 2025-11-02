@@ -15,7 +15,7 @@ namespace Quantum
     {
         [Header("Ability Identity")]
         [Tooltip("Unique identifier for this ability")]
-        public string AbilityId;
+        public AbilityId AbilityId;
         
         [Tooltip("Display name for this ability")]
         public string AbilityName;

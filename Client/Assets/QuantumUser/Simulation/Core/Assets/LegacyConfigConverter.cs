@@ -28,7 +28,7 @@ namespace Quantum
             if (lightConfig == null) return null;
 
             var component = ScriptableObject.CreateInstance<AttackAbilityComponent>();
-            component.AbilityId = "attack_light_converted";
+            component.AbilityId = AbilityId.AttackLight;
             component.AbilityName = "Light Attack (Converted)";
             component.AttackType = AttackAbilityType.LightMelee;
             
@@ -54,7 +54,7 @@ namespace Quantum
             if (heavyConfig == null) return null;
 
             var component = ScriptableObject.CreateInstance<AttackAbilityComponent>();
-            component.AbilityId = "attack_heavy_converted";
+            component.AbilityId = AbilityId.AttackHeavy;
             component.AbilityName = "Heavy Attack (Converted)";
             component.AttackType = AttackAbilityType.HeavyMelee;
             
@@ -80,7 +80,7 @@ namespace Quantum
             if (specialConfig == null) return null;
 
             var component = ScriptableObject.CreateInstance<SpecialAbilityComponent>();
-            component.AbilityId = $"special_{specialConfig.MoveId}";
+            component.AbilityId = (AbilityId)(300 + specialConfig.MoveId); // Special abilities start at 300
             component.AbilityName = specialConfig.MoveName;
             component.SpecialType = SpecialAbilityType.Combo; // Default type
             
@@ -135,7 +135,7 @@ namespace Quantum
                 unlocks.Add(new AbilityUnlock
                 {
                     UnlockLevel = legacyConfig.DoubleJumpUnlockLevel,
-                    AbilityId = "movement_double_jump",
+                    AbilityId = AbilityId.MovementDoubleJump,
                     UnlockDescription = "Unlock Double Jump"
                 });
             }
@@ -145,7 +145,7 @@ namespace Quantum
                 unlocks.Add(new AbilityUnlock
                 {
                     UnlockLevel = legacyConfig.DashUnlockLevel,
-                    AbilityId = "movement_dash",
+                    AbilityId = AbilityId.MovementDash,
                     UnlockDescription = "Unlock Dash"
                 });
             }
