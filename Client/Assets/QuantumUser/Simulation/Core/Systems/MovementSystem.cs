@@ -30,7 +30,7 @@ namespace Quantum
             }
             
             // Apply ability unlock filtering
-            input = FilterInputByUnlocks(frame, ref filter, input);
+            input = FilterInputByUnlocks(frame, filter, input);
             
             var config = frame.FindAsset(filter.KCC->Config);
             filter.KCC->Input = input;
@@ -120,7 +120,7 @@ namespace Quantum
             KCC2DSettings settings = default;
             kccConfig.BaseSettings.Materialize(frame, ref settings);
             
-            // Check if double jump ability is unlocked based on modular config
+            // Check if double jump ability is unlocked based on modular config 
             bool doubleJumpUnlocked = IsAbilityUnlocked(filter.Level, modularConfig, AbilityId.MovementDoubleJump);
             if (!doubleJumpUnlocked)
             {
@@ -148,7 +148,7 @@ namespace Quantum
             return true; // Ability not in unlock list, assume unlocked
         }
         
-        private SimpleInput2D FilterInputByUnlocks(Frame frame, ref Filter filter, SimpleInput2D input)
+        private SimpleInput2D FilterInputByUnlocks(Frame frame, Filter filter, SimpleInput2D input)
         {
             // If no level or attack data, allow all inputs
             if (filter.Level == null || filter.AttackData == null)
@@ -180,13 +180,15 @@ namespace Quantum
             }
             
             // Check dash unlock
-            bool dashUnlocked = filter.Level->CurrentLevel >= attackConfig.DashUnlockLevel;
-            
-            // Filter dash input if not unlocked
-            if (!dashUnlocked && input.Dash.WasPressed)
             {
-                // Clear dash button state
-                input.Dash = default;
+                bool dashUnlocked = filter.Level->CurrentLevel >= attackConfig.DashUnlockLevel;
+            
+                // Filter dash input if not unlocked
+                if (!dashUnlocked && input.Dash.WasPressed)
+                {
+                    // Clear dash button state
+                    input.Dash = default;
+                }
             }
             
             return input;
