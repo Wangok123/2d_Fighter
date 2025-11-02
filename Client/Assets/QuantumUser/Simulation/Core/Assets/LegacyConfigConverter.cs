@@ -80,7 +80,9 @@ namespace Quantum
             if (specialConfig == null) return null;
 
             var component = ScriptableObject.CreateInstance<SpecialAbilityComponent>();
-            component.AbilityId = (AbilityId)(300 + specialConfig.MoveId); // Special abilities start at 300
+            // Map legacy MoveId to the Special abilities range (300-399 in AbilityId enum)
+            // Using SpecialUltimate as the base value for clarity
+            component.AbilityId = (AbilityId)((int)AbilityId.SpecialUltimate + specialConfig.MoveId);
             component.AbilityName = specialConfig.MoveName;
             component.SpecialType = SpecialAbilityType.Combo; // Default type
             
