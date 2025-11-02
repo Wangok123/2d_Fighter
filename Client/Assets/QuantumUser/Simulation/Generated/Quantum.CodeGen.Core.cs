@@ -49,6 +49,25 @@ namespace Quantum {
   using RuntimeInitializeOnLoadMethodAttribute = UnityEngine.RuntimeInitializeOnLoadMethodAttribute;
   #endif //;
   
+  public enum AbilityId : int {
+    None = 0,
+    MovementDoubleJump = 1,
+    MovementDash = 2,
+    MovementWallJump = 3,
+    MovementAirDash = 4,
+    MovementGlide = 5,
+    AttackLight = 100,
+    AttackHeavy = 101,
+    AttackRanged = 102,
+    AttackArea = 103,
+    DefenseBlock = 200,
+    DefenseParry = 201,
+    DefenseDodge = 202,
+    DefenseShield = 203,
+    SpecialUltimate = 300,
+    SpecialTransformation = 301,
+    SpecialSummon = 302,
+  }
   public enum AbilityType : int {
     Block,
     Jump,
@@ -1219,23 +1238,25 @@ namespace Quantum {
   }
   [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct AttackData : Quantum.IComponent {
-    public const Int32 SIZE = 48;
+    public const Int32 SIZE = 56;
     public const Int32 ALIGNMENT = 8;
     [FieldOffset(16)]
     public AssetRef<CharacterAttackConfig> AttackConfig;
+    [FieldOffset(24)]
+    public AssetRef<ModularCharacterConfig> ModularConfig;
     [FieldOffset(0)]
     [ExcludeFromPrototype()]
     public Int32 ComboCounter;
-    [FieldOffset(40)]
+    [FieldOffset(48)]
     [ExcludeFromPrototype()]
     public FrameTimer ComboResetTimer;
-    [FieldOffset(32)]
+    [FieldOffset(40)]
     [ExcludeFromPrototype()]
     public FrameTimer AttackCooldown;
     [FieldOffset(4)]
     [ExcludeFromPrototype()]
     public QBoolean IsAttacking;
-    [FieldOffset(24)]
+    [FieldOffset(32)]
     [ExcludeFromPrototype()]
     public FP HeavyChargeTime;
     [FieldOffset(8)]
@@ -1245,6 +1266,7 @@ namespace Quantum {
       unchecked { 
         var hash = 8563;
         hash = hash * 31 + AttackConfig.GetHashCode();
+        hash = hash * 31 + ModularConfig.GetHashCode();
         hash = hash * 31 + ComboCounter.GetHashCode();
         hash = hash * 31 + ComboResetTimer.GetHashCode();
         hash = hash * 31 + AttackCooldown.GetHashCode();
@@ -1260,6 +1282,7 @@ namespace Quantum {
         QBoolean.Serialize(&p->IsAttacking, serializer);
         QBoolean.Serialize(&p->IsChargingHeavy, serializer);
         AssetRef.Serialize(&p->AttackConfig, serializer);
+        AssetRef.Serialize(&p->ModularConfig, serializer);
         FP.Serialize(&p->HeavyChargeTime, serializer);
         FrameTimer.Serialize(&p->AttackCooldown, serializer);
         FrameTimer.Serialize(&p->ComboResetTimer, serializer);
@@ -1671,6 +1694,7 @@ namespace Quantum {
       SerializeInput = Quantum.Input.Serialize;
     }
     static partial void RegisterSimulationTypesGen(TypeRegistry typeRegistry) {
+      typeRegistry.Register(typeof(Quantum.AbilityId), 4);
       typeRegistry.Register(typeof(Quantum.AbilityType), 4);
       typeRegistry.Register(typeof(AssetGuid), AssetGuid.SIZE);
       typeRegistry.Register(typeof(AssetRef), AssetRef.SIZE);
@@ -1792,6 +1816,7 @@ namespace Quantum {
     [Preserve()]
     public static void EnsureNotStrippedGen() {
       FramePrinter.EnsureNotStripped();
+      FramePrinter.EnsurePrimitiveNotStripped<Quantum.AbilityId>();
       FramePrinter.EnsurePrimitiveNotStripped<Quantum.AbilityType>();
       FramePrinter.EnsurePrimitiveNotStripped<CallbackFlags>();
       FramePrinter.EnsurePrimitiveNotStripped<Quantum.CharacterTeam>();

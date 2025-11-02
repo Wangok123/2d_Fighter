@@ -53,6 +53,7 @@ namespace Quantum.Prototypes {
   [Quantum.Prototypes.Prototype(typeof(Quantum.AttackData))]
   public unsafe partial class AttackDataPrototype : ComponentPrototype<Quantum.AttackData> {
     public AssetRef<CharacterAttackConfig> AttackConfig;
+    public AssetRef<ModularCharacterConfig> ModularConfig;
     partial void MaterializeUser(Frame frame, ref Quantum.AttackData result, in PrototypeMaterializationContext context);
     public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
         Quantum.AttackData component = default;
@@ -61,6 +62,7 @@ namespace Quantum.Prototypes {
     }
     public void Materialize(Frame frame, ref Quantum.AttackData result, in PrototypeMaterializationContext context = default) {
         result.AttackConfig = this.AttackConfig;
+        result.ModularConfig = this.ModularConfig;
         MaterializeUser(frame, ref result, in context);
     }
   }
