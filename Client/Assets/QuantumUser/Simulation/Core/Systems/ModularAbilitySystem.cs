@@ -63,9 +63,13 @@ namespace Quantum
         /// </summary>
         private ModularCharacterConfig GetModularConfig(Frame frame, ref Filter filter)
         {
-            // For now, check if there's a modular config linked
-            // This would need to be extended with a component reference in Character.qtn
-            // For demonstration, we return null to maintain compatibility
+            // Check if entity has a modular config reference
+            if (filter.AttackData->ModularConfig.Id.IsValid)
+            {
+                return frame.FindAsset(filter.AttackData->ModularConfig);
+            }
+            
+            // No modular config, entity uses legacy system
             return null;
         }
 

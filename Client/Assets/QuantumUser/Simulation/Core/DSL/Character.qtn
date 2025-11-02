@@ -30,6 +30,7 @@ component CharacterLevel
 component AttackData
 {
 	asset_ref<CharacterAttackConfig> AttackConfig;
+	asset_ref<ModularCharacterConfig> ModularConfig;
 	[ExcludeFromPrototype] Int32 ComboCounter;
 	[ExcludeFromPrototype] FrameTimer ComboResetTimer;
 	[ExcludeFromPrototype] FrameTimer AttackCooldown;

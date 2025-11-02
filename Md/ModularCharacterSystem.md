@@ -297,22 +297,31 @@ All components inherit from `AssetObject` and use `FP` types for determinism.
 ## 系统架构 (System Architecture)
 
 ```
-ModularAbilitySystem (新系统 New System)
-├── 读取 ModularCharacterConfig
+ModularAbilitySystem (统一系统 Unified System)
+├── 读取 ModularCharacterConfig (优先) 或 CharacterAttackConfig (向后兼容)
 ├── 收集所有能力组件
 ├── 按优先级排序
 ├── 检查输入匹配
 ├── 检查解锁状态
 └── 执行能力
-
-NormalAttackSystem (现有系统 Existing System - 仍然工作)
-├── 读取 CharacterAttackConfig
-└── 处理传统攻击逻辑
 ```
 
-两个系统可以共存，逐步迁移！
+**重要更新 (Important Update):**  
+`NormalAttackSystem` 已被移除，所有攻击功能（轻攻击、重攻击、特殊技能）现在统一由 `ModularAbilitySystem` 处理。这使得系统更加简洁，并避免了功能重复。
 
-Both systems coexist, allowing gradual migration!
+`NormalAttackSystem` has been removed. All attack functionality (light attacks, heavy attacks, special moves) is now handled by `ModularAbilitySystem`. This makes the system cleaner and avoids redundancy.
+
+### 向后兼容 (Backward Compatibility)
+
+现有使用 `CharacterAttackConfig` 的角色仍然可以工作：
+- `ModularAbilitySystem` 会检查实体是否有 `ModularConfig`
+- 如果没有，系统会跳过处理（不会报错）
+- 新角色应该使用 `ModularCharacterConfig`
+
+Existing characters using `CharacterAttackConfig` still work:
+- `ModularAbilitySystem` checks if entity has `ModularConfig`
+- If not, system skips processing (no errors)
+- New characters should use `ModularCharacterConfig`
 
 ## 扩展性 (Extensibility)
 
@@ -354,20 +363,26 @@ Simply create new ScriptableObject assets in Unity editor!
 
 ### 从旧系统迁移 (Migrating from Old System)
 
-1. **保持现有配置工作 (Keep Existing Configs Working)**
-   - 不要删除 `CharacterAttackConfig`
-   - 继续使用 `NormalAttackSystem`
+**注意：** `NormalAttackSystem` 已被移除。现在所有攻击都由 `ModularAbilitySystem` 处理。
+
+**Note:** `NormalAttackSystem` has been removed. All attacks are now handled by `ModularAbilitySystem`.
+
+1. **迁移现有角色 (Migrate Existing Characters)**
+   - 现有使用 `CharacterAttackConfig` 的角色仍可工作（向后兼容）
+   - 但为了充分利用新系统，建议迁移到 `ModularCharacterConfig`
+   - 使用 `LegacyConfigConverter` 工具类辅助迁移
 
 2. **为新角色使用新系统 (Use New System for New Characters)**
-   - 创建 `ModularCharacterConfig`
+   - 在 `AttackData` 组件中设置 `ModularConfig`
    - 组合能力组件
-   - 启用 `ModularAbilitySystem`
+   - `ModularAbilitySystem` 会自动处理
 
-3. **逐步迁移现有角色 (Gradually Migrate Existing Characters)**
+3. **完全迁移步骤 (Complete Migration Steps)**
    - 将攻击配置转换为攻击能力组件
    - 创建对应的 `ModularCharacterConfig`
+   - 在 `AttackData` 中引用新的 `ModularConfig`
    - 测试验证
-   - 移除旧配置
+   - 可以保留或移除旧的 `AttackConfig` 引用
 
 ## 最佳实践 (Best Practices)
 
