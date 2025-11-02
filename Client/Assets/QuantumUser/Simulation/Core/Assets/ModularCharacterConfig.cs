@@ -98,7 +98,7 @@ namespace Quantum
         public int UnlockLevel;
         
         [Tooltip("Ability ID that gets unlocked")]
-        public string AbilityId;
+        public AbilityId AbilityId;
         
         [Tooltip("Description of what unlocks")]
         public string UnlockDescription;

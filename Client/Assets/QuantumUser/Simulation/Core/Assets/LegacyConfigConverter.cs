@@ -28,7 +28,7 @@ namespace Quantum
             if (lightConfig == null) return null;
 
             var component = ScriptableObject.CreateInstance<AttackAbilityComponent>();
-            component.AbilityId = "attack_light_converted";
+            component.AbilityId = AbilityId.AttackLight;
             component.AbilityName = "Light Attack (Converted)";
             component.AttackType = AttackAbilityType.LightMelee;
             
@@ -54,7 +54,7 @@ namespace Quantum
             if (heavyConfig == null) return null;
 
             var component = ScriptableObject.CreateInstance<AttackAbilityComponent>();
-            component.AbilityId = "attack_heavy_converted";
+            component.AbilityId = AbilityId.AttackHeavy;
             component.AbilityName = "Heavy Attack (Converted)";
             component.AttackType = AttackAbilityType.HeavyMelee;
             
@@ -80,7 +80,18 @@ namespace Quantum
             if (specialConfig == null) return null;
 
             var component = ScriptableObject.CreateInstance<SpecialAbilityComponent>();
-            component.AbilityId = $"special_{specialConfig.MoveId}";
+            
+            // Map legacy MoveId to the Special abilities range (300-399 in AbilityId enum)
+            // Using SpecialUltimate as the base value for clarity
+            // Clamp to ensure valid range (300-399)
+            int specialIdValue = (int)AbilityId.SpecialUltimate + specialConfig.MoveId;
+            if (specialIdValue > 399)
+            {
+                Log.Warn($"Special ability MoveId {specialConfig.MoveId} exceeds valid range, clamping to 399");
+                specialIdValue = 399;
+            }
+            component.AbilityId = (AbilityId)specialIdValue;
+            
             component.AbilityName = specialConfig.MoveName;
             component.SpecialType = SpecialAbilityType.Combo; // Default type
             
@@ -135,7 +146,7 @@ namespace Quantum
                 unlocks.Add(new AbilityUnlock
                 {
                     UnlockLevel = legacyConfig.DoubleJumpUnlockLevel,
-                    AbilityId = "movement_double_jump",
+                    AbilityId = AbilityId.MovementDoubleJump,
                     UnlockDescription = "Unlock Double Jump"
                 });
             }
@@ -145,7 +156,7 @@ namespace Quantum
                 unlocks.Add(new AbilityUnlock
                 {
                     UnlockLevel = legacyConfig.DashUnlockLevel,
-                    AbilityId = "movement_dash",
+                    AbilityId = AbilityId.MovementDash,
                     UnlockDescription = "Unlock Dash"
                 });
             }

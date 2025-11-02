@@ -37,7 +37,7 @@ namespace Quantum
         
         public MovementAbilityComponent()
         {
-            AbilityId = "movement_basic";
+            AbilityId = AbilityId.None;
             AbilityName = "Basic Movement";
             Priority = 10;
         }

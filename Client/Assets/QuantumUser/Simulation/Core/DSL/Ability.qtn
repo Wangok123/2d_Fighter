@@ -2,3 +2,34 @@ enum AbilityType
 {
     Block, Jump, Dash, Attack
 }
+
+// Ability identifier enum for all ability types
+// Organized by value ranges for different categories
+enum AbilityId
+{
+    None = 0,
+    
+    // Movement abilities (1-99)
+    MovementDoubleJump = 1,
+    MovementDash = 2,
+    MovementWallJump = 3,
+    MovementAirDash = 4,
+    MovementGlide = 5,
+    
+    // Attack abilities (100-199)
+    AttackLight = 100,
+    AttackHeavy = 101,
+    AttackRanged = 102,
+    AttackArea = 103,
+    
+    // Defense abilities (200-299)
+    DefenseBlock = 200,
+    DefenseParry = 201,
+    DefenseDodge = 202,
+    DefenseShield = 203,
+    
+    // Special abilities (300-399)
+    SpecialUltimate = 300,
+    SpecialTransformation = 301,
+    SpecialSummon = 302
+}
