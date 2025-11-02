@@ -58,6 +58,13 @@ namespace Quantum
         [Tooltip("Level-based ability unlocks")]
         public AbilityUnlock[] AbilityUnlocks;
         
+        [Header("Command Input Settings")]
+        [Tooltip("Time window for command input sequence")]
+        public FP CommandInputWindow = FP._0_50;
+        
+        [Tooltip("Maximum number of inputs to track")]
+        public int MaxInputBufferSize = 8;
+        
         [Header("Legacy Support")]
         [Tooltip("Legacy attack config for backward compatibility (optional)")]
         public AssetRef<CharacterAttackConfig> LegacyAttackConfig;

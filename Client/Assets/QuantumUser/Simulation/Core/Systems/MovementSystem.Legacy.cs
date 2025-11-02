@@ -1,3 +1,9 @@
+// DEPRECATED: This system has been replaced by signal-based systems:
+// - MovementInputSystem: Handles player input processing
+// - MovementExecutionSystem: Executes movement with KCC
+// - MovementUnlockSystem: Validates ability unlocks
+// This file is kept for backward compatibility but should not be used in new code.
+
 namespace Quantum
 {
     using Photon.Deterministic;
@@ -72,39 +78,14 @@ namespace Quantum
                 return null;
             }
             
-            // Try modular config first
+            // Get modular config
             var modularConfig = TryGetModularConfig(frame, ref filter);
             if (modularConfig != null)
             {
                 return GetModifiedSettingsFromModularConfig(frame, ref filter, modularConfig);
             }
             
-            // Fall back to legacy attack config
-            var attackConfig = frame.FindAsset(filter.AttackData->AttackConfig);
-            if (attackConfig == null)
-            {
-                return null;
-            }
-            
-            // Get base KCC config
-            var kccConfig = frame.FindAsset(filter.KCC->Config);
-            if (kccConfig == null)
-            {
-                return null;
-            }
-            
-            // Create modified settings
-            KCC2DSettings settings = default;
-            kccConfig.BaseSettings.Materialize(frame, ref settings);
-            
-            // Check double jump unlock
-            bool doubleJumpUnlocked = filter.Level->CurrentLevel >= attackConfig.DoubleJumpUnlockLevel;
-            if (!doubleJumpUnlocked)
-            {
-                settings.DoubleJumpEnabled = false;
-            }
-            
-            return settings;
+            return null;
         }
         
         private KCC2DSettings? GetModifiedSettingsFromModularConfig(Frame frame, ref Filter filter, ModularCharacterConfig modularConfig)
@@ -156,7 +137,7 @@ namespace Quantum
                 return input;
             }
             
-            // Try modular config first
+            // Get modular config
             var modularConfig = TryGetModularConfig(frame, ref filter);
             if (modularConfig != null)
             {
@@ -170,25 +151,6 @@ namespace Quantum
                 }
                 
                 return input;
-            }
-            
-            // Fall back to legacy attack config
-            var attackConfig = frame.FindAsset(filter.AttackData->AttackConfig);
-            if (attackConfig == null)
-            {
-                return input;
-            }
-            
-            // Check dash unlock
-            {
-                bool dashUnlocked = filter.Level->CurrentLevel >= attackConfig.DashUnlockLevel;
-            
-                // Filter dash input if not unlocked
-                if (!dashUnlocked && input.Dash.WasPressed)
-                {
-                    // Clear dash button state
-                    input.Dash = default;
-                }
             }
             
             return input;
