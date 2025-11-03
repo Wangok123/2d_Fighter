@@ -28,6 +28,12 @@ namespace Quantum
             }
 
             CharacterStatus* playerStatus = frame.Unsafe.GetPointer<CharacterStatus>(entityRef);
+            if (playerStatus->IsIncapacitated)
+            {
+                return false;
+            }
+            
+            
             AbilityInventory* abilityInventory = frame.Unsafe.GetPointer<AbilityInventory>(entityRef);
 
             if (abilityInventory->HasActiveAbility)
@@ -53,6 +59,94 @@ namespace Quantum
             playerMovementData.UpdateKCCSettings(frame, entityRef);
 
             return true;
+        }
+        
+        public AbilityState Update(Frame frame, EntityRef entityRef)
+        {
+            AbilityState state = new AbilityState();
+
+            InputBufferTimer.Tick(frame.DeltaTime);
+            CooldownTimer.Tick(frame.DeltaTime);
+
+            state.IsOnCooldown = IsOnCooldown;
+
+            if (IsDelayedOrActive)
+            {
+                CharacterStatus* playerStatus = frame.Unsafe.GetPointer<CharacterStatus>(entityRef);
+
+                if (playerStatus->IsIncapacitated)
+                {
+                    StopAbility(frame, entityRef);
+
+                    return state;
+                }
+
+                FP delayTimeLeft = DelayTimer.TimeLeft;
+
+                if (IsDelayed)
+                {
+                    DelayTimer.Tick(frame.DeltaTime);
+
+                    if (DelayTimer.IsRunning)
+                    {
+                        state.IsDelayed = true;
+                    }
+                    else
+                    {
+                        state.IsActiveStartTick = true;
+
+                        AbilityData abilityData = frame.FindAsset<AbilityData>(AbilityData.Id);
+
+                        DurationTimer.Start(abilityData.Duration);
+                        if (abilityData.StartCooldownAfterDelay)
+                        {
+                            CooldownTimer.Start(abilityData.Cooldown);
+                        }
+                    }
+                }
+
+                if (IsActive)
+                {
+                    state.IsActive = true;
+
+                    DurationTimer.Tick(frame.DeltaTime - delayTimeLeft);
+
+                    if (DurationTimer.IsDone)
+                    {
+                        state.IsActiveEndTick = true;
+
+                        StopAbility(frame, entityRef);
+                    }
+                }
+            }
+
+            return state;
+        }
+
+        public void BufferInput(Frame frame)
+        {
+            AbilityData abilityData = frame.FindAsset<AbilityData>(AbilityData.Id);
+
+            InputBufferTimer.Start(abilityData.InputBuffer);
+        }
+
+        public void StopAbility(Frame frame, EntityRef entityRef)
+        {
+            CharacterStatus* playerStatus = frame.Unsafe.GetPointer<CharacterStatus>(entityRef);
+            AbilityInventory* abilityInventory = frame.Unsafe.GetPointer<AbilityInventory>(entityRef);
+            PlayerMovementData playerMovementData = frame.FindAsset<PlayerMovementData>(playerStatus->PlayerMovementData.Id);
+
+            abilityInventory->ActiveAbilityInfo.ActiveAbilityType = AbilityType.None;
+
+            DelayTimer.Reset();
+            DurationTimer.Reset();
+
+            playerMovementData.UpdateKCCSettings(frame, entityRef);
+        }
+
+        public void ResetCooldown()
+        {
+            CooldownTimer.Reset();
         }
         
         private FPVector2 GetCastDirection(Frame frame, PlayerRef playerRef, AbilityData abilityData, EntityRef entity)

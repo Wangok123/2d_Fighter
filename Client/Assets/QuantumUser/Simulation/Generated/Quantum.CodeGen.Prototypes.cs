@@ -189,6 +189,7 @@ namespace Quantum.Prototypes {
     public AssetRef<PlayerMovementData> PlayerMovementData;
     public FP CurrentHealth;
     public QBoolean IsDead;
+    public QBoolean IsIncapacitated;
     public Quantum.Prototypes.FrameTimerPrototype RespawnTimer;
     public Quantum.Prototypes.FrameTimerPrototype RegenTimer;
     public Quantum.Prototypes.FrameTimerPrototype InvincibleTimer;
@@ -204,6 +205,7 @@ namespace Quantum.Prototypes {
         result.PlayerMovementData = this.PlayerMovementData;
         result.CurrentHealth = this.CurrentHealth;
         result.IsDead = this.IsDead;
+        result.IsIncapacitated = this.IsIncapacitated;
         this.RespawnTimer.Materialize(frame, ref result.RespawnTimer, in context);
         this.RegenTimer.Materialize(frame, ref result.RegenTimer, in context);
         this.InvincibleTimer.Materialize(frame, ref result.InvincibleTimer, in context);

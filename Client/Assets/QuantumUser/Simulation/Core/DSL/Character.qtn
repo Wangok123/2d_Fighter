@@ -10,7 +10,7 @@ component CharacterStatus
     
 	FP CurrentHealth;
 	Boolean IsDead;
-	
+	Boolean IsIncapacitated;
 	
 	FrameTimer RespawnTimer;
 	FrameTimer RegenTimer;

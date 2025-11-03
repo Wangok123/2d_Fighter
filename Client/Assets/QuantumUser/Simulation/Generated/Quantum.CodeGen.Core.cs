@@ -1503,6 +1503,8 @@ namespace Quantum {
     public FP CurrentHealth;
     [FieldOffset(0)]
     public QBoolean IsDead;
+    [FieldOffset(4)]
+    public QBoolean IsIncapacitated;
     [FieldOffset(56)]
     public FrameTimer RespawnTimer;
     [FieldOffset(48)]
@@ -1518,6 +1520,7 @@ namespace Quantum {
         hash = hash * 31 + PlayerMovementData.GetHashCode();
         hash = hash * 31 + CurrentHealth.GetHashCode();
         hash = hash * 31 + IsDead.GetHashCode();
+        hash = hash * 31 + IsIncapacitated.GetHashCode();
         hash = hash * 31 + RespawnTimer.GetHashCode();
         hash = hash * 31 + RegenTimer.GetHashCode();
         hash = hash * 31 + InvincibleTimer.GetHashCode();
@@ -1528,6 +1531,7 @@ namespace Quantum {
     public static void Serialize(void* ptr, FrameSerializer serializer) {
         var p = (CharacterStatus*)ptr;
         QBoolean.Serialize(&p->IsDead, serializer);
+        QBoolean.Serialize(&p->IsIncapacitated, serializer);
         AssetRef.Serialize(&p->PlayerMovementData, serializer);
         AssetRef.Serialize(&p->StatusData, serializer);
         FP.Serialize(&p->CurrentHealth, serializer);
