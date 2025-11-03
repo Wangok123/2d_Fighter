@@ -6,6 +6,8 @@ enum CharacterTeam
 component CharacterStatus
 {
     asset_ref<StatusData> StatusData;
+    asset_ref<PlayerMovementData> PlayerMovementData;
+    
 	FP CurrentHealth;
 	Boolean IsDead;
 	

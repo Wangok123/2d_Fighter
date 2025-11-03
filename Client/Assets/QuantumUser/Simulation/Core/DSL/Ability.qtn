@@ -1,6 +1,6 @@
 // Ability identifier enum for all ability types
 // Organized by value ranges for different categories
-enum AbilityId
+enum AbilityType
 {
     None = 0,
     
@@ -56,4 +56,32 @@ component AbilityEnable
      bool SpecialSummonEnabled;
 }
 
-signal CheckAbilityEnabled(AbilityId abilityId);
+component AbilityInventory
+{
+    [ExcludeFromPrototype] ActiveAbilityInfo ActiveAbilityInfo;
+        
+    dictionary<AbilityType, Ability> AbilitiesDic;
+}
+
+struct ActiveAbilityInfo
+{
+    [ExcludeFromPrototype] AbilityType ActiveAbilityType;
+
+    [ExcludeFromPrototype] FPVector2 CastDirection;
+    [ExcludeFromPrototype] FPQuaternion CastRotation;
+    [ExcludeFromPrototype] FPVector2 CastVelocity;
+}
+
+struct Ability
+{
+    [ExcludeFromPrototype] AbilityType AbilityType;
+
+    [ExcludeFromPrototype] CountdownTimer InputBufferTimer;
+    [ExcludeFromPrototype] CountdownTimer DelayTimer;
+    [ExcludeFromPrototype] CountdownTimer DurationTimer;
+    [ExcludeFromPrototype] CountdownTimer CooldownTimer;
+
+    asset_ref<AbilityData> AbilityData;
+}
+
+signal CheckAbilityEnabled(AbilityType abilityId);

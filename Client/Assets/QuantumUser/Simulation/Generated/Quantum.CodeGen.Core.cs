@@ -49,7 +49,7 @@ namespace Quantum {
   using RuntimeInitializeOnLoadMethodAttribute = UnityEngine.RuntimeInitializeOnLoadMethodAttribute;
   #endif //;
   
-  public enum AbilityId : int {
+  public enum AbilityType : int {
     None = 0,
     MovementDoubleJump = 1,
     MovementDash = 2,
@@ -581,6 +581,83 @@ namespace Quantum {
     public static void Serialize(void* ptr, FrameSerializer serializer) {
         var p = (BitSet6*)ptr;
         serializer.Stream.SerializeBuffer(&p->Bits[0], 1);
+    }
+  }
+  [StructLayout(LayoutKind.Explicit)]
+  public unsafe partial struct Ability {
+    public const Int32 SIZE = 80;
+    public const Int32 ALIGNMENT = 8;
+    [FieldOffset(0)]
+    [ExcludeFromPrototype()]
+    public AbilityType AbilityType;
+    [FieldOffset(64)]
+    [ExcludeFromPrototype()]
+    public CountdownTimer InputBufferTimer;
+    [FieldOffset(32)]
+    [ExcludeFromPrototype()]
+    public CountdownTimer DelayTimer;
+    [FieldOffset(48)]
+    [ExcludeFromPrototype()]
+    public CountdownTimer DurationTimer;
+    [FieldOffset(16)]
+    [ExcludeFromPrototype()]
+    public CountdownTimer CooldownTimer;
+    [FieldOffset(8)]
+    public AssetRef<AbilityData> AbilityData;
+    public override readonly Int32 GetHashCode() {
+      unchecked { 
+        var hash = 6343;
+        hash = hash * 31 + (Int32)AbilityType;
+        hash = hash * 31 + InputBufferTimer.GetHashCode();
+        hash = hash * 31 + DelayTimer.GetHashCode();
+        hash = hash * 31 + DurationTimer.GetHashCode();
+        hash = hash * 31 + CooldownTimer.GetHashCode();
+        hash = hash * 31 + AbilityData.GetHashCode();
+        return hash;
+      }
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+        var p = (Ability*)ptr;
+        serializer.Stream.Serialize((Int32*)&p->AbilityType);
+        AssetRef.Serialize(&p->AbilityData, serializer);
+        Quantum.CountdownTimer.Serialize(&p->CooldownTimer, serializer);
+        Quantum.CountdownTimer.Serialize(&p->DelayTimer, serializer);
+        Quantum.CountdownTimer.Serialize(&p->DurationTimer, serializer);
+        Quantum.CountdownTimer.Serialize(&p->InputBufferTimer, serializer);
+    }
+  }
+  [StructLayout(LayoutKind.Explicit)]
+  public unsafe partial struct ActiveAbilityInfo {
+    public const Int32 SIZE = 72;
+    public const Int32 ALIGNMENT = 8;
+    [FieldOffset(0)]
+    [ExcludeFromPrototype()]
+    public AbilityType ActiveAbilityType;
+    [FieldOffset(8)]
+    [ExcludeFromPrototype()]
+    public FPVector2 CastDirection;
+    [FieldOffset(40)]
+    [ExcludeFromPrototype()]
+    public FPQuaternion CastRotation;
+    [FieldOffset(24)]
+    [ExcludeFromPrototype()]
+    public FPVector2 CastVelocity;
+    public override readonly Int32 GetHashCode() {
+      unchecked { 
+        var hash = 2017;
+        hash = hash * 31 + (Int32)ActiveAbilityType;
+        hash = hash * 31 + CastDirection.GetHashCode();
+        hash = hash * 31 + CastRotation.GetHashCode();
+        hash = hash * 31 + CastVelocity.GetHashCode();
+        return hash;
+      }
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+        var p = (ActiveAbilityInfo*)ptr;
+        serializer.Stream.Serialize((Int32*)&p->ActiveAbilityType);
+        FPVector2.Serialize(&p->CastDirection, serializer);
+        FPVector2.Serialize(&p->CastVelocity, serializer);
+        FPQuaternion.Serialize(&p->CastRotation, serializer);
     }
   }
   [StructLayout(LayoutKind.Explicit)]
@@ -1319,6 +1396,36 @@ namespace Quantum {
     }
   }
   [StructLayout(LayoutKind.Explicit)]
+  public unsafe partial struct AbilityInventory : Quantum.IComponent {
+    public const Int32 SIZE = 80;
+    public const Int32 ALIGNMENT = 8;
+    [FieldOffset(8)]
+    [ExcludeFromPrototype()]
+    public ActiveAbilityInfo ActiveAbilityInfo;
+    [FieldOffset(0)]
+    public QDictionaryPtr<AbilityType, Ability> AbilitiesDic;
+    public override readonly Int32 GetHashCode() {
+      unchecked { 
+        var hash = 13523;
+        hash = hash * 31 + ActiveAbilityInfo.GetHashCode();
+        hash = hash * 31 + AbilitiesDic.GetHashCode();
+        return hash;
+      }
+    }
+    public void ClearPointers(FrameBase f, EntityRef entity) {
+      AbilitiesDic = default;
+    }
+    public static void OnRemoved(FrameBase frame, EntityRef entity, void* ptr) {
+      var p = (Quantum.AbilityInventory*)ptr;
+      p->ClearPointers((Frame)frame, entity);
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+        var p = (AbilityInventory*)ptr;
+        QDictionary.Serialize(&p->AbilitiesDic, serializer, Statics.SerializeAbilityType, Statics.SerializeAbility);
+        Quantum.ActiveAbilityInfo.Serialize(&p->ActiveAbilityInfo, serializer);
+    }
+  }
+  [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct AttackData : Quantum.IComponent {
     public const Int32 SIZE = 48;
     public const Int32 ALIGNMENT = 8;
@@ -1386,26 +1493,29 @@ namespace Quantum {
   }
   [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct CharacterStatus : Quantum.IComponent {
-    public const Int32 SIZE = 56;
+    public const Int32 SIZE = 64;
     public const Int32 ALIGNMENT = 8;
-    [FieldOffset(8)]
-    public AssetRef<StatusData> StatusData;
     [FieldOffset(16)]
+    public AssetRef<StatusData> StatusData;
+    [FieldOffset(8)]
+    public AssetRef<PlayerMovementData> PlayerMovementData;
+    [FieldOffset(24)]
     public FP CurrentHealth;
     [FieldOffset(0)]
     public QBoolean IsDead;
-    [FieldOffset(48)]
+    [FieldOffset(56)]
     public FrameTimer RespawnTimer;
-    [FieldOffset(40)]
+    [FieldOffset(48)]
     public FrameTimer RegenTimer;
-    [FieldOffset(32)]
+    [FieldOffset(40)]
     public FrameTimer InvincibleTimer;
-    [FieldOffset(24)]
+    [FieldOffset(32)]
     public FrameTimer DisconnectedTimer;
     public override readonly Int32 GetHashCode() {
       unchecked { 
         var hash = 14551;
         hash = hash * 31 + StatusData.GetHashCode();
+        hash = hash * 31 + PlayerMovementData.GetHashCode();
         hash = hash * 31 + CurrentHealth.GetHashCode();
         hash = hash * 31 + IsDead.GetHashCode();
         hash = hash * 31 + RespawnTimer.GetHashCode();
@@ -1418,6 +1528,7 @@ namespace Quantum {
     public static void Serialize(void* ptr, FrameSerializer serializer) {
         var p = (CharacterStatus*)ptr;
         QBoolean.Serialize(&p->IsDead, serializer);
+        AssetRef.Serialize(&p->PlayerMovementData, serializer);
         AssetRef.Serialize(&p->StatusData, serializer);
         FP.Serialize(&p->CurrentHealth, serializer);
         FrameTimer.Serialize(&p->DisconnectedTimer, serializer);
@@ -1593,7 +1704,7 @@ namespace Quantum {
     }
   }
   public unsafe partial interface ISignalCheckAbilityEnabled : ISignal {
-    void CheckAbilityEnabled(Frame f, AbilityId abilityId);
+    void CheckAbilityEnabled(Frame f, AbilityType abilityId);
   }
   public unsafe partial interface ISignalOnClearInputBuffer : ISignal {
     void OnClearInputBuffer(Frame f, EntityRef playerEntityRef);
@@ -1645,6 +1756,8 @@ namespace Quantum {
       _ComponentSignalsOnRemoved = new ComponentReactiveCallbackInvoker[ComponentTypeId.Type.Length];
       BuildSignalsArrayOnComponentAdded<Quantum.AbilityEnable>();
       BuildSignalsArrayOnComponentRemoved<Quantum.AbilityEnable>();
+      BuildSignalsArrayOnComponentAdded<Quantum.AbilityInventory>();
+      BuildSignalsArrayOnComponentRemoved<Quantum.AbilityInventory>();
       BuildSignalsArrayOnComponentAdded<Quantum.AttackData>();
       BuildSignalsArrayOnComponentRemoved<Quantum.AttackData>();
       BuildSignalsArrayOnComponentAdded<CharacterController2D>();
@@ -1731,7 +1844,7 @@ namespace Quantum {
       Physics3D?.Init(_globals->PhysicsState3D.MapStaticCollidersState.TrackedMap);
     }
     public unsafe partial struct FrameSignals {
-      public void CheckAbilityEnabled(AbilityId abilityId) {
+      public void CheckAbilityEnabled(AbilityType abilityId) {
         var array = _f._ISignalCheckAbilityEnabledSystems;
         for (Int32 i = 0; i < array.Length; ++i) {
           var s = array[i];
@@ -1797,13 +1910,20 @@ namespace Quantum {
     }
   }
   public unsafe partial class Statics {
+    public static FrameSerializer.Delegate SerializeAbilityType;
+    public static FrameSerializer.Delegate SerializeAbility;
     public static FrameSerializer.Delegate SerializeInput;
     static partial void InitStaticDelegatesGen() {
+      SerializeAbilityType = (v, s) => {{ s.Stream.Serialize((Int32*)v); }};
+      SerializeAbility = Quantum.Ability.Serialize;
       SerializeInput = Quantum.Input.Serialize;
     }
     static partial void RegisterSimulationTypesGen(TypeRegistry typeRegistry) {
+      typeRegistry.Register(typeof(Quantum.Ability), Quantum.Ability.SIZE);
       typeRegistry.Register(typeof(Quantum.AbilityEnable), Quantum.AbilityEnable.SIZE);
-      typeRegistry.Register(typeof(Quantum.AbilityId), 4);
+      typeRegistry.Register(typeof(Quantum.AbilityInventory), Quantum.AbilityInventory.SIZE);
+      typeRegistry.Register(typeof(Quantum.AbilityType), 4);
+      typeRegistry.Register(typeof(Quantum.ActiveAbilityInfo), Quantum.ActiveAbilityInfo.SIZE);
       typeRegistry.Register(typeof(AssetGuid), AssetGuid.SIZE);
       typeRegistry.Register(typeof(AssetRef), AssetRef.SIZE);
       typeRegistry.Register(typeof(Quantum.AttackData), Quantum.AttackData.SIZE);
@@ -1909,9 +2029,10 @@ namespace Quantum {
       typeRegistry.Register(typeof(Quantum._globals_), Quantum._globals_.SIZE);
     }
     static partial void InitComponentTypeIdGen() {
-      ComponentTypeId.Reset(ComponentTypeId.BuiltInComponentCount + 9)
+      ComponentTypeId.Reset(ComponentTypeId.BuiltInComponentCount + 10)
         .AddBuiltInComponents()
         .Add<Quantum.AbilityEnable>(Quantum.AbilityEnable.Serialize, null, null, ComponentFlags.None)
+        .Add<Quantum.AbilityInventory>(Quantum.AbilityInventory.Serialize, null, Quantum.AbilityInventory.OnRemoved, ComponentFlags.None)
         .Add<Quantum.AttackData>(Quantum.AttackData.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.CharacterLevel>(Quantum.CharacterLevel.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.CharacterStatus>(Quantum.CharacterStatus.Serialize, null, null, ComponentFlags.None)
@@ -1925,7 +2046,7 @@ namespace Quantum {
     [Preserve()]
     public static void EnsureNotStrippedGen() {
       FramePrinter.EnsureNotStripped();
-      FramePrinter.EnsurePrimitiveNotStripped<Quantum.AbilityId>();
+      FramePrinter.EnsurePrimitiveNotStripped<Quantum.AbilityType>();
       FramePrinter.EnsurePrimitiveNotStripped<CallbackFlags>();
       FramePrinter.EnsurePrimitiveNotStripped<Quantum.CharacterTeam>();
       FramePrinter.EnsurePrimitiveNotStripped<Quantum.CommandInput>();

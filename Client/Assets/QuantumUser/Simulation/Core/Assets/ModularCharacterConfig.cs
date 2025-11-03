@@ -64,10 +64,6 @@ namespace Quantum
         
         [Tooltip("Maximum number of inputs to track for command sequences")]
         public int MaxInputBufferSize = 8; // Standard fighting game buffer size
-        
-        [Header("Legacy Support")]
-        [Tooltip("Legacy attack config for backward compatibility (optional)")]
-        public AssetRef<CharacterAttackConfig> LegacyAttackConfig;
     }
     
     /// <summary>
@@ -105,7 +101,7 @@ namespace Quantum
         public int UnlockLevel;
         
         [Tooltip("Ability ID that gets unlocked")]
-        public AbilityId AbilityId;
+        public AbilityType AbilityType;
         
         [Tooltip("Description of what unlocks")]
         public string UnlockDescription;

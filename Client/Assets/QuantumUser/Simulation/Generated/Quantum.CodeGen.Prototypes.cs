@@ -50,6 +50,22 @@ namespace Quantum.Prototypes {
   #endif //;
   
   [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(System.Collections.Generic.KeyValuePair<AbilityType, Ability>))]
+  public unsafe class DictionaryEntry_AbilityType_Ability : Quantum.Prototypes.DictionaryEntry {
+    public Quantum.QEnum32<AbilityType> Key;
+    public Quantum.Prototypes.AbilityPrototype Value;
+  }
+  [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.Ability))]
+  public unsafe partial class AbilityPrototype : StructPrototype {
+    public AssetRef<AbilityData> AbilityData;
+    partial void MaterializeUser(Frame frame, ref Quantum.Ability result, in PrototypeMaterializationContext context);
+    public void Materialize(Frame frame, ref Quantum.Ability result, in PrototypeMaterializationContext context = default) {
+        result.AbilityData = this.AbilityData;
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.AbilityEnable))]
   public unsafe partial class AbilityEnablePrototype : ComponentPrototype<Quantum.AbilityEnable> {
     public QBoolean MovementDoubleJumpEnabled;
@@ -99,6 +115,44 @@ namespace Quantum.Prototypes {
     }
   }
   [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.AbilityInventory))]
+  public unsafe partial class AbilityInventoryPrototype : ComponentPrototype<Quantum.AbilityInventory> {
+    [DictionaryAttribute()]
+    [DynamicCollectionAttribute()]
+    public DictionaryEntry_AbilityType_Ability[] AbilitiesDic = {};
+    partial void MaterializeUser(Frame frame, ref Quantum.AbilityInventory result, in PrototypeMaterializationContext context);
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+        Quantum.AbilityInventory component = default;
+        Materialize((Frame)f, ref component, in context);
+        return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref Quantum.AbilityInventory result, in PrototypeMaterializationContext context = default) {
+        if (this.AbilitiesDic.Length == 0) {
+          result.AbilitiesDic = default;
+        } else {
+          var dict = frame.AllocateDictionary(out result.AbilitiesDic, this.AbilitiesDic.Length);
+          for (int i = 0; i < this.AbilitiesDic.Length; ++i) {
+            Quantum.AbilityType tmpKey = default;
+            Quantum.Ability tmpValue = default;
+            tmpKey = this.AbilitiesDic[i].Key;
+            this.AbilitiesDic[i].Value.Materialize(frame, ref tmpValue, in context);
+            PrototypeValidator.AddToDictionary(dict, tmpKey, tmpValue, in context);
+          }
+        }
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.ActiveAbilityInfo))]
+  public unsafe partial class ActiveAbilityInfoPrototype : StructPrototype {
+    [HideInInspector()]
+    public Int32 _empty_prototype_dummy_field_;
+    partial void MaterializeUser(Frame frame, ref Quantum.ActiveAbilityInfo result, in PrototypeMaterializationContext context);
+    public void Materialize(Frame frame, ref Quantum.ActiveAbilityInfo result, in PrototypeMaterializationContext context = default) {
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.AttackData))]
   public unsafe partial class AttackDataPrototype : ComponentPrototype<Quantum.AttackData> {
     public AssetRef<ModularCharacterConfig> ModularConfig;
@@ -132,6 +186,7 @@ namespace Quantum.Prototypes {
   [Quantum.Prototypes.Prototype(typeof(Quantum.CharacterStatus))]
   public unsafe partial class CharacterStatusPrototype : ComponentPrototype<Quantum.CharacterStatus> {
     public AssetRef<StatusData> StatusData;
+    public AssetRef<PlayerMovementData> PlayerMovementData;
     public FP CurrentHealth;
     public QBoolean IsDead;
     public Quantum.Prototypes.FrameTimerPrototype RespawnTimer;
@@ -146,6 +201,7 @@ namespace Quantum.Prototypes {
     }
     public void Materialize(Frame frame, ref Quantum.CharacterStatus result, in PrototypeMaterializationContext context = default) {
         result.StatusData = this.StatusData;
+        result.PlayerMovementData = this.PlayerMovementData;
         result.CurrentHealth = this.CurrentHealth;
         result.IsDead = this.IsDead;
         this.RespawnTimer.Materialize(frame, ref result.RespawnTimer, in context);
