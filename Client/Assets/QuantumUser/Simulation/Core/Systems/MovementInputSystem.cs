@@ -16,8 +16,7 @@ namespace Quantum
             public CharacterStatus* Status;
             public MovementData* MovementData;
             public KCC2D* KCC;
-            public CharacterLevel* Level;
-            public AttackData* AttackData;
+            public AbilityEnable* AbilityEnabled;
         }
 
         public override void Update(Frame frame, ref Filter filter)
@@ -32,102 +31,11 @@ namespace Quantum
 
             var config = frame.FindAsset(filter.KCC->Config);
             filter.KCC->Input = input;
-            config.Move(frame, filter.Entity, filter.Transform, filter.KCC);
+            config.MoveWithAbility(frame, filter.Entity, filter.Transform, filter.KCC, filter.AbilityEnabled);
 
             UpdateIsFacingRight(input, filter.MovementData);
         }
-
-        private KCC2DSettings? GetModifiedSettingsByUnlocks(Frame frame, ref Filter filter)
-        {
-            // If no level or attack data, use default settings
-            if (filter.Level == null || filter.AttackData == null)
-            {
-                return null;
-            }
-
-            // Get modular config
-            if (!filter.AttackData->ModularConfig.Id.IsValid)
-            {
-                return null;
-            }
-
-            var modularConfig = frame.FindAsset(filter.AttackData->ModularConfig);
-            if (modularConfig == null)
-            {
-                return null;
-            }
-
-            // Get base KCC config
-            var kccConfig = frame.FindAsset(filter.KCC->Config);
-            if (kccConfig == null)
-            {
-                return null;
-            }
-
-            // Create modified settings
-            KCC2DSettings settings = default;
-            kccConfig.BaseSettings.Materialize(frame, ref settings);
-
-            // Check if double jump ability is unlocked based on modular config 
-            bool doubleJumpUnlocked = IsAbilityUnlocked(filter.Level, modularConfig, AbilityId.MovementDoubleJump);
-            if (!doubleJumpUnlocked)
-            {
-                settings.DoubleJumpEnabled = false;
-            }
-
-            return settings;
-        }
-
-        private bool IsAbilityUnlocked(CharacterLevel* level, ModularCharacterConfig config, AbilityId abilityId)
-        {
-            if (config.AbilityUnlocks == null || config.AbilityUnlocks.Length == 0)
-            {
-                return true; // No unlock system, all abilities available
-            }
-
-            foreach (var unlock in config.AbilityUnlocks)
-            {
-                if (unlock.AbilityId == abilityId)
-                {
-                    return level->CurrentLevel >= unlock.UnlockLevel;
-                }
-            }
-
-            return true; // Ability not in unlock list, assume unlocked
-        }
-
-        private SimpleInput2D FilterInputByUnlocks(Frame frame, ref Filter filter, SimpleInput2D input)
-        {
-            // If no level or attack data, allow all inputs
-            if (filter.Level == null || filter.AttackData == null)
-            {
-                return input;
-            }
-
-            // Get modular config
-            if (!filter.AttackData->ModularConfig.Id.IsValid)
-            {
-                return input;
-            }
-
-            var modularConfig = frame.FindAsset(filter.AttackData->ModularConfig);
-            if (modularConfig == null)
-            {
-                return input;
-            }
-
-            // Check dash unlock
-            bool dashUnlocked = IsAbilityUnlocked(filter.Level, modularConfig, AbilityId.MovementDash);
-
-            // Filter dash input if not unlocked
-            if (!dashUnlocked && input.Dash.WasPressed)
-            {
-                input.Dash = default;
-            }
-
-            return input;
-        }
-
+        
         private void UpdateIsFacingRight(SimpleInput2D input, MovementData* movementData)
         {
             bool noInput = !input.Left.IsDown && !input.Right.IsDown;

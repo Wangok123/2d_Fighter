@@ -10,6 +10,8 @@ enum AbilityId
     MovementWallJump = 3,
     MovementAirDash = 4,
     MovementGlide = 5,
+    Movement = 6,
+    MovementJump = 7,
     
     // Attack abilities (100-199)
     AttackLight = 100,
@@ -36,14 +38,19 @@ component AbilityEnable
      bool MovementWallJumpEnabled;
      bool MovementAirDashEnabled;
      bool MovementGlideEnabled;
+     bool MovementEnabled;
+     bool MovementJumpEnabled;
+     
      bool AttackLightEnabled;
      bool AttackHeavyEnabled;
      bool AttackRangedEnabled;
      bool AttackAreaEnabled;
+     
      bool DefenseBlockEnabled;
      bool DefenseParryEnabled;
      bool DefenseDodgeEnabled;
      bool DefenseShieldEnabled;
+     
      bool SpecialUltimateEnabled;
      bool SpecialTransformationEnabled;
      bool SpecialSummonEnabled;

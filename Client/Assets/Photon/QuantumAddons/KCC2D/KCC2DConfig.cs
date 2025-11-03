@@ -15,6 +15,7 @@ namespace Quantum
       public Transform2D* Transform;
       public KCC2D* KCC;
       public KCC2DSettings Settings;
+      public AbilityEnable* AbilityEnable;
     }
     
     [Space(5)][Header("KCC Default Settings")]
@@ -71,6 +72,12 @@ namespace Quantum
 
     public void Move(Frame frame, EntityRef e, Transform2D* transform, KCC2D* KCC)
     {
+      Move(frame, e, transform, KCC, null);
+    }
+    
+    public void MoveWithAbility(Frame frame, EntityRef e, Transform2D* transform, KCC2D* KCC, AbilityEnable* enable)
+    {
+      _context.AbilityEnable = enable;
       Move(frame, e, transform, KCC, null);
     }
 
@@ -161,6 +168,12 @@ namespace Quantum
 
     private void ProcessDash()
     {
+      bool dashEnabled = _context.AbilityEnable->MovementDashEnabled;
+      if (!dashEnabled)
+      {
+        return;
+      }
+      
       if (_context.KCC->State == KCCState.DASHING) return;
 
       if (_context.KCC->Closest.ContactType == KCCContactType.WALL)
@@ -188,6 +201,9 @@ namespace Quantum
 
     private void ProcessJump()
     {
+      bool jumpEnabled = _context.AbilityEnable->MovementJumpEnabled;
+      bool doubleJumpEnabled = _context.AbilityEnable->MovementDoubleJumpEnabled;
+      
       var prematureJump = _context.KCC->GroundedJumpTimer.IsRunning(_context.Frame);
       if (_context.KCC->Input.Jump.WasPressed || prematureJump)
       {
@@ -195,12 +211,16 @@ namespace Quantum
         switch (_context.KCC->State)
         {
           case KCCState.GROUNDED:
+            if (!jumpEnabled)
+            {
+              break;
+            }
             _context.KCC->Jump(_context.Frame, _context.Entity, impulse);
             _context.Frame.Events.Jumped(_context.Entity, KCCState.JUMPED, KCCState.GROUNDED, impulse);
             _context.KCC->SetState(_context.Frame, KCCState.JUMPED);
             break;
           case KCCState.JUMPED:
-            if (_context.Settings.DoubleJumpEnabled)
+            if (_context.Settings.DoubleJumpEnabled && doubleJumpEnabled)
             {
               impulse = new FPVector2(_context.KCC->KinematicHorizontalSpeed, _context.Settings.DoubleJumpImpulse);
 
@@ -211,6 +231,11 @@ namespace Quantum
             else if (_context.KCC->Input.Jump.WasPressed) _context.KCC->GroundedJumpTimer = FrameTimer.FromSeconds(_context.Frame, _context.Settings.InputBufferTime);
             break;
           case KCCState.WALLED:
+            if (!jumpEnabled)
+            {
+              break;
+            }
+            
             FP wallContactDirection = _context.KCC->Closest.Contact.Normal.X > 0 ? 1 : -1;
             impulse = _context.Settings.WallJumpImpulse;
             impulse.X *= wallContactDirection;
@@ -219,7 +244,7 @@ namespace Quantum
             _context.KCC->SetState(_context.Frame, KCCState.JUMPED);
             break;
           case KCCState.FREE_FALLING:
-            if (_context.Settings.DoubleJumpEnabled && _context.Settings.DoubleJumpWhenFreeFalling)
+            if (_context.Settings.DoubleJumpEnabled && _context.Settings.DoubleJumpWhenFreeFalling && doubleJumpEnabled)
             {
               impulse = new FPVector2(_context.KCC->KinematicHorizontalSpeed, _context.Settings.DoubleJumpImpulse);
               
@@ -461,12 +486,17 @@ namespace Quantum
 
     private void IntegrateForces()
     {
-      var sideMovement = SideMovement();
+      bool movementEnabled = _context.AbilityEnable->MovementEnabled;
 
-      Accelerate(sideMovement);
+      FP sideMovement = 0;
+      if (movementEnabled)
+      {
+        sideMovement = SideMovement();
+        Accelerate(sideMovement);
+      }
 
       // drag
-      if (sideMovement == 0)
+      if (sideMovement == 0 && movementEnabled)
       {
         if (_context.KCC->State == KCCState.GROUNDED)
         {

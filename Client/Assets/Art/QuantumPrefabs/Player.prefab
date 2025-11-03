@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 4225920870206189311}
   - component: {fileID: 8595205649062271519}
   - component: {fileID: 8665276627128132852}
+  - component: {fileID: 7037740535014558776}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -416,6 +417,55 @@ MonoBehaviour:
       Frames: 0
       Seconds:
         RawValue: 0
+--- !u!114 &7037740535014558776
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 747601124680124256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89d353e2181430f4db8b88aa91bba96b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Prototype:
+    MovementDoubleJumpEnabled:
+      Value: 0
+    MovementDashEnabled:
+      Value: 0
+    MovementWallJumpEnabled:
+      Value: 0
+    MovementAirDashEnabled:
+      Value: 0
+    MovementGlideEnabled:
+      Value: 0
+    MovementEnabled:
+      Value: 1
+    MovementJumpEnabled:
+      Value: 1
+    AttackLightEnabled:
+      Value: 0
+    AttackHeavyEnabled:
+      Value: 0
+    AttackRangedEnabled:
+      Value: 0
+    AttackAreaEnabled:
+      Value: 0
+    DefenseBlockEnabled:
+      Value: 0
+    DefenseParryEnabled:
+      Value: 0
+    DefenseDodgeEnabled:
+      Value: 0
+    DefenseShieldEnabled:
+      Value: 0
+    SpecialUltimateEnabled:
+      Value: 0
+    SpecialTransformationEnabled:
+      Value: 0
+    SpecialSummonEnabled:
+      Value: 0
 --- !u!1 &4774830198564325150
 GameObject:
   m_ObjectHideFlags: 0

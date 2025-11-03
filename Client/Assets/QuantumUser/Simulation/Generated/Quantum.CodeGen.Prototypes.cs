@@ -57,6 +57,8 @@ namespace Quantum.Prototypes {
     public QBoolean MovementWallJumpEnabled;
     public QBoolean MovementAirDashEnabled;
     public QBoolean MovementGlideEnabled;
+    public QBoolean MovementEnabled;
+    public QBoolean MovementJumpEnabled;
     public QBoolean AttackLightEnabled;
     public QBoolean AttackHeavyEnabled;
     public QBoolean AttackRangedEnabled;
@@ -80,6 +82,8 @@ namespace Quantum.Prototypes {
         result.MovementWallJumpEnabled = this.MovementWallJumpEnabled;
         result.MovementAirDashEnabled = this.MovementAirDashEnabled;
         result.MovementGlideEnabled = this.MovementGlideEnabled;
+        result.MovementEnabled = this.MovementEnabled;
+        result.MovementJumpEnabled = this.MovementJumpEnabled;
         result.AttackLightEnabled = this.AttackLightEnabled;
         result.AttackHeavyEnabled = this.AttackHeavyEnabled;
         result.AttackRangedEnabled = this.AttackRangedEnabled;

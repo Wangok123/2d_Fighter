@@ -56,6 +56,8 @@ namespace Quantum {
     MovementWallJump = 3,
     MovementAirDash = 4,
     MovementGlide = 5,
+    Movement = 6,
+    MovementJump = 7,
     AttackLight = 100,
     AttackHeavy = 101,
     AttackRanged = 102,
@@ -1232,18 +1234,22 @@ namespace Quantum {
   }
   [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct AbilityEnable : Quantum.IComponent {
-    public const Int32 SIZE = 64;
+    public const Int32 SIZE = 72;
     public const Int32 ALIGNMENT = 4;
     [FieldOffset(40)]
     public QBoolean MovementDoubleJumpEnabled;
     [FieldOffset(36)]
     public QBoolean MovementDashEnabled;
-    [FieldOffset(48)]
+    [FieldOffset(56)]
     public QBoolean MovementWallJumpEnabled;
     [FieldOffset(32)]
     public QBoolean MovementAirDashEnabled;
-    [FieldOffset(44)]
+    [FieldOffset(48)]
     public QBoolean MovementGlideEnabled;
+    [FieldOffset(44)]
+    public QBoolean MovementEnabled;
+    [FieldOffset(52)]
+    public QBoolean MovementJumpEnabled;
     [FieldOffset(8)]
     public QBoolean AttackLightEnabled;
     [FieldOffset(4)]
@@ -1260,11 +1266,11 @@ namespace Quantum {
     public QBoolean DefenseDodgeEnabled;
     [FieldOffset(28)]
     public QBoolean DefenseShieldEnabled;
-    [FieldOffset(60)]
+    [FieldOffset(68)]
     public QBoolean SpecialUltimateEnabled;
-    [FieldOffset(56)]
+    [FieldOffset(64)]
     public QBoolean SpecialTransformationEnabled;
-    [FieldOffset(52)]
+    [FieldOffset(60)]
     public QBoolean SpecialSummonEnabled;
     public override readonly Int32 GetHashCode() {
       unchecked { 
@@ -1274,6 +1280,8 @@ namespace Quantum {
         hash = hash * 31 + MovementWallJumpEnabled.GetHashCode();
         hash = hash * 31 + MovementAirDashEnabled.GetHashCode();
         hash = hash * 31 + MovementGlideEnabled.GetHashCode();
+        hash = hash * 31 + MovementEnabled.GetHashCode();
+        hash = hash * 31 + MovementJumpEnabled.GetHashCode();
         hash = hash * 31 + AttackLightEnabled.GetHashCode();
         hash = hash * 31 + AttackHeavyEnabled.GetHashCode();
         hash = hash * 31 + AttackRangedEnabled.GetHashCode();
@@ -1301,7 +1309,9 @@ namespace Quantum {
         QBoolean.Serialize(&p->MovementAirDashEnabled, serializer);
         QBoolean.Serialize(&p->MovementDashEnabled, serializer);
         QBoolean.Serialize(&p->MovementDoubleJumpEnabled, serializer);
+        QBoolean.Serialize(&p->MovementEnabled, serializer);
         QBoolean.Serialize(&p->MovementGlideEnabled, serializer);
+        QBoolean.Serialize(&p->MovementJumpEnabled, serializer);
         QBoolean.Serialize(&p->MovementWallJumpEnabled, serializer);
         QBoolean.Serialize(&p->SpecialSummonEnabled, serializer);
         QBoolean.Serialize(&p->SpecialTransformationEnabled, serializer);
