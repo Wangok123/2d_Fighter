@@ -117,6 +117,7 @@ namespace Quantum.Prototypes {
   [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.AbilityInventory))]
   public unsafe partial class AbilityInventoryPrototype : ComponentPrototype<Quantum.AbilityInventory> {
+    [FreeOnComponentRemoved()]
     [DictionaryAttribute()]
     [DynamicCollectionAttribute()]
     public DictionaryEntry_AbilityType_Ability[] AbilitiesDic = {};
@@ -420,6 +421,16 @@ namespace Quantum.Prototypes {
     }
   }
   [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.KnockbackStatusEffect))]
+  public unsafe partial class KnockbackStatusEffectPrototype : StructPrototype {
+    public AssetRef<KnockbackStatusEffectData> StatusEffectData;
+    partial void MaterializeUser(Frame frame, ref Quantum.KnockbackStatusEffect result, in PrototypeMaterializationContext context);
+    public void Materialize(Frame frame, ref Quantum.KnockbackStatusEffect result, in PrototypeMaterializationContext context = default) {
+        result.StatusEffectData = this.StatusEffectData;
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.MovementData))]
   public unsafe partial class MovementDataPrototype : ComponentPrototype<Quantum.MovementData> {
     [HideInInspector()]
@@ -565,6 +576,28 @@ namespace Quantum.Prototypes {
         result.SequenceLength = this.SequenceLength;
         result.MoveId = this.MoveId;
         result.Damage = this.Damage;
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.StatusEffect))]
+  public unsafe partial class StatusEffectPrototype : StructPrototype {
+    [HideInInspector()]
+    public Int32 _empty_prototype_dummy_field_;
+    partial void MaterializeUser(Frame frame, ref Quantum.StatusEffect result, in PrototypeMaterializationContext context);
+    public void Materialize(Frame frame, ref Quantum.StatusEffect result, in PrototypeMaterializationContext context = default) {
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.StatusEffectConfig))]
+  public unsafe partial class StatusEffectConfigPrototype : StructPrototype {
+    public Quantum.QEnum32<StatusEffectType> Type;
+    public FP Duration;
+    partial void MaterializeUser(Frame frame, ref Quantum.StatusEffectConfig result, in PrototypeMaterializationContext context);
+    public void Materialize(Frame frame, ref Quantum.StatusEffectConfig result, in PrototypeMaterializationContext context = default) {
+        result.Type = this.Type;
+        result.Duration = this.Duration;
         MaterializeUser(frame, ref result, in context);
     }
   }

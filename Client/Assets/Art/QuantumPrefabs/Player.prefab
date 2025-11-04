@@ -18,6 +18,7 @@ GameObject:
   - component: {fileID: 8595205649062271519}
   - component: {fileID: 8665276627128132852}
   - component: {fileID: 7037740535014558776}
+  - component: {fileID: 4042427979017233580}
   m_Layer: 0
   m_Name: Player
   m_TagString: Untagged
@@ -392,10 +393,15 @@ MonoBehaviour:
   Prototype:
     StatusData:
       Id:
-        Value: 0
+        Value: 336468280525922348
+    PlayerMovementData:
+      Id:
+        Value: 485897725668651356
     CurrentHealth:
       RawValue: 0
     IsDead:
+      Value: 0
+    IsIncapacitated:
       Value: 0
     RespawnTimer:
       Mode: 0
@@ -433,7 +439,7 @@ MonoBehaviour:
     MovementDoubleJumpEnabled:
       Value: 0
     MovementDashEnabled:
-      Value: 0
+      Value: 1
     MovementWallJumpEnabled:
       Value: 0
     MovementAirDashEnabled:
@@ -466,6 +472,32 @@ MonoBehaviour:
       Value: 0
     SpecialSummonEnabled:
       Value: 0
+--- !u!114 &4042427979017233580
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 747601124680124256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 36cb1f4773caeb140bb60d90626614cf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Prototype:
+    AbilitiesDic:
+    - Key:
+        Value: 2
+      Value:
+        AbilityData:
+          Id:
+            Value: 355305705527588594
+    - Key:
+        Value: 4
+      Value:
+        AbilityData:
+          Id:
+            Value: 355305705527588594
 --- !u!1 &4774830198564325150
 GameObject:
   m_ObjectHideFlags: 0

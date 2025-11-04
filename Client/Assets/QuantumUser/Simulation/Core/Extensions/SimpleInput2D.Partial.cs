@@ -56,5 +56,17 @@ namespace Quantum {
         return value;
       }
     }
+    
+    public bool GetAbilityInputWasPressed(AbilityType abilityType)
+    {
+      switch (abilityType)
+      {
+        case AbilityType.MovementDash:
+        case AbilityType.MovementAirDash:
+          return Dash.WasPressed;
+        default:
+          throw new System.ArgumentException($"Unknown {nameof(AbilityType)}: {abilityType}", nameof(abilityType));
+      }
+    }
   }
 }

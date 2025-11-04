@@ -185,14 +185,7 @@ namespace Quantum
         // 辅助方法：从输入获取移动方向
         private FPVector2 GetMovementDirection(SimpleInput2D input)
         {
-            FPVector2 direction = FPVector2.Zero;
-    
-            if (input.Left.IsDown) direction.X -= FP._1;
-            if (input.Right.IsDown) direction.X += FP._1;
-            if (input.Up.IsDown) direction.Y += FP._1;
-            if (input.Down.IsDown) direction.Y -= FP._1;
-    
-            return direction;
+            return input.DigitalDirection;
         }
 
         // 辅助方法：获取角色朝向

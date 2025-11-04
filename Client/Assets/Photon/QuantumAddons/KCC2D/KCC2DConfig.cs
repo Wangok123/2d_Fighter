@@ -111,7 +111,7 @@ namespace Quantum
 
       ProcessJump();
 
-      ProcessDash();
+      //ProcessDash();
 
       int steps = 1;
       if (_context.Settings.CCD)

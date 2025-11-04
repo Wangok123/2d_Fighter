@@ -59,7 +59,8 @@ component AbilityEnable
 component AbilityInventory
 {
     [ExcludeFromPrototype] ActiveAbilityInfo ActiveAbilityInfo;
-        
+      
+    [FreeOnComponentRemoved]
     dictionary<AbilityType, Ability> AbilitiesDic;
 }
 
@@ -85,3 +86,5 @@ struct Ability
 }
 
 signal CheckAbilityEnabled(AbilityType abilityId);
+signal OnCooldownsReset(entity_ref playerEntityRef);
+signal OnActiveAbilityStopped(entity_ref playerEntityRef);
