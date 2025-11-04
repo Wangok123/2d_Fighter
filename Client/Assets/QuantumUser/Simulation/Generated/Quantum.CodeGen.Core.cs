@@ -54,10 +54,11 @@ namespace Quantum {
     MovementDoubleJump = 1,
     MovementDash = 2,
     MovementWallJump = 3,
-    MovementAirDash = 4,
-    MovementGlide = 5,
-    Movement = 6,
-    MovementJump = 7,
+    MovementWallSlide = 4,
+    MovementAirDash = 5,
+    MovementGlide = 6,
+    Movement = 7,
+    MovementJump = 8,
     AttackLight = 100,
     AttackHeavy = 101,
     AttackRanged = 102,
@@ -589,41 +590,48 @@ namespace Quantum {
   }
   [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct Ability {
-    public const Int32 SIZE = 80;
+    public const Int32 SIZE = 88;
     public const Int32 ALIGNMENT = 8;
-    [FieldOffset(0)]
-    [ExcludeFromPrototype()]
-    public AbilityType AbilityType;
-    [FieldOffset(64)]
+    [FieldOffset(72)]
     [ExcludeFromPrototype()]
     public CountdownTimer InputBufferTimer;
-    [FieldOffset(32)]
+    [FieldOffset(40)]
     [ExcludeFromPrototype()]
     public CountdownTimer DelayTimer;
-    [FieldOffset(48)]
+    [FieldOffset(56)]
     [ExcludeFromPrototype()]
     public CountdownTimer DurationTimer;
-    [FieldOffset(16)]
+    [FieldOffset(24)]
     [ExcludeFromPrototype()]
     public CountdownTimer CooldownTimer;
     [FieldOffset(8)]
     public AssetRef<AbilityData> AbilityData;
+    [FieldOffset(16)]
+    public FrameTimer ChargeTimer;
+    [FieldOffset(4)]
+    public Int32 UsageCount;
+    [FieldOffset(0)]
+    public Int32 ComboStep;
     public override readonly Int32 GetHashCode() {
       unchecked { 
         var hash = 6343;
-        hash = hash * 31 + (Int32)AbilityType;
         hash = hash * 31 + InputBufferTimer.GetHashCode();
         hash = hash * 31 + DelayTimer.GetHashCode();
         hash = hash * 31 + DurationTimer.GetHashCode();
         hash = hash * 31 + CooldownTimer.GetHashCode();
         hash = hash * 31 + AbilityData.GetHashCode();
+        hash = hash * 31 + ChargeTimer.GetHashCode();
+        hash = hash * 31 + UsageCount.GetHashCode();
+        hash = hash * 31 + ComboStep.GetHashCode();
         return hash;
       }
     }
     public static void Serialize(void* ptr, FrameSerializer serializer) {
         var p = (Ability*)ptr;
-        serializer.Stream.Serialize((Int32*)&p->AbilityType);
+        serializer.Stream.Serialize(&p->ComboStep);
+        serializer.Stream.Serialize(&p->UsageCount);
         AssetRef.Serialize(&p->AbilityData, serializer);
+        FrameTimer.Serialize(&p->ChargeTimer, serializer);
         Quantum.CountdownTimer.Serialize(&p->CooldownTimer, serializer);
         Quantum.CountdownTimer.Serialize(&p->DelayTimer, serializer);
         Quantum.CountdownTimer.Serialize(&p->DurationTimer, serializer);
@@ -1391,7 +1399,7 @@ namespace Quantum {
   }
   [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct AbilityEnable : Quantum.IComponent {
-    public const Int32 SIZE = 72;
+    public const Int32 SIZE = 76;
     public const Int32 ALIGNMENT = 4;
     [FieldOffset(40)]
     public QBoolean MovementDoubleJumpEnabled;
@@ -1399,6 +1407,8 @@ namespace Quantum {
     public QBoolean MovementDashEnabled;
     [FieldOffset(56)]
     public QBoolean MovementWallJumpEnabled;
+    [FieldOffset(60)]
+    public QBoolean MovementWallSlideEnabled;
     [FieldOffset(32)]
     public QBoolean MovementAirDashEnabled;
     [FieldOffset(48)]
@@ -1423,11 +1433,11 @@ namespace Quantum {
     public QBoolean DefenseDodgeEnabled;
     [FieldOffset(28)]
     public QBoolean DefenseShieldEnabled;
-    [FieldOffset(68)]
+    [FieldOffset(72)]
     public QBoolean SpecialUltimateEnabled;
-    [FieldOffset(64)]
+    [FieldOffset(68)]
     public QBoolean SpecialTransformationEnabled;
-    [FieldOffset(60)]
+    [FieldOffset(64)]
     public QBoolean SpecialSummonEnabled;
     public override readonly Int32 GetHashCode() {
       unchecked { 
@@ -1435,6 +1445,7 @@ namespace Quantum {
         hash = hash * 31 + MovementDoubleJumpEnabled.GetHashCode();
         hash = hash * 31 + MovementDashEnabled.GetHashCode();
         hash = hash * 31 + MovementWallJumpEnabled.GetHashCode();
+        hash = hash * 31 + MovementWallSlideEnabled.GetHashCode();
         hash = hash * 31 + MovementAirDashEnabled.GetHashCode();
         hash = hash * 31 + MovementGlideEnabled.GetHashCode();
         hash = hash * 31 + MovementEnabled.GetHashCode();
@@ -1470,6 +1481,7 @@ namespace Quantum {
         QBoolean.Serialize(&p->MovementGlideEnabled, serializer);
         QBoolean.Serialize(&p->MovementJumpEnabled, serializer);
         QBoolean.Serialize(&p->MovementWallJumpEnabled, serializer);
+        QBoolean.Serialize(&p->MovementWallSlideEnabled, serializer);
         QBoolean.Serialize(&p->SpecialSummonEnabled, serializer);
         QBoolean.Serialize(&p->SpecialTransformationEnabled, serializer);
         QBoolean.Serialize(&p->SpecialUltimateEnabled, serializer);

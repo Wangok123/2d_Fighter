@@ -59,9 +59,15 @@ namespace Quantum.Prototypes {
   [Quantum.Prototypes.Prototype(typeof(Quantum.Ability))]
   public unsafe partial class AbilityPrototype : StructPrototype {
     public AssetRef<AbilityData> AbilityData;
+    public Quantum.Prototypes.FrameTimerPrototype ChargeTimer;
+    public Int32 UsageCount;
+    public Int32 ComboStep;
     partial void MaterializeUser(Frame frame, ref Quantum.Ability result, in PrototypeMaterializationContext context);
     public void Materialize(Frame frame, ref Quantum.Ability result, in PrototypeMaterializationContext context = default) {
         result.AbilityData = this.AbilityData;
+        this.ChargeTimer.Materialize(frame, ref result.ChargeTimer, in context);
+        result.UsageCount = this.UsageCount;
+        result.ComboStep = this.ComboStep;
         MaterializeUser(frame, ref result, in context);
     }
   }
@@ -71,6 +77,7 @@ namespace Quantum.Prototypes {
     public QBoolean MovementDoubleJumpEnabled;
     public QBoolean MovementDashEnabled;
     public QBoolean MovementWallJumpEnabled;
+    public QBoolean MovementWallSlideEnabled;
     public QBoolean MovementAirDashEnabled;
     public QBoolean MovementGlideEnabled;
     public QBoolean MovementEnabled;
@@ -96,6 +103,7 @@ namespace Quantum.Prototypes {
         result.MovementDoubleJumpEnabled = this.MovementDoubleJumpEnabled;
         result.MovementDashEnabled = this.MovementDashEnabled;
         result.MovementWallJumpEnabled = this.MovementWallJumpEnabled;
+        result.MovementWallSlideEnabled = this.MovementWallSlideEnabled;
         result.MovementAirDashEnabled = this.MovementAirDashEnabled;
         result.MovementGlideEnabled = this.MovementGlideEnabled;
         result.MovementEnabled = this.MovementEnabled;

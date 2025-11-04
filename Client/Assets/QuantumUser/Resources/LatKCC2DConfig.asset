@@ -18,7 +18,7 @@ MonoBehaviour:
       Value: 335552892607164892
   BaseSettings:
     CapsuleRadius:
-      RawValue: 32768
+      RawValue: 20972
     CapsuleHeight:
       RawValue: 131072
     Offset:

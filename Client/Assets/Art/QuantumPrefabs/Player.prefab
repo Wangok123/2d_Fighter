@@ -437,13 +437,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Prototype:
     MovementDoubleJumpEnabled:
-      Value: 0
+      Value: 1
     MovementDashEnabled:
       Value: 1
     MovementWallJumpEnabled:
-      Value: 0
+      Value: 1
+    MovementWallSlideEnabled:
+      Value: 1
     MovementAirDashEnabled:
-      Value: 0
+      Value: 1
     MovementGlideEnabled:
       Value: 0
     MovementEnabled:
@@ -492,12 +494,65 @@ MonoBehaviour:
         AbilityData:
           Id:
             Value: 355305705527588594
+        ChargeTimer:
+          Mode: 0
+          Frames: 0
+          Seconds:
+            RawValue: 0
+        UsageCount: 0
+        ComboStep: 0
+    - Key:
+        Value: 1
+      Value:
+        AbilityData:
+          Id:
+            Value: 398239309984243437
+        ChargeTimer:
+          Mode: 0
+          Frames: 0
+          Seconds:
+            RawValue: 0
+        UsageCount: 0
+        ComboStep: 0
+    - Key:
+        Value: 8
+      Value:
+        AbilityData:
+          Id:
+            Value: 384777324059473156
+        ChargeTimer:
+          Mode: 0
+          Frames: 0
+          Seconds:
+            RawValue: 0
+        UsageCount: 0
+        ComboStep: 0
+    - Key:
+        Value: 3
+      Value:
+        AbilityData:
+          Id:
+            Value: 521779086454359441
+        ChargeTimer:
+          Mode: 0
+          Frames: 0
+          Seconds:
+            RawValue: 0
+        UsageCount: 0
+        ComboStep: 0
     - Key:
         Value: 4
       Value:
         AbilityData:
           Id:
-            Value: 355305705527588594
+            Value: 514875114087800724
+        ChargeTimer:
+          Mode: 0
+          Frames: 0
+          Seconds:
+            RawValue: 0
+        UsageCount: 0
+        ComboStep: 0
 --- !u!1 &4774830198564325150
 GameObject:
   m_ObjectHideFlags: 0

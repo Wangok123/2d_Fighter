@@ -16,9 +16,9 @@ namespace Quantum
         // 是否在结束时平滑过渡
         public bool SmoothEndTransition = true;
         
-        public override Ability.AbilityState UpdateAbility(Frame frame, EntityRef entityRef, ref Ability ability)
+        public override Ability.AbilityState UpdateAbility(Frame frame, EntityRef entityRef, Ability* ability)
         {
-            Ability.AbilityState abilityState = base.UpdateAbility(frame, entityRef, ref ability);
+            Ability.AbilityState abilityState = base.UpdateAbility(frame, entityRef, ability);
 
             // 处理技能激活时刻
             if (abilityState.IsActiveStartTick)
@@ -29,7 +29,7 @@ namespace Quantum
             // 处理技能持续期间
             if (abilityState.IsActive)
             {
-                UpdateDashMovement(frame, entityRef, ref ability);
+                UpdateDashMovement(frame, entityRef, ability);
             }
             
             // 处理技能结束时刻
@@ -39,6 +39,18 @@ namespace Quantum
             }
 
             return abilityState;
+        }
+        
+        public override unsafe bool TryActivateAbility(Frame frame, EntityRef entityRef, PlayerLink* playerLink, AbilityType abilityType, ref Ability ability)
+        {
+            bool activated = base.TryActivateAbility(frame, entityRef, playerLink, abilityType, ref ability);
+
+            if (activated)
+            {
+                // dosometing
+            }
+
+            return activated;
         }
         
         // Dash开始时的初始化
@@ -75,7 +87,7 @@ namespace Quantum
         }
 
         // Dash期间每帧更新速度（基于曲线）
-        private void UpdateDashMovement(Frame frame, EntityRef entityRef, ref Ability ability)
+        private void UpdateDashMovement(Frame frame, EntityRef entityRef, Ability* ability)
         {
             var kcc = frame.Unsafe.GetPointer<KCC2D>(entityRef);
             
@@ -93,7 +105,7 @@ namespace Quantum
             var movementData = frame.Unsafe.GetPointer<MovementData>(entityRef);
 
             // 获取当前Dash的归一化时间 (0-1)
-            FP normalizedTime = ability.DurationTimer.NormalizedTime;
+            FP normalizedTime = ability->DurationTimer.NormalizedTime;
             
             // 从曲线获取当前速度倍数
             FP speedMultiplier = DashMovementCurve.Evaluate(normalizedTime);

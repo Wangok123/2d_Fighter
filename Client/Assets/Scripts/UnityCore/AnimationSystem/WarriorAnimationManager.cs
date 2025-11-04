@@ -109,6 +109,7 @@ namespace UnityCore.AnimationSystem
         public void PlaySlide() => PlayAnimation(AnimationStates.Slide);
         public void PlayHurt() => PlayAnimation(AnimationStates.Hurt);
         public void PlayDeath() => PlayAnimation(AnimationStates.Death);
+        public void PlayWallSlide() => PlayAnimation(AnimationStates.WallSlide);
 
         #endregion
     }

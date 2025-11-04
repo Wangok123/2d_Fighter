@@ -1,4 +1,4 @@
-﻿using Photon.Deterministic;
+using Photon.Deterministic;
 using Quantum.QuantumView.Base;
 using UnityCore.AnimationSystem;
 using UnityEngine;
@@ -10,16 +10,22 @@ namespace Quantum.QuantumView
         private readonly Vector3 _rightRotation = Vector3.zero;
         private readonly Vector3 _leftRotation = new(0, 180, 0);
         
-        /// <summary>
-        /// Direction the character is currently facing: 1 for right, -1 for left.
-        /// </summary>
         [HideInInspector] public int LookDirection; 
         [SerializeField] private Transform _playerCenterTransform;
         [SerializeField] private WarriorAnimationManager _manager;
 
+        private bool _isPlayingAbilityAnimation;
+        
         public override void OnActivate(Frame frame)
         {
-            base.OnActivate(frame);
+            QuantumEvent.Subscribe<EventAbilityActivated>(this, OnAbilityActivated);
+            QuantumEvent.Subscribe<EventAbilityCancelled>(this, OnAbilityCancelled);
+            QuantumEvent.Subscribe<EventAbilityEnded>(this, OnAbilityEnded);
+        }
+
+        public override void OnDeactivate()
+        {
+            QuantumEvent.UnsubscribeListener(this);
         }
 
         public override void OnUpdateView()
@@ -27,8 +33,11 @@ namespace Quantum.QuantumView
             KCC2D* kcc = VerifiedFrame.Unsafe.GetPointer<KCC2D>(EntityRef);
             KCC2DConfig config = VerifiedFrame.FindAsset(kcc->Config);
             UpdateRightFace();
-            UpdateAnimatorMovementSpeed(kcc, config);
-            UpdateAnimatorJumpState(kcc);
+            if (!_isPlayingAbilityAnimation)
+            {
+                UpdateAnimatorMovementSpeed(kcc, config);
+                UpdateAnimatorJumpState(kcc);
+            }
         }
 
         private void UpdateRightFace()
@@ -76,6 +85,72 @@ namespace Quantum.QuantumView
                 {
                     _manager.PlayFall();
                 }
+            }
+        }
+
+        private void OnAbilityActivated(EventAbilityActivated e)
+        {
+            if (e.Entity != EntityRef) return;
+
+            switch (e.AbilityType)
+            {
+                case AbilityType.MovementJump:
+                case AbilityType.MovementDoubleJump:
+                    _manager.PlayJump();
+                    break;
+                    
+                case AbilityType.MovementDash:
+                case AbilityType.MovementAirDash:
+                    _isPlayingAbilityAnimation = true;
+                    _manager.PlayDash();
+                    break;
+                    
+                case AbilityType.MovementWallSlide:
+                    _isPlayingAbilityAnimation = true;
+                    _manager.PlayWallSlide();
+                    break;
+                    
+                case AbilityType.MovementWallJump:
+                    _manager.PlayJump();
+                    break;
+                    
+                case AbilityType.AttackLight:
+                    _isPlayingAbilityAnimation = true;
+                    _manager.PlayAttack();
+                    break;
+            }
+        }
+
+        private void OnAbilityCancelled(EventAbilityCancelled e)
+        {
+            if (e.Entity != EntityRef) return;
+
+            switch (e.AbilityType)
+            {
+                case AbilityType.MovementWallSlide:
+                    _isPlayingAbilityAnimation = false;
+                    break;
+                    
+                case AbilityType.MovementDash:
+                case AbilityType.MovementAirDash:
+                case AbilityType.AttackLight:
+                    _isPlayingAbilityAnimation = false;
+                    break;
+            }
+        }
+
+        private void OnAbilityEnded(EventAbilityEnded e)
+        {
+            if (e.Entity != EntityRef) return;
+
+            switch (e.AbilityType)
+            {
+                case AbilityType.MovementDash:
+                case AbilityType.MovementAirDash:
+                case AbilityType.AttackLight:
+                case AbilityType.MovementWallSlide:
+                    _isPlayingAbilityAnimation = false;
+                    break;
             }
         }
 

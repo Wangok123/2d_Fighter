@@ -1,0 +1,41 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9cfae7938d6e4262a64245ea1e6a9d04, type: 3}
+  m_Name: DoubleJumpAbilityData
+  m_EditorClassIdentifier: 
+  Identifier:
+    Path: QuantumUser/Resources/DB/DoubleJumpAbilityData
+    Guid:
+      Value: 398239309984243437
+  InputBuffer:
+    RawValue: 0
+  Delay:
+    RawValue: 0
+  Duration:
+    RawValue: 16384
+  Cooldown:
+    RawValue: 0
+  CastDirectionType: 4
+  FaceCastDirection: 1
+  KeepVelocity: 0
+  StartCooldownAfterDelay: 0
+  _uiAbilityPrefab: {fileID: 0}
+  DoubleJumpImpulse:
+    RawValue: 524288
+  JumpHeightMultiplier:
+    RawValue: 65536
+  AllowFromFreeFalling: 1
+  HorizontalVelocityMultiplier:
+    RawValue: 65536
+  AllowVariableHeight: 1
+  MinJumpHeightPercent:
+    RawValue: 32768

@@ -8,10 +8,11 @@ enum AbilityType
     MovementDoubleJump = 1,
     MovementDash = 2,
     MovementWallJump = 3,
-    MovementAirDash = 4,
-    MovementGlide = 5,
-    Movement = 6,
-    MovementJump = 7,
+    MovementWallSlide = 4,
+    MovementAirDash = 5,
+    MovementGlide = 6,
+    Movement = 7,
+    MovementJump = 8,
     
     // Attack abilities (100-199)
     AttackLight = 100,
@@ -36,6 +37,7 @@ component AbilityEnable
      bool MovementDoubleJumpEnabled;
      bool MovementDashEnabled;
      bool MovementWallJumpEnabled;
+     bool MovementWallSlideEnabled;
      bool MovementAirDashEnabled;
      bool MovementGlideEnabled;
      bool MovementEnabled;
@@ -75,14 +77,17 @@ struct ActiveAbilityInfo
 
 struct Ability
 {
-    [ExcludeFromPrototype] AbilityType AbilityType;
-
     [ExcludeFromPrototype] CountdownTimer InputBufferTimer;
     [ExcludeFromPrototype] CountdownTimer DelayTimer;
     [ExcludeFromPrototype] CountdownTimer DurationTimer;
     [ExcludeFromPrototype] CountdownTimer CooldownTimer;
 
     asset_ref<AbilityData> AbilityData;
+    
+     // 扩展字段用于复杂输入
+    FrameTimer ChargeTimer;
+    Int32 UsageCount;
+    Int32 ComboStep;
 }
 
 signal CheckAbilityEnabled(AbilityType abilityId);

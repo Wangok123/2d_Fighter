@@ -71,3 +71,22 @@ event SpecialMovePerformed
 	Int32 MoveId;
 	FP Damage;
 }
+
+event AbilityActivated
+{
+    EntityRef Entity;
+    AbilityType AbilityType;
+}
+
+event AbilityCancelled
+{
+    EntityRef Entity;
+    AbilityType AbilityType;
+}
+
+event AbilityEnded
+{
+    EntityRef Entity;
+    AbilityType AbilityType;
+}
+

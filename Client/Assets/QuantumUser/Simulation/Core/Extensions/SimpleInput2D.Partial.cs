@@ -64,6 +64,10 @@ namespace Quantum {
         case AbilityType.MovementDash:
         case AbilityType.MovementAirDash:
           return Dash.WasPressed;
+        case AbilityType.MovementJump:
+        case AbilityType.MovementWallJump:
+        case AbilityType.MovementDoubleJump:
+          return Jump.WasPressed;
         default:
           throw new System.ArgumentException($"Unknown {nameof(AbilityType)}: {abilityType}", nameof(abilityType));
       }

@@ -109,7 +109,7 @@ namespace Quantum
       // based on current state
       IntegrateForces();
 
-      ProcessJump();
+      //ProcessJump();
 
       //ProcessDash();
 

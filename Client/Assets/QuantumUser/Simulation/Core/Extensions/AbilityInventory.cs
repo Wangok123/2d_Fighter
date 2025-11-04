@@ -1,4 +1,4 @@
-﻿namespace Quantum
+namespace Quantum
 {
     public unsafe partial struct AbilityInventory
     {
@@ -7,8 +7,13 @@
         public bool TryGetAbility(Frame f, AbilityType type, out Ability ability)
         {
             var dic = f.ResolveDictionary(AbilitiesDic);
-            ability = dic[type];
-            return ability.AbilityData.Id.IsValid;
+            if (dic.TryGetValue(type, out ability))
+            {
+                return ability.AbilityData.Id.IsValid;
+            }
+            
+            ability = default;
+            return false;
         }
 
         public bool TryGetActiveAbility(Frame f, out Ability ability)
@@ -20,8 +25,13 @@
             }
 
             var dic = f.ResolveDictionary(AbilitiesDic);
-            ability = dic[ActiveAbilityInfo.ActiveAbilityType];
-            return true;
+            if (dic.TryGetValue(ActiveAbilityInfo.ActiveAbilityType, out ability))
+            {
+                return true;
+            }
+            
+            ability = default;
+            return false;
         }
     } 
 }

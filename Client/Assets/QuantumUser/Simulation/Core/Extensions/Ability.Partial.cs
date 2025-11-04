@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using Photon.Deterministic;
 
 namespace Quantum
@@ -20,7 +20,7 @@ namespace Quantum
         public bool IsDelayedOrActive => IsDelayed || IsActive;
         public bool IsOnCooldown => CooldownTimer.IsRunning;
         
-        public bool TryActivateAbility(Frame frame, EntityRef entityRef, PlayerRef playerRef)
+        public bool TryActivateAbility(Frame frame, EntityRef entityRef, PlayerRef playerRef, AbilityType abilityType)
         {
             if (IsOnCooldown)
             {
@@ -52,7 +52,7 @@ namespace Quantum
                 CooldownTimer.Start(abilityData.Cooldown);
             }
 
-            abilityInventory->ActiveAbilityInfo.ActiveAbilityType = AbilityType;
+            abilityInventory->ActiveAbilityInfo.ActiveAbilityType = abilityType;
             abilityInventory->ActiveAbilityInfo.CastDirection = GetCastDirection(frame, playerRef, abilityData, entityRef);
             abilityInventory->ActiveAbilityInfo.CastVelocity = kcc->CombinedVelocity;
 
@@ -115,7 +115,15 @@ namespace Quantum
                     {
                         state.IsActiveEndTick = true;
 
+                        AbilityInventory* abilityInventory = frame.Unsafe.GetPointer<AbilityInventory>(entityRef);
+                        AbilityType currentAbilityType = abilityInventory->ActiveAbilityInfo.ActiveAbilityType;
+
                         StopAbility(frame, entityRef);
+                        
+                        if (currentAbilityType != AbilityType.None)
+                        {
+                            frame.Events.AbilityEnded(entityRef, currentAbilityType);
+                        }
                     }
                 }
             }
