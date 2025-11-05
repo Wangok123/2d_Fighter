@@ -38,9 +38,10 @@ This directory contains design and implementation documentation for various core
 
 ## 🔗 相关文档 / Related Documentation
 
-- [客户端架构](../03-客户端架构.md) - 客户端整体架构
+- [模块化角色系统](../ModularCharacterSystem.md) - 模块化角色系统详解
 - [Core模块](../Core/概述.md) - 核心模块文档
-- [API文档](../06-API文档.md) - API接口文档
+- [系统架构总览](../Architecture.md) - 系统架构和数据流
+- [根目录FEATURES.md](../../FEATURES.md) - 完整功能特性文档
 
 ## 📝 使用说明 / Usage Guide
 
