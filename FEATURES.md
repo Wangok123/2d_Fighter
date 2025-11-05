@@ -9,14 +9,24 @@
 ### 客户端技术
 - **游戏引擎**: Unity 2022.3 LTS
 - **物理引擎**: Photon Quantum (确定性物理)
-- **架构模式**: ECS (Entity Component System)
+- **架构模式**: ECS (Entity Component System) + 自研 LAT 框架
 - **资源管理**: YooAsset (热更新支持)
 - **配置系统**: Luban
+- **对象池**: 双层对象池系统 (ObjectPool + ReferencePool)
 
 ### 服务器技术
 - **网络层**: 自研 LAT 服务器 + KCP 协议
 - **协议**: Protocol Buffers
 - **语言**: C# (.NET 6.0+)
+
+### LAT 框架特性
+LAT (龙傲天) 框架是本项目自研的游戏框架，融合了多个优秀框架的设计理念：
+- **模块化组件系统**: 基于 `LatComponent` 的组件化架构
+- **GameEntry 管理器**: 统一的组件注册和访问入口
+- **双层对象池**: ObjectPool (Unity对象) + ReferencePool (C#对象)
+- **事件系统**: 解耦的事件驱动通信
+- **资源热更新**: 基于 YooAsset 的资源管理
+- **平台无关核心**: Core 层完全不依赖 Unity
 
 ## 主要功能模块
 
@@ -152,22 +162,226 @@
 - 匹配协议 (Match.proto)
 - 战斗协议 (Battle.proto)
 
-### 7. 对象池系统
+### 7. LAT 框架核心系统
 
-高效的对象复用系统，减少 GC 压力。
+自研的 LAT (龙傲天) 框架提供了完整的游戏开发基础设施。
 
-#### 功能
+#### GameEntry 组件管理系统
+
+**核心类**: `GameEntry`
+- 统一的组件注册和访问入口
+- 基于 `LatLinkedList` 的高效组件管理
+- 支持类型和名称查找
+
+**LatComponent 基类**:
+```csharp
+// 所有游戏组件的基类
+public abstract class LatComponent : MonoBehaviour
+{
+    public bool IsInit { get; set; }
+    protected virtual void Awake()
+    {
+        GameEntry.RegisterComponent(this);
+    }
+}
+```
+
+**使用示例**:
+```csharp
+// 获取组件
+var inputComponent = GameEntry.GetComponent<InputComponent>();
+var uiComponent = GameEntry.GetComponent<UIComponent>();
+```
+
+#### ReferencePool 引用池系统
+
+**核心功能**:
+- ✅ C# 对象的高效复用，减少 GC 压力
+- ✅ 类型安全的泛型接口
+- ✅ 自动创建和回收
+- ✅ 统计信息跟踪（获取、释放、添加、移除次数）
+- ✅ 严格检查模式，防止重复释放
+
+**核心 API**:
+```csharp
+// 获取引用
+T obj = ReferencePool.Acquire<T>() where T : class, IReference, new();
+
+// 释放引用
+ReferencePool.Release(obj);
+
+// 清理引用池
+ReferencePool.ClearAll();
+```
+
+**使用场景**:
+- 网络消息对象
+- 临时数据结构
+- 事件参数对象
+- 任何需要频繁创建销毁的 C# 对象
+
+#### ObjectPool 对象池系统
+
+**核心功能**:
+- ✅ Unity GameObject 的高效复用
+- ✅ 预加载和自动扩容
+- ✅ 容量限制和自动回收
+- ✅ 优先级队列支持
+- ✅ 对象生命周期管理
+
+**核心组件**:
+- `ObjectPoolComponent` - Unity 组件封装
+- `ObjectPoolManager` - 对象池管理器
+- `ObjectBase` - 可池化对象基类
+
+**使用场景**:
+- 特效对象
+- 子弹对象
+- UI 元素
+- 音频播放器
+
+#### YooAsset 资源管理系统
+
+**核心功能**:
+- ✅ 资源热更新支持
+- ✅ 异步资源加载
+- ✅ 资源卸载和内存管理
+- ✅ 资源包管理
+- ✅ 资源缓存清理
+
+**核心类**: `YooAssetHelper`
+- 资源加载辅助方法
+- 资源卸载管理
+- 缓存清理工具
+
+**FSM 节点**:
+- `FsmInitialize` - 初始化节点
+- `FsmUpdateVersion` - 版本更新节点
+- `FsmUpdateManifest` - 清单更新节点
+- `FsmCreateDownloader` - 创建下载器节点
+- `FsmDownloadPackageOver` - 下载完成节点
+
+**使用场景**:
+- 游戏资源热更新
+- 动态资源加载
+- 资源版本管理
+- 资源包分发
+
+#### 事件系统
+
+**核心功能**:
+- ✅ 松耦合的模块通信
+- ✅ 类型安全的事件定义
+- ✅ 事件订阅和发布
+- ✅ 支持自定义事件参数
+
+**事件定义基类**: `EventDefineBase`
+
+**内置事件类型**:
+- `UIEventDefine` - UI 相关事件
+- `BattleEventDefine` - 战斗相关事件
+- `SceneEventDefine` - 场景相关事件
+- `PatchEventDefine` - 热更新相关事件
+- `UserEventDefine` - 用户相关事件
+- `ResponseEventDefine` - 网络响应事件
+
+**使用场景**:
+- 跨模块通信
+- UI 交互通知
+- 游戏状态变更
+- 网络消息分发
+
+#### 输入系统 (InputComponent)
+
+**核心功能**:
+- ✅ 统一的输入管理
+- ✅ 多输入模块支持
+- ✅ 输入优先级管理
+- ✅ 支持 UI 和游戏玩法输入分离
+
+**输入模块**:
+- `PlayerInputModule` - 玩家输入处理
+- `UIInputModule` - UI 输入处理
+- `IInputModule` - 输入模块接口
+
+#### 动画系统 (AnimationSystem)
+
+**核心功能**:
+- ✅ 动画状态管理
+- ✅ 动画参数辅助类
+- ✅ 动画层级管理
+- ✅ 角色动画管理器
+
+**核心类**:
+- `AnimationStateManager` - 动画状态管理器
+- `AnimationStateConfig` - 动画状态配置
+- `AnimatorParameterHelper` - 动画参数辅助
+- `AnimatorLayerHelper` - 动画层级辅助
+- `CharacterAnimationManager` - 角色动画管理器
+
+#### UI 系统
+
+**核心功能**:
+- ✅ UI 界面管理
+- ✅ UI 生命周期
+- ✅ UI 资源加载
+- ✅ UI 事件系统
+
+**使用场景**:
+- 游戏 UI 界面
+- HUD 显示
+- 菜单系统
+- 对话框管理
+
+#### 场景管理系统 (SceneManagement)
+
+**核心功能**:
+- ✅ 场景异步加载
+- ✅ 场景切换管理
+- ✅ 场景资源管理
+- ✅ 场景事件通知
+
+#### 保存系统 (SaveSystem)
+
+**核心功能**:
+- ✅ 游戏数据持久化
+- ✅ 存档管理
+- ✅ 数据加密
+- ✅ 云存档支持基础
+
+#### 网络组件 (NetworkComponent)
+
+**核心功能**:
+- ✅ 网络连接管理
+- ✅ 消息发送和接收
+- ✅ 协议处理
+- ✅ 断线重连
+
+**相关类**:
+- `NetworkManager` - 网络管理器
+- `BattleNetworkManager` - 战斗网络管理
+
+### 8. 对象池系统（双层架构）
+
+本项目采用双层对象池架构，分别处理不同类型的对象复用。
+
+#### ObjectPool - Unity 对象池
+- ✅ Unity GameObject 的高效复用
 - ✅ 自动对象创建和回收
 - ✅ 预热池容量
 - ✅ 池容量限制
 - ✅ 泛型支持
 
-#### 实现
+**实现**:
 - `ObjectPoolManager` - 对象池管理器
+- `ObjectPoolComponent` - Unity 组件封装
 - `IObjectPool` - 对象池接口
 - `ObjectBase` - 可池化对象基类
 
-### 8. 事件系统
+#### ReferencePool - C# 对象池
+- 详见上文 "LAT 框架核心系统" 部分
+
+### 9. Quantum 事件与信号系统
 
 #### Quantum 事件
 - **LevelUp**: 等级提升事件
@@ -182,7 +396,10 @@
 - **OnCooldownsReset**: 冷却重置信号
 - **OnActiveAbilityStopped**: 活动能力停止信号
 
-### 9. 状态效果系统 (Status Effects)
+#### LAT 框架事件系统
+- 详见上文 "LAT 框架核心系统 - 事件系统" 部分
+
+### 10. 状态效果系统 (Status Effects)
 
 支持各种临时状态效果和能力修改。
 
@@ -200,7 +417,7 @@
 - `DashAbilityData` - 冲刺数据
 - `KnockbackStatusEffectData` - 击退效果数据
 
-### 10. 工具和实用功能
+### 11. 核心工具库 (Core Layer)
 
 #### 核心工具
 - **BinaryTools**: 二进制序列化工具

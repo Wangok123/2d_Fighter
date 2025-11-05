@@ -50,9 +50,21 @@
 ### 客户端
 - **游戏引擎**: Unity 2022.3 LTS
 - **物理引擎**: Photon Quantum (确定性物理)
-- **架构模式**: ECS (Entity Component System)
+- **架构模式**: ECS (Entity Component System) + 自研 LAT 框架
 - **资源管理**: YooAsset (支持热更新)
 - **配置系统**: Luban
+- **对象池**: 双层对象池 (ObjectPool + ReferencePool)
+
+### LAT 框架 (自研)
+LAT (龙傲天) 是本项目自研的游戏框架，提供完整的游戏开发基础设施：
+- **GameEntry 管理器** - 统一的组件注册和访问
+- **LatComponent 系统** - 模块化组件架构
+- **ReferencePool** - C# 对象池，减少 GC 压力
+- **ObjectPool** - Unity 对象池，高效复用 GameObject
+- **事件系统** - 松耦合的模块通信
+- **动画系统** - 动画状态管理
+- **输入系统** - 统一的输入处理
+- **UI 系统** - 界面管理框架
 
 ### 服务器
 - **网络层**: 自研 LAT 服务器
@@ -60,7 +72,7 @@
 - **消息格式**: Protocol Buffers
 - **开发语言**: C# (.NET 6.0+)
 
-### 核心系统
+### 核心游戏系统 (Quantum)
 - **MovementInputSystem** - 移动输入处理
 - **AbilityInputSystem** - 能力输入处理
 - **AbilitySystem** - 能力生命周期管理
