@@ -1,0 +1,82 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4639e63b099e42f5a2bbf7d3cdea376e, type: 3}
+  m_Name: AttackAbilityData
+  m_EditorClassIdentifier: 
+  Identifier:
+    Path: QuantumUser/Resources/DB/AttackAbilityData
+    Guid:
+      Value: 470966568987184665
+  InputBuffer:
+    RawValue: 9831
+  Delay:
+    RawValue: 9831
+  Duration:
+    RawValue: 16384
+  Cooldown:
+    RawValue: 327680
+  CastDirectionType: 4
+  FaceCastDirection: 1
+  KeepVelocity: 0
+  StartCooldownAfterDelay: 0
+  Priority: 2
+  CanBeCancelledByHigherPriority: 1
+  CanCancelLowerPriority: 1
+  _uiAbilityPrefab: {fileID: 0}
+  BaseDamage:
+    RawValue: 655360
+  DamagePerLevel:
+    RawValue: 32768
+  StartupTime:
+    RawValue: 6554
+  ActiveTime:
+    RawValue: 13107
+  RecoveryTime:
+    RawValue: 21845
+  AttackShape:
+    ShapeType: 4
+    PolygonCollider:
+      Id:
+        Value: 0
+    CircleRadius:
+      RawValue: 32768
+    CapsuleSize:
+      X:
+        RawValue: 65536
+      Y:
+        RawValue: 131072
+    EdgeExtent:
+      RawValue: 32768
+    BoxExtents:
+      X:
+        RawValue: 32768
+      Y:
+        RawValue: 32768
+    PositionOffset:
+      X:
+        RawValue: 0
+      Y:
+        RawValue: 0
+    RotationOffset:
+      RawValue: 0
+    UserTag: 0
+    IsPersistent: 1
+    CompoundShapes: []
+  KnockbackForce:
+    RawValue: 327680
+  KnockbackDirectionX:
+    RawValue: 65536
+  KnockbackDirectionY:
+    RawValue: 32768
+  HitstunDuration:
+    RawValue: 16384
+  HitStatusEffects: []
