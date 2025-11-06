@@ -24,6 +24,6 @@ struct StatusEffectConfig
 }
 
 signal OnStunApplied(entity_ref playerEntityRef, FP duration);
-signal OnKnockbackApplied(entity_ref playerEntityRef, FP duration, FPVector3 direction);
+signal OnKnockbackApplied(entity_ref playerEntityRef, FP duration, FPVector2 direction);
 
 signal OnStatusEffectsReset(entity_ref playerEntityRef);

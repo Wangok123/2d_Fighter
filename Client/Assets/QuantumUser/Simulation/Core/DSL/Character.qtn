@@ -32,13 +32,15 @@ component CharacterLevel
 component AttackData
 {
 	// Single source of character configuration - ModularCharacterConfig replaces legacy AttackConfig
-	asset_ref<ModularCharacterConfig> ModularConfig;
 	[ExcludeFromPrototype] Int32 ComboCounter;
 	[ExcludeFromPrototype] FrameTimer ComboResetTimer;
 	[ExcludeFromPrototype] FrameTimer AttackCooldown;
 	[ExcludeFromPrototype] bool IsAttacking;
 	[ExcludeFromPrototype] FP HeavyChargeTime;
 	[ExcludeFromPrototype] bool IsChargingHeavy;
+	
+	[ExcludeFromPrototype] FrameTimer ChargeTimer;
+    [ExcludeFromPrototype] FrameTimer ComboWindowTimer;
 }
 
 component CommandInputData

@@ -1520,38 +1520,43 @@ namespace Quantum {
   }
   [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct AttackData : Quantum.IComponent {
-    public const Int32 SIZE = 48;
+    public const Int32 SIZE = 56;
     public const Int32 ALIGNMENT = 8;
-    [FieldOffset(16)]
-    public AssetRef<ModularCharacterConfig> ModularConfig;
     [FieldOffset(0)]
     [ExcludeFromPrototype()]
     public Int32 ComboCounter;
     [FieldOffset(40)]
     [ExcludeFromPrototype()]
     public FrameTimer ComboResetTimer;
-    [FieldOffset(32)]
+    [FieldOffset(24)]
     [ExcludeFromPrototype()]
     public FrameTimer AttackCooldown;
     [FieldOffset(4)]
     [ExcludeFromPrototype()]
     public QBoolean IsAttacking;
-    [FieldOffset(24)]
+    [FieldOffset(16)]
     [ExcludeFromPrototype()]
     public FP HeavyChargeTime;
     [FieldOffset(8)]
     [ExcludeFromPrototype()]
     public QBoolean IsChargingHeavy;
+    [FieldOffset(32)]
+    [ExcludeFromPrototype()]
+    public FrameTimer ChargeTimer;
+    [FieldOffset(48)]
+    [ExcludeFromPrototype()]
+    public FrameTimer ComboWindowTimer;
     public override readonly Int32 GetHashCode() {
       unchecked { 
         var hash = 8563;
-        hash = hash * 31 + ModularConfig.GetHashCode();
         hash = hash * 31 + ComboCounter.GetHashCode();
         hash = hash * 31 + ComboResetTimer.GetHashCode();
         hash = hash * 31 + AttackCooldown.GetHashCode();
         hash = hash * 31 + IsAttacking.GetHashCode();
         hash = hash * 31 + HeavyChargeTime.GetHashCode();
         hash = hash * 31 + IsChargingHeavy.GetHashCode();
+        hash = hash * 31 + ChargeTimer.GetHashCode();
+        hash = hash * 31 + ComboWindowTimer.GetHashCode();
         return hash;
       }
     }
@@ -1560,10 +1565,11 @@ namespace Quantum {
         serializer.Stream.Serialize(&p->ComboCounter);
         QBoolean.Serialize(&p->IsAttacking, serializer);
         QBoolean.Serialize(&p->IsChargingHeavy, serializer);
-        AssetRef.Serialize(&p->ModularConfig, serializer);
         FP.Serialize(&p->HeavyChargeTime, serializer);
         FrameTimer.Serialize(&p->AttackCooldown, serializer);
+        FrameTimer.Serialize(&p->ChargeTimer, serializer);
         FrameTimer.Serialize(&p->ComboResetTimer, serializer);
+        FrameTimer.Serialize(&p->ComboWindowTimer, serializer);
     }
   }
   [StructLayout(LayoutKind.Explicit)]
@@ -1831,7 +1837,7 @@ namespace Quantum {
     void OnStunApplied(Frame f, EntityRef playerEntityRef, FP duration);
   }
   public unsafe partial interface ISignalOnKnockbackApplied : ISignal {
-    void OnKnockbackApplied(Frame f, EntityRef playerEntityRef, FP duration, FPVector3 direction);
+    void OnKnockbackApplied(Frame f, EntityRef playerEntityRef, FP duration, FPVector2 direction);
   }
   public unsafe partial interface ISignalOnStatusEffectsReset : ISignal {
     void OnStatusEffectsReset(Frame f, EntityRef playerEntityRef);
@@ -2056,7 +2062,7 @@ namespace Quantum {
           }
         }
       }
-      public void OnKnockbackApplied(EntityRef playerEntityRef, FP duration, FPVector3 direction) {
+      public void OnKnockbackApplied(EntityRef playerEntityRef, FP duration, FPVector2 direction) {
         var array = _f._ISignalOnKnockbackAppliedSystems;
         for (Int32 i = 0; i < array.Length; ++i) {
           var s = array[i];

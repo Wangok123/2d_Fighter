@@ -25,7 +25,7 @@ namespace Quantum
         public FP[] ComboDamageMultipliers = new FP[] { FP._1, FP._1_20, FP._1_50 };
         
         [Tooltip("每段连击的持续时间")]
-        public FP[] ComboDurations = new FP[] { FP._0_33, FP._0_40, FP._0_50 };
+        public FP[] ComboDurations = new FP[] { FP._0_33, FP._0_33, FP._0_50 };
         
         [Tooltip("每段连击的启动时间")]
         public FP[] ComboStartupTimes = new FP[] { FP._0_10, FP._0_10, FP._0_10 };
@@ -50,14 +50,13 @@ namespace Quantum
 
         private FP _lastComboInputTime;
 
-        public override unsafe bool TryActivateAbility(Frame frame, EntityRef entityRef, PlayerStatus* playerStatus, ref Ability ability)
+        public override unsafe bool TryActivateAbility(Frame frame, EntityRef entityRef, PlayerLink* playerLink, AbilityType abilityType, ref Ability ability)
         {
             var attackData = frame.Unsafe.GetPointer<AttackData>(entityRef);
             
-            FP currentTime = frame.Global->Time;
-            FP timeSinceLastCombo = currentTime - _lastComboInputTime;
+            bool withinComboWindow = attackData->ComboWindowTimer.IsRunning(frame);
             
-            if (timeSinceLastCombo <= ComboWindow && attackData->ComboCounter < MaxComboCount)
+            if (withinComboWindow && attackData->ComboCounter < MaxComboCount)
             {
                 attackData->ComboCounter++;
             }
@@ -66,12 +65,12 @@ namespace Quantum
                 attackData->ComboCounter = 1;
             }
             
-            _lastComboInputTime = currentTime;
+            attackData->ComboWindowTimer = FrameTimer.FromSeconds(frame, ComboWindow);
             
             int comboIndex = attackData->ComboCounter - 1;
             UpdateComboParameters(comboIndex);
 
-            return base.TryActivateAbility(frame, entityRef, playerStatus, ref ability);
+            return base.TryActivateAbility(frame, entityRef, playerLink, abilityType, ref ability);
         }
 
         private void UpdateComboParameters(int comboIndex)
@@ -107,14 +106,14 @@ namespace Quantum
             }
         }
 
-        protected override void OnAttackActivate(Frame frame, EntityRef entityRef, ref Ability ability)
+        protected override void OnAttackActivate(Frame frame, EntityRef entityRef, Ability* ability)
         {
-            var attackData = frame.Unsafe.GetPointer<AttackData>(entityRef);
+            AttackData* attackData = frame.Unsafe.GetPointer<AttackData>(entityRef);
             int comboStep = attackData->ComboCounter;
             
-            frame.Events.ComboAttackStarted(entityRef, comboStep, MaxComboCount);
+            //frame.Events.ComboAttackStarted(entityRef, comboStep, MaxComboCount);
             
-            base.OnAttackActivate(frame, entityRef, ref ability);
+            base.OnAttackActivate(frame, entityRef, ability);
             
             if (attackData->ComboCounter >= MaxComboCount)
             {
@@ -126,7 +125,7 @@ namespace Quantum
         {
             FP baseDamage = base.CalculateDamage(frame, entityRef);
             
-            var attackData = frame.Unsafe.GetPointer<AttackData>(entityRef);
+            AttackData* attackData = frame.Unsafe.GetPointer<AttackData>(entityRef);
             int comboIndex = attackData->ComboCounter - 1;
             
             if (comboIndex >= 0 && comboIndex < ComboDamageMultipliers.Length)
@@ -139,7 +138,7 @@ namespace Quantum
 
         protected override void ApplyKnockback(Frame frame, EntityRef attacker, EntityRef target, FPVector2 hitDirection)
         {
-            var attackData = frame.Unsafe.GetPointer<AttackData>(attacker);
+            AttackData* attackData = frame.Unsafe.GetPointer<AttackData>(attacker);
             bool isFinalHit = attackData->ComboCounter >= MaxComboCount;
             
             if (isFinalHit && LastHitLaunches)
@@ -148,9 +147,9 @@ namespace Quantum
                 knockbackDirection.Y = LastHitVerticalKnockback;
                 knockbackDirection = knockbackDirection.Normalized;
                 
-                FPVector3 knockbackDirection3D = new FPVector3(knockbackDirection.X, knockbackDirection.Y, FP._0);
+                FPVector2 knockbackDirection2D = new FPVector2(knockbackDirection.X, knockbackDirection.Y);
                 
-                frame.Signals.OnKnockbackApplied(target, HitstunDuration, knockbackDirection3D * KnockbackForce);
+                frame.Signals.OnKnockbackApplied(target, HitstunDuration, knockbackDirection2D * KnockbackForce);
             }
             else
             {

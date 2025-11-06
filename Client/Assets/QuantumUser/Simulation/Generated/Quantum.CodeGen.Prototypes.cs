@@ -164,7 +164,8 @@ namespace Quantum.Prototypes {
   [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.AttackData))]
   public unsafe partial class AttackDataPrototype : ComponentPrototype<Quantum.AttackData> {
-    public AssetRef<ModularCharacterConfig> ModularConfig;
+    [HideInInspector()]
+    public Int32 _empty_prototype_dummy_field_;
     partial void MaterializeUser(Frame frame, ref Quantum.AttackData result, in PrototypeMaterializationContext context);
     public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
         Quantum.AttackData component = default;
@@ -172,7 +173,6 @@ namespace Quantum.Prototypes {
         return f.Set(entity, component) == SetResult.ComponentAdded;
     }
     public void Materialize(Frame frame, ref Quantum.AttackData result, in PrototypeMaterializationContext context = default) {
-        result.ModularConfig = this.ModularConfig;
         MaterializeUser(frame, ref result, in context);
     }
   }

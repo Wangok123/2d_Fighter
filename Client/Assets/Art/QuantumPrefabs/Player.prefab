@@ -453,9 +453,9 @@ MonoBehaviour:
     MovementJumpEnabled:
       Value: 1
     AttackLightEnabled:
-      Value: 0
+      Value: 1
     AttackHeavyEnabled:
-      Value: 0
+      Value: 1
     AttackRangedEnabled:
       Value: 0
     AttackAreaEnabled:
@@ -542,6 +542,19 @@ MonoBehaviour:
         ComboStep: 0
     - Key:
         Value: 4
+      Value:
+        AbilityData:
+          Id:
+            Value: 514875114087800724
+        ChargeTimer:
+          Mode: 0
+          Frames: 0
+          Seconds:
+            RawValue: 0
+        UsageCount: 0
+        ComboStep: 0
+    - Key:
+        Value: 100
       Value:
         AbilityData:
           Id:

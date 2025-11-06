@@ -165,9 +165,9 @@ namespace Quantum
             knockbackDirection.Y = KnockbackDirectionY;
             knockbackDirection = knockbackDirection.Normalized;
             
-            FPVector3 knockbackDirection3D = new FPVector3(knockbackDirection.X, knockbackDirection.Y, FP._0);
+            FPVector2 knockbackDirection2D = new FPVector2(knockbackDirection.X, knockbackDirection.Y);
             
-            frame.Signals.OnKnockbackApplied(target, HitstunDuration, knockbackDirection3D * KnockbackForce);
+            frame.Signals.OnKnockbackApplied(target, HitstunDuration, knockbackDirection2D * KnockbackForce);
         }
 
         protected virtual void ApplyStatusEffects(Frame frame, EntityRef target, FPVector2 hitDirection)
@@ -184,8 +184,8 @@ namespace Quantum
                         break;
 
                     case StatusEffectType.Knockback:
-                        FPVector3 direction3D = new FPVector3(hitDirection.X, hitDirection.Y, FP._0);
-                        frame.Signals.OnKnockbackApplied(target, statusEffectConfig.Duration, direction3D);
+                        FPVector2 direction2D = new FPVector2(hitDirection.X, hitDirection.Y);
+                        frame.Signals.OnKnockbackApplied(target, statusEffectConfig.Duration, direction2D);
                         break;
 
                     default:

@@ -28,8 +28,8 @@ namespace Quantum
         public FP SpecialDamageMultiplier = FP._2;
         
         [Header("Invincibility")]
-        [Tooltip("无敌帧")]
-        public FP InvincibilityFrames = FP._0_10;
+        [Tooltip("无敌帧时间")]
+        public FP InvincibilityDuration = FP._0_10;
         
         [Tooltip("是否在整个攻击过程中都无敌")]
         public bool FullInvincibility = false;
@@ -57,39 +57,28 @@ namespace Quantum
         [Tooltip("超级取消时间窗口")]
         public FP SuperCancelWindow = FP._0_20;
 
-        public override unsafe bool TryActivateAbility(Frame frame, EntityRef entityRef, PlayerStatus* playerStatus, ref Ability ability)
+        public override unsafe bool TryActivateAbility(Frame frame, EntityRef entityRef, PlayerLink* playerLink, AbilityType abilityType, ref Ability ability)
         {
-            if (IsSpecialMove && EnergyCost > 0)
-            {
-                if (frame.TryGet<Energy>(entityRef, out var energy))
-                {
-                    if (energy.CurrentEnergy < EnergyCost)
-                    {
-                        return false;
-                    }
-                }
-            }
-
-            bool activated = base.TryActivateAbility(frame, entityRef, playerStatus, ref ability);
+            bool activated = base.TryActivateAbility(frame, entityRef, playerLink, abilityType, ref ability);
             
             if (activated)
             {
-                if (IsSpecialMove && EnergyCost > 0 && frame.Unsafe.TryGetPointer<Energy>(entityRef, out var energy))
+                CommandInputData* commandInputData = frame.Unsafe.GetPointer<CommandInputData>(entityRef);
+                if (commandInputData != null)
                 {
-                    energy->CurrentEnergy -= EnergyCost;
+                    commandInputData->InputBufferIndex = 0;
+                    commandInputData->InputBufferSize = 0;
                 }
-                
-                frame.Signals.OnClearInputBuffer(entityRef);
             }
 
             return activated;
         }
 
-        protected override void OnAttackActivate(Frame frame, EntityRef entityRef, ref Ability ability)
+        protected override void OnAttackActivate(Frame frame, EntityRef entityRef, Ability* ability)
         {
-            if (InvincibilityFrames > 0)
+            if (InvincibilityDuration > 0)
             {
-                SetInvincibility(frame, entityRef, true, InvincibilityFrames);
+                SetInvincibility(frame, entityRef, InvincibilityDuration);
             }
             
             if (SpawnsProjectile)
@@ -101,20 +90,16 @@ namespace Quantum
             
             if (!SpawnsProjectile)
             {
-                base.OnAttackActivate(frame, entityRef, ref ability);
+                base.OnAttackActivate(frame, entityRef, ability);
             }
         }
 
-        protected virtual void SetInvincibility(Frame frame, EntityRef entityRef, bool isInvincible, FP duration)
+
+        protected virtual void SetInvincibility(Frame frame, EntityRef entityRef, FP duration)
         {
-            if (frame.Unsafe.TryGetPointer<CharacterState>(entityRef, out var characterState))
+            if (frame.Unsafe.TryGetPointer<CharacterStatus>(entityRef, out var characterStatus))
             {
-                characterState->IsInvincible = isInvincible ? 1 : 0;
-                
-                if (duration > 0)
-                {
-                    characterState->InvincibleTimer = CountdownTimer.FromSeconds(frame, duration);
-                }
+                characterStatus->InvincibleTimer = FrameTimer.FromSeconds(frame, duration);
             }
         }
 
@@ -123,26 +108,19 @@ namespace Quantum
             if (!frame.Unsafe.TryGetPointer<Transform2D>(entityRef, out var transform))
                 return;
 
-            var movementData = frame.Unsafe.GetPointer<MovementData>(entityRef);
+            MovementData* movementData = frame.Unsafe.GetPointer<MovementData>(entityRef);
+            FPVector2 direction = movementData->IsFacingRight ? FPVector2.Right : FPVector2.Left;
+            FP damage = CalculateDamage(frame, entityRef);
             
             for (int i = 0; i < ProjectileCount; i++)
             {
-                EntityRef projectile = frame.Create();
-                
-                if (frame.Unsafe.TryGetPointer<Transform2D>(projectile, out var projectileTransform))
-                {
-                    projectileTransform->Position = transform->Position;
-                    projectileTransform->Rotation = transform->Rotation;
-                }
-                
-                if (frame.Unsafe.TryGetPointer<Projectile>(projectile, out var projectileData))
-                {
-                    FP direction = movementData->IsFacingRight ? FP._1 : -FP._1;
-                    projectileData->Velocity = new FPVector2(direction * ProjectileSpeed, FP._0);
-                    projectileData->LifetimeTimer = CountdownTimer.FromSeconds(frame, ProjectileLifetime);
-                    projectileData->Damage = CalculateDamage(frame, entityRef);
-                    projectileData->Owner = entityRef;
-                }
+                // frame.Events.ProjectileSpawnRequested(
+                //     entityRef, 
+                //     transform->Position, 
+                //     direction * ProjectileSpeed, 
+                //     damage, 
+                //     ProjectileLifetime
+                // );
             }
         }
 
