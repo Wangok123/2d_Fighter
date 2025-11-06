@@ -15,12 +15,19 @@ namespace Quantum.QuantumView
         [SerializeField] private WarriorAnimationManager _manager;
 
         private bool _isPlayingAbilityAnimation;
+        // 添加：当前播放的攻击段数，防止重复播放
+        private int _currentAttackStep = -1;
         
         public override void OnActivate(Frame frame)
         {
             QuantumEvent.Subscribe<EventAbilityActivated>(this, OnAbilityActivated);
             QuantumEvent.Subscribe<EventAbilityCancelled>(this, OnAbilityCancelled);
             QuantumEvent.Subscribe<EventAbilityEnded>(this, OnAbilityEnded);
+            
+            // 订阅攻击事件
+            QuantumEvent.Subscribe<EventComboAttackStarted>(this, OnComboAttackStarted);
+            QuantumEvent.Subscribe<EventChargeAttackReleased>(this, OnChargeAttackReleased);
+            QuantumEvent.Subscribe<EventChargingStarted>(this, OnChargingStarted);
         }
 
         public override void OnDeactivate()
@@ -116,7 +123,7 @@ namespace Quantum.QuantumView
                     
                 case AbilityType.AttackLight:
                     _isPlayingAbilityAnimation = true;
-                    _manager.PlayAttack();
+                    
                     break;
             }
         }
@@ -135,6 +142,7 @@ namespace Quantum.QuantumView
                 case AbilityType.MovementAirDash:
                 case AbilityType.AttackLight:
                     _isPlayingAbilityAnimation = false;
+                    _currentAttackStep = -1;  // 重置攻击段数
                     break;
             }
         }
@@ -150,9 +158,61 @@ namespace Quantum.QuantumView
                 case AbilityType.AttackLight:
                 case AbilityType.MovementWallSlide:
                     _isPlayingAbilityAnimation = false;
+                    _currentAttackStep = -1;  // 重置攻击段数
                     break;
             }
         }
+        
+        // 轻攻击连击事件
+        private void OnComboAttackStarted(EventComboAttackStarted e)
+        {
+            if (e.Entity != EntityRef) return;
+
+            // 添加：防止同一段攻击重复播放
+            if (_currentAttackStep == e.Step)
+            {
+                return;
+            }
+            
+            _currentAttackStep = e.Step;
+            
+            // 根据连击段数播放动画
+            switch (e.Step)
+            {
+                case 1:
+                    _manager.PlayAttack1();  // Attack_1
+                    break;
+                case 2:
+                    _manager.PlayAttack2();  // Attack_2
+                    break;
+            }
+        }
+        
+        // 重攻击释放事件
+        private void OnChargeAttackReleased(EventChargeAttackReleased e)
+        {
+            if (e.Entity != EntityRef) return;
+    
+            // 根据是否满蓄力播放不同动画
+            if (e.IsFullyCharged)
+            {
+                _manager.PlayHeavyAttack();  // Attack_3（满蓄力重攻击）
+            }
+            else
+            {
+                _manager.PlayHeavyAttack();   // Attack（普通重攻击）
+            }
+        }
+
+        // 开始蓄力事件（可选，用于播放蓄力特效）
+        private void OnChargingStarted(EventChargingStarted e)
+        {
+            if (e.Entity != EntityRef) return;
+    
+            // 播放蓄力特效/音效
+            Debug.Log($"开始蓄力，最大蓄力时间: {e.MaxChargeTime}");
+        }
+
 
     }
 }

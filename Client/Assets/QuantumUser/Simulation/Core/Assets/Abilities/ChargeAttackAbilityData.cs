@@ -57,7 +57,7 @@ namespace Quantum
                 {
                     if (ShowFullChargeIndicator)
                     {
-                        //frame.Events.ChargeMaxReached(entityRef);
+                        frame.Events.ChargeMaxReached(entityRef);
                     }
                 }
             }
@@ -97,7 +97,7 @@ namespace Quantum
                 
                 if (ShowChargingEffect)
                 {
-                    //frame.Events.ChargingStarted(entityRef, MaxChargeTime);
+                    frame.Events.ChargingStarted(entityRef, MaxChargeTime);
                 }
                 
                 return false;

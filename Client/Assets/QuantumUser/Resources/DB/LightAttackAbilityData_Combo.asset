@@ -10,18 +10,18 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2372c3cb7edc072499edf188fa84aa84, type: 3}
-  m_Name: ComboAttackAbilityData
+  m_Name: LightAttackAbilityData_Combo
   m_EditorClassIdentifier: 
   Identifier:
-    Path: QuantumUser/Resources/DB/ComboAttackAbilityData
+    Path: QuantumUser/Resources/DB/LightAttackAbilityData_Combo
     Guid:
-      Value: 501362135799871875
+      Value: 519720871119260888
   InputBuffer:
     RawValue: 0
   Delay:
     RawValue: 0
   Duration:
-    RawValue: 16384
+    RawValue: 21845
   Cooldown:
     RawValue: 0
   CastDirectionType: 4
@@ -72,15 +72,21 @@ MonoBehaviour:
     IsPersistent: 1
     CompoundShapes: []
   KnockbackForce:
-    RawValue: 327680
+    RawValue: 262144
   KnockbackDirectionX:
     RawValue: 65536
   KnockbackDirectionY:
     RawValue: 32768
   HitstunDuration:
     RawValue: 16384
-  HitStatusEffects: []
-  MaxComboCount: 3
+  HitStatusEffects:
+  - Type: 1
+    Duration:
+      RawValue: 65536
+  - Type: 1
+    Duration:
+      RawValue: 65536
+  MaxComboCount: 2
   ComboWindow:
     RawValue: 32768
   RequireTimedInput: 0
@@ -89,24 +95,76 @@ MonoBehaviour:
   ComboDamageMultipliers:
   - RawValue: 65536
   - RawValue: 78643
-  - RawValue: 98304
   ComboDurations:
   - RawValue: 21845
   - RawValue: 21845
-  - RawValue: 32768
   ComboStartupTimes:
-  - RawValue: 6554
   - RawValue: 6554
   - RawValue: 6554
   ComboActiveTimes:
   - RawValue: 13107
   - RawValue: 13107
-  - RawValue: 16384
   ComboKnockbackForces:
   - RawValue: 196608
-  - RawValue: 262144
   - RawValue: 524288
-  ComboAttackShapes: []
+  ComboAttackShapes:
+  - ShapeType: 4
+    PolygonCollider:
+      Id:
+        Value: 0
+    CircleRadius:
+      RawValue: 0
+    CapsuleSize:
+      X:
+        RawValue: 0
+      Y:
+        RawValue: 0
+    EdgeExtent:
+      RawValue: 0
+    BoxExtents:
+      X:
+        RawValue: 0
+      Y:
+        RawValue: 0
+    PositionOffset:
+      X:
+        RawValue: 0
+      Y:
+        RawValue: 0
+    RotationOffset:
+      RawValue: 0
+    UserTag: 0
+    IsPersistent: 0
+    CompoundShapes: []
+  - ShapeType: 4
+    PolygonCollider:
+      Id:
+        Value: 0
+    CircleRadius:
+      RawValue: 0
+    CapsuleSize:
+      X:
+        RawValue: 0
+      Y:
+        RawValue: 0
+    EdgeExtent:
+      RawValue: 0
+    BoxExtents:
+      X:
+        RawValue: 0
+      Y:
+        RawValue: 0
+    PositionOffset:
+      X:
+        RawValue: 0
+      Y:
+        RawValue: 0
+    RotationOffset:
+      RawValue: 0
+    UserTag: 0
+    IsPersistent: 0
+    CompoundShapes: []
+  ComboStatusEffects: []
   LastHitLaunches: 1
   LastHitVerticalKnockback:
     RawValue: 131072

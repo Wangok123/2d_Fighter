@@ -4,6 +4,14 @@ using UnityEngine;
 
 namespace Quantum
 {
+    // 添加这个包装类
+    [Serializable]
+    public class ComboStatusEffectArray
+    {
+        [Tooltip("该连击段的状态效果列表")]
+        public StatusEffectConfig[] StatusEffects = new StatusEffectConfig[0];
+    }
+    
     [Serializable]
     public unsafe partial class ComboAttackAbilityData : AttackAbilityData
     {
@@ -14,24 +22,12 @@ namespace Quantum
         [Tooltip("连击时间窗口")]
         public FP ComboWindow = FP._0_50;
         
-        [Tooltip("是否需要在特定时机输入")]
-        public bool RequireTimedInput = false;
-        
-        [Tooltip("目押时间窗口")]
-        public FP TimedInputWindow = FP._0_10;
-        
         [Header("Combo Chain Configuration")]
         [Tooltip("每段连击的伤害倍率")]
         public FP[] ComboDamageMultipliers = new FP[] { FP._1, FP._1_20, FP._1_50 };
         
         [Tooltip("每段连击的持续时间")]
         public FP[] ComboDurations = new FP[] { FP._0_33, FP._0_33, FP._0_50 };
-        
-        [Tooltip("每段连击的启动时间")]
-        public FP[] ComboStartupTimes = new FP[] { FP._0_10, FP._0_10, FP._0_10 };
-        
-        [Tooltip("每段连击的活跃时间")]
-        public FP[] ComboActiveTimes = new FP[] { FP._0_20, FP._0_20, FP._0_25 };
         
         [Tooltip("每段连击的击退力度")]
         public FP[] ComboKnockbackForces = new FP[] { 3, 4, 8 };
@@ -40,15 +36,13 @@ namespace Quantum
         public Shape2DConfig[] ComboAttackShapes;
         
         [Tooltip("每段连击的状态效果")]
-        public StatusEffectConfig[][] ComboStatusEffects;
+        public ComboStatusEffectArray[] ComboStatusEffects;
         
         [Tooltip("最后一击是否有特殊效果")]
         public bool LastHitLaunches = true;
         
         [Tooltip("最后一击的垂直击退方向")]
         public FP LastHitVerticalKnockback = FP._2;
-
-        private FP _lastComboInputTime;
 
         public override unsafe bool TryActivateAbility(Frame frame, EntityRef entityRef, PlayerLink* playerLink, AbilityType abilityType, ref Ability ability)
         {
@@ -80,29 +74,19 @@ namespace Quantum
                 Duration = ComboDurations[comboIndex];
             }
             
-            if (comboIndex >= 0 && comboIndex < ComboStartupTimes.Length)
-            {
-                StartupTime = ComboStartupTimes[comboIndex];
-            }
-            
-            if (comboIndex >= 0 && comboIndex < ComboActiveTimes.Length)
-            {
-                ActiveTime = ComboActiveTimes[comboIndex];
-            }
-            
             if (comboIndex >= 0 && comboIndex < ComboKnockbackForces.Length)
             {
                 KnockbackForce = ComboKnockbackForces[comboIndex];
             }
             
-            if (comboIndex >= 0 && comboIndex < ComboAttackShapes.Length)
+            if (ComboAttackShapes != null && comboIndex >= 0 && comboIndex < ComboAttackShapes.Length)
             {
                 AttackShape = ComboAttackShapes[comboIndex];
             }
             
-            if (comboIndex >= 0 && comboIndex < ComboStatusEffects.Length)
+            if (ComboStatusEffects != null && comboIndex >= 0 && comboIndex < ComboStatusEffects.Length)
             {
-                HitStatusEffects = ComboStatusEffects[comboIndex];
+                HitStatusEffects = ComboStatusEffects[comboIndex].StatusEffects;
             }
         }
 
@@ -111,15 +95,29 @@ namespace Quantum
             AttackData* attackData = frame.Unsafe.GetPointer<AttackData>(entityRef);
             int comboStep = attackData->ComboCounter;
             
-            //frame.Events.ComboAttackStarted(entityRef, comboStep, MaxComboCount);
+            frame.Events.ComboAttackStarted(entityRef, comboStep, MaxComboCount);
             
             base.OnAttackActivate(frame, entityRef, ability);
             
             if (attackData->ComboCounter >= MaxComboCount)
             {
                 attackData->ComboCounter = 0;
+                
+                attackData->ComboWindowTimer = FrameTimer.None;
             }
         }
+        
+        protected override void OnAbilityCancelled(Frame frame, EntityRef entityRef, AbilityType cancelledAbilityType)
+        {
+            // 只处理连击攻击被取消的情况
+            if (cancelledAbilityType == AbilityType.AttackLight)
+            {
+                ResetComboState(frame, entityRef);
+            }
+    
+            base.OnAbilityCancelled(frame, entityRef, cancelledAbilityType);
+        }
+
 
         protected override FP CalculateDamage(Frame frame, EntityRef entityRef)
         {
@@ -154,6 +152,15 @@ namespace Quantum
             else
             {
                 base.ApplyKnockback(frame, attacker, target, hitDirection);
+            }
+        }
+        
+        private void ResetComboState(Frame frame, EntityRef entityRef)
+        {
+            if (frame.Unsafe.TryGetPointer<AttackData>(entityRef, out var attackData))
+            {
+                attackData->ComboCounter = 0;
+                attackData->ComboWindowTimer = FrameTimer.None;
             }
         }
     }

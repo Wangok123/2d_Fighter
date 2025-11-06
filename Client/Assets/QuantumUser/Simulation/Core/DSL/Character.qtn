@@ -92,3 +92,34 @@ event AbilityEnded
     AbilityType AbilityType;
 }
 
+// 连击事件
+event ComboAttackStarted
+{
+    EntityRef Entity;
+    Int32 Step;
+    Int32 MaxSteps;
+}
+
+// 蓄力攻击事件
+event ChargeAttackReleased
+{
+    EntityRef Entity;
+    FP ChargeTime;
+    Boolean IsFullyCharged;
+}
+
+// 蓄力开始事件
+event ChargingStarted
+{
+    EntityRef Entity;
+    FP MaxChargeTime;
+}
+
+// 满蓄力事件
+event ChargeMaxReached
+{
+    EntityRef Entity;
+}
+
+
+

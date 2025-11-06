@@ -27,8 +27,10 @@ namespace UnityCore.AnimationSystem
             public const string Jump = "jump";
             public const string JumpToFall = "JumptoFall";
             public const string Fall = "Fall";
-            public const string Attack = "Attack";
-            public const string DashAttack = "Dash-Attack";
+            public const string DashAttack = "Attack";
+            public const string Attack1 = "Attack_1";
+            public const string Attack2 = "Attack_2";
+            public const string HeavyAttack = "Attack_3";
             public const string DashAttackNoDust = "Dash-Attack NoDust";
             public const string Dash = "Dash";
             public const string DashNoDust = "Dash NoDust";
@@ -60,7 +62,9 @@ namespace UnityCore.AnimationSystem
             RegisterState(AnimationStates.Fall, layer: 0, crossfadeDuration: 0.1f);
 
             // 注册攻击动画 / Register attack animations
-            RegisterState(AnimationStates.Attack, layer: 0, crossfadeDuration: 0.05f);
+            RegisterState(AnimationStates.Attack1, layer: 0, crossfadeDuration: 0.05f);
+            RegisterState(AnimationStates.Attack2, layer: 0, crossfadeDuration: 0.05f);
+            RegisterState(AnimationStates.HeavyAttack, layer: 0, crossfadeDuration: 0.05f);
             RegisterState(AnimationStates.DashAttack, layer: 0, crossfadeDuration: 0.05f);
             RegisterState(AnimationStates.DashAttackNoDust, layer: 0, crossfadeDuration: 0.05f);
 
@@ -103,7 +107,10 @@ namespace UnityCore.AnimationSystem
         public void PlayRun() => PlayAnimation(AnimationStates.Run);
         public void PlayJump() => PlayAnimation(AnimationStates.Jump);
         public void PlayFall() => PlayAnimation(AnimationStates.Fall);
-        public void PlayAttack() => PlayAnimation(AnimationStates.Attack);
+        public void PlayDashAttack() => PlayAnimation(AnimationStates.DashAttack);
+        public void PlayAttack1() => PlayAnimation(AnimationStates.Attack1);
+        public void PlayAttack2() => PlayAnimation(AnimationStates.Attack2);
+        public void PlayHeavyAttack() => PlayAnimation(AnimationStates.HeavyAttack);
         public void PlayDash() => PlayAnimation(AnimationStates.Dash);
         public void PlayCrouch() => PlayAnimation(AnimationStates.Crouch);
         public void PlaySlide() => PlayAnimation(AnimationStates.Slide);

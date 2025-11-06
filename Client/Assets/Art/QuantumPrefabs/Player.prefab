@@ -19,7 +19,8 @@ GameObject:
   - component: {fileID: 8665276627128132852}
   - component: {fileID: 7037740535014558776}
   - component: {fileID: 4042427979017233580}
-  m_Layer: 0
+  - component: {fileID: 2809623338448697929}
+  m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -134,7 +135,7 @@ MonoBehaviour:
       IsPersistent: 1
       CompoundShapes: []
     LayerSource: 0
-    Layer: 0
+    Layer: 6
     CallbackFlags:
       Value: 0
   PhysicsBody:
@@ -558,7 +559,7 @@ MonoBehaviour:
       Value:
         AbilityData:
           Id:
-            Value: 514875114087800724
+            Value: 519720871119260888
         ChargeTimer:
           Mode: 0
           Frames: 0
@@ -566,6 +567,20 @@ MonoBehaviour:
             RawValue: 0
         UsageCount: 0
         ComboStep: 0
+--- !u!114 &2809623338448697929
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 747601124680124256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cc3612f60dbb4b5db149399f576aa197, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Prototype:
+    _empty_prototype_dummy_field_: 0
 --- !u!1 &4774830198564325150
 GameObject:
   m_ObjectHideFlags: 0
@@ -575,7 +590,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8015249240277242128}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: CharacterModel
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -609,6 +624,10 @@ PrefabInstance:
     - target: {fileID: 3083854885697321796, guid: 0fed2bfe9f5a1134eb49adc1628e6af3, type: 3}
       propertyPath: m_Name
       value: Warrior
+      objectReference: {fileID: 0}
+    - target: {fileID: 3083854885697321796, guid: 0fed2bfe9f5a1134eb49adc1628e6af3, type: 3}
+      propertyPath: m_Layer
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 4686640316857813791, guid: 0fed2bfe9f5a1134eb49adc1628e6af3, type: 3}
       propertyPath: m_LocalPosition.x

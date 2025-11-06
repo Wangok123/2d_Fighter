@@ -16,16 +16,6 @@ namespace Quantum
         [Tooltip("每级伤害加成")]
         public FP DamagePerLevel = FP._0_50;
         
-        [Header("Attack Timing")]
-        [Tooltip("攻击启动时间")]
-        public FP StartupTime = FP._0_10;
-        
-        [Tooltip("攻击判定活跃时间")]
-        public FP ActiveTime = FP._0_20;
-        
-        [Tooltip("攻击恢复时间")]
-        public FP RecoveryTime = FP._0_33;
-        
         [Header("Attack Range")]
         [Tooltip("攻击判定形状")]
         public Shape2DConfig AttackShape;

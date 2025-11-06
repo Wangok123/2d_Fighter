@@ -52,7 +52,7 @@ namespace Quantum {
   public unsafe partial class Frame {
     public unsafe partial struct FrameEvents {
       static partial void GetEventTypeCountCodeGen(ref Int32 eventCount) {
-        eventCount = 9;
+        eventCount = 13;
       }
       static partial void GetParentEventIDCodeGen(Int32 eventID, ref Int32 parentEventID) {
         switch (eventID) {
@@ -67,6 +67,10 @@ namespace Quantum {
           case EventAbilityActivated.ID: result = typeof(EventAbilityActivated); return;
           case EventAbilityCancelled.ID: result = typeof(EventAbilityCancelled); return;
           case EventAbilityEnded.ID: result = typeof(EventAbilityEnded); return;
+          case EventComboAttackStarted.ID: result = typeof(EventComboAttackStarted); return;
+          case EventChargeAttackReleased.ID: result = typeof(EventChargeAttackReleased); return;
+          case EventChargingStarted.ID: result = typeof(EventChargingStarted); return;
+          case EventChargeMaxReached.ID: result = typeof(EventChargeMaxReached); return;
           case EventJumped.ID: result = typeof(EventJumped); return;
           case EventLanded.ID: result = typeof(EventLanded); return;
           default: break;
@@ -116,6 +120,35 @@ namespace Quantum {
         var ev = _f.Context.AcquireEvent<EventAbilityEnded>(EventAbilityEnded.ID);
         ev.Entity = Entity;
         ev.AbilityType = AbilityType;
+        _f.AddEvent(ev);
+        return ev;
+      }
+      public EventComboAttackStarted ComboAttackStarted(EntityRef Entity, Int32 Step, Int32 MaxSteps) {
+        var ev = _f.Context.AcquireEvent<EventComboAttackStarted>(EventComboAttackStarted.ID);
+        ev.Entity = Entity;
+        ev.Step = Step;
+        ev.MaxSteps = MaxSteps;
+        _f.AddEvent(ev);
+        return ev;
+      }
+      public EventChargeAttackReleased ChargeAttackReleased(EntityRef Entity, FP ChargeTime, QBoolean IsFullyCharged) {
+        var ev = _f.Context.AcquireEvent<EventChargeAttackReleased>(EventChargeAttackReleased.ID);
+        ev.Entity = Entity;
+        ev.ChargeTime = ChargeTime;
+        ev.IsFullyCharged = IsFullyCharged;
+        _f.AddEvent(ev);
+        return ev;
+      }
+      public EventChargingStarted ChargingStarted(EntityRef Entity, FP MaxChargeTime) {
+        var ev = _f.Context.AcquireEvent<EventChargingStarted>(EventChargingStarted.ID);
+        ev.Entity = Entity;
+        ev.MaxChargeTime = MaxChargeTime;
+        _f.AddEvent(ev);
+        return ev;
+      }
+      public EventChargeMaxReached ChargeMaxReached(EntityRef Entity) {
+        var ev = _f.Context.AcquireEvent<EventChargeMaxReached>(EventChargeMaxReached.ID);
+        ev.Entity = Entity;
         _f.AddEvent(ev);
         return ev;
       }
@@ -310,16 +343,15 @@ namespace Quantum {
       }
     }
   }
-  public unsafe partial class EventJumped : EventBase {
+  public unsafe partial class EventComboAttackStarted : EventBase {
     public new const Int32 ID = 7;
     public EntityRef Entity;
-    public KCCState State;
-    public KCCState PreviousState;
-    public FPVector2 Impulse;
-    protected EventJumped(Int32 id, EventFlags flags) : 
+    public Int32 Step;
+    public Int32 MaxSteps;
+    protected EventComboAttackStarted(Int32 id, EventFlags flags) : 
         base(id, flags) {
     }
-    public EventJumped() : 
+    public EventComboAttackStarted() : 
         base(7, EventFlags.Server|EventFlags.Client) {
     }
     public new QuantumGame Game {
@@ -334,22 +366,21 @@ namespace Quantum {
       unchecked {
         var hash = 67;
         hash = hash * 31 + Entity.GetHashCode();
-        hash = hash * 31 + State.GetHashCode();
-        hash = hash * 31 + PreviousState.GetHashCode();
-        hash = hash * 31 + Impulse.GetHashCode();
+        hash = hash * 31 + Step.GetHashCode();
+        hash = hash * 31 + MaxSteps.GetHashCode();
         return hash;
       }
     }
   }
-  public unsafe partial class EventLanded : EventBase {
+  public unsafe partial class EventChargeAttackReleased : EventBase {
     public new const Int32 ID = 8;
     public EntityRef Entity;
-    public FP Velocity;
-    public KCCState State;
-    protected EventLanded(Int32 id, EventFlags flags) : 
+    public FP ChargeTime;
+    public QBoolean IsFullyCharged;
+    protected EventChargeAttackReleased(Int32 id, EventFlags flags) : 
         base(id, flags) {
     }
-    public EventLanded() : 
+    public EventChargeAttackReleased() : 
         base(8, EventFlags.Server|EventFlags.Client) {
     }
     public new QuantumGame Game {
@@ -363,6 +394,118 @@ namespace Quantum {
     public override Int32 GetHashCode() {
       unchecked {
         var hash = 71;
+        hash = hash * 31 + Entity.GetHashCode();
+        hash = hash * 31 + ChargeTime.GetHashCode();
+        hash = hash * 31 + IsFullyCharged.GetHashCode();
+        return hash;
+      }
+    }
+  }
+  public unsafe partial class EventChargingStarted : EventBase {
+    public new const Int32 ID = 9;
+    public EntityRef Entity;
+    public FP MaxChargeTime;
+    protected EventChargingStarted(Int32 id, EventFlags flags) : 
+        base(id, flags) {
+    }
+    public EventChargingStarted() : 
+        base(9, EventFlags.Server|EventFlags.Client) {
+    }
+    public new QuantumGame Game {
+      get {
+        return (QuantumGame)base.Game;
+      }
+      set {
+        base.Game = value;
+      }
+    }
+    public override Int32 GetHashCode() {
+      unchecked {
+        var hash = 73;
+        hash = hash * 31 + Entity.GetHashCode();
+        hash = hash * 31 + MaxChargeTime.GetHashCode();
+        return hash;
+      }
+    }
+  }
+  public unsafe partial class EventChargeMaxReached : EventBase {
+    public new const Int32 ID = 10;
+    public EntityRef Entity;
+    protected EventChargeMaxReached(Int32 id, EventFlags flags) : 
+        base(id, flags) {
+    }
+    public EventChargeMaxReached() : 
+        base(10, EventFlags.Server|EventFlags.Client) {
+    }
+    public new QuantumGame Game {
+      get {
+        return (QuantumGame)base.Game;
+      }
+      set {
+        base.Game = value;
+      }
+    }
+    public override Int32 GetHashCode() {
+      unchecked {
+        var hash = 79;
+        hash = hash * 31 + Entity.GetHashCode();
+        return hash;
+      }
+    }
+  }
+  public unsafe partial class EventJumped : EventBase {
+    public new const Int32 ID = 11;
+    public EntityRef Entity;
+    public KCCState State;
+    public KCCState PreviousState;
+    public FPVector2 Impulse;
+    protected EventJumped(Int32 id, EventFlags flags) : 
+        base(id, flags) {
+    }
+    public EventJumped() : 
+        base(11, EventFlags.Server|EventFlags.Client) {
+    }
+    public new QuantumGame Game {
+      get {
+        return (QuantumGame)base.Game;
+      }
+      set {
+        base.Game = value;
+      }
+    }
+    public override Int32 GetHashCode() {
+      unchecked {
+        var hash = 83;
+        hash = hash * 31 + Entity.GetHashCode();
+        hash = hash * 31 + State.GetHashCode();
+        hash = hash * 31 + PreviousState.GetHashCode();
+        hash = hash * 31 + Impulse.GetHashCode();
+        return hash;
+      }
+    }
+  }
+  public unsafe partial class EventLanded : EventBase {
+    public new const Int32 ID = 12;
+    public EntityRef Entity;
+    public FP Velocity;
+    public KCCState State;
+    protected EventLanded(Int32 id, EventFlags flags) : 
+        base(id, flags) {
+    }
+    public EventLanded() : 
+        base(12, EventFlags.Server|EventFlags.Client) {
+    }
+    public new QuantumGame Game {
+      get {
+        return (QuantumGame)base.Game;
+      }
+      set {
+        base.Game = value;
+      }
+    }
+    public override Int32 GetHashCode() {
+      unchecked {
+        var hash = 89;
         hash = hash * 31 + Entity.GetHashCode();
         hash = hash * 31 + Velocity.GetHashCode();
         hash = hash * 31 + State.GetHashCode();

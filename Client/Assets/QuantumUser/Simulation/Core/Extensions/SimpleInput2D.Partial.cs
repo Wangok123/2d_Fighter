@@ -68,6 +68,11 @@ namespace Quantum {
         case AbilityType.MovementWallJump:
         case AbilityType.MovementDoubleJump:
           return Jump.WasPressed;
+        case AbilityType.AttackLight:
+          return LP.WasPressed;
+        case AbilityType.AttackHeavy:
+          return HP.WasPressed;
+        
         default:
           throw new System.ArgumentException($"Unknown {nameof(AbilityType)}: {abilityType}", nameof(abilityType));
       }
