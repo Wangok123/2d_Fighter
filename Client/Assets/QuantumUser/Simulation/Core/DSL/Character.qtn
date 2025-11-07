@@ -121,5 +121,11 @@ event ChargeMaxReached
     EntityRef Entity;
 }
 
+event AttackHitboxActivated
+{
+    entity_ref Entity;
+    Int32 ComboStep;
+}
+
 
 

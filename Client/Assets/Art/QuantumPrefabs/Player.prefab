@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 3351024916982054779}
   - component: {fileID: 4225920870206189311}
   - component: {fileID: 8595205649062271519}
+  - component: {fileID: 6071441484835123145}
   - component: {fileID: 8665276627128132852}
   - component: {fileID: 7037740535014558776}
   - component: {fileID: 4042427979017233580}
@@ -379,6 +380,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04a1f74c0f284b57a8be0af2e7423374, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6071441484835123145
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 747601124680124256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d487beb18c6f64745b91190c87209af8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EnableDebug: 1
+  AttackRangeColor: {r: 1, g: 0, b: 0, a: 0.3}
+  AttackWireframeColor: {r: 1, g: 0, b: 0, a: 1}
+  DisplayDuration: 0.1
+  Combo1Color: {r: 1, g: 0.5, b: 0, a: 0.3}
+  Combo2Color: {r: 1, g: 0, b: 0, a: 0.3}
+  Combo3Color: {r: 0.5, g: 0, b: 1, a: 0.3}
 --- !u!114 &8665276627128132852
 MonoBehaviour:
   m_ObjectHideFlags: 0

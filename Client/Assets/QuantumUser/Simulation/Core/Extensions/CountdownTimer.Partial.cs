@@ -6,6 +6,7 @@ namespace Quantum
     {
         public bool IsRunning => TimeLeft > FP._0;
         public bool IsDone => !IsRunning;
+        public FP ElapsedTime => StartTime - TimeLeft;
 
         public FP NormalizedTimeLeft
         {

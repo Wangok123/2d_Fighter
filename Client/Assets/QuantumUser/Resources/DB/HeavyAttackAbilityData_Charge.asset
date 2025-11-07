@@ -9,28 +9,28 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2372c3cb7edc072499edf188fa84aa84, type: 3}
-  m_Name: LightAttackAbilityData_Combo
+  m_Script: {fileID: 11500000, guid: 0d171e42800b39d44a8beccfb25d2007, type: 3}
+  m_Name: HeavyAttackAbilityData_Charge
   m_EditorClassIdentifier: 
   Identifier:
-    Path: QuantumUser/Resources/DB/LightAttackAbilityData_Combo
+    Path: QuantumUser/Resources/DB/HeavyAttackAbilityData_Charge
     Guid:
-      Value: 519720871119260888
+      Value: 477480624821614058
   InputBuffer:
-    RawValue: 0
+    RawValue: 9831
   Delay:
-    RawValue: 0
+    RawValue: 9831
   Duration:
-    RawValue: 21845
+    RawValue: 16384
   Cooldown:
-    RawValue: 0
+    RawValue: 327680
   CastDirectionType: 4
   FaceCastDirection: 1
   KeepVelocity: 0
   StartCooldownAfterDelay: 0
   Priority: 2
   CanBeCancelledByHigherPriority: 1
-  CanCancelLowerPriority: 0
+  CanCancelLowerPriority: 1
   _uiAbilityPrefab: {fileID: 0}
   BaseDamage:
     RawValue: 655360
@@ -42,14 +42,14 @@ MonoBehaviour:
       Id:
         Value: 0
     CircleRadius:
-      RawValue: 0
+      RawValue: 32768
     CapsuleSize:
       X:
-        RawValue: 0
+        RawValue: 65536
       Y:
-        RawValue: 0
+        RawValue: 131072
     EdgeExtent:
-      RawValue: 0
+      RawValue: 32768
     BoxExtents:
       X:
         RawValue: 32768
@@ -63,93 +63,59 @@ MonoBehaviour:
     RotationOffset:
       RawValue: 0
     UserTag: 0
-    IsPersistent: 0
+    IsPersistent: 1
     CompoundShapes: []
   KnockbackForce:
-    RawValue: 196608
+    RawValue: 327680
   KnockbackDirectionX:
     RawValue: 65536
   KnockbackDirectionY:
     RawValue: 32768
   HitstunDuration:
     RawValue: 16384
-  HitStatusEffects:
-  - Type: 1
-    Duration:
-      RawValue: 65536
-  - Type: 1
-    Duration:
-      RawValue: 65536
-  MaxComboCount: 2
-  ComboWindow:
+  HitStatusEffects: []
+  MinChargeTime:
     RawValue: 32768
-  ComboDamageMultipliers:
-  - RawValue: 65536
-  - RawValue: 78643
-  ComboDurations:
-  - RawValue: 21845
-  - RawValue: 21845
-  ComboKnockbackForces:
-  - RawValue: 196608
-  - RawValue: 524288
-  ComboAttackShapes:
-  - ShapeType: 4
-    PolygonCollider:
-      Id:
-        Value: 0
-    CircleRadius:
-      RawValue: 0
-    CapsuleSize:
-      X:
-        RawValue: 0
-      Y:
-        RawValue: 0
-    EdgeExtent:
-      RawValue: 0
-    BoxExtents:
-      X:
-        RawValue: 32768
-      Y:
-        RawValue: 32768
-    PositionOffset:
-      X:
-        RawValue: 0
-      Y:
-        RawValue: 0
-    RotationOffset:
-      RawValue: 0
-    UserTag: 0
-    IsPersistent: 0
-    CompoundShapes: []
-  - ShapeType: 4
-    PolygonCollider:
-      Id:
-        Value: 0
-    CircleRadius:
-      RawValue: 0
-    CapsuleSize:
-      X:
-        RawValue: 0
-      Y:
-        RawValue: 0
-    EdgeExtent:
-      RawValue: 0
-    BoxExtents:
-      X:
-        RawValue: 32768
-      Y:
-        RawValue: 32768
-    PositionOffset:
-      X:
-        RawValue: 0
-      Y:
-        RawValue: 0
-    RotationOffset:
-      RawValue: 0
-    UserTag: 0
-    IsPersistent: 0
-    CompoundShapes: []
-  ComboStatusEffects: []
-  LastHitLaunches: 1
-  LastHitVerticalKnockback:
+  MaxChargeTime:
     RawValue: 131072
+  FullChargeDamageMultiplier:
+    RawValue: 163840
+  MinChargeDamageMultiplier:
+    RawValue: 78643
+  ShowChargingEffect: 1
+  ShowFullChargeIndicator: 1
+  FullChargeAttackShape:
+    ShapeType: 0
+    PolygonCollider:
+      Id:
+        Value: 0
+    CircleRadius:
+      RawValue: 32768
+    CapsuleSize:
+      X:
+        RawValue: 65536
+      Y:
+        RawValue: 131072
+    EdgeExtent:
+      RawValue: 32768
+    BoxExtents:
+      X:
+        RawValue: 32768
+      Y:
+        RawValue: 32768
+    PositionOffset:
+      X:
+        RawValue: 0
+      Y:
+        RawValue: 0
+    RotationOffset:
+      RawValue: 0
+    UserTag: 0
+    IsPersistent: 1
+    CompoundShapes: []
+  FullChargeKnockbackForce:
+    RawValue: 655360
+  FullChargeStatusEffects: []
+  CanMoveWhileCharging: 0
+  ChargingMoveSpeedMultiplier:
+    RawValue: 32768

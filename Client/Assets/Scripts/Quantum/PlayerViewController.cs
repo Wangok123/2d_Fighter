@@ -17,6 +17,8 @@ namespace Quantum.QuantumView
         private bool _isPlayingAbilityAnimation;
         // 添加：当前播放的攻击段数，防止重复播放
         private int _currentAttackStep = -1;
+        private int _lastComboEventFrame = -1;
+        private int _lastComboStep = -1;
         
         public override void OnActivate(Frame frame)
         {
@@ -168,6 +170,18 @@ namespace Quantum.QuantumView
         {
             if (e.Entity != EntityRef) return;
 
+            // 防止Quantum回滚导致的重复事件触发
+            int currentFrame = VerifiedFrame.Number;
+            if (_lastComboEventFrame == currentFrame && _lastComboStep == e.Step)
+            {
+                return;
+            }
+    
+            _lastComboEventFrame = currentFrame;
+            _lastComboStep = e.Step;
+            
+            Debug.Log($"连击攻击开始，当前段数: {e.Step}");
+            
             // 添加：防止同一段攻击重复播放
             if (_currentAttackStep == e.Step)
             {
