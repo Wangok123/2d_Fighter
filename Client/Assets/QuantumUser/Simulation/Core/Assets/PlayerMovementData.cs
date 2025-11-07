@@ -6,7 +6,7 @@
         
         public unsafe void UpdateKCCSettings(Frame frame, EntityRef playerEntityRef)
         {
-            CharacterStatus* playerStatus = frame.Unsafe.GetPointer<CharacterStatus>(playerEntityRef);
+            CharacterStatusComponent* playerStatus = frame.Unsafe.GetPointer<CharacterStatusComponent>(playerEntityRef);
             AbilityInventory* abilityInventory = frame.Unsafe.GetPointer<AbilityInventory>(playerEntityRef);
             KCC2D* kcc = frame.Unsafe.GetPointer<KCC2D>(playerEntityRef);
 

@@ -3,7 +3,7 @@ enum CharacterTeam
     None, Blue, Red, Neutral
 }
 
-component CharacterStatus
+component CharacterStatusComponent
 {
     asset_ref<StatusData> StatusData;
     asset_ref<PlayerMovementData> PlayerMovementData;
@@ -12,24 +12,21 @@ component CharacterStatus
 	Boolean IsDead;
 	Boolean IsIncapacitated;
 	
-	FrameTimer RespawnTimer;
-	FrameTimer RegenTimer;
-	FrameTimer InvincibleTimer;
 	FrameTimer DisconnectedTimer;
 }
 
-component MovementData
+component MovementComponent
 {
 	[ExcludeFromPrototype] bool IsFacingRight;
 	[ExcludeFromPrototype] bool HasAirJump;
 }
 
-component CharacterLevel
+component CharacterLevelComponent
 {
 	Int32 CurrentLevel;
 }
 
-component AttackData
+component AttackComponent
 {
 	// Single source of character configuration - ModularCharacterConfig replaces legacy AttackConfig
 	[ExcludeFromPrototype] Int32 ComboCounter;
@@ -50,6 +47,53 @@ component CommandInputData
 	[ExcludeFromPrototype] Int32 InputBufferIndex;
 	[ExcludeFromPrototype] FrameTimer InputExpiryTimer;
 }
+
+// Signals
+signal OnKnockbackApplied(EntityRef target, FP duration, FPVector2 knockbackVelocity);
+signal OnStunApplied(EntityRef target, FP duration);
+signal OnHitstunApplied(EntityRef target, FP duration);
+signal OnDamageTaken(EntityRef target, EntityRef attacker, FP damage, HitType hitType);
+signal OnEntityDied(EntityRef target, EntityRef killer);
+signal OnEntityRespawned(EntityRef entity);
+signal OnSuperArmorActivated(EntityRef entity);
+signal OnSuperArmorBroken(EntityRef entity);
+
+// Events
+event OnPlayerHit
+{
+    entity_ref Entity;
+    entity_ref Attacker;
+    FP Damage;
+    FPVector2 HitDirection;
+    HitType HitType;
+    bool IsCounterHit;
+}
+
+event OnPlayerDied
+{
+    entity_ref Entity;
+    entity_ref Killer;
+}
+
+event OnPlayerRespawn
+{
+    entity_ref Entity;
+    FPVector2 Position;
+}
+
+event OnPlayerKnockedBack
+{
+    entity_ref Entity;
+    FPVector2 Direction;
+    FP Force;
+}
+
+event OnSuperArmorTriggered
+{
+    entity_ref Entity;
+    FP RemainingArmor;
+}
+
 
 event LevelUp
 {

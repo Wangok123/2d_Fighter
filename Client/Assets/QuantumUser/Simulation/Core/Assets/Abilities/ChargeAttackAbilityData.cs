@@ -45,7 +45,7 @@ namespace Quantum
 
         public override void UpdateInput(Frame frame, EntityRef entityRef, AbilityType abilityType, Ability* ability, SimpleInput2D input)
         {
-            AttackData* attackData = frame.Unsafe.GetPointer<AttackData>(entityRef);
+            AttackComponent* attackData = frame.Unsafe.GetPointer<AttackComponent>(entityRef);
             
             if (attackData->IsChargingHeavy)
             {
@@ -69,7 +69,7 @@ namespace Quantum
         
         protected override bool ShouldBufferInput(Frame frame, EntityRef entityRef, AbilityType abilityType, Ability* ability, SimpleInput2D input)
         {
-            AttackData* attackData = frame.Unsafe.GetPointer<AttackData>(entityRef);
+            AttackComponent* attackData = frame.Unsafe.GetPointer<AttackComponent>(entityRef);
             
             if (attackData->IsChargingHeavy)
             {
@@ -81,7 +81,7 @@ namespace Quantum
         
         public override unsafe bool TryActivateAbility(Frame frame, EntityRef entityRef, PlayerLink* playerLink, AbilityType abilityType, ref Ability ability)
         {
-            AttackData* attackData = frame.Unsafe.GetPointer<AttackData>(entityRef);
+            AttackComponent* attackData = frame.Unsafe.GetPointer<AttackComponent>(entityRef);
             
             if (attackData->IsChargingHeavy)
             {
@@ -108,7 +108,7 @@ namespace Quantum
 
         protected virtual void ReleaseCharge(Frame frame, EntityRef entityRef, AbilityType abilityType)
         {
-            AttackData* attackData = frame.Unsafe.GetPointer<AttackData>(entityRef);
+            AttackComponent* attackData = frame.Unsafe.GetPointer<AttackComponent>(entityRef);
             
             FP chargeTime = attackData->ChargeTimer.ElapsedSeconds(frame);
             bool isMinCharged = chargeTime >= MinChargeTime;
@@ -150,7 +150,7 @@ namespace Quantum
         {
             FP baseDamage = base.CalculateDamage(frame, entityRef);
             
-            AttackData* attackData = frame.Unsafe.GetPointer<AttackData>(entityRef);
+            AttackComponent* attackData = frame.Unsafe.GetPointer<AttackComponent>(entityRef);
             FP chargeRatio = FPMath.Clamp(attackData->HeavyChargeTime / MaxChargeTime, FP._0, FP._1);
             FP chargeMultiplier = FPMath.Lerp(MinChargeDamageMultiplier, FullChargeDamageMultiplier, chargeRatio);
             

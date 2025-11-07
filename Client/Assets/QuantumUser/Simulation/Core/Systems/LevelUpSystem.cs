@@ -12,7 +12,7 @@ namespace Quantum
         public struct Filter
         {
             public EntityRef Entity;
-            public CharacterLevel* Level;
+            public CharacterLevelComponent* Level;
         }
 
         public override void Update(Frame frame, ref Filter filter)
@@ -26,7 +26,7 @@ namespace Quantum
         /// </summary>
         public static void LevelUpCharacter(Frame frame, EntityRef entity, int levelsToAdd = 1)
         {
-            if (!frame.Unsafe.TryGetPointer(entity, out CharacterLevel* level))
+            if (!frame.Unsafe.TryGetPointer(entity, out CharacterLevelComponent* level))
             {
                 return;
             }
@@ -45,7 +45,7 @@ namespace Quantum
         /// </summary>
         public static void SetCharacterLevel(Frame frame, EntityRef entity, int newLevel)
         {
-            if (!frame.Unsafe.TryGetPointer(entity, out CharacterLevel* level))
+            if (!frame.Unsafe.TryGetPointer(entity, out CharacterLevelComponent* level))
             {
                 return;
             }

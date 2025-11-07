@@ -51,7 +51,7 @@ namespace Quantum.QuantumView
 
         private void UpdateRightFace()
         {
-            bool isRight = VerifiedFrame.Get<MovementData>(EntityRef).IsFacingRight;
+            bool isRight = VerifiedFrame.Get<MovementComponent>(EntityRef).IsFacingRight;
             if (isRight)
             {
                 _playerCenterTransform.localRotation = Quaternion.Euler(_rightRotation);
@@ -179,8 +179,6 @@ namespace Quantum.QuantumView
     
             _lastComboEventFrame = currentFrame;
             _lastComboStep = e.Step;
-            
-            Debug.Log($"连击攻击开始，当前段数: {e.Step}");
             
             // 添加：防止同一段攻击重复播放
             if (_currentAttackStep == e.Step)

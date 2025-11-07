@@ -162,62 +162,56 @@ namespace Quantum.Prototypes {
     }
   }
   [System.SerializableAttribute()]
-  [Quantum.Prototypes.Prototype(typeof(Quantum.AttackData))]
-  public unsafe partial class AttackDataPrototype : ComponentPrototype<Quantum.AttackData> {
+  [Quantum.Prototypes.Prototype(typeof(Quantum.AttackComponent))]
+  public unsafe partial class AttackComponentPrototype : ComponentPrototype<Quantum.AttackComponent> {
     [HideInInspector()]
     public Int32 _empty_prototype_dummy_field_;
-    partial void MaterializeUser(Frame frame, ref Quantum.AttackData result, in PrototypeMaterializationContext context);
+    partial void MaterializeUser(Frame frame, ref Quantum.AttackComponent result, in PrototypeMaterializationContext context);
     public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
-        Quantum.AttackData component = default;
+        Quantum.AttackComponent component = default;
         Materialize((Frame)f, ref component, in context);
         return f.Set(entity, component) == SetResult.ComponentAdded;
     }
-    public void Materialize(Frame frame, ref Quantum.AttackData result, in PrototypeMaterializationContext context = default) {
+    public void Materialize(Frame frame, ref Quantum.AttackComponent result, in PrototypeMaterializationContext context = default) {
         MaterializeUser(frame, ref result, in context);
     }
   }
   [System.SerializableAttribute()]
-  [Quantum.Prototypes.Prototype(typeof(Quantum.CharacterLevel))]
-  public unsafe partial class CharacterLevelPrototype : ComponentPrototype<Quantum.CharacterLevel> {
+  [Quantum.Prototypes.Prototype(typeof(Quantum.CharacterLevelComponent))]
+  public unsafe partial class CharacterLevelComponentPrototype : ComponentPrototype<Quantum.CharacterLevelComponent> {
     public Int32 CurrentLevel;
-    partial void MaterializeUser(Frame frame, ref Quantum.CharacterLevel result, in PrototypeMaterializationContext context);
+    partial void MaterializeUser(Frame frame, ref Quantum.CharacterLevelComponent result, in PrototypeMaterializationContext context);
     public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
-        Quantum.CharacterLevel component = default;
+        Quantum.CharacterLevelComponent component = default;
         Materialize((Frame)f, ref component, in context);
         return f.Set(entity, component) == SetResult.ComponentAdded;
     }
-    public void Materialize(Frame frame, ref Quantum.CharacterLevel result, in PrototypeMaterializationContext context = default) {
+    public void Materialize(Frame frame, ref Quantum.CharacterLevelComponent result, in PrototypeMaterializationContext context = default) {
         result.CurrentLevel = this.CurrentLevel;
         MaterializeUser(frame, ref result, in context);
     }
   }
   [System.SerializableAttribute()]
-  [Quantum.Prototypes.Prototype(typeof(Quantum.CharacterStatus))]
-  public unsafe partial class CharacterStatusPrototype : ComponentPrototype<Quantum.CharacterStatus> {
+  [Quantum.Prototypes.Prototype(typeof(Quantum.CharacterStatusComponent))]
+  public unsafe partial class CharacterStatusComponentPrototype : ComponentPrototype<Quantum.CharacterStatusComponent> {
     public AssetRef<StatusData> StatusData;
     public AssetRef<PlayerMovementData> PlayerMovementData;
     public FP CurrentHealth;
     public QBoolean IsDead;
     public QBoolean IsIncapacitated;
-    public Quantum.Prototypes.FrameTimerPrototype RespawnTimer;
-    public Quantum.Prototypes.FrameTimerPrototype RegenTimer;
-    public Quantum.Prototypes.FrameTimerPrototype InvincibleTimer;
     public Quantum.Prototypes.FrameTimerPrototype DisconnectedTimer;
-    partial void MaterializeUser(Frame frame, ref Quantum.CharacterStatus result, in PrototypeMaterializationContext context);
+    partial void MaterializeUser(Frame frame, ref Quantum.CharacterStatusComponent result, in PrototypeMaterializationContext context);
     public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
-        Quantum.CharacterStatus component = default;
+        Quantum.CharacterStatusComponent component = default;
         Materialize((Frame)f, ref component, in context);
         return f.Set(entity, component) == SetResult.ComponentAdded;
     }
-    public void Materialize(Frame frame, ref Quantum.CharacterStatus result, in PrototypeMaterializationContext context = default) {
+    public void Materialize(Frame frame, ref Quantum.CharacterStatusComponent result, in PrototypeMaterializationContext context = default) {
         result.StatusData = this.StatusData;
         result.PlayerMovementData = this.PlayerMovementData;
         result.CurrentHealth = this.CurrentHealth;
         result.IsDead = this.IsDead;
         result.IsIncapacitated = this.IsIncapacitated;
-        this.RespawnTimer.Materialize(frame, ref result.RespawnTimer, in context);
-        this.RegenTimer.Materialize(frame, ref result.RegenTimer, in context);
-        this.InvincibleTimer.Materialize(frame, ref result.InvincibleTimer, in context);
         this.DisconnectedTimer.Materialize(frame, ref result.DisconnectedTimer, in context);
         MaterializeUser(frame, ref result, in context);
     }
@@ -246,6 +240,27 @@ namespace Quantum.Prototypes {
     public void Materialize(Frame frame, ref Quantum.CountdownTimer result, in PrototypeMaterializationContext context = default) {
         result.TimeLeft = this.TimeLeft;
         result.StartTime = this.StartTime;
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.HitReactionComponent))]
+  public unsafe partial class HitReactionComponentPrototype : ComponentPrototype<Quantum.HitReactionComponent> {
+    public AssetRef<HitReactionConfig> Config;
+    public FP CurrentHealth;
+    public FP MaxHealth;
+    public QBoolean IsDead;
+    partial void MaterializeUser(Frame frame, ref Quantum.HitReactionComponent result, in PrototypeMaterializationContext context);
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+        Quantum.HitReactionComponent component = default;
+        Materialize((Frame)f, ref component, in context);
+        return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref Quantum.HitReactionComponent result, in PrototypeMaterializationContext context = default) {
+        result.Config = this.Config;
+        result.CurrentHealth = this.CurrentHealth;
+        result.MaxHealth = this.MaxHealth;
+        result.IsDead = this.IsDead;
         MaterializeUser(frame, ref result, in context);
     }
   }
@@ -439,17 +454,17 @@ namespace Quantum.Prototypes {
     }
   }
   [System.SerializableAttribute()]
-  [Quantum.Prototypes.Prototype(typeof(Quantum.MovementData))]
-  public unsafe partial class MovementDataPrototype : ComponentPrototype<Quantum.MovementData> {
+  [Quantum.Prototypes.Prototype(typeof(Quantum.MovementComponent))]
+  public unsafe partial class MovementComponentPrototype : ComponentPrototype<Quantum.MovementComponent> {
     [HideInInspector()]
     public Int32 _empty_prototype_dummy_field_;
-    partial void MaterializeUser(Frame frame, ref Quantum.MovementData result, in PrototypeMaterializationContext context);
+    partial void MaterializeUser(Frame frame, ref Quantum.MovementComponent result, in PrototypeMaterializationContext context);
     public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
-        Quantum.MovementData component = default;
+        Quantum.MovementComponent component = default;
         Materialize((Frame)f, ref component, in context);
         return f.Set(entity, component) == SetResult.ComponentAdded;
     }
-    public void Materialize(Frame frame, ref Quantum.MovementData result, in PrototypeMaterializationContext context = default) {
+    public void Materialize(Frame frame, ref Quantum.MovementComponent result, in PrototypeMaterializationContext context = default) {
         MaterializeUser(frame, ref result, in context);
     }
   }

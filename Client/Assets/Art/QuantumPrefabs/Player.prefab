@@ -13,14 +13,14 @@ GameObject:
   - component: {fileID: 2924809605513461826}
   - component: {fileID: 2376690383729190282}
   - component: {fileID: 5428458400057698225}
-  - component: {fileID: 3351024916982054779}
   - component: {fileID: 4225920870206189311}
   - component: {fileID: 8595205649062271519}
   - component: {fileID: 6071441484835123145}
-  - component: {fileID: 8665276627128132852}
   - component: {fileID: 7037740535014558776}
   - component: {fileID: 4042427979017233580}
-  - component: {fileID: 2809623338448697929}
+  - component: {fileID: 294399432298058463}
+  - component: {fileID: 1613700388019197692}
+  - component: {fileID: 830373370507069944}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -339,20 +339,6 @@ MonoBehaviour:
     Config:
       Id:
         Value: 335552892607164892
---- !u!114 &3351024916982054779
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 747601124680124256}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 131c2357d06eb164b9d8b43ac4cb0689, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Prototype:
-    _empty_prototype_dummy_field_: 0
 --- !u!114 &4225920870206189311
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -399,51 +385,6 @@ MonoBehaviour:
   Combo1Color: {r: 1, g: 0.5, b: 0, a: 0.3}
   Combo2Color: {r: 1, g: 0, b: 0, a: 0.3}
   Combo3Color: {r: 0.5, g: 0, b: 1, a: 0.3}
---- !u!114 &8665276627128132852
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 747601124680124256}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 96117ecf85a51b245883ec41a84b85c2, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Prototype:
-    StatusData:
-      Id:
-        Value: 336468280525922348
-    PlayerMovementData:
-      Id:
-        Value: 485897725668651356
-    CurrentHealth:
-      RawValue: 0
-    IsDead:
-      Value: 0
-    IsIncapacitated:
-      Value: 0
-    RespawnTimer:
-      Mode: 0
-      Frames: 0
-      Seconds:
-        RawValue: 0
-    RegenTimer:
-      Mode: 0
-      Frames: 0
-      Seconds:
-        RawValue: 0
-    InvincibleTimer:
-      Mode: 0
-      Frames: 0
-      Seconds:
-        RawValue: 0
-    DisconnectedTimer:
-      Mode: 0
-      Frames: 0
-      Seconds:
-        RawValue: 0
 --- !u!114 &7037740535014558776
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -587,7 +528,7 @@ MonoBehaviour:
             RawValue: 0
         UsageCount: 0
         ComboStep: 0
---- !u!114 &2809623338448697929
+--- !u!114 &294399432298058463
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -596,11 +537,55 @@ MonoBehaviour:
   m_GameObject: {fileID: 747601124680124256}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cc3612f60dbb4b5db149399f576aa197, type: 3}
+  m_Script: {fileID: 11500000, guid: 45ef23f3dbd7ce94a9d1f1aca36ac732, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   Prototype:
     _empty_prototype_dummy_field_: 0
+--- !u!114 &1613700388019197692
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 747601124680124256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 19d9db6ffa425014fadeb8e3224663ff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Prototype:
+    _empty_prototype_dummy_field_: 0
+--- !u!114 &830373370507069944
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 747601124680124256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ae181574d1dc0e4589d719243de5688, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Prototype:
+    StatusData:
+      Id:
+        Value: 336468280525922348
+    PlayerMovementData:
+      Id:
+        Value: 485897725668651356
+    CurrentHealth:
+      RawValue: 0
+    IsDead:
+      Value: 0
+    IsIncapacitated:
+      Value: 0
+    DisconnectedTimer:
+      Mode: 0
+      Frames: 0
+      Seconds:
+        RawValue: 0
 --- !u!1 &4774830198564325150
 GameObject:
   m_ObjectHideFlags: 0

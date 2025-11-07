@@ -91,7 +91,7 @@ namespace Quantum
                 // 获取当前位置和朝向
                 var transform = frame.Unsafe.GetPointer<Transform2D>(EntityRef);
                 _attackTransform = *transform;
-                var movementData = frame.Unsafe.GetPointer<MovementData>(EntityRef);
+                var movementData = frame.Unsafe.GetPointer<MovementComponent>(EntityRef);
                 _isFacingRight = movementData->IsFacingRight;
                 
                 _displayTimer = DisplayDuration;

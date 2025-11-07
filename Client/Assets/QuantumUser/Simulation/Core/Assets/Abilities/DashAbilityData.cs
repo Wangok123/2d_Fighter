@@ -65,7 +65,7 @@ namespace Quantum
             }
 
             var kcc = frame.Unsafe.GetPointer<KCC2D>(entityRef);
-            var movementData = frame.Unsafe.GetPointer<MovementData>(entityRef);
+            var movementData = frame.Unsafe.GetPointer<MovementComponent>(entityRef);
             // 设置Dash状态
             kcc->SetState(frame, KCCState.DASHING, Duration);
 
@@ -102,7 +102,7 @@ namespace Quantum
                 return;
             }
             
-            var movementData = frame.Unsafe.GetPointer<MovementData>(entityRef);
+            var movementData = frame.Unsafe.GetPointer<MovementComponent>(entityRef);
 
             // 获取当前Dash的归一化时间 (0-1)
             FP normalizedTime = ability->DurationTimer.NormalizedTime;
@@ -145,7 +145,7 @@ namespace Quantum
             // 不需要手动设置状态，ComputeState会处理
         }
         
-        private FP GetDashDirection(KCC2D* kcc, MovementData* movementData)
+        private FP GetDashDirection(KCC2D* kcc, MovementComponent* movementData)
         {
             FP direction = FP._0;
     

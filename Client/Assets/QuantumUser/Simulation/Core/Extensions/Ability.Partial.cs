@@ -27,7 +27,7 @@ namespace Quantum
                 return false;
             }
 
-            CharacterStatus* playerStatus = frame.Unsafe.GetPointer<CharacterStatus>(entityRef);
+            CharacterStatusComponent* playerStatus = frame.Unsafe.GetPointer<CharacterStatusComponent>(entityRef);
             if (playerStatus->IsIncapacitated)
             {
                 return false;
@@ -72,7 +72,7 @@ namespace Quantum
 
             if (IsDelayedOrActive)
             {
-                CharacterStatus* playerStatus = frame.Unsafe.GetPointer<CharacterStatus>(entityRef);
+                CharacterStatusComponent* playerStatus = frame.Unsafe.GetPointer<CharacterStatusComponent>(entityRef);
 
                 if (playerStatus->IsIncapacitated)
                 {
@@ -140,7 +140,7 @@ namespace Quantum
 
         public void StopAbility(Frame frame, EntityRef entityRef)
         {
-            CharacterStatus* playerStatus = frame.Unsafe.GetPointer<CharacterStatus>(entityRef);
+            CharacterStatusComponent* playerStatus = frame.Unsafe.GetPointer<CharacterStatusComponent>(entityRef);
             AbilityInventory* abilityInventory = frame.Unsafe.GetPointer<AbilityInventory>(entityRef);
             PlayerMovementData playerMovementData = frame.FindAsset<PlayerMovementData>(playerStatus->PlayerMovementData.Id);
 
@@ -200,7 +200,7 @@ namespace Quantum
         private FPVector2 GetFacingDirection(Frame frame, EntityRef playerRef)
         {
     
-            if (frame.Unsafe.TryGetPointer<MovementData>(playerRef, out var movementData))
+            if (frame.Unsafe.TryGetPointer<MovementComponent>(playerRef, out var movementData))
             {
                 return movementData->IsFacingRight ? FPVector2.Right : FPVector2.Left;
             }

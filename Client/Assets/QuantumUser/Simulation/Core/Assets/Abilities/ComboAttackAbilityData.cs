@@ -14,6 +14,22 @@ namespace Quantum
     }
 
     [Serializable]
+    public class ComboStepConfig
+    {
+        [Tooltip("伤害倍率")] public FP DamageMultiplier = FP._1;
+
+        [Tooltip("打击框激活时间（从动画开始到判定触发的延迟）")] public FP HitboxActiveTime = FP._0;
+
+        [Tooltip("持续时间")] public FP Duration = FP._1;
+
+        [Tooltip("击退力度")] public FP KnockbackForce = FP._5;
+
+        [Tooltip("攻击形状")] public Shape2DConfig AttackShape;
+
+        [Tooltip("状态效果")] public StatusEffectConfig[] StatusEffects = new StatusEffectConfig[0];
+    }
+
+    [Serializable]
     public unsafe partial class ComboAttackAbilityData : AttackAbilityData
     {
         [Header("Combo Settings")] [Tooltip("最大连击数")]
@@ -24,16 +40,7 @@ namespace Quantum
         [Header("Combo Chain Configuration")] [Tooltip("每段连击的伤害倍率")]
         public FP[] ComboDamageMultipliers;
 
-        [Tooltip("每段连击的打击框激活时间（从动画开始到判定触发的延迟）")]
-        public FP[] ComboHitboxActiveTimes;
-
-        [Tooltip("每段连击的持续时间")] public FP[] ComboDurations;
-
-        [Tooltip("每段连击的击退力度")] public FP[] ComboKnockbackForces;
-
-        [Tooltip("每段连击的攻击形状")] public Shape2DConfig[] ComboAttackShapes;
-
-        [Tooltip("每段连击的状态效果")] public ComboStatusEffectArray[] ComboStatusEffects;
+        [Tooltip("每段的配置")] public ComboStepConfig[] ComboSteps;
 
         [Tooltip("最后一击是否有特殊效果")] public bool LastHitLaunches = true;
 
@@ -48,7 +55,7 @@ namespace Quantum
         public override unsafe bool TryActivateAbility(Frame frame, EntityRef entityRef, PlayerLink* playerLink,
             AbilityType abilityType, ref Ability ability)
         {
-            var attackData = frame.Unsafe.GetPointer<AttackData>(entityRef);
+            var attackData = frame.Unsafe.GetPointer<AttackComponent>(entityRef);
 
             // 计算下一段连击数
             bool withinComboWindow = attackData->ComboWindowTimer.IsRunning(frame);
@@ -64,20 +71,20 @@ namespace Quantum
             }
 
             int comboIndex = nextComboCounter - 1;
-    
+
             // 保存当前参数（以防激活失败需要恢复）
             FP oldDuration = Duration;
             FP oldHitboxActiveTime = _currentHitboxActiveTime;
             FP oldKnockbackForce = KnockbackForce;
             Shape2DConfig oldAttackShape = AttackShape;
             StatusEffectConfig[] oldHitStatusEffects = HitStatusEffects;
-    
+
             // 更新参数（需要在激活前更新，因为 base 会使用 Duration）
             UpdateComboParameters(comboIndex);
 
             // 尝试激活
             bool activated = base.TryActivateAbility(frame, entityRef, playerLink, abilityType, ref ability);
-    
+
             if (activated)
             {
                 // 激活成功，提交连击状态
@@ -103,15 +110,15 @@ namespace Quantum
             if (comboIndex < 0)
                 return;
 
-            if (comboIndex < ComboDurations.Length)
+            if (comboIndex < ComboSteps.Length)
             {
-                Duration = ComboDurations[comboIndex];
+                Duration = ComboSteps[comboIndex].Duration;
             }
 
             //设置打击框激活时间
-            if (ComboHitboxActiveTimes != null && comboIndex < ComboHitboxActiveTimes.Length)
+            if (comboIndex < ComboSteps.Length)
             {
-                _currentHitboxActiveTime = ComboHitboxActiveTimes[comboIndex];
+                _currentHitboxActiveTime = ComboSteps[comboIndex].HitboxActiveTime;
             }
             else
             {
@@ -119,27 +126,27 @@ namespace Quantum
             }
 
             // 设置击退力度
-            if (comboIndex < ComboKnockbackForces.Length)
+            if (comboIndex < ComboSteps.Length)
             {
-                KnockbackForce = ComboKnockbackForces[comboIndex];
+                KnockbackForce = ComboSteps[comboIndex].KnockbackForce;
             }
 
             // 设置击退力度
-            if (ComboAttackShapes != null && comboIndex < ComboAttackShapes.Length)
+            if (comboIndex < ComboSteps.Length)
             {
-                AttackShape = ComboAttackShapes[comboIndex];
+                AttackShape = ComboSteps[comboIndex].AttackShape;
             }
 
             // 设置状态效果
-            if (ComboStatusEffects != null && comboIndex < ComboStatusEffects.Length)
+            if (comboIndex < ComboSteps.Length)
             {
-                HitStatusEffects = ComboStatusEffects[comboIndex].StatusEffects;
+                HitStatusEffects = ComboSteps[comboIndex].StatusEffects;
             }
         }
 
         protected override void OnAttackActivate(Frame frame, EntityRef entityRef, Ability* ability)
         {
-            AttackData* attackData = frame.Unsafe.GetPointer<AttackData>(entityRef);
+            AttackComponent* attackData = frame.Unsafe.GetPointer<AttackComponent>(entityRef);
             int comboStep = attackData->ComboCounter;
 
             frame.Events.ComboAttackStarted(entityRef, comboStep, MaxComboCount);
@@ -148,7 +155,7 @@ namespace Quantum
         public override Ability.AbilityState UpdateAbility(Frame frame, EntityRef entityRef, Ability* ability)
         {
             Ability.AbilityState abilityState = base.UpdateAbility(frame, entityRef, ability);
-            AttackData* attackData = frame.Unsafe.GetPointer<AttackData>(entityRef);
+            AttackComponent* attackData = frame.Unsafe.GetPointer<AttackComponent>(entityRef);
 
             if (abilityState.IsActive && !_hasTriggeredHitbox)
             {
@@ -194,7 +201,7 @@ namespace Quantum
         {
             FP baseDamage = base.CalculateDamage(frame, entityRef);
 
-            AttackData* attackData = frame.Unsafe.GetPointer<AttackData>(entityRef);
+            AttackComponent* attackData = frame.Unsafe.GetPointer<AttackComponent>(entityRef);
             int comboIndex = attackData->ComboCounter - 1;
 
             if (comboIndex >= 0 && comboIndex < ComboDamageMultipliers.Length)
@@ -208,7 +215,7 @@ namespace Quantum
         protected override void ApplyKnockback(Frame frame, EntityRef attacker, EntityRef target,
             FPVector2 hitDirection)
         {
-            AttackData* attackData = frame.Unsafe.GetPointer<AttackData>(attacker);
+            AttackComponent* attackData = frame.Unsafe.GetPointer<AttackComponent>(attacker);
             bool isFinalHit = attackData->ComboCounter >= MaxComboCount;
 
             if (isFinalHit && LastHitLaunches)
@@ -229,7 +236,7 @@ namespace Quantum
 
         private void ResetComboState(Frame frame, EntityRef entityRef)
         {
-            if (frame.Unsafe.TryGetPointer<AttackData>(entityRef, out var attackData))
+            if (frame.Unsafe.TryGetPointer<AttackComponent>(entityRef, out var attackData))
             {
                 attackData->ComboCounter = 0;
                 attackData->ComboWindowTimer = FrameTimer.None;
@@ -239,15 +246,17 @@ namespace Quantum
         private void ExecuteAttackHitbox(Frame frame, EntityRef entityRef, Ability* ability)
         {
 #if UNITY_EDITOR
-            AttackData* attackData = frame.Unsafe.GetPointer<AttackData>(entityRef);
+            AttackComponent* attackData = frame.Unsafe.GetPointer<AttackComponent>(entityRef);
             // 发送打击框激活事件
             frame.Events.AttackHitboxActivated(entityRef, attackData->ComboCounter);
 #endif
             Transform2D* transform = frame.Unsafe.GetPointer<Transform2D>(entityRef);
             GameSettingsData gameSettingsData =
                 frame.FindAsset<GameSettingsData>(frame.RuntimeConfig.GameSettingsData.Id);
-
-            var shape = AttackShape.CreateShape(frame);
+            
+            bool isFacingRight = GetIsFacingRight(frame, entityRef);
+            var shape = CreateAttackShapeWithDirection(frame, AttackShape, isFacingRight);
+            
             HitCollection hits = frame.Physics2D.OverlapShape(*transform, shape, gameSettingsData.PlayerLayerMask,
                 QueryOptions.HitKinematics);
 
@@ -267,8 +276,8 @@ namespace Quantum
 
                     hitEntities.Add(hit.Entity);
 
-                    CharacterStatus* hitPlayerStatus = frame.Unsafe.GetPointer<CharacterStatus>(hit.Entity);
-                    Transform2D* hitPlayerTransform = frame.Unsafe.GetPointer<Transform2D>(hit.Entity);
+                    if (!frame.Unsafe.TryGetPointer<Transform2D>(hit.Entity, out var hitPlayerTransform))
+                        continue;
 
                     FPVector2 hitLateralDirection = hitPlayerTransform->Position - transform->Position;
                     hitLateralDirection = hitLateralDirection.Normalized;
@@ -280,5 +289,45 @@ namespace Quantum
                 }
             }
         }
+        
+        private bool GetIsFacingRight(Frame frame, EntityRef entityRef)
+        {
+            // 方法1: 从 MovementComponent 获取
+            if (frame.Unsafe.TryGetPointer<MovementComponent>(entityRef, out var movement))
+            {
+                return movement->IsFacingRight;
+            }
+    
+            // 默认面向右
+            return true;
+        }
+        
+        private Shape2D CreateAttackShapeWithDirection(Frame frame, Shape2DConfig shapeConfig, bool isFacingRight)
+        {
+            // 克隆配置（避免修改原始数据）
+            Shape2DConfig adjustedConfig = new Shape2DConfig
+            {
+                ShapeType = shapeConfig.ShapeType,
+                PolygonCollider = shapeConfig.PolygonCollider,
+                CircleRadius = shapeConfig.CircleRadius,
+                CapsuleSize = shapeConfig.CapsuleSize,
+                EdgeExtent = shapeConfig.EdgeExtent,
+                BoxExtents = shapeConfig.BoxExtents,
+                PositionOffset = shapeConfig.PositionOffset,
+                RotationOffset = shapeConfig.RotationOffset,
+                UserTag = shapeConfig.UserTag,
+                IsPersistent = shapeConfig.IsPersistent,
+                CompoundShapes = shapeConfig.CompoundShapes
+            };
+    
+            // ✅ 根据朝向翻转 X 偏移量
+            if (!isFacingRight)
+            {
+                adjustedConfig.PositionOffset.X = -adjustedConfig.PositionOffset.X;
+            }
+    
+            return adjustedConfig.CreateShape(frame);
+        }
+
     }
 }

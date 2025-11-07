@@ -97,9 +97,9 @@ namespace Quantum
 
         protected virtual void SetInvincibility(Frame frame, EntityRef entityRef, FP duration)
         {
-            if (frame.Unsafe.TryGetPointer<CharacterStatus>(entityRef, out var characterStatus))
+            if (frame.Unsafe.TryGetPointer<CharacterStatusComponent>(entityRef, out var characterStatus))
             {
-                characterStatus->InvincibleTimer = FrameTimer.FromSeconds(frame, duration);
+                //characterStatus->InvincibleTimer = FrameTimer.FromSeconds(frame, duration);
             }
         }
 
@@ -108,7 +108,7 @@ namespace Quantum
             if (!frame.Unsafe.TryGetPointer<Transform2D>(entityRef, out var transform))
                 return;
 
-            MovementData* movementData = frame.Unsafe.GetPointer<MovementData>(entityRef);
+            MovementComponent* movementData = frame.Unsafe.GetPointer<MovementComponent>(entityRef);
             FPVector2 direction = movementData->IsFacingRight ? FPVector2.Right : FPVector2.Left;
             FP damage = CalculateDamage(frame, entityRef);
             

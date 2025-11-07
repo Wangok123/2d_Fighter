@@ -69,7 +69,7 @@ namespace Quantum
 
             if (FlipOnWallJump)
             {
-                if (frame.Unsafe.TryGetPointer<MovementData>(entityRef, out var movementData))
+                if (frame.Unsafe.TryGetPointer<MovementComponent>(entityRef, out var movementData))
                 {
                     movementData->IsFacingRight = wallContactDirection > 0;
                 }

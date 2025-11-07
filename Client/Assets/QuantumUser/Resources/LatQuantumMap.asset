@@ -127,8 +127,84 @@ MonoBehaviour:
       ColliderIndex: 1
       MutableMode: 0
   StaticColliders3D: []
-  MapEntities: []
+  MapEntities:
+  - Components:
+    - rid: 8101032211223937024
+    - rid: 8101032211223937025
+    - rid: 8101032211223937026
+    - rid: 8101032211223937027
+    - rid: 8101032211223937028
   SerializedTriangleDataUncompressedSize: 8
   references:
     version: 2
-    RefIds: []
+    RefIds:
+    - rid: 8101032211223937024
+      type: {class: Transform2DPrototype, ns: Quantum.Prototypes, asm: Quantum.Engine}
+      data:
+        Position:
+          X:
+            RawValue: -205783
+          Y:
+            RawValue: -70123
+        Rotation:
+          RawValue: 0
+    - rid: 8101032211223937025
+      type: {class: PhysicsCollider2DPrototype, ns: Quantum.Prototypes, asm: Quantum.Engine}
+      data:
+        ShapeConfig:
+          ShapeType: 1
+          PolygonCollider:
+            Id:
+              Value: 0
+          CircleRadius:
+            RawValue: 32817
+          CapsuleSize:
+            X:
+              RawValue: 65536
+            Y:
+              RawValue: 131072
+          EdgeExtent:
+            RawValue: 32768
+          BoxExtents:
+            X:
+              RawValue: 32768
+            Y:
+              RawValue: 32768
+          PositionOffset:
+            X:
+              RawValue: 0
+            Y:
+              RawValue: 0
+          RotationOffset:
+            RawValue: 0
+          UserTag: 0
+          IsPersistent: 1
+          CompoundShapes: []
+        Layer: 6
+        IsTrigger: 0
+        PhysicsMaterial:
+          Id:
+            Value: 0
+    - rid: 8101032211223937026
+      type: {class: PhysicsCallbacks2DPrototype, ns: Quantum.Prototypes, asm: Quantum.Engine}
+      data:
+        CallbackFlags:
+          Value: 9
+    - rid: 8101032211223937027
+      type: {class: HitReactionComponentPrototype, ns: Quantum.Prototypes, asm: Quantum.Simulation}
+      data:
+        Config:
+          Id:
+            Value: 492397630496385056
+        CurrentHealth:
+          RawValue: 6553600
+        MaxHealth:
+          RawValue: 6553600
+        IsDead:
+          Value: 0
+    - rid: 8101032211223937028
+      type: {class: KCC2DPrototype, ns: Quantum.Prototypes, asm: Quantum.Simulation}
+      data:
+        Config:
+          Id:
+            Value: 335552892607164892

@@ -54,7 +54,7 @@ namespace Quantum
 
         protected virtual void OnAttackActivate(Frame frame, EntityRef entityRef, Ability* ability)
         {
-            CharacterStatus* playerStatus = frame.Unsafe.GetPointer<CharacterStatus>(entityRef);
+            CharacterStatusComponent* playerStatus = frame.Unsafe.GetPointer<CharacterStatusComponent>(entityRef);
             Transform2D* transform = frame.Unsafe.GetPointer<Transform2D>(entityRef);
             GameSettingsData gameSettingsData = frame.FindAsset<GameSettingsData>(frame.RuntimeConfig.GameSettingsData.Id);
 
@@ -76,7 +76,7 @@ namespace Quantum
 
                     _hitEntities.Add(hit.Entity);
 
-                    CharacterStatus* hitPlayerStatus = frame.Unsafe.GetPointer<CharacterStatus>(hit.Entity);
+                    CharacterStatusComponent* hitPlayerStatus = frame.Unsafe.GetPointer<CharacterStatusComponent>(hit.Entity);
 
                     // if (playerStatus->PlayerTeam == hitPlayerStatus->PlayerTeam)
                     // {
@@ -123,14 +123,10 @@ namespace Quantum
         {
             FP damage = CalculateDamage(frame, attacker);
             
-            if (frame.Unsafe.TryGetPointer<CharacterStatus>(target, out var health))
+            // ✅ 支持新的HitReactionComponent组件
+            if (frame.Unsafe.TryGetPointer<HitReactionComponent>(target, out var hitReaction))
             {
-                health->CurrentHealth -= damage;
-                
-                if (health->CurrentHealth <= 0)
-                {
-                    //frame.Events.EntityDied(target, attacker);
-                }
+                hitReaction->TakeDamage(frame, target, attacker, damage, HitType.Medium);
             }
         }
 
@@ -138,7 +134,7 @@ namespace Quantum
         {
             FP damage = BaseDamage;
             
-            if (frame.TryGet<CharacterLevel>(entityRef, out var level))
+            if (frame.TryGet<CharacterLevelComponent>(entityRef, out var level))
             {
                 damage += DamagePerLevel * level.CurrentLevel;
             }

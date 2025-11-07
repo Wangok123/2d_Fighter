@@ -1,0 +1,63 @@
+// 受击反馈组件 - 可复用于玩家、怪物、NPC等任何可受击的实体
+component HitReactionComponent
+{
+    // 配置数据引用
+    asset_ref<HitReactionConfig> Config;
+    
+    // 生命值相关
+    FP CurrentHealth;
+    FP MaxHealth;
+    bool IsDead;
+    
+    // 受击状态
+    [ExcludeFromPrototype] bool IsHitstunned;
+    [ExcludeFromPrototype] FrameTimer HitstunTimer;
+    
+    // 击退状态
+    [ExcludeFromPrototype] bool IsKnockedBack;
+    [ExcludeFromPrototype] FPVector2 KnockbackVelocity;
+    [ExcludeFromPrototype] FP KnockbackDecay;
+    
+    // 眩晕状态
+    [ExcludeFromPrototype] bool IsStunned;
+    [ExcludeFromPrototype] FrameTimer StunTimer;
+    
+    // 无敌帧
+    [ExcludeFromPrototype] FrameTimer InvincibilityTimer;
+    
+    // 超级护甲
+    [ExcludeFromPrototype] FP SuperArmorValue;
+    [ExcludeFromPrototype] bool HasSuperArmor;
+    
+    // 生命恢复
+    [ExcludeFromPrototype] FrameTimer RegenDelayTimer;
+    [ExcludeFromPrototype] FP RegenAccumulator;
+    
+    // 连击计数（用于伤害衰减）
+    [ExcludeFromPrototype] Int32 ConsecutiveHitCount;
+    [ExcludeFromPrototype] FrameTimer ConsecutiveHitResetTimer;
+    
+    // 死亡和重生
+    [ExcludeFromPrototype] FrameTimer RespawnTimer;
+    [ExcludeFromPrototype] FPVector2 RespawnPosition;
+}
+
+// 受击类型枚举
+enum HitType
+{
+    Light,      // 轻击
+    Medium,     // 中击
+    Heavy,      // 重击
+    Launch,     // 浮空
+    GroundBounce, // 地面反弹
+    WallBounce  // 墙壁反弹
+}
+
+// 受击方向枚举
+enum HitDirection
+{
+    Front,
+    Back,
+    Up,
+    Down
+}

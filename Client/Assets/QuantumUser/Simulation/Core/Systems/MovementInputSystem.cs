@@ -13,8 +13,8 @@ namespace Quantum
             public EntityRef Entity;
             public Transform2D* Transform;
             public PlayerLink* PlayerLink;
-            public CharacterStatus* Status;
-            public MovementData* MovementData;
+            public CharacterStatusComponent* Status;
+            public MovementComponent* MovementData;
             public KCC2D* KCC;
             public AbilityEnable* AbilityEnabled;
         }
@@ -36,7 +36,7 @@ namespace Quantum
             UpdateIsFacingRight(input, filter.MovementData, filter.KCC);
         }
         
-        private void UpdateIsFacingRight(SimpleInput2D input, MovementData* movementData, KCC2D* kcc)
+        private void UpdateIsFacingRight(SimpleInput2D input, MovementComponent* movementData, KCC2D* kcc)
         {
             FP horizontalVelocity = kcc->CombinedVelocity.X;
     
