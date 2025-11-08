@@ -16,9 +16,25 @@ namespace Quantum
         [Tooltip("攻击范围线框颜色")]
         public Color AttackWireframeColor = Color.red;
         
-        [Tooltip("显示持续时间")]
-        public float DisplayDuration = 0.1f;
+        [Tooltip("默认显示持续时间（当无法获取配置时使用）")]
+        public float DefaultDisplayDuration = 0.1f;
 
+        [Tooltip("是否显示激活时间窗口信息")]
+        public bool ShowTimingInfo = true;
+        
+        [Tooltip("文字显示额外延长时间（秒）")]
+        public float TextExtraDuration = 0.5f;
+
+        [Header("文字样式")]
+        [Tooltip("文字颜色")]
+        public Color TextColor = Color.yellow;
+        
+        [Tooltip("文字背景颜色")]
+        public Color TextBackgroundColor = new Color(0f, 0f, 0f, 0.7f);
+        
+        [Tooltip("字体大小")]
+        public int FontSize = 14;
+        
         [Header("每段连击独立颜色（可选）")]
         [Tooltip("第一段攻击颜色")]
         public Color Combo1Color = new Color(1f, 0.5f, 0f, 0.3f);
@@ -32,9 +48,16 @@ namespace Quantum
         private Shape2DConfig _currentAttackShape;
         private Transform2D _attackTransform;
         private float _displayTimer;
+        private float _textDisplayTimer;
+        private float _maxDisplayDuration;
         private int _currentComboStep;
         private bool _isFacingRight;
 
+        private float _hitboxActiveTime;
+        private float _hitboxActiveDuration;
+        
+        private string _cachedTimingInfo;
+        
         public override void OnActivate(Frame frame)
         {
             if (!EnableDebug) return;
@@ -64,7 +87,6 @@ namespace Quantum
             if (e.AbilityType == AbilityType.AttackLight || e.AbilityType == AbilityType.AttackHeavy)
             {
                 _currentAttackShape = null;
-                _displayTimer = 0f;
             }
         }
 
@@ -73,55 +95,84 @@ namespace Quantum
             var frame = VerifiedFrame;
             if (frame == null) return;
 
-            // 获取当前激活的技能
             var abilityInventory = frame.Unsafe.GetPointer<AbilityInventory>(EntityRef);
             var activeAbilityType = abilityInventory->ActiveAbilityInfo.ActiveAbilityType;
 
-            // 获取技能数据
             var dic = frame.ResolveDictionary(abilityInventory->AbilitiesDic);
             if (!dic.TryGetValue(activeAbilityType, out var ability)) return;
 
             var abilityData = frame.FindAsset<AbilityData>(ability.AbilityData.Id);
             
-            // 尝试转换为攻击技能
             if (abilityData is AttackAbilityData attackData)
             {
                 _currentAttackShape = attackData.AttackShape;
                 
-                // 获取当前位置和朝向
                 var transform = frame.Unsafe.GetPointer<Transform2D>(EntityRef);
                 _attackTransform = *transform;
                 var movementData = frame.Unsafe.GetPointer<MovementComponent>(EntityRef);
                 _isFacingRight = movementData->IsFacingRight;
                 
-                _displayTimer = DisplayDuration;
+                _hitboxActiveTime = attackData.HitboxActiveTime.AsFloat;
+                _hitboxActiveDuration = attackData.HitboxActiveDuration.AsFloat;
+                _maxDisplayDuration = _hitboxActiveDuration > 0 ? _hitboxActiveDuration : DefaultDisplayDuration;
+                _displayTimer = _maxDisplayDuration;
+                _textDisplayTimer = _maxDisplayDuration + TextExtraDuration;
+                
+                _cachedTimingInfo = _currentComboStep > 0 
+                    ? $"Combo {_currentComboStep}\nStartup: {_hitboxActiveTime:F3}s | Active: {_hitboxActiveDuration:F3}s"
+                    : $"Attack\nStartup: {_hitboxActiveTime:F3}s | Active: {_hitboxActiveDuration:F3}s";
             }
         }
 
         private void Update()
         {
-            if (!EnableDebug || _currentAttackShape == null) return;
+            if (!EnableDebug) return;
 
-            _displayTimer -= Time.deltaTime;
-            
-            if (_displayTimer <= 0)
+            if (_currentAttackShape != null)
             {
-                _currentAttackShape = null;
+                _displayTimer -= Time.deltaTime;
+                
+                if (_displayTimer <= 0)
+                {
+                    _currentAttackShape = null;
+                }
+            }
+            
+            if (ShowTimingInfo && _textDisplayTimer > 0)
+            {
+                _textDisplayTimer -= Time.deltaTime;
             }
         }
 
         private void OnDrawGizmos()
         {
-            if (!EnableDebug || _currentAttackShape == null) return;
+            if (!EnableDebug) return;
             if (!Application.isPlaying) return;
 
+            if (_currentAttackShape != null)
+            {
+                DrawAttackShape();
+            }
+            
+            if (ShowTimingInfo && _textDisplayTimer > 0 && !string.IsNullOrEmpty(_cachedTimingInfo))
+            {
+                DrawTimingInfo();
+            }
+        }
+
+        private void DrawAttackShape()
+        {
             Color fillColor = GetComboColor(_currentComboStep);
+            
+            float fadeRatio = Mathf.Clamp01(_displayTimer / _maxDisplayDuration);
+            fillColor.a *= fadeRatio;
+            
             Color wireColor = AttackWireframeColor;
+            wireColor.a *= fadeRatio;
 
             Vector3 position = _attackTransform.Position.ToUnityVector3();
             Vector3 offset = _currentAttackShape.PositionOffset.ToUnityVector3();
             
-            // ✅ 根据朝向翻转偏移的 X 轴
             if (!_isFacingRight)
             {
                 offset.x = -offset.x;
@@ -129,11 +180,9 @@ namespace Quantum
             
             Vector3 finalPosition = position + offset;
             
-            // ✅ 旋转角度也需要根据朝向调整
             float shapeRotation = _currentAttackShape.RotationOffset.AsFloat;
             if (!_isFacingRight)
             {
-                // 向左时，旋转需要镜像
                 shapeRotation = 180f - shapeRotation;
             }
 
@@ -243,5 +292,69 @@ namespace Quantum
                 lastPoint = newPoint;
             }
         }
+        
+        private void DrawTimingInfo()
+        {
+#if UNITY_EDITOR
+            Vector3 position = _attackTransform.Position.ToUnityVector3();
+            Vector3 labelPosition = position + Vector3.up * 0.8f;
+            
+            GUIStyle backgroundStyle = new GUIStyle()
+            {
+                normal = new GUIStyleState() 
+                { 
+                    background = CreateBackgroundTexture(TextBackgroundColor)
+                },
+                padding = new RectOffset(8, 8, 4, 4),
+                alignment = TextAnchor.MiddleCenter
+            };
+            
+            GUIStyle textStyle = new GUIStyle()
+            {
+                normal = new GUIStyleState() { textColor = TextColor },
+                fontSize = FontSize,
+                fontStyle = FontStyle.Bold,
+                alignment = TextAnchor.MiddleCenter
+            };
+            
+            float textFadeRatio = Mathf.Clamp01(_textDisplayTimer / TextExtraDuration);
+            Color adjustedTextColor = TextColor;
+            adjustedTextColor.a *= textFadeRatio;
+            textStyle.normal.textColor = adjustedTextColor;
+            
+            GUIContent content = new GUIContent(_cachedTimingInfo);
+            Vector2 size = textStyle.CalcSize(content);
+            size.x += 16;
+            size.y += 8;
+            
+            Vector3 screenPos = UnityEditor.SceneView.currentDrawingSceneView?.camera.WorldToScreenPoint(labelPosition) ?? Vector3.zero;
+            if (screenPos.z > 0)
+            {
+                UnityEditor.Handles.BeginGUI();
+                
+                Rect backgroundRect = new Rect(
+                    screenPos.x - size.x * 0.5f, 
+                    UnityEditor.SceneView.currentDrawingSceneView.camera.pixelHeight - screenPos.y - size.y * 0.5f, 
+                    size.x, 
+                    size.y
+                );
+                
+                GUI.Box(backgroundRect, "", backgroundStyle);
+                GUI.Label(backgroundRect, _cachedTimingInfo, textStyle);
+                
+                UnityEditor.Handles.EndGUI();
+            }
+#endif
+        }
+        
+#if UNITY_EDITOR
+        private Texture2D CreateBackgroundTexture(Color color)
+        {
+            Texture2D texture = new Texture2D(1, 1);
+            texture.SetPixel(0, 0, color);
+            texture.Apply();
+            return texture;
+        }
+#endif
     }
 }

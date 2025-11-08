@@ -133,7 +133,6 @@ MonoBehaviour:
     - rid: 8101032211223937025
     - rid: 8101032211223937026
     - rid: 8101032211223937027
-    - rid: 8101032211223937028
   SerializedTriangleDataUncompressedSize: 8
   references:
     version: 2
@@ -145,7 +144,7 @@ MonoBehaviour:
           X:
             RawValue: -205783
           Y:
-            RawValue: -70123
+            RawValue: -80609
         Rotation:
           RawValue: 0
     - rid: 8101032211223937025
@@ -202,9 +201,3 @@ MonoBehaviour:
           RawValue: 6553600
         IsDead:
           Value: 0
-    - rid: 8101032211223937028
-      type: {class: KCC2DPrototype, ns: Quantum.Prototypes, asm: Quantum.Simulation}
-      data:
-        Config:
-          Id:
-            Value: 335552892607164892
