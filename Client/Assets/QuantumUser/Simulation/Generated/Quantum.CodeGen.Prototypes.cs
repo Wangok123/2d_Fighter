@@ -246,10 +246,16 @@ namespace Quantum.Prototypes {
   [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.HitReactionComponent))]
   public unsafe partial class HitReactionComponentPrototype : ComponentPrototype<Quantum.HitReactionComponent> {
-    public AssetRef<HitReactionConfig> Config;
-    public FP CurrentHealth;
-    public FP MaxHealth;
-    public QBoolean IsDead;
+    public AssetRef<HitReactionData> HitReactionData;
+    public QBoolean IsHitstunned;
+    public Quantum.Prototypes.FrameTimerPrototype HitstunTimer;
+    public QBoolean IsKnockedBack;
+    public FPVector2 KnockbackVelocity;
+    public FP KnockbackDecay;
+    public FPVector2 InitialKnockbackVelocity;
+    public FP KnockbackStartTime;
+    public FP KnockbackDuration;
+    public Quantum.QEnum32<KnockbackMode> CurrentMode;
     partial void MaterializeUser(Frame frame, ref Quantum.HitReactionComponent result, in PrototypeMaterializationContext context);
     public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
         Quantum.HitReactionComponent component = default;
@@ -257,10 +263,16 @@ namespace Quantum.Prototypes {
         return f.Set(entity, component) == SetResult.ComponentAdded;
     }
     public void Materialize(Frame frame, ref Quantum.HitReactionComponent result, in PrototypeMaterializationContext context = default) {
-        result.Config = this.Config;
-        result.CurrentHealth = this.CurrentHealth;
-        result.MaxHealth = this.MaxHealth;
-        result.IsDead = this.IsDead;
+        result.HitReactionData = this.HitReactionData;
+        result.IsHitstunned = this.IsHitstunned;
+        this.HitstunTimer.Materialize(frame, ref result.HitstunTimer, in context);
+        result.IsKnockedBack = this.IsKnockedBack;
+        result.KnockbackVelocity = this.KnockbackVelocity;
+        result.KnockbackDecay = this.KnockbackDecay;
+        result.InitialKnockbackVelocity = this.InitialKnockbackVelocity;
+        result.KnockbackStartTime = this.KnockbackStartTime;
+        result.KnockbackDuration = this.KnockbackDuration;
+        result.CurrentMode = this.CurrentMode;
         MaterializeUser(frame, ref result, in context);
     }
   }
@@ -440,6 +452,26 @@ namespace Quantum.Prototypes {
         result.Ignore = this.Ignore;
         result.Contact = this.Contact;
         result.ContactType = this.ContactType;
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.KnockbackConfig))]
+  public unsafe partial class KnockbackConfigPrototype : StructPrototype {
+    public Quantum.QEnum32<KnockbackMode> Mode;
+    public FP HorizontalDecayRate;
+    public QBoolean UseGravity;
+    public FP CurveDuration;
+    public FP LinearDecayRate;
+    public FP MinThreshold;
+    partial void MaterializeUser(Frame frame, ref Quantum.KnockbackConfig result, in PrototypeMaterializationContext context);
+    public void Materialize(Frame frame, ref Quantum.KnockbackConfig result, in PrototypeMaterializationContext context = default) {
+        result.Mode = this.Mode;
+        result.HorizontalDecayRate = this.HorizontalDecayRate;
+        result.UseGravity = this.UseGravity;
+        result.CurveDuration = this.CurveDuration;
+        result.LinearDecayRate = this.LinearDecayRate;
+        result.MinThreshold = this.MinThreshold;
         MaterializeUser(frame, ref result, in context);
     }
   }

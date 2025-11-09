@@ -9,13 +9,6 @@ namespace Quantum
     [Serializable]
     public unsafe partial class AttackAbilityData : AbilityData
     {
-        [Header("Attack Properties")]
-        [Tooltip("基础伤害")]
-        public FP BaseDamage = 10;
-        
-        [Tooltip("每级伤害加成")]
-        public FP DamagePerLevel = FP._0_50;
-        
         [Header("Attack Range")]
         [Tooltip("攻击判定形状")]
         public Shape2DConfig AttackShape;
@@ -41,9 +34,8 @@ namespace Quantum
         [Tooltip("受击硬直时间")]
         public FP HitstunDuration = FP._0_25;
         
-        [Header("Status Effects")]
-        [Tooltip("命中时施加的状态效果")]
-        public StatusEffectConfig[] HitStatusEffects;
+        [Tooltip("受击类型")]
+        public HitType HitType = HitType.Light;
 
         protected bool _hasStartedHitboxWindow;
         protected HashSet<EntityRef> _hitEntitiesThisAttack = new HashSet<EntityRef>();
@@ -102,7 +94,7 @@ namespace Quantum
             bool isFacingRight = GetIsFacingRight(frame, entityRef);
             var shape = CreateAttackShapeWithDirection(frame, AttackShape, isFacingRight);
             
-            HitCollection hits = frame.Physics2D.OverlapShape(*transform, shape, gameSettingsData.PlayerLayerMask, QueryOptions.HitKinematics);
+            HitCollection hits = frame.Physics2D.OverlapShape(*transform, shape, gameSettingsData.PlayerLayerMask, QueryOptions.HitDynamics);
 
             if (hits.Count > 0)
             {
@@ -124,9 +116,7 @@ namespace Quantum
                     FPVector2 hitLateralDirection = hitPlayerTransform->Position - transform->Position;
                     hitLateralDirection = hitLateralDirection.Normalized;
 
-                    ApplyDamage(frame, entityRef, hit.Entity);
-                    ApplyKnockback(frame, entityRef, hit.Entity, hitLateralDirection);
-                    ApplyStatusEffects(frame, hit.Entity, hitLateralDirection);
+                    OnHitTarget(frame, entityRef, hit, hitLateralDirection);
                 }
             }
         }
@@ -142,65 +132,32 @@ namespace Quantum
 
             return activated;
         }
-
-        protected virtual void ApplyDamage(Frame frame, EntityRef attacker, EntityRef target)
+        
+        protected virtual void OnHitTarget(Frame frame, EntityRef attacker, Hit hit, FPVector2 hitLateralDirection)
         {
-            FP damage = CalculateDamage(frame, attacker);
-            
-            if (frame.Unsafe.TryGetPointer<HitReactionComponent>(target, out var hitReaction))
+            EntityRef target = hit.Entity;
+    
+            if (frame.Has<HitReactionComponent>(target))
             {
-                hitReaction->TakeDamage(frame, target, attacker, damage, HitType.Medium);
+                ApplyKnockback(frame, attacker, target, hitLateralDirection);
             }
-        }
-
-        protected virtual FP CalculateDamage(Frame frame, EntityRef entityRef)
-        {
-            FP damage = BaseDamage;
-            
-            if (frame.TryGet<CharacterLevelComponent>(entityRef, out var level))
-            {
-                damage += DamagePerLevel * level.CurrentLevel;
-            }
-            
-            return damage;
+    
+            frame.Events.OnPlayerHit(target, attacker, FP._0, hitLateralDirection, HitType, false);
         }
 
         protected virtual void ApplyKnockback(Frame frame, EntityRef attacker, EntityRef target, FPVector2 hitDirection)
         {
-            if (KnockbackForce <= 0)
+            if (!frame.Unsafe.TryGetPointer<HitReactionComponent>(target, out var hitReaction))
                 return;
 
-            FPVector2 knockbackDirection = hitDirection * KnockbackDirectionX;
-            knockbackDirection.Y = KnockbackDirectionY;
-            knockbackDirection = knockbackDirection.Normalized;
-            
-            FPVector2 knockbackDirection2D = new FPVector2(knockbackDirection.X, knockbackDirection.Y);
-            
-            frame.Signals.OnKnockbackApplied(target, HitstunDuration, knockbackDirection2D * KnockbackForce);
-        }
-
-        protected virtual void ApplyStatusEffects(Frame frame, EntityRef target, FPVector2 hitDirection)
-        {
-            if (HitStatusEffects == null || HitStatusEffects.Length == 0)
-                return;
-
-            foreach (var statusEffectConfig in HitStatusEffects)
-            {
-                switch (statusEffectConfig.Type)
-                {
-                    case StatusEffectType.Stun:
-                        frame.Signals.OnStunApplied(target, statusEffectConfig.Duration);
-                        break;
-
-                    case StatusEffectType.Knockback:
-                        FPVector2 direction2D = new FPVector2(hitDirection.X, hitDirection.Y);
-                        frame.Signals.OnKnockbackApplied(target, statusEffectConfig.Duration, direction2D);
-                        break;
-
-                    default:
-                        throw new System.ArgumentException($"Unknown {nameof(StatusEffectType)}: {statusEffectConfig.Type}", nameof(statusEffectConfig.Type));
-                }
-            }
+            FPVector2 knockbackDirection2D = new FPVector2(
+                KnockbackDirectionX * (hitDirection.X > 0 ? FP._1 : -FP._1),
+                KnockbackDirectionY
+            ).Normalized;
+    
+            FPVector2 knockbackVelocity = knockbackDirection2D * KnockbackForce;
+    
+            hitReaction->ApplyKnockback(frame, target, knockbackVelocity, HitstunDuration);
         }
         
         protected virtual bool GetIsFacingRight(Frame frame, EntityRef entityRef)

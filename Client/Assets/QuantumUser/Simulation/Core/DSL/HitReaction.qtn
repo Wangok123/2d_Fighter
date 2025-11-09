@@ -1,63 +1,56 @@
-// 受击反馈组件 - 可复用于玩家、怪物、NPC等任何可受击的实体
-component HitReactionComponent
+// 击退模式枚举
+enum KnockbackMode
 {
-    // 配置数据引用
-    asset_ref<HitReactionConfig> Config;
-    
-    // 生命值相关
-    FP CurrentHealth;
-    FP MaxHealth;
-    bool IsDead;
-    
-    // 受击状态
-    [ExcludeFromPrototype] bool IsHitstunned;
-    [ExcludeFromPrototype] FrameTimer HitstunTimer;
-    
-    // 击退状态
-    [ExcludeFromPrototype] bool IsKnockedBack;
-    [ExcludeFromPrototype] FPVector2 KnockbackVelocity;
-    [ExcludeFromPrototype] FP KnockbackDecay;
-    
-    // 眩晕状态
-    [ExcludeFromPrototype] bool IsStunned;
-    [ExcludeFromPrototype] FrameTimer StunTimer;
-    
-    // 无敌帧
-    [ExcludeFromPrototype] FrameTimer InvincibilityTimer;
-    
-    // 超级护甲
-    [ExcludeFromPrototype] FP SuperArmorValue;
-    [ExcludeFromPrototype] bool HasSuperArmor;
-    
-    // 生命恢复
-    [ExcludeFromPrototype] FrameTimer RegenDelayTimer;
-    [ExcludeFromPrototype] FP RegenAccumulator;
-    
-    // 连击计数（用于伤害衰减）
-    [ExcludeFromPrototype] Int32 ConsecutiveHitCount;
-    [ExcludeFromPrototype] FrameTimer ConsecutiveHitResetTimer;
-    
-    // 死亡和重生
-    [ExcludeFromPrototype] FrameTimer RespawnTimer;
-    [ExcludeFromPrototype] FPVector2 RespawnPosition;
+    Physics = 0,      // 物理模式：水平衰减 + 重力
+    CustomCurve = 1,  // 曲线模式：完全自定义
+    LinearDecay = 2   // 线性衰减：原有模式
 }
 
 // 受击类型枚举
 enum HitType
 {
-    Light,      // 轻击
-    Medium,     // 中击
-    Heavy,      // 重击
-    Launch,     // 浮空
-    GroundBounce, // 地面反弹
-    WallBounce  // 墙壁反弹
+    None,
+    Light,
+    Heavy,
+    Launch
 }
 
-// 受击方向枚举
-enum HitDirection
+// 击退配置数据（高性能 struct）
+struct KnockbackConfig
 {
-    Front,
-    Back,
-    Up,
-    Down
+    // 模式选择
+    KnockbackMode Mode;
+    
+    // Physics 模式参数
+    FP HorizontalDecayRate;  // 水平速度衰减率
+    bool UseGravity;          // 是否使用重力
+    
+    // Curve 模式参数
+    FP CurveDuration;         // 曲线持续时间
+    
+    // Linear 模式参数
+    FP LinearDecayRate;       // 线性衰减率
+    FP MinThreshold;          // 最小速度阈值
+}
+
+// 受击反馈组件
+component HitReactionComponent
+{
+    // 配置引用
+    asset_ref<HitReactionData> HitReactionData;
+    
+    // 硬直状态
+    bool IsHitstunned;
+    FrameTimer HitstunTimer;
+    
+    // 击退状态
+    bool IsKnockedBack;
+    FPVector2 KnockbackVelocity;
+    FP KnockbackDecay;
+    
+    // 曲线击飞支持（新增字段）
+    FPVector2 InitialKnockbackVelocity;
+    FP KnockbackStartTime;
+    FP KnockbackDuration;
+    KnockbackMode CurrentMode;
 }

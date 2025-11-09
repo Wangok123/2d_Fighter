@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: DashAbilityData
   m_EditorClassIdentifier: 
   Identifier:
-    Path: QuantumUser/Resources/DB/DashAbilityData
+    Path: QuantumUser/Resources/DB/Ability/DashAbilityData
     Guid:
       Value: 355305705527588594
   InputBuffer:

@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: JumpAbilityData
   m_EditorClassIdentifier: 
   Identifier:
-    Path: QuantumUser/Resources/DB/JumpAbilityData
+    Path: QuantumUser/Resources/DB/Ability/JumpAbilityData
     Guid:
       Value: 384777324059473156
   InputBuffer:
@@ -28,6 +28,9 @@ MonoBehaviour:
   FaceCastDirection: 1
   KeepVelocity: 0
   StartCooldownAfterDelay: 0
+  Priority: 2
+  CanBeCancelledByHigherPriority: 1
+  CanCancelLowerPriority: 1
   _uiAbilityPrefab: {fileID: 0}
   JumpImpulse:
     RawValue: 655360

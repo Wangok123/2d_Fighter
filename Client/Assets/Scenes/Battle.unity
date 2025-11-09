@@ -852,14 +852,35 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Prototype:
-    Config:
+    HitReactionData:
       Id:
-        Value: 492397630496385056
-    CurrentHealth:
-      RawValue: 6553600
-    MaxHealth:
-      RawValue: 6553600
-    IsDead:
+        Value: 469818618232086861
+    IsHitstunned:
+      Value: 0
+    HitstunTimer:
+      Mode: 0
+      Frames: 0
+      Seconds:
+        RawValue: 0
+    IsKnockedBack:
+      Value: 0
+    KnockbackVelocity:
+      X:
+        RawValue: 0
+      Y:
+        RawValue: 0
+    KnockbackDecay:
+      RawValue: 0
+    InitialKnockbackVelocity:
+      X:
+        RawValue: 0
+      Y:
+        RawValue: 0
+    KnockbackStartTime:
+      RawValue: 0
+    KnockbackDuration:
+      RawValue: 0
+    CurrentMode:
       Value: 0
 --- !u!114 &1850518760
 MonoBehaviour:
@@ -988,13 +1009,13 @@ MonoBehaviour:
     CallbackFlags:
       Value: 9
   PhysicsBody:
-    IsEnabled: 0
+    IsEnabled: 1
     Config2D: 116
     Config3D: 58
     RotationFreeze: 0
     InertiaMode: 0
     Mass:
-      RawValue: 65536
+      RawValue: 32768
     Drag:
       RawValue: 32768
     AngularDrag:

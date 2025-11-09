@@ -9,30 +9,35 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5641d8e4d911466ca615b56dfc97c46b, type: 3}
-  m_Name: WallJumpAbilityData
+  m_Script: {fileID: 11500000, guid: ab6fd0c34cc95a145984ebf1d9fad8dc, type: 3}
+  m_Name: WallSlideAbilityData
   m_EditorClassIdentifier: 
   Identifier:
-    Path: QuantumUser/Resources/DB/WallJumpAbilityData
+    Path: QuantumUser/Resources/DB/Ability/WallSlideAbilityData
     Guid:
-      Value: 521779086454359441
+      Value: 514875114087800724
   InputBuffer:
     RawValue: 0
   Delay:
     RawValue: 0
   Duration:
-    RawValue: 16384
+    RawValue: 0
   Cooldown:
     RawValue: 0
   CastDirectionType: 4
   FaceCastDirection: 1
   KeepVelocity: 0
   StartCooldownAfterDelay: 0
+  Priority: 0
+  CanBeCancelledByHigherPriority: 1
+  CanCancelLowerPriority: 0
   _uiAbilityPrefab: {fileID: 0}
-  WallJumpImpulseX:
-    RawValue: 655360
-  WallJumpImpulseY:
-    RawValue: 786432
-  FlipOnWallJump: 1
-  HorizontalVelocityMultiplier:
-    RawValue: 65536
+  SlideSpeed:
+    RawValue: 131072
+  SlideSpeedMultiplier:
+    RawValue: 32768
+  RequireInputTowardWall: 1
+  MinWallAngle:
+    RawValue: 4915200
+  MaxWallAngle:
+    RawValue: 6881280

@@ -9,13 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9cfae7938d6e4262a64245ea1e6a9d04, type: 3}
-  m_Name: DoubleJumpAbilityData
+  m_Script: {fileID: 11500000, guid: 5641d8e4d911466ca615b56dfc97c46b, type: 3}
+  m_Name: WallJumpAbilityData
   m_EditorClassIdentifier: 
   Identifier:
-    Path: QuantumUser/Resources/DB/DoubleJumpAbilityData
+    Path: QuantumUser/Resources/DB/Ability/WallJumpAbilityData
     Guid:
-      Value: 398239309984243437
+      Value: 521779086454359441
   InputBuffer:
     RawValue: 0
   Delay:
@@ -28,14 +28,14 @@ MonoBehaviour:
   FaceCastDirection: 1
   KeepVelocity: 0
   StartCooldownAfterDelay: 0
+  Priority: 2
+  CanBeCancelledByHigherPriority: 1
+  CanCancelLowerPriority: 1
   _uiAbilityPrefab: {fileID: 0}
-  DoubleJumpImpulse:
-    RawValue: 524288
-  JumpHeightMultiplier:
-    RawValue: 65536
-  AllowFromFreeFalling: 1
+  WallJumpImpulseX:
+    RawValue: 655360
+  WallJumpImpulseY:
+    RawValue: 786432
+  FlipOnWallJump: 1
   HorizontalVelocityMultiplier:
     RawValue: 65536
-  AllowVariableHeight: 1
-  MinJumpHeightPercent:
-    RawValue: 32768

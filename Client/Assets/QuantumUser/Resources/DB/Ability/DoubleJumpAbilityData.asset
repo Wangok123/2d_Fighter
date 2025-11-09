@@ -9,35 +9,36 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ab6fd0c34cc95a145984ebf1d9fad8dc, type: 3}
-  m_Name: WallSlideAbilityData
+  m_Script: {fileID: 11500000, guid: 9cfae7938d6e4262a64245ea1e6a9d04, type: 3}
+  m_Name: DoubleJumpAbilityData
   m_EditorClassIdentifier: 
   Identifier:
-    Path: QuantumUser/Resources/DB/WallSlideAbilityData
+    Path: QuantumUser/Resources/DB/Ability/DoubleJumpAbilityData
     Guid:
-      Value: 514875114087800724
+      Value: 398239309984243437
   InputBuffer:
     RawValue: 0
   Delay:
     RawValue: 0
   Duration:
-    RawValue: 0
+    RawValue: 16384
   Cooldown:
     RawValue: 0
   CastDirectionType: 4
   FaceCastDirection: 1
   KeepVelocity: 0
   StartCooldownAfterDelay: 0
-  Priority: 0
+  Priority: 2
   CanBeCancelledByHigherPriority: 1
-  CanCancelLowerPriority: 0
+  CanCancelLowerPriority: 1
   _uiAbilityPrefab: {fileID: 0}
-  SlideSpeed:
-    RawValue: 131072
-  SlideSpeedMultiplier:
+  DoubleJumpImpulse:
+    RawValue: 524288
+  JumpHeightMultiplier:
+    RawValue: 65536
+  AllowFromFreeFalling: 1
+  HorizontalVelocityMultiplier:
+    RawValue: 65536
+  AllowVariableHeight: 1
+  MinJumpHeightPercent:
     RawValue: 32768
-  RequireInputTowardWall: 1
-  MinWallAngle:
-    RawValue: 4915200
-  MaxWallAngle:
-    RawValue: 6881280

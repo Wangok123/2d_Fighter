@@ -96,19 +96,11 @@ namespace Quantum {
     Velocity,
     Input,
   }
-  public enum HitDirection : int {
-    Front,
-    Back,
-    Up,
-    Down,
-  }
   public enum HitType : int {
+    None,
     Light,
-    Medium,
     Heavy,
     Launch,
-    GroundBounce,
-    WallBounce,
   }
   public enum KCCContactType : int {
     NONE = 0,
@@ -125,6 +117,11 @@ namespace Quantum {
     DASHING = 4,
     JUMPED = 5,
     DOUBLE_JUMPED = 6,
+  }
+  public enum KnockbackMode : int {
+    Physics = 0,
+    CustomCurve = 1,
+    LinearDecay = 2,
   }
   public enum StatusEffectType : int {
     Stun,
@@ -1046,6 +1043,44 @@ namespace Quantum {
     }
   }
   [StructLayout(LayoutKind.Explicit)]
+  public unsafe partial struct KnockbackConfig {
+    public const Int32 SIZE = 40;
+    public const Int32 ALIGNMENT = 8;
+    [FieldOffset(0)]
+    public KnockbackMode Mode;
+    [FieldOffset(16)]
+    public FP HorizontalDecayRate;
+    [FieldOffset(4)]
+    public QBoolean UseGravity;
+    [FieldOffset(8)]
+    public FP CurveDuration;
+    [FieldOffset(24)]
+    public FP LinearDecayRate;
+    [FieldOffset(32)]
+    public FP MinThreshold;
+    public override readonly Int32 GetHashCode() {
+      unchecked { 
+        var hash = 2111;
+        hash = hash * 31 + (Int32)Mode;
+        hash = hash * 31 + HorizontalDecayRate.GetHashCode();
+        hash = hash * 31 + UseGravity.GetHashCode();
+        hash = hash * 31 + CurveDuration.GetHashCode();
+        hash = hash * 31 + LinearDecayRate.GetHashCode();
+        hash = hash * 31 + MinThreshold.GetHashCode();
+        return hash;
+      }
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+        var p = (KnockbackConfig*)ptr;
+        serializer.Stream.Serialize((Int32*)&p->Mode);
+        QBoolean.Serialize(&p->UseGravity, serializer);
+        FP.Serialize(&p->CurveDuration, serializer);
+        FP.Serialize(&p->HorizontalDecayRate, serializer);
+        FP.Serialize(&p->LinearDecayRate, serializer);
+        FP.Serialize(&p->MinThreshold, serializer);
+    }
+  }
+  [StructLayout(LayoutKind.Explicit)]
   [Quantum.Core.DerivedStructAttribute(typeof(StatusEffect))]
   public unsafe partial struct KnockbackStatusEffect : IDerivedStruct<StatusEffect> {
     public const Int32 SIZE = 72;
@@ -1678,112 +1713,56 @@ namespace Quantum {
   }
   [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct HitReactionComponent : Quantum.IComponent {
-    public const Int32 SIZE = 152;
+    public const Int32 SIZE = 88;
     public const Int32 ALIGNMENT = 8;
-    [FieldOffset(24)]
-    public AssetRef<HitReactionConfig> Config;
-    [FieldOffset(32)]
-    public FP CurrentHealth;
-    [FieldOffset(48)]
-    public FP MaxHealth;
-    [FieldOffset(8)]
-    public QBoolean IsDead;
-    [FieldOffset(12)]
-    [ExcludeFromPrototype()]
-    public QBoolean IsHitstunned;
-    [FieldOffset(80)]
-    [ExcludeFromPrototype()]
-    public FrameTimer HitstunTimer;
     [FieldOffset(16)]
-    [ExcludeFromPrototype()]
-    public QBoolean IsKnockedBack;
-    [FieldOffset(120)]
-    [ExcludeFromPrototype()]
-    public FPVector2 KnockbackVelocity;
-    [FieldOffset(40)]
-    [ExcludeFromPrototype()]
-    public FP KnockbackDecay;
-    [FieldOffset(20)]
-    [ExcludeFromPrototype()]
-    public QBoolean IsStunned;
-    [FieldOffset(112)]
-    [ExcludeFromPrototype()]
-    public FrameTimer StunTimer;
-    [FieldOffset(88)]
-    [ExcludeFromPrototype()]
-    public FrameTimer InvincibilityTimer;
-    [FieldOffset(64)]
-    [ExcludeFromPrototype()]
-    public FP SuperArmorValue;
+    public AssetRef<HitReactionData> HitReactionData;
     [FieldOffset(4)]
-    [ExcludeFromPrototype()]
-    public QBoolean HasSuperArmor;
-    [FieldOffset(96)]
-    [ExcludeFromPrototype()]
-    public FrameTimer RegenDelayTimer;
-    [FieldOffset(56)]
-    [ExcludeFromPrototype()]
-    public FP RegenAccumulator;
-    [FieldOffset(0)]
-    [ExcludeFromPrototype()]
-    public Int32 ConsecutiveHitCount;
+    public QBoolean IsHitstunned;
+    [FieldOffset(48)]
+    public FrameTimer HitstunTimer;
+    [FieldOffset(8)]
+    public QBoolean IsKnockedBack;
     [FieldOffset(72)]
-    [ExcludeFromPrototype()]
-    public FrameTimer ConsecutiveHitResetTimer;
-    [FieldOffset(104)]
-    [ExcludeFromPrototype()]
-    public FrameTimer RespawnTimer;
-    [FieldOffset(136)]
-    [ExcludeFromPrototype()]
-    public FPVector2 RespawnPosition;
+    public FPVector2 KnockbackVelocity;
+    [FieldOffset(24)]
+    public FP KnockbackDecay;
+    [FieldOffset(56)]
+    public FPVector2 InitialKnockbackVelocity;
+    [FieldOffset(40)]
+    public FP KnockbackStartTime;
+    [FieldOffset(32)]
+    public FP KnockbackDuration;
+    [FieldOffset(0)]
+    public KnockbackMode CurrentMode;
     public override readonly Int32 GetHashCode() {
       unchecked { 
         var hash = 17191;
-        hash = hash * 31 + Config.GetHashCode();
-        hash = hash * 31 + CurrentHealth.GetHashCode();
-        hash = hash * 31 + MaxHealth.GetHashCode();
-        hash = hash * 31 + IsDead.GetHashCode();
+        hash = hash * 31 + HitReactionData.GetHashCode();
         hash = hash * 31 + IsHitstunned.GetHashCode();
         hash = hash * 31 + HitstunTimer.GetHashCode();
         hash = hash * 31 + IsKnockedBack.GetHashCode();
         hash = hash * 31 + KnockbackVelocity.GetHashCode();
         hash = hash * 31 + KnockbackDecay.GetHashCode();
-        hash = hash * 31 + IsStunned.GetHashCode();
-        hash = hash * 31 + StunTimer.GetHashCode();
-        hash = hash * 31 + InvincibilityTimer.GetHashCode();
-        hash = hash * 31 + SuperArmorValue.GetHashCode();
-        hash = hash * 31 + HasSuperArmor.GetHashCode();
-        hash = hash * 31 + RegenDelayTimer.GetHashCode();
-        hash = hash * 31 + RegenAccumulator.GetHashCode();
-        hash = hash * 31 + ConsecutiveHitCount.GetHashCode();
-        hash = hash * 31 + ConsecutiveHitResetTimer.GetHashCode();
-        hash = hash * 31 + RespawnTimer.GetHashCode();
-        hash = hash * 31 + RespawnPosition.GetHashCode();
+        hash = hash * 31 + InitialKnockbackVelocity.GetHashCode();
+        hash = hash * 31 + KnockbackStartTime.GetHashCode();
+        hash = hash * 31 + KnockbackDuration.GetHashCode();
+        hash = hash * 31 + (Int32)CurrentMode;
         return hash;
       }
     }
     public static void Serialize(void* ptr, FrameSerializer serializer) {
         var p = (HitReactionComponent*)ptr;
-        serializer.Stream.Serialize(&p->ConsecutiveHitCount);
-        QBoolean.Serialize(&p->HasSuperArmor, serializer);
-        QBoolean.Serialize(&p->IsDead, serializer);
+        serializer.Stream.Serialize((Int32*)&p->CurrentMode);
         QBoolean.Serialize(&p->IsHitstunned, serializer);
         QBoolean.Serialize(&p->IsKnockedBack, serializer);
-        QBoolean.Serialize(&p->IsStunned, serializer);
-        AssetRef.Serialize(&p->Config, serializer);
-        FP.Serialize(&p->CurrentHealth, serializer);
+        AssetRef.Serialize(&p->HitReactionData, serializer);
         FP.Serialize(&p->KnockbackDecay, serializer);
-        FP.Serialize(&p->MaxHealth, serializer);
-        FP.Serialize(&p->RegenAccumulator, serializer);
-        FP.Serialize(&p->SuperArmorValue, serializer);
-        FrameTimer.Serialize(&p->ConsecutiveHitResetTimer, serializer);
+        FP.Serialize(&p->KnockbackDuration, serializer);
+        FP.Serialize(&p->KnockbackStartTime, serializer);
         FrameTimer.Serialize(&p->HitstunTimer, serializer);
-        FrameTimer.Serialize(&p->InvincibilityTimer, serializer);
-        FrameTimer.Serialize(&p->RegenDelayTimer, serializer);
-        FrameTimer.Serialize(&p->RespawnTimer, serializer);
-        FrameTimer.Serialize(&p->StunTimer, serializer);
+        FPVector2.Serialize(&p->InitialKnockbackVelocity, serializer);
         FPVector2.Serialize(&p->KnockbackVelocity, serializer);
-        FPVector2.Serialize(&p->RespawnPosition, serializer);
     }
   }
   [StructLayout(LayoutKind.Explicit)]
@@ -2340,7 +2319,6 @@ namespace Quantum {
       typeRegistry.Register(typeof(HingeJoint3D), HingeJoint3D.SIZE);
       typeRegistry.Register(typeof(Hit), Hit.SIZE);
       typeRegistry.Register(typeof(Hit3D), Hit3D.SIZE);
-      typeRegistry.Register(typeof(Quantum.HitDirection), 4);
       typeRegistry.Register(typeof(Quantum.HitReactionComponent), Quantum.HitReactionComponent.SIZE);
       typeRegistry.Register(typeof(Quantum.HitType), 4);
       typeRegistry.Register(typeof(Quantum.Input), Quantum.Input.SIZE);
@@ -2357,6 +2335,8 @@ namespace Quantum {
       typeRegistry.Register(typeof(Quantum.KCCContactType), 4);
       typeRegistry.Register(typeof(Quantum.KCCQueryResult), Quantum.KCCQueryResult.SIZE);
       typeRegistry.Register(typeof(Quantum.KCCState), 4);
+      typeRegistry.Register(typeof(Quantum.KnockbackConfig), Quantum.KnockbackConfig.SIZE);
+      typeRegistry.Register(typeof(Quantum.KnockbackMode), 4);
       typeRegistry.Register(typeof(Quantum.KnockbackStatusEffect), Quantum.KnockbackStatusEffect.SIZE);
       typeRegistry.Register(typeof(LayerMask), LayerMask.SIZE);
       typeRegistry.Register(typeof(MapEntityId), MapEntityId.SIZE);
@@ -2432,11 +2412,11 @@ namespace Quantum {
       FramePrinter.EnsurePrimitiveNotStripped<Quantum.CharacterTeam>();
       FramePrinter.EnsurePrimitiveNotStripped<Quantum.CommandInput>();
       FramePrinter.EnsurePrimitiveNotStripped<Quantum.DashDirection>();
-      FramePrinter.EnsurePrimitiveNotStripped<Quantum.HitDirection>();
       FramePrinter.EnsurePrimitiveNotStripped<Quantum.HitType>();
       FramePrinter.EnsurePrimitiveNotStripped<Quantum.InputButtons>();
       FramePrinter.EnsurePrimitiveNotStripped<Quantum.KCCContactType>();
       FramePrinter.EnsurePrimitiveNotStripped<Quantum.KCCState>();
+      FramePrinter.EnsurePrimitiveNotStripped<Quantum.KnockbackMode>();
       FramePrinter.EnsurePrimitiveNotStripped<QueryOptions>();
       FramePrinter.EnsurePrimitiveNotStripped<Quantum.StatusEffectType>();
     }
