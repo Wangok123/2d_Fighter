@@ -28,9 +28,10 @@ MonoBehaviour:
   FaceCastDirection: 1
   KeepVelocity: 0
   StartCooldownAfterDelay: 0
+  DisableMovementDuringAbility: 0
   Priority: 3
   CanBeCancelledByHigherPriority: 1
-  CanCancelLowerPriority: 1
+  CanCancelLowerPriority: 0
   _uiAbilityPrefab: {fileID: 0}
   DirectionType: 1
   MaxDashSpeed:

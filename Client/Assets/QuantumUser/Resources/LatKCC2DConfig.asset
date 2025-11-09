@@ -40,7 +40,7 @@ MonoBehaviour:
     FlipDirectionMultiplier:
       RawValue: 65536
     Deceleration:
-      RawValue: 655360
+      RawValue: 294912
     MaxBaseSpeed:
       RawValue: 458752
     DirectionType:
@@ -74,13 +74,13 @@ MonoBehaviour:
     CoyoteTime:
       RawValue: 6554
     InputBufferTime:
-      RawValue: 6554
+      RawValue: 11141
     DoubleJumpEnabled:
       Value: 1
     DoubleJumpWhenFreeFalling:
       Value: 1
     DecelerationOnAir:
-      RawValue: 655360
+      RawValue: 170394
     WallJumpEnabled:
       Value: 1
     RequiresOppositeInput:

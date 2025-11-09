@@ -28,6 +28,7 @@ MonoBehaviour:
   FaceCastDirection: 1
   KeepVelocity: 0
   StartCooldownAfterDelay: 0
+  DisableMovementDuringAbility: 1
   Priority: 2
   CanBeCancelledByHigherPriority: 1
   CanCancelLowerPriority: 0
@@ -79,11 +80,11 @@ MonoBehaviour:
     RawValue: 49152
   ComboSteps:
   - HitboxActiveTime:
-      RawValue: 24248
+      RawValue: 19661
     HitboxActiveDuration:
-      RawValue: 6554
+      RawValue: 3277
     Duration:
-      RawValue: 32768
+      RawValue: 26214
     KnockbackForce:
       RawValue: 327680
     KnockbackDirectionX:
