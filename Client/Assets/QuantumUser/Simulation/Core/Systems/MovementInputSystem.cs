@@ -29,6 +29,14 @@ namespace Quantum
             // Get input
             SimpleInput2D input = *frame.GetPlayerInput(filter.PlayerLink->Player);
 
+            if (!filter.AbilityEnabled->MovementEnabled)
+            {
+                input.Left = default;
+                input.Right = default;
+                input.Up = default;
+                input.Down = default;
+            }
+            
             var config = frame.FindAsset(filter.KCC->Config);
             filter.KCC->Input = input;
             config.MoveWithAbility(frame, filter.Entity, filter.Transform, filter.KCC, filter.AbilityEnabled);

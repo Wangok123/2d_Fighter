@@ -495,8 +495,8 @@ namespace Quantum
         Accelerate(sideMovement);
       }
 
-      // drag
-      if (sideMovement == 0 && movementEnabled)
+      // drag - 修改：即使禁用移动输入，减速仍然生效
+      if (sideMovement == 0)
       {
         if (_context.KCC->State == KCCState.GROUNDED)
         {

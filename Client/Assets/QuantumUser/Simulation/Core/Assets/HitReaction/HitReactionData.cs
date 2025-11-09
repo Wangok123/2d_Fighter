@@ -93,6 +93,11 @@ namespace Quantum
 
         protected virtual void OnHitstunStarted(Frame frame, EntityRef target, HitReactionComponent* hitReaction, HitType hitType)
         {
+            if (frame.Unsafe.TryGetPointer<AbilityEnable>(target, out var abilityEnable))
+            {
+                abilityEnable->MovementEnabled = false;
+            }
+    
             if (frame.Unsafe.TryGetPointer<AbilityInventory>(target, out var abilityInventory))
             {
                 if (abilityInventory->HasActiveAbility)
@@ -104,6 +109,11 @@ namespace Quantum
 
         protected virtual void OnKnockbackStarted(Frame frame, EntityRef target, HitReactionComponent* hitReaction, FPVector2 velocity)
         {
+            if (frame.Unsafe.TryGetPointer<AbilityEnable>(target, out var abilityEnable))
+            {
+                abilityEnable->MovementEnabled = false;
+            }
+    
             if (frame.Unsafe.TryGetPointer<MovementComponent>(target, out var movementData))
             {
                 FP horizontalDirection = velocity.X;
@@ -121,8 +131,15 @@ namespace Quantum
             if (hitReaction->IsHitstunned && !hitReaction->HitstunTimer.IsRunning(frame))
             {
                 hitReaction->IsHitstunned = false;
+        
+                OnHitstunEnded(frame, hitReaction);
             }
         }
+        
+        protected virtual void OnHitstunEnded(Frame frame, HitReactionComponent* hitReaction)
+        {
+        }
+
 
         protected virtual void UpdateKnockback(Frame frame, EntityRef entity, HitReactionComponent* hitReaction)
         {
@@ -296,6 +313,21 @@ namespace Quantum
                 else
                 {
                     physicsBody->Velocity = new FPVector2(FP._0, physicsBody->Velocity.Y);
+                }
+            }
+    
+            if (frame.Unsafe.TryGetPointer<AbilityEnable>(entity, out var abilityEnable))
+            {
+                if (frame.Unsafe.TryGetPointer<AbilityInventory>(entity, out var abilityInventory))
+                {
+                    if (!abilityInventory->HasActiveAbility)
+                    {
+                        abilityEnable->MovementEnabled = true;
+                    }
+                }
+                else
+                {
+                    abilityEnable->MovementEnabled = true;
                 }
             }
         }

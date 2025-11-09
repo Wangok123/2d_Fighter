@@ -25,6 +25,9 @@ namespace Quantum
         public bool KeepVelocity = false;
         public bool StartCooldownAfterDelay = false;
         
+        [Header("Movement Settings")]
+        public bool DisableMovementDuringAbility = false;
+        
         [Header("Cancel Settings")]
         public AbilityPriority Priority = AbilityPriority.Normal;
         public bool CanBeCancelledByHigherPriority = true;

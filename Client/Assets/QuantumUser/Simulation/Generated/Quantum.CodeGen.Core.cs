@@ -601,23 +601,25 @@ namespace Quantum {
   }
   [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct Ability {
-    public const Int32 SIZE = 88;
+    public const Int32 SIZE = 96;
     public const Int32 ALIGNMENT = 8;
-    [FieldOffset(72)]
+    [FieldOffset(16)]
+    public FP RuntimeDuration;
+    [FieldOffset(80)]
     [ExcludeFromPrototype()]
     public CountdownTimer InputBufferTimer;
-    [FieldOffset(40)]
+    [FieldOffset(48)]
     [ExcludeFromPrototype()]
     public CountdownTimer DelayTimer;
-    [FieldOffset(56)]
+    [FieldOffset(64)]
     [ExcludeFromPrototype()]
     public CountdownTimer DurationTimer;
-    [FieldOffset(24)]
+    [FieldOffset(32)]
     [ExcludeFromPrototype()]
     public CountdownTimer CooldownTimer;
     [FieldOffset(8)]
     public AssetRef<AbilityData> AbilityData;
-    [FieldOffset(16)]
+    [FieldOffset(24)]
     public FrameTimer ChargeTimer;
     [FieldOffset(4)]
     public Int32 UsageCount;
@@ -626,6 +628,7 @@ namespace Quantum {
     public override readonly Int32 GetHashCode() {
       unchecked { 
         var hash = 6343;
+        hash = hash * 31 + RuntimeDuration.GetHashCode();
         hash = hash * 31 + InputBufferTimer.GetHashCode();
         hash = hash * 31 + DelayTimer.GetHashCode();
         hash = hash * 31 + DurationTimer.GetHashCode();
@@ -642,6 +645,7 @@ namespace Quantum {
         serializer.Stream.Serialize(&p->ComboStep);
         serializer.Stream.Serialize(&p->UsageCount);
         AssetRef.Serialize(&p->AbilityData, serializer);
+        FP.Serialize(&p->RuntimeDuration, serializer);
         FrameTimer.Serialize(&p->ChargeTimer, serializer);
         Quantum.CountdownTimer.Serialize(&p->CooldownTimer, serializer);
         Quantum.CountdownTimer.Serialize(&p->DelayTimer, serializer);

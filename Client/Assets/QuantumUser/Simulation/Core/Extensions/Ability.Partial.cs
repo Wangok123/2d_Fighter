@@ -32,18 +32,20 @@ namespace Quantum
             {
                 return false;
             }
-            
-            
+    
+    
             AbilityInventory* abilityInventory = frame.Unsafe.GetPointer<AbilityInventory>(entityRef);
 
             if (abilityInventory->HasActiveAbility)
             {
                 return false;
             }
-            
+    
             KCC2D* kcc = frame.Unsafe.GetPointer<KCC2D>(entityRef);
             AbilityData abilityData = frame.FindAsset<AbilityData>(AbilityData.Id);
             PlayerMovementData playerMovementData = frame.FindAsset<PlayerMovementData>(playerStatus->PlayerMovementData.Id);
+
+            RuntimeDuration = abilityData.Duration;
 
             InputBufferTimer.Reset();
             DelayTimer.Start(abilityData.Delay);
@@ -57,6 +59,15 @@ namespace Quantum
             abilityInventory->ActiveAbilityInfo.CastVelocity = kcc->CombinedVelocity;
 
             playerMovementData.UpdateKCCSettings(frame, entityRef);
+
+            if (abilityData.DisableMovementDuringAbility)
+            {
+                if (frame.Unsafe.TryGetPointer<AbilityEnable>(entityRef, out var abilityEnable))
+                {
+                    abilityEnable->MovementEnabled = false;
+                }
+                
+            }
 
             return true;
         }
@@ -95,9 +106,10 @@ namespace Quantum
                     {
                         state.IsActiveStartTick = true;
 
+                        // 使用运行时存储的Duration，而不是重新从Asset读取
+                        DurationTimer.Start(RuntimeDuration);
+        
                         AbilityData abilityData = frame.FindAsset<AbilityData>(AbilityData.Id);
-
-                        DurationTimer.Start(abilityData.Duration);
                         if (abilityData.StartCooldownAfterDelay)
                         {
                             CooldownTimer.Start(abilityData.Cooldown);
@@ -144,13 +156,34 @@ namespace Quantum
             AbilityInventory* abilityInventory = frame.Unsafe.GetPointer<AbilityInventory>(entityRef);
             PlayerMovementData playerMovementData = frame.FindAsset<PlayerMovementData>(playerStatus->PlayerMovementData.Id);
 
+            AbilityData abilityData = frame.FindAsset<AbilityData>(AbilityData.Id);
+
             abilityInventory->ActiveAbilityInfo.ActiveAbilityType = AbilityType.None;
 
             DelayTimer.Reset();
             DurationTimer.Reset();
 
             playerMovementData.UpdateKCCSettings(frame, entityRef);
+    
+            if (abilityData.DisableMovementDuringAbility)
+            {
+                if (frame.Unsafe.TryGetPointer<AbilityEnable>(entityRef, out var abilityEnable))
+                {
+                    if (frame.Unsafe.TryGetPointer<HitReactionComponent>(entityRef, out var hitReaction))
+                    {
+                        if (!hitReaction->IsHitstunned && !hitReaction->IsKnockedBack)
+                        {
+                            abilityEnable->MovementEnabled = true;
+                        }
+                    }
+                    else
+                    {
+                        abilityEnable->MovementEnabled = true;
+                    }
+                }
+            }
         }
+
 
         public void ResetCooldown()
         {

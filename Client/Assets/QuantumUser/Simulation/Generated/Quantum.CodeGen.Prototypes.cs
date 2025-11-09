@@ -58,12 +58,14 @@ namespace Quantum.Prototypes {
   [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.Ability))]
   public unsafe partial class AbilityPrototype : StructPrototype {
+    public FP RuntimeDuration;
     public AssetRef<AbilityData> AbilityData;
     public Quantum.Prototypes.FrameTimerPrototype ChargeTimer;
     public Int32 UsageCount;
     public Int32 ComboStep;
     partial void MaterializeUser(Frame frame, ref Quantum.Ability result, in PrototypeMaterializationContext context);
     public void Materialize(Frame frame, ref Quantum.Ability result, in PrototypeMaterializationContext context = default) {
+        result.RuntimeDuration = this.RuntimeDuration;
         result.AbilityData = this.AbilityData;
         this.ChargeTimer.Materialize(frame, ref result.ChargeTimer, in context);
         result.UsageCount = this.UsageCount;

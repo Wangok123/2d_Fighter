@@ -191,7 +191,7 @@ MonoBehaviour:
         Config:
           Value: 116
         Mass:
-          RawValue: 0
+          RawValue: 32768
         Drag:
           RawValue: 32768
         AngularDrag:

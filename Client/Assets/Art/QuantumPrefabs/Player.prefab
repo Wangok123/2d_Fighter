@@ -381,7 +381,12 @@ MonoBehaviour:
   EnableDebug: 1
   AttackRangeColor: {r: 1, g: 0, b: 0, a: 0.3}
   AttackWireframeColor: {r: 1, g: 0, b: 0, a: 1}
-  DisplayDuration: 0.1
+  DefaultDisplayDuration: 0.1
+  ShowTimingInfo: 1
+  TextExtraDuration: 0.5
+  TextColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  TextBackgroundColor: {r: 0, g: 0, b: 0, a: 0.7}
+  FontSize: 14
   Combo1Color: {r: 1, g: 0.5, b: 0, a: 0.3}
   Combo2Color: {r: 1, g: 0, b: 0, a: 0.3}
   Combo3Color: {r: 0.5, g: 0, b: 1, a: 0.3}
@@ -398,6 +403,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Prototype:
+    MovementInputEnabled:
+      Value: 1
     MovementDoubleJumpEnabled:
       Value: 1
     MovementDashEnabled:
