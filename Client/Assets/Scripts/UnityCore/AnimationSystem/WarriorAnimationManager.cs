@@ -31,6 +31,7 @@ namespace UnityCore.AnimationSystem
             public const string Attack1 = "Attack_1";
             public const string Attack2 = "Attack_2";
             public const string HeavyAttack = "Attack_3";
+            public const string ChargeStart = "ChargeStart";
             public const string DashAttackNoDust = "Dash-Attack NoDust";
             public const string Dash = "Dash";
             public const string DashNoDust = "Dash NoDust";
@@ -65,6 +66,7 @@ namespace UnityCore.AnimationSystem
             RegisterState(AnimationStates.Attack1, layer: 0, crossfadeDuration: 0.05f);
             RegisterState(AnimationStates.Attack2, layer: 0, crossfadeDuration: 0.05f);
             RegisterState(AnimationStates.HeavyAttack, layer: 0, crossfadeDuration: 0.05f);
+            RegisterState(AnimationStates.ChargeStart, layer: 0, crossfadeDuration: 0.1f);
             RegisterState(AnimationStates.DashAttack, layer: 0, crossfadeDuration: 0.05f);
             RegisterState(AnimationStates.DashAttackNoDust, layer: 0, crossfadeDuration: 0.05f);
 
@@ -111,6 +113,7 @@ namespace UnityCore.AnimationSystem
         public void PlayAttack1() => PlayAnimation(AnimationStates.Attack1);
         public void PlayAttack2() => PlayAnimation(AnimationStates.Attack2);
         public void PlayHeavyAttack() => PlayAnimation(AnimationStates.HeavyAttack);
+        public void PlayChargeStart() => PlayAnimation(AnimationStates.ChargeStart);
         public void PlayDash() => PlayAnimation(AnimationStates.Dash);
         public void PlayCrouch() => PlayAnimation(AnimationStates.Crouch);
         public void PlaySlide() => PlayAnimation(AnimationStates.Slide);

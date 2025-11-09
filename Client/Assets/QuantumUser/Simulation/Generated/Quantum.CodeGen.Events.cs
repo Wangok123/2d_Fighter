@@ -75,7 +75,7 @@ namespace Quantum {
           case EventComboAttackStarted.ID: result = typeof(EventComboAttackStarted); return;
           case EventChargeAttackReleased.ID: result = typeof(EventChargeAttackReleased); return;
           case EventChargingStarted.ID: result = typeof(EventChargingStarted); return;
-          case EventChargeMaxReached.ID: result = typeof(EventChargeMaxReached); return;
+          case EventChargingCancelled.ID: result = typeof(EventChargingCancelled); return;
           case EventAttackHitboxActivated.ID: result = typeof(EventAttackHitboxActivated); return;
           case EventJumped.ID: result = typeof(EventJumped); return;
           case EventLanded.ID: result = typeof(EventLanded); return;
@@ -192,8 +192,8 @@ namespace Quantum {
         _f.AddEvent(ev);
         return ev;
       }
-      public EventChargeMaxReached ChargeMaxReached(EntityRef Entity) {
-        var ev = _f.Context.AcquireEvent<EventChargeMaxReached>(EventChargeMaxReached.ID);
+      public EventChargingCancelled ChargingCancelled(EntityRef Entity) {
+        var ev = _f.Context.AcquireEvent<EventChargingCancelled>(EventChargingCancelled.ID);
         ev.Entity = Entity;
         _f.AddEvent(ev);
         return ev;
@@ -626,13 +626,13 @@ namespace Quantum {
       }
     }
   }
-  public unsafe partial class EventChargeMaxReached : EventBase {
+  public unsafe partial class EventChargingCancelled : EventBase {
     public new const Int32 ID = 15;
     public EntityRef Entity;
-    protected EventChargeMaxReached(Int32 id, EventFlags flags) : 
+    protected EventChargingCancelled(Int32 id, EventFlags flags) : 
         base(id, flags) {
     }
-    public EventChargeMaxReached() : 
+    public EventChargingCancelled() : 
         base(15, EventFlags.Server|EventFlags.Client) {
     }
     public new QuantumGame Game {

@@ -403,8 +403,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Prototype:
-    MovementInputEnabled:
-      Value: 1
     MovementDoubleJumpEnabled:
       Value: 1
     MovementDashEnabled:
@@ -460,6 +458,8 @@ MonoBehaviour:
     - Key:
         Value: 2
       Value:
+        RuntimeDuration:
+          RawValue: 0
         AbilityData:
           Id:
             Value: 355305705527588594
@@ -473,6 +473,8 @@ MonoBehaviour:
     - Key:
         Value: 1
       Value:
+        RuntimeDuration:
+          RawValue: 0
         AbilityData:
           Id:
             Value: 398239309984243437
@@ -486,6 +488,8 @@ MonoBehaviour:
     - Key:
         Value: 8
       Value:
+        RuntimeDuration:
+          RawValue: 0
         AbilityData:
           Id:
             Value: 384777324059473156
@@ -499,6 +503,8 @@ MonoBehaviour:
     - Key:
         Value: 3
       Value:
+        RuntimeDuration:
+          RawValue: 0
         AbilityData:
           Id:
             Value: 521779086454359441
@@ -512,6 +518,8 @@ MonoBehaviour:
     - Key:
         Value: 4
       Value:
+        RuntimeDuration:
+          RawValue: 0
         AbilityData:
           Id:
             Value: 514875114087800724
@@ -525,9 +533,26 @@ MonoBehaviour:
     - Key:
         Value: 100
       Value:
+        RuntimeDuration:
+          RawValue: 0
         AbilityData:
           Id:
             Value: 519720871119260888
+        ChargeTimer:
+          Mode: 0
+          Frames: 0
+          Seconds:
+            RawValue: 0
+        UsageCount: 0
+        ComboStep: 0
+    - Key:
+        Value: 101
+      Value:
+        RuntimeDuration:
+          RawValue: 0
+        AbilityData:
+          Id:
+            Value: 477480624821614058
         ChargeTimer:
           Mode: 0
           Frames: 0

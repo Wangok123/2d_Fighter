@@ -159,8 +159,8 @@ event ChargingStarted
     FP MaxChargeTime;
 }
 
-// 满蓄力事件
-event ChargeMaxReached
+// 蓄力取消事件
+event ChargingCancelled
 {
     EntityRef Entity;
 }

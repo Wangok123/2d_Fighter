@@ -141,8 +141,6 @@ namespace Quantum
             {
                 ApplyKnockback(frame, attacker, target, hitLateralDirection);
             }
-    
-            frame.Events.OnPlayerHit(target, attacker, FP._0, hitLateralDirection, HitType, false);
         }
 
         protected virtual void ApplyKnockback(Frame frame, EntityRef attacker, EntityRef target, FPVector2 hitDirection)

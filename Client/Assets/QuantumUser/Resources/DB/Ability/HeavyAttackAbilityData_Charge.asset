@@ -1,0 +1,94 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d171e42800b39d44a8beccfb25d2007, type: 3}
+  m_Name: HeavyAttackAbilityData_Charge
+  m_EditorClassIdentifier: 
+  Identifier:
+    Path: QuantumUser/Resources/DB/Ability/HeavyAttackAbilityData_Charge
+    Guid:
+      Value: 477480624821614058
+  InputBuffer:
+    RawValue: 9831
+  Delay:
+    RawValue: 0
+  Duration:
+    RawValue: 32768
+  Cooldown:
+    RawValue: 0
+  CastDirectionType: 4
+  FaceCastDirection: 1
+  KeepVelocity: 0
+  StartCooldownAfterDelay: 0
+  DisableMovementDuringAbility: 1
+  Priority: 2
+  CanBeCancelledByHigherPriority: 1
+  CanCancelLowerPriority: 1
+  _uiAbilityPrefab: {fileID: 0}
+  AttackShape:
+    ShapeType: 4
+    PolygonCollider:
+      Id:
+        Value: 0
+    CircleRadius:
+      RawValue: 32768
+    CapsuleSize:
+      X:
+        RawValue: 65536
+      Y:
+        RawValue: 131072
+    EdgeExtent:
+      RawValue: 32768
+    BoxExtents:
+      X:
+        RawValue: 65536
+      Y:
+        RawValue: 65536
+    PositionOffset:
+      X:
+        RawValue: 98304
+      Y:
+        RawValue: 0
+    RotationOffset:
+      RawValue: 0
+    UserTag: 0
+    IsPersistent: 1
+    CompoundShapes: []
+  HitboxActiveTime:
+    RawValue: 13107
+  HitboxActiveDuration:
+    RawValue: 19661
+  KnockbackForce:
+    RawValue: 655360
+  KnockbackDirectionX:
+    RawValue: 65536
+  KnockbackDirectionY:
+    RawValue: 32768
+  HitstunDuration:
+    RawValue: 16384
+  HitType: 2
+  MinChargeTime:
+    RawValue: 16384
+  MaxChargeTime:
+    RawValue: 65536
+  CanMoveWhileCharging: 0
+  MinChargeDamageMultiplier:
+    RawValue: 65536
+  MaxChargeDamageMultiplier:
+    RawValue: 131072
+  ScaleKnockbackWithCharge: 1
+  MinChargeKnockbackMultiplier:
+    RawValue: 65536
+  MaxChargeKnockbackMultiplier:
+    RawValue: 98304
+  ScaleAttackRangeWithCharge: 0
+  MaxChargeRangeMultiplier:
+    RawValue: 98304
