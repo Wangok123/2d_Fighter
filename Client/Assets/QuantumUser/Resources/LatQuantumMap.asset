@@ -184,7 +184,7 @@ MonoBehaviour:
         IsTrigger: 0
         PhysicsMaterial:
           Id:
-            Value: 0
+            Value: 424419529196919110
     - rid: 8101032211223937026
       type: {class: PhysicsBody2DPrototype, ns: Quantum.Prototypes, asm: Quantum.Engine}
       data:
@@ -245,7 +245,7 @@ MonoBehaviour:
       type: {class: PhysicsCallbacks2DPrototype, ns: Quantum.Prototypes, asm: Quantum.Engine}
       data:
         CallbackFlags:
-          Value: 9
+          Value: 8
     - rid: 8101032211223937028
       type: {class: HitReactionComponentPrototype, ns: Quantum.Prototypes, asm: Quantum.Simulation}
       data:

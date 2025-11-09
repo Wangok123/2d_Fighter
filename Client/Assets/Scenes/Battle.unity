@@ -937,7 +937,7 @@ MonoBehaviour:
     IsTrigger: 0
     Material:
       Id:
-        Value: 1241873710147300057
+        Value: 424419529196919110
     SourceCollider: {fileID: 0}
     SourceShapeSettings:
       IsScaledBySource: 0
@@ -1007,7 +1007,7 @@ MonoBehaviour:
     LayerSource: 0
     Layer: 6
     CallbackFlags:
-      Value: 9
+      Value: 8
   PhysicsBody:
     IsEnabled: 1
     Config2D: 116

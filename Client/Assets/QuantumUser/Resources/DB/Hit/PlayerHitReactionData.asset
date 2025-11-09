@@ -30,9 +30,9 @@ MonoBehaviour:
     CurveDuration:
       RawValue: 13107
     LinearDecayRate:
-      RawValue: 65536
+      RawValue: 131072
     MinThreshold:
-      RawValue: 32768
+      RawValue: 655360
     HorizontalCurve:
       serializedVersion: 2
       m_Curve:

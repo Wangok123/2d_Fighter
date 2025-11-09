@@ -76,10 +76,10 @@ MonoBehaviour:
     RawValue: 16384
   HitType: 2
   MinChargeTime:
-    RawValue: 16384
+    RawValue: 32768
   MaxChargeTime:
     RawValue: 65536
-  CanMoveWhileCharging: 0
+  CanMoveWhileCharging: 1
   MinChargeDamageMultiplier:
     RawValue: 65536
   MaxChargeDamageMultiplier:

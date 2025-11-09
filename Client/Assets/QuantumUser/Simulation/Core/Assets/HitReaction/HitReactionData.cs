@@ -3,7 +3,7 @@ using Photon.Deterministic;
 
 namespace Quantum
 {
-    public unsafe class HitReactionData : AssetObject
+    public unsafe partial class HitReactionData : AssetObject
     {
         [Header("Core Flags")]
         [Tooltip("是否可以被击退")]
@@ -229,7 +229,7 @@ namespace Quantum
                 if (physicsBody->IsKinematic)
                 {
                     physicsBody->Velocity = hitReaction->KnockbackVelocity;
-                    
+
                     if (frame.Unsafe.TryGetPointer<Transform2D>(entity, out var trans))
                     {
                         trans->Position += hitReaction->KnockbackVelocity * frame.DeltaTime;
@@ -242,6 +242,7 @@ namespace Quantum
                         physicsBody->Velocity.Y
                     );
                 }
+
                 return;
             }
 
@@ -306,14 +307,17 @@ namespace Quantum
 
             if (frame.Unsafe.TryGetPointer<PhysicsBody2D>(entity, out var physicsBody))
             {
-                if (physicsBody->IsKinematic || !preserveVerticalVelocity)
+                if (physicsBody->IsKinematic)
                 {
+                    // Kinematic物体必须手动清零
                     physicsBody->Velocity = FPVector2.Zero;
                 }
-                else
+                else if (preserveVerticalVelocity)
                 {
+                    // Dynamic物体空中击退，只清零水平速度
                     physicsBody->Velocity = new FPVector2(FP._0, physicsBody->Velocity.Y);
                 }
+                // Dynamic物体地面击退：不清零，让物理引擎自然减速
             }
     
             if (frame.Unsafe.TryGetPointer<AbilityEnable>(entity, out var abilityEnable))
