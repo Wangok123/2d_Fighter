@@ -1935,9 +1935,6 @@ namespace Quantum {
     [FieldOffset(32)]
     [ExcludeFromPrototype()]
     public EntityRef Owner;
-    [FieldOffset(8)]
-    [ExcludeFromPrototype()]
-    public ProjectileType Type;
     [FieldOffset(48)]
     [ExcludeFromPrototype()]
     public FrameTimer LifetimeTimer;
@@ -1947,10 +1944,10 @@ namespace Quantum {
     [FieldOffset(40)]
     [ExcludeFromPrototype()]
     public FP Speed;
-    [FieldOffset(12)]
+    [FieldOffset(8)]
     [ExcludeFromPrototype()]
     public QBoolean IsActive;
-    [FieldOffset(16)]
+    [FieldOffset(12)]
     [ExcludeFromPrototype()]
     public QBoolean PierceTargets;
     [FieldOffset(4)]
@@ -1959,7 +1956,7 @@ namespace Quantum {
     [FieldOffset(0)]
     [ExcludeFromPrototype()]
     public Int32 CurrentPierceCount;
-    [FieldOffset(20)]
+    [FieldOffset(16)]
     [ExcludeFromPrototype()]
     public QListPtr<EntityRef> HitEntities;
     public override readonly Int32 GetHashCode() {
@@ -1967,7 +1964,6 @@ namespace Quantum {
         var hash = 12491;
         hash = hash * 31 + ProjectileData.GetHashCode();
         hash = hash * 31 + Owner.GetHashCode();
-        hash = hash * 31 + (Int32)Type;
         hash = hash * 31 + LifetimeTimer.GetHashCode();
         hash = hash * 31 + Direction.GetHashCode();
         hash = hash * 31 + Speed.GetHashCode();
@@ -1990,7 +1986,6 @@ namespace Quantum {
         var p = (ProjectileComponent*)ptr;
         serializer.Stream.Serialize(&p->CurrentPierceCount);
         serializer.Stream.Serialize(&p->MaxPierceCount);
-        serializer.Stream.Serialize((Int32*)&p->Type);
         QBoolean.Serialize(&p->IsActive, serializer);
         QBoolean.Serialize(&p->PierceTargets, serializer);
         QList.Serialize(&p->HitEntities, serializer, Statics.SerializeEntityRef);

@@ -46,21 +46,28 @@ namespace Quantum
         [Tooltip("字体大小")]
         public int FontSize = 12;
 
-        [Header("不同效果类型颜色")]
+        [Header("不同类型颜色")]
         [Tooltip("伤害类型颜色")]
         public Color DamageColor = new Color(1f, 0f, 0f, 0.2f);
         
         [Tooltip("治疗类型颜色")]
         public Color HealColor = new Color(0f, 1f, 0f, 0.2f);
         
-        [Tooltip("Buff类型颜色")]
-        public Color BuffColor = new Color(0f, 0.5f, 1f, 0.2f);
+        [Tooltip("减速类型颜色")]
+        public Color SlowColor = new Color(0f, 0.5f, 1f, 0.2f);
         
-        [Tooltip("Debuff类型颜色")]
-        public Color DebuffColor = new Color(0.8f, 0f, 0.8f, 0.2f);
+        [Tooltip("推拉力场颜色")]
+        public Color PushColor = new Color(1f, 0.5f, 0f, 0.2f);
         
-        [Tooltip("控制类型颜色")]
-        public Color ControlColor = new Color(1f, 1f, 0f, 0.2f);
+        [Tooltip("旋涡力场颜色")]
+        public Color VortexColor = new Color(0.8f, 0f, 0.8f, 0.2f);
+        
+        [Tooltip("爆炸类型颜色")]
+        public Color ExplosionColor = new Color(1f, 0.3f, 0f, 0.3f);
+
+        [Header("爆炸特殊显示")]
+        [Tooltip("是否显示爆炸倒计时闪烁")]
+        public bool ShowExplosionCountdown = true;
 
         private SkillFieldComponent* _skillField;
         private Transform2D* _transform;
@@ -126,11 +133,63 @@ namespace Quantum
         {
             if (!ShowFieldInfo || _skillFieldData == null) return;
 
-            FP remainingDuration = _skillFieldData.Duration - _skillField->TickTimer.ElapsedSeconds(frame);
-            FP tickInterval = _skillFieldData.TickInterval;
-            string effectType = _skillFieldData.EffectType.ToString();
+            string fieldType = GetFieldTypeName();
+            string durationInfo = GetDurationInfo(frame);
+            string extraInfo = GetExtraInfo(frame);
 
-            _cachedInfo = $"Skill Field\nType: {effectType}\nTick: {tickInterval.AsFloat:F2}s\nRemaining: {remainingDuration.AsFloat:F2}s";
+            _cachedInfo = $"Skill Field\nType: {fieldType}{durationInfo}{extraInfo}";
+        }
+
+        private string GetDurationInfo(Frame frame)
+        {
+            if (_skillFieldData is DelayedExplosionFieldData explosionData)
+            {
+                FP elapsed = _skillField->TickTimer.ElapsedSeconds(frame);
+                FP remaining = explosionData.ExplosionDelay - elapsed;
+                return $"\nDetonation: {remaining.AsFloat:F2}s";
+            }
+            else
+            {
+                FP remainingDuration = _skillFieldData.Duration - _skillField->TickTimer.ElapsedSeconds(frame);
+                FP tickInterval = _skillFieldData.TickInterval;
+                return $"\nTick: {tickInterval.AsFloat:F2}s\nRemaining: {remainingDuration.AsFloat:F2}s";
+            }
+        }
+
+        private string GetFieldTypeName()
+        {
+            if (_skillFieldData is DelayedExplosionFieldData)
+                return "Explosion";
+            if (_skillFieldData is DamageFieldData)
+                return "Damage";
+            if (_skillFieldData is HealFieldData)
+                return "Heal";
+            if (_skillFieldData is SlowFieldData)
+                return "Slow";
+            if (_skillFieldData is PushFieldData pushData)
+                return pushData.FieldType == ForceFieldType.Push ? "Push" : "Pull";
+            if (_skillFieldData is VortexFieldData)
+                return "Vortex";
+            
+            return "Unknown";
+        }
+
+        private string GetExtraInfo(Frame frame)
+        {
+            if (_skillFieldData is DelayedExplosionFieldData explosionData)
+                return $"\nDamage: {explosionData.ExplosionDamage.AsFloat:F0}";
+            if (_skillFieldData is DamageFieldData damageData)
+                return $"\nDamage: {damageData.DamagePerTick.AsFloat:F1}";
+            if (_skillFieldData is HealFieldData healData)
+                return $"\nHeal: {healData.HealPerTick.AsFloat:F1}";
+            if (_skillFieldData is SlowFieldData slowData)
+                return $"\nSlow: {(slowData.SpeedReductionPercent.AsFloat * 100):F0}%";
+            if (_skillFieldData is PushFieldData pushData)
+                return $"\nForce: {pushData.ForceStrength.AsFloat:F1}";
+            if (_skillFieldData is VortexFieldData vortexData)
+                return $"\nPull: {vortexData.CentripetalForce.AsFloat:F1} | Spin: {vortexData.TangentialForce.AsFloat:F1}";
+            
+            return "";
         }
 
         private void OnDrawGizmos()
@@ -160,18 +219,25 @@ namespace Quantum
             if (shape == null) return;
 
             Vector3 position = _transform->Position.ToUnityVector3();
-            Color fillColor = GetEffectTypeColor();
+            Color fillColor = GetFieldTypeColor();
 
-            if (_tickFlashTimer > 0)
+            if (_skillFieldData is DelayedExplosionFieldData explosionData && ShowExplosionCountdown)
             {
-                float flashRatio = _tickFlashTimer / TickFlashDuration;
-                fillColor = Color.Lerp(fillColor, TickFlashColor, flashRatio);
+                fillColor = ApplyExplosionCountdownEffect(fillColor, explosionData);
             }
-
-            if (EnablePulseAnimation)
+            else
             {
-                float pulse = Mathf.Sin(_pulseTime) * PulseIntensity;
-                fillColor.a *= (1f + pulse);
+                if (_tickFlashTimer > 0)
+                {
+                    float flashRatio = _tickFlashTimer / TickFlashDuration;
+                    fillColor = Color.Lerp(fillColor, TickFlashColor, flashRatio);
+                }
+
+                if (EnablePulseAnimation)
+                {
+                    float pulse = Mathf.Sin(_pulseTime) * PulseIntensity;
+                    fillColor.a *= (1f + pulse);
+                }
             }
 
             switch (shape.ShapeType)
@@ -190,19 +256,46 @@ namespace Quantum
             }
         }
 
-        private Color GetEffectTypeColor()
+        private Color ApplyExplosionCountdownEffect(Color baseColor, DelayedExplosionFieldData explosionData)
         {
-            if (_skillFieldData == null) return EffectAreaColor;
+            var frame = VerifiedFrame;
+            if (frame == null) return baseColor;
 
-            return _skillFieldData.EffectType switch
+            FP elapsed = _skillField->TickTimer.ElapsedSeconds(frame);
+            FP remaining = explosionData.ExplosionDelay - elapsed;
+
+            if (remaining < FP._1)
             {
-                SkillFieldEffectType.Damage => DamageColor,
-                SkillFieldEffectType.Heal => HealColor,
-                SkillFieldEffectType.Buff => BuffColor,
-                SkillFieldEffectType.Debuff => DebuffColor,
-                SkillFieldEffectType.Control => ControlColor,
-                _ => EffectAreaColor
-            };
+                float blinkSpeed = 10f;
+                float blink = Mathf.Abs(Mathf.Sin(Time.time * blinkSpeed));
+                return Color.Lerp(baseColor, Color.red, blink * 0.7f);
+            }
+            else if (remaining < FP._2)
+            {
+                float blinkSpeed = 5f;
+                float blink = Mathf.Abs(Mathf.Sin(Time.time * blinkSpeed));
+                return Color.Lerp(baseColor, Color.yellow, blink * 0.5f);
+            }
+
+            return baseColor;
+        }
+
+        private Color GetFieldTypeColor()
+        {
+            if (_skillFieldData is DelayedExplosionFieldData)
+                return ExplosionColor;
+            if (_skillFieldData is DamageFieldData)
+                return DamageColor;
+            if (_skillFieldData is HealFieldData)
+                return HealColor;
+            if (_skillFieldData is SlowFieldData)
+                return SlowColor;
+            if (_skillFieldData is PushFieldData)
+                return PushColor;
+            if (_skillFieldData is VortexFieldData)
+                return VortexColor;
+            
+            return EffectAreaColor;
         }
 
         private void DrawFieldInfo()

@@ -34,7 +34,6 @@ component ProjectileComponent
 {
     [ExcludeFromPrototype] asset_ref<ProjectileData> ProjectileData;
     [ExcludeFromPrototype] EntityRef Owner;
-    [ExcludeFromPrototype] ProjectileType Type;
     [ExcludeFromPrototype] FrameTimer LifetimeTimer;
     [ExcludeFromPrototype] FPVector2 Direction;
     [ExcludeFromPrototype] FP Speed;
@@ -65,7 +64,6 @@ signal DestroySkillField(entity_ref skillField);
 event OnProjectileSpawned{
     EntityRef Projectile;
     EntityRef Owner;
-    ProjectileType Type;
 }
 
 event OnProjectileHitTarget{

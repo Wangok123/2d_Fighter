@@ -236,11 +236,10 @@ namespace Quantum {
         _f.AddEvent(ev);
         return ev;
       }
-      public EventOnProjectileSpawned OnProjectileSpawned(EntityRef Projectile, EntityRef Owner, ProjectileType Type) {
+      public EventOnProjectileSpawned OnProjectileSpawned(EntityRef Projectile, EntityRef Owner) {
         var ev = _f.Context.AcquireEvent<EventOnProjectileSpawned>(EventOnProjectileSpawned.ID);
         ev.Projectile = Projectile;
         ev.Owner = Owner;
-        ev.Type = Type;
         _f.AddEvent(ev);
         return ev;
       }
@@ -827,7 +826,6 @@ namespace Quantum {
     public new const Int32 ID = 20;
     public EntityRef Projectile;
     public EntityRef Owner;
-    public ProjectileType Type;
     protected EventOnProjectileSpawned(Int32 id, EventFlags flags) : 
         base(id, flags) {
     }
@@ -847,7 +845,6 @@ namespace Quantum {
         var hash = 131;
         hash = hash * 31 + Projectile.GetHashCode();
         hash = hash * 31 + Owner.GetHashCode();
-        hash = hash * 31 + Type.GetHashCode();
         return hash;
       }
     }

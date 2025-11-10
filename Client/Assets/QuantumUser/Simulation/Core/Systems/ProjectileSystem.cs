@@ -51,7 +51,6 @@ namespace Quantum
             ProjectileComponent* projectile = frame.Unsafe.GetPointer<ProjectileComponent>(projectileEntity);
             projectile->ProjectileData = data;
             projectile->Owner = owner;
-            projectile->Type = data.ProjectileType;
             projectile->Direction = direction.Normalized;
             projectile->IsActive = true;
             projectile->PierceTargets = data.PierceTargets;
@@ -62,7 +61,7 @@ namespace Quantum
 
             data.OnProjectileSpawned(frame, projectileEntity, projectile, owner);
 
-            frame.Events.OnProjectileSpawned(projectileEntity, owner, data.ProjectileType);
+            frame.Events.OnProjectileSpawned(projectileEntity, owner);
         }
 
         public void DestroyProjectile(Frame frame, EntityRef projectile, ProjectileDestroyReason reason)

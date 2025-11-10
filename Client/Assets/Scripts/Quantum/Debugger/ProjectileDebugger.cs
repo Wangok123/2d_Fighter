@@ -61,6 +61,16 @@ namespace Quantum
         
         [Tooltip("回旋镖弹道颜色")]
         public Color BoomerangColor = new Color(1f, 0f, 1f, 0.3f);
+        
+        [Tooltip("手榴弹弹道颜色")]
+        public Color GrenadeColor = new Color(1f, 0.3f, 0f, 0.3f);
+
+        [Header("手榴弹特殊显示")]
+        [Tooltip("是否显示爆炸预览")]
+        public bool ShowExplosionPreview = true;
+        
+        [Tooltip("爆炸预览颜色")]
+        public Color ExplosionPreviewColor = new Color(1f, 0f, 0f, 0.15f);
 
         private List<Vector3> _trajectoryPoints = new List<Vector3>(100);
         private ProjectileComponent* _projectile;
@@ -131,6 +141,8 @@ namespace Quantum
 
         private string GetProjectileTypeName()
         {
+            if (_projectileData is GrenadeProjectileData)
+                return "Grenade";
             if (_projectileData is StraightProjectileData)
                 return "Straight";
             if (_projectileData is HomingProjectileData)
@@ -145,6 +157,12 @@ namespace Quantum
 
         private string GetExtraInfo(Frame frame)
         {
+            if (_projectileData is GrenadeProjectileData grenadeData)
+            {
+                FP currentHeight = _transform->Position.Y;
+                return $"\nHeight: {currentHeight.AsFloat:F2}\nGround: {grenadeData.GroundHeight.AsFloat:F2}";
+            }
+            
             if (_projectileData is BoomerangProjectileData boomerangData)
             {
                 FP elapsed = _projectile->LifetimeTimer.ElapsedSeconds(frame);
@@ -172,6 +190,11 @@ namespace Quantum
             if (ShowPredictedTrajectory)
             {
                 DrawPredictedTrajectory();
+            }
+
+            if (_projectileData is GrenadeProjectileData && ShowExplosionPreview)
+            {
+                DrawGrenadeExplosionPreview();
             }
 
             if (ShowProjectileInfo && !string.IsNullOrEmpty(_cachedInfo))
@@ -221,6 +244,8 @@ namespace Quantum
 
         private Color GetProjectileTypeColor()
         {
+            if (_projectileData is GrenadeProjectileData)
+                return GrenadeColor;
             if (_projectileData is StraightProjectileData)
                 return StraightColor;
             if (_projectileData is HomingProjectileData)
@@ -255,6 +280,10 @@ namespace Quantum
             {
                 DrawArcPrediction(position, direction, arcData.Gravity.AsFloat, timeStep, steps, predictedPoints);
             }
+            else if (_projectileData is GrenadeProjectileData grenadeData)
+            {
+                DrawGrenadePrediction(position, direction, grenadeData.Gravity.AsFloat, grenadeData.GroundHeight.AsFloat, timeStep, steps, predictedPoints);
+            }
 
 #if UNITY_EDITOR
             if (predictedPoints.Count > 1)
@@ -285,6 +314,55 @@ namespace Quantum
                 position += new Vector3(direction.x, direction.y, 0) * timeStep;
                 points.Add(position);
             }
+        }
+
+        private void DrawGrenadePrediction(Vector3 position, Vector2 direction, float gravity, float groundHeight, float timeStep, int steps, List<Vector3> points)
+        {
+            for (int i = 0; i < steps; i++)
+            {
+                direction.y -= gravity * timeStep;
+                position += new Vector3(direction.x, direction.y, 0) * timeStep;
+                points.Add(position);
+
+                if (position.y <= groundHeight && direction.y <= 0)
+                {
+                    break;
+                }
+            }
+        }
+
+        private void DrawGrenadeExplosionPreview()
+        {
+            if (!(_projectileData is GrenadeProjectileData grenadeData)) return;
+            if (!grenadeData.ExplosionFieldData.Id.IsValid) return;
+
+            var frame = VerifiedFrame;
+            if (frame == null) return;
+
+            var explosionData = frame.FindAsset<DelayedExplosionFieldData>(grenadeData.ExplosionFieldData.Id);
+            if (explosionData == null || explosionData.EffectArea == null) return;
+
+            Vector3 currentPos = _transform->Position.ToUnityVector3();
+            Vector3 explosionPos = currentPos;
+            explosionPos.y = grenadeData.GroundHeight.AsFloat;
+
+            Shape2DConfig explosionShape = explosionData.EffectArea;
+
+            switch (explosionShape.ShapeType)
+            {
+                case Shape2DType.Circle:
+                    DrawCircle(explosionPos, explosionShape.CircleRadius.AsFloat, ExplosionPreviewColor, new Color(1f, 0f, 0f, 0.3f));
+                    break;
+
+                case Shape2DType.Box:
+                    DrawBox(explosionPos, explosionShape.BoxExtents, explosionShape.RotationOffset.AsFloat, ExplosionPreviewColor, new Color(1f, 0f, 0f, 0.3f));
+                    break;
+            }
+
+#if UNITY_EDITOR
+            UnityEditor.Handles.color = new Color(1f, 0f, 0f, 0.5f);
+            UnityEditor.Handles.DrawDottedLine(currentPos, explosionPos, 2f);
+#endif
         }
 
         private void DrawProjectileInfo()

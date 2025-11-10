@@ -7,8 +7,6 @@ namespace Quantum
     public unsafe partial class ProjectileData : AssetObject
     {
         [Header("基础设置")]
-        [Tooltip("飞行道具类型")]
-        public ProjectileType ProjectileType = ProjectileType.Bullet;
         
         [Tooltip("生命周期（秒）")]
         public FP Lifetime = 3;
@@ -40,7 +38,7 @@ namespace Quantum
         public Shape2DConfig CollisionShape;
         
         [Tooltip("碰撞层")]
-        public int CollisionLayer = 1 << 6;
+        public LayerMask CollisionLayer = 1 << 6;
         
         [Tooltip("是否穿透目标")]
         public bool PierceTargets = false;
