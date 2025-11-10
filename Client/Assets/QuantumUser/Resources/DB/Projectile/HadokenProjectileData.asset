@@ -10,10 +10,10 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2c523cee387e43a78074a51b0e9e5ed6, type: 3}
-  m_Name: BulletProjectileData
+  m_Name: HadokenProjectileData
   m_EditorClassIdentifier: 
   Identifier:
-    Path: QuantumUser/Resources/DB/Projectile/BulletProjectileData
+    Path: QuantumUser/Resources/DB/Projectile/HadokenProjectileData
     Guid:
       Value: 317318408739899484
   ProjectileType: 0

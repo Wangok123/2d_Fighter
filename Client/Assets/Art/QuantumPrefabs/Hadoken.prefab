@@ -14,6 +14,7 @@ GameObject:
   - component: {fileID: 4266458020897265507}
   - component: {fileID: 3867704231004567889}
   - component: {fileID: 6974663850274520944}
+  - component: {fileID: 7070596115164496206}
   m_Layer: 0
   m_Name: Hadoken
   m_TagString: Untagged
@@ -364,3 +365,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Prototype:
     _empty_prototype_dummy_field_: 0
+--- !u!114 &7070596115164496206
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7367499995819809428}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b83b693ab9925214ca6b5211acc782d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EnableDebug: 1
+  CollisionShapeColor: {r: 0, g: 1, b: 1, a: 0.3}
+  CollisionWireframeColor: {r: 0, g: 1, b: 1, a: 1}
+  TrajectoryColor: {r: 1, g: 1, b: 0, a: 0.8}
+  TrajectoryLineWidth: 2
+  TrajectoryPointCount: 20
+  ShowPredictedTrajectory: 1
+  PredictionTime: 2
+  PredictedTrajectoryColor: {r: 1, g: 1, b: 0, a: 0.2}
+  ShowProjectileInfo: 1
+  TextColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  TextBackgroundColor: {r: 0, g: 0, b: 0, a: 0.7}
+  FontSize: 12
+  StraightColor: {r: 0, g: 1, b: 1, a: 0.3}
+  HomingColor: {r: 1, g: 0.5, b: 0, a: 0.3}
+  ArcColor: {r: 0.5, g: 1, b: 0, a: 0.3}
+  BoomerangColor: {r: 1, g: 0, b: 1, a: 0.3}
