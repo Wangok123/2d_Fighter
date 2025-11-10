@@ -56,7 +56,32 @@
 
 ---
 
-### 3. ComboStepConfigDrawer.cs
+### 3. ChargeAttackAbilityDataEditor.cs
+**用途**: 为 `ChargeAttackAbilityData` 提供专门的蓄力攻击配置界面
+
+**优化内容**:
+- 继承 `AttackAbilityDataEditor` 的所有功能
+- ⏱ **蓄力时序**: 最小/最大蓄力时间，蓄力时移动控制
+  - 可视化时间轴，显示无效区域、可释放区域、满蓄力区域
+- ⚔️ **伤害缩放**: 根据蓄力时间的伤害倍率缩放
+  - 线性插值曲线可视化
+- 💥 **击退缩放**: 可选的击退力度缩放
+  - 缩放曲线可视化
+  - 禁用时显示提示信息
+- 🎨 **视觉效果**: 可选的攻击范围缩放
+  - 清晰显示范围增加百分比
+
+**可视化功能**:
+- **蓄力时间轴**: 三段式时间轴（太短/可释放/满蓄力）
+- **缩放曲线**: 实时显示伤害和击退的缩放曲线
+- **智能禁用**: 未启用的功能灰色显示并提示
+
+**适用于**:
+- `ChargeAttackAbilityData`
+
+---
+
+### 4. ComboStepConfigDrawer.cs
 **用途**: 为 `ComboStepConfig` 提供结构化的属性绘制
 
 **优化内容**:
@@ -75,7 +100,7 @@
 
 ---
 
-### 4. HitReactionDataEditor.cs
+### 5. HitReactionDataEditor.cs
 **用途**: 为 `HitReactionData` 及其子类提供受击反应配置界面
 
 **优化内容**:
@@ -98,7 +123,7 @@
 
 ---
 
-### 5. Shape2DConfigDrawer.cs
+### 6. Shape2DConfigDrawer.cs
 **用途**: 为 `Shape2DConfig` 提供智能化的形状配置界面
 
 **优化内容**:
@@ -123,7 +148,7 @@
 
 ---
 
-### 6. KnockbackCurveProfileDrawer.cs (已存在)
+### 7. KnockbackCurveProfileDrawer.cs (已存在)
 **用途**: 为 `KnockbackCurveProfile` 提供模式切换的属性绘制
 
 **优化内容**:
@@ -180,14 +205,15 @@ FP RawValue → Float Value
 
 ```
 Editor/
-├── AbilityDataEditor.cs              # 基础技能编辑器
-├── AttackAbilityDataEditor.cs        # 攻击技能编辑器
-├── ComboStepConfigDrawer.cs          # 连招步骤属性绘制器
-├── HitReactionDataEditor.cs          # 受击反应编辑器
-├── Shape2DConfigDrawer.cs            # 形状配置属性绘制器
-├── KnockbackCurveProfileDrawer.cs    # 击退曲线属性绘制器
-├── OverrideProtodll.cs               # (原有)
-└── Proto2CSEditor.cs                 # (原有)
+├── AbilityDataEditor.cs                    # 基础技能编辑器
+├── AttackAbilityDataEditor.cs              # 攻击技能编辑器
+├── ChargeAttackAbilityDataEditor.cs        # 蓄力攻击编辑器
+├── ComboStepConfigDrawer.cs                # 连招步骤属性绘制器
+├── HitReactionDataEditor.cs                # 受击反应编辑器
+├── Shape2DConfigDrawer.cs                  # 形状配置属性绘制器
+├── KnockbackCurveProfileDrawer.cs          # 击退曲线属性绘制器
+├── OverrideProtodll.cs                     # (原有)
+└── Proto2CSEditor.cs                       # (原有)
 ```
 
 ---
@@ -234,6 +260,7 @@ public class YourDrawer : PropertyDrawer
 - **CustomEditor**: 用于 ScriptableObject 和 MonoBehaviour，完全控制整个 Inspector
   - `AbilityDataEditor`
   - `AttackAbilityDataEditor`
+  - `ChargeAttackAbilityDataEditor`
   - `HitReactionDataEditor`
 
 - **CustomPropertyDrawer**: 用于 Serializable 类，绘制嵌套属性
