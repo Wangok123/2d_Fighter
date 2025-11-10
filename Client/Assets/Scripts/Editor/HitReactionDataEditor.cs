@@ -8,7 +8,7 @@ using Quantum;
 /// 将受击反应相关字段进行分组和可视化
 /// </summary>
 [CustomEditor(typeof(HitReactionData), true)]
-public class HitReactionDataEditor : Editor
+public class HitReactionDataEditor : UnityEditor.Editor
 {
     private SerializedProperty identifierProp;
     private SerializedProperty canBeKnockedBackProp;

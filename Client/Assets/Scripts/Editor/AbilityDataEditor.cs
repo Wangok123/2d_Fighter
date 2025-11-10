@@ -8,7 +8,7 @@ using Quantum;
 /// 将相关字段分组，并提供更直观的编辑界面
 /// </summary>
 [CustomEditor(typeof(AbilityData), true)]
-public class AbilityDataEditor : Editor
+public class AbilityDataEditor : UnityEditor.Editor
 {
     private SerializedProperty identifierProp;
     private SerializedProperty inputBufferProp;
