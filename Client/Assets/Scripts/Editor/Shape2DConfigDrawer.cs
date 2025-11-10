@@ -456,15 +456,6 @@ public class Shape2DConfigDrawer : PropertyDrawer
                lineHeight + spacing;  // Y field
     }
 
-    private void DrawFPSubProperty(SerializedProperty vectorProp, string axis)
-    {
-        var axisProp = vectorProp.FindPropertyRelative(axis);
-        if (axisProp != null)
-        {
-            EditorGUILayout.PropertyField(axisProp, GUIContent.none);
-        }
-    }
-
     private float GetFPValue(SerializedProperty vectorProp, string axis)
     {
         var axisProp = vectorProp.FindPropertyRelative(axis);
