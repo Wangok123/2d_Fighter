@@ -1,7 +1,9 @@
 ﻿using Photon.Deterministic;
+using UnityEngine.Scripting;
 
 namespace Quantum
 {
+    [Preserve]
     public unsafe class HitReactionSystem : SystemMainThreadFilter<HitReactionSystem.Filter>,
         ISignalOnKnockbackApplied,
         ISignalOnHitstunApplied

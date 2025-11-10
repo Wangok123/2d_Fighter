@@ -1,0 +1,94 @@
+enum ProjectileMovePattern
+{
+    Straight,
+    Homing,
+    Arc,
+    Boomerang,
+}
+
+enum ProjectileType
+{
+    Bullet,
+    SkillField,
+}
+
+enum ProjectileDestroyReason
+{
+    Lifetime,
+    HitTarget,
+    HitEnvironment,
+    Manual,
+}
+
+enum SkillFieldEffectType
+{
+    Damage,
+    Heal,
+    Buff,
+    Debuff,
+    Control,
+}
+
+component ProjectileComponent
+{
+    [ExcludeFromPrototype] asset_ref<ProjectileData> ProjectileData;
+    [ExcludeFromPrototype] EntityRef Owner;
+    [ExcludeFromPrototype] ProjectileType Type;
+    [ExcludeFromPrototype] FrameTimer LifetimeTimer;
+    [ExcludeFromPrototype] FPVector2 Direction;
+    [ExcludeFromPrototype] FP Speed;
+    [ExcludeFromPrototype] QBoolean IsActive;
+    [ExcludeFromPrototype] QBoolean PierceTargets;
+    [ExcludeFromPrototype] Int32 MaxPierceCount;
+    [ExcludeFromPrototype] Int32 CurrentPierceCount;
+    [ExcludeFromPrototype] list<EntityRef> HitEntities;
+}
+
+component SkillFieldComponent
+{
+    [ExcludeFromPrototype] asset_ref<SkillFieldData> SkillFieldData;
+    [ExcludeFromPrototype] EntityRef Owner;
+    [ExcludeFromPrototype] FrameTimer LifetimeTimer;
+    [ExcludeFromPrototype] FrameTimer TickTimer;
+    [ExcludeFromPrototype] FP TickInterval;
+    [ExcludeFromPrototype] QBoolean IsActive;
+    [ExcludeFromPrototype] FPVector2 Center;
+    [ExcludeFromPrototype] list<EntityRef> AffectedEntities;
+}
+
+signal SpawnProjectile(asset_ref<ProjectileData> projectileData, FPVector2 position, FPVector2 direction, entity_ref owner);
+signal DestroyProjectile(entity_ref projectile, ProjectileDestroyReason reason);
+signal SpawnSkillField(asset_ref<SkillFieldData> skillFieldData, FPVector2 position, entity_ref owner);
+signal DestroySkillField(entity_ref skillField);
+
+event OnProjectileSpawned{
+    EntityRef Projectile;
+    EntityRef Owner;
+    ProjectileType Type;
+}
+
+event OnProjectileHitTarget{
+    EntityRef Projectile;
+    EntityRef Target;
+    FPVector2 HitPoint;
+}
+
+event OnProjectileDestroyed{
+    EntityRef Projectile;
+    ProjectileDestroyReason reason;
+}
+
+event OnSkillFieldSpawned{
+    EntityRef SkillField;
+    EntityRef Owner;
+    FPVector2 Center;
+}
+
+event OnSkillFieldTick{
+    EntityRef SkillField;
+    list<EntityRef> AffectedEntities;
+}
+
+event OnSkillFieldDestroyed{
+    EntityRef SkillField;
+}

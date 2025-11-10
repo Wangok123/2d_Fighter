@@ -123,6 +123,29 @@ namespace Quantum {
     CustomCurve = 1,
     LinearDecay = 2,
   }
+  public enum ProjectileDestroyReason : int {
+    Lifetime,
+    HitTarget,
+    HitEnvironment,
+    Manual,
+  }
+  public enum ProjectileMovePattern : int {
+    Straight,
+    Homing,
+    Arc,
+    Boomerang,
+  }
+  public enum ProjectileType : int {
+    Bullet,
+    SkillField,
+  }
+  public enum SkillFieldEffectType : int {
+    Damage,
+    Heal,
+    Buff,
+    Debuff,
+    Control,
+  }
   public enum StatusEffectType : int {
     Stun,
     Knockback,
@@ -1901,6 +1924,143 @@ namespace Quantum {
         PlayerRef.Serialize(&p->PlayerRef, serializer);
     }
   }
+  [StructLayout(LayoutKind.Explicit)]
+  public unsafe partial struct ProjectileComponent : Quantum.IComponent {
+    public const Int32 SIZE = 72;
+    public const Int32 ALIGNMENT = 8;
+    [FieldOffset(24)]
+    [ExcludeFromPrototype()]
+    public AssetRef<ProjectileData> ProjectileData;
+    [FieldOffset(32)]
+    [ExcludeFromPrototype()]
+    public EntityRef Owner;
+    [FieldOffset(8)]
+    [ExcludeFromPrototype()]
+    public ProjectileType Type;
+    [FieldOffset(48)]
+    [ExcludeFromPrototype()]
+    public FrameTimer LifetimeTimer;
+    [FieldOffset(56)]
+    [ExcludeFromPrototype()]
+    public FPVector2 Direction;
+    [FieldOffset(40)]
+    [ExcludeFromPrototype()]
+    public FP Speed;
+    [FieldOffset(12)]
+    [ExcludeFromPrototype()]
+    public QBoolean IsActive;
+    [FieldOffset(16)]
+    [ExcludeFromPrototype()]
+    public QBoolean PierceTargets;
+    [FieldOffset(4)]
+    [ExcludeFromPrototype()]
+    public Int32 MaxPierceCount;
+    [FieldOffset(0)]
+    [ExcludeFromPrototype()]
+    public Int32 CurrentPierceCount;
+    [FieldOffset(20)]
+    [ExcludeFromPrototype()]
+    public QListPtr<EntityRef> HitEntities;
+    public override readonly Int32 GetHashCode() {
+      unchecked { 
+        var hash = 12491;
+        hash = hash * 31 + ProjectileData.GetHashCode();
+        hash = hash * 31 + Owner.GetHashCode();
+        hash = hash * 31 + (Int32)Type;
+        hash = hash * 31 + LifetimeTimer.GetHashCode();
+        hash = hash * 31 + Direction.GetHashCode();
+        hash = hash * 31 + Speed.GetHashCode();
+        hash = hash * 31 + IsActive.GetHashCode();
+        hash = hash * 31 + PierceTargets.GetHashCode();
+        hash = hash * 31 + MaxPierceCount.GetHashCode();
+        hash = hash * 31 + CurrentPierceCount.GetHashCode();
+        hash = hash * 31 + HitEntities.GetHashCode();
+        return hash;
+      }
+    }
+    public void ClearPointers(FrameBase f, EntityRef entity) {
+      HitEntities = default;
+    }
+    public static void OnRemoved(FrameBase frame, EntityRef entity, void* ptr) {
+      var p = (Quantum.ProjectileComponent*)ptr;
+      p->ClearPointers((Frame)frame, entity);
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+        var p = (ProjectileComponent*)ptr;
+        serializer.Stream.Serialize(&p->CurrentPierceCount);
+        serializer.Stream.Serialize(&p->MaxPierceCount);
+        serializer.Stream.Serialize((Int32*)&p->Type);
+        QBoolean.Serialize(&p->IsActive, serializer);
+        QBoolean.Serialize(&p->PierceTargets, serializer);
+        QList.Serialize(&p->HitEntities, serializer, Statics.SerializeEntityRef);
+        AssetRef.Serialize(&p->ProjectileData, serializer);
+        EntityRef.Serialize(&p->Owner, serializer);
+        FP.Serialize(&p->Speed, serializer);
+        FrameTimer.Serialize(&p->LifetimeTimer, serializer);
+        FPVector2.Serialize(&p->Direction, serializer);
+    }
+  }
+  [StructLayout(LayoutKind.Explicit)]
+  public unsafe partial struct SkillFieldComponent : Quantum.IComponent {
+    public const Int32 SIZE = 64;
+    public const Int32 ALIGNMENT = 8;
+    [FieldOffset(8)]
+    [ExcludeFromPrototype()]
+    public AssetRef<SkillFieldData> SkillFieldData;
+    [FieldOffset(16)]
+    [ExcludeFromPrototype()]
+    public EntityRef Owner;
+    [FieldOffset(32)]
+    [ExcludeFromPrototype()]
+    public FrameTimer LifetimeTimer;
+    [FieldOffset(40)]
+    [ExcludeFromPrototype()]
+    public FrameTimer TickTimer;
+    [FieldOffset(24)]
+    [ExcludeFromPrototype()]
+    public FP TickInterval;
+    [FieldOffset(0)]
+    [ExcludeFromPrototype()]
+    public QBoolean IsActive;
+    [FieldOffset(48)]
+    [ExcludeFromPrototype()]
+    public FPVector2 Center;
+    [FieldOffset(4)]
+    [ExcludeFromPrototype()]
+    public QListPtr<EntityRef> AffectedEntities;
+    public override readonly Int32 GetHashCode() {
+      unchecked { 
+        var hash = 20249;
+        hash = hash * 31 + SkillFieldData.GetHashCode();
+        hash = hash * 31 + Owner.GetHashCode();
+        hash = hash * 31 + LifetimeTimer.GetHashCode();
+        hash = hash * 31 + TickTimer.GetHashCode();
+        hash = hash * 31 + TickInterval.GetHashCode();
+        hash = hash * 31 + IsActive.GetHashCode();
+        hash = hash * 31 + Center.GetHashCode();
+        hash = hash * 31 + AffectedEntities.GetHashCode();
+        return hash;
+      }
+    }
+    public void ClearPointers(FrameBase f, EntityRef entity) {
+      AffectedEntities = default;
+    }
+    public static void OnRemoved(FrameBase frame, EntityRef entity, void* ptr) {
+      var p = (Quantum.SkillFieldComponent*)ptr;
+      p->ClearPointers((Frame)frame, entity);
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+        var p = (SkillFieldComponent*)ptr;
+        QBoolean.Serialize(&p->IsActive, serializer);
+        QList.Serialize(&p->AffectedEntities, serializer, Statics.SerializeEntityRef);
+        AssetRef.Serialize(&p->SkillFieldData, serializer);
+        EntityRef.Serialize(&p->Owner, serializer);
+        FP.Serialize(&p->TickInterval, serializer);
+        FrameTimer.Serialize(&p->LifetimeTimer, serializer);
+        FrameTimer.Serialize(&p->TickTimer, serializer);
+        FPVector2.Serialize(&p->Center, serializer);
+    }
+  }
   public unsafe partial interface ISignalCheckAbilityEnabled : ISignal {
     void CheckAbilityEnabled(Frame f, AbilityType abilityId);
   }
@@ -1952,6 +2112,18 @@ namespace Quantum {
   public unsafe partial interface ISignalOnKCC2DAfterState : ISignal {
     void OnKCC2DAfterState(Frame f, EntityRef entity, KCC2D* kcc, ref KCC2DSettings settings);
   }
+  public unsafe partial interface ISignalSpawnProjectile : ISignal {
+    void SpawnProjectile(Frame f, AssetRef<ProjectileData> projectileData, FPVector2 position, FPVector2 direction, EntityRef owner);
+  }
+  public unsafe partial interface ISignalDestroyProjectile : ISignal {
+    void DestroyProjectile(Frame f, EntityRef projectile, ProjectileDestroyReason reason);
+  }
+  public unsafe partial interface ISignalSpawnSkillField : ISignal {
+    void SpawnSkillField(Frame f, AssetRef<SkillFieldData> skillFieldData, FPVector2 position, EntityRef owner);
+  }
+  public unsafe partial interface ISignalDestroySkillField : ISignal {
+    void DestroySkillField(Frame f, EntityRef skillField);
+  }
   public unsafe partial interface ISignalOnStatusEffectsReset : ISignal {
     void OnStatusEffectsReset(Frame f, EntityRef playerEntityRef);
   }
@@ -1975,6 +2147,10 @@ namespace Quantum {
     private ISignalOnKCC2DSolverCollision[] _ISignalOnKCC2DSolverCollisionSystems;
     private ISignalOnKCC2DPostSolverCollision[] _ISignalOnKCC2DPostSolverCollisionSystems;
     private ISignalOnKCC2DAfterState[] _ISignalOnKCC2DAfterStateSystems;
+    private ISignalSpawnProjectile[] _ISignalSpawnProjectileSystems;
+    private ISignalDestroyProjectile[] _ISignalDestroyProjectileSystems;
+    private ISignalSpawnSkillField[] _ISignalSpawnSkillFieldSystems;
+    private ISignalDestroySkillField[] _ISignalDestroySkillFieldSystems;
     private ISignalOnStatusEffectsReset[] _ISignalOnStatusEffectsResetSystems;
     partial void AllocGen() {
       _globals = (_globals_*)Context.Allocator.AllocAndClear(sizeof(_globals_));
@@ -2004,6 +2180,10 @@ namespace Quantum {
       _ISignalOnKCC2DSolverCollisionSystems = BuildSignalsArray<ISignalOnKCC2DSolverCollision>();
       _ISignalOnKCC2DPostSolverCollisionSystems = BuildSignalsArray<ISignalOnKCC2DPostSolverCollision>();
       _ISignalOnKCC2DAfterStateSystems = BuildSignalsArray<ISignalOnKCC2DAfterState>();
+      _ISignalSpawnProjectileSystems = BuildSignalsArray<ISignalSpawnProjectile>();
+      _ISignalDestroyProjectileSystems = BuildSignalsArray<ISignalDestroyProjectile>();
+      _ISignalSpawnSkillFieldSystems = BuildSignalsArray<ISignalSpawnSkillField>();
+      _ISignalDestroySkillFieldSystems = BuildSignalsArray<ISignalDestroySkillField>();
       _ISignalOnStunAppliedSystems = BuildSignalsArray<ISignalOnStunApplied>();
       _ISignalOnKnockbackAppliedSystems = BuildSignalsArray<ISignalOnKnockbackApplied>();
       _ISignalOnStatusEffectsResetSystems = BuildSignalsArray<ISignalOnStatusEffectsReset>();
@@ -2061,6 +2241,10 @@ namespace Quantum {
       BuildSignalsArrayOnComponentRemoved<Quantum.PlayerLink>();
       BuildSignalsArrayOnComponentAdded<Quantum.PlayerSpawner>();
       BuildSignalsArrayOnComponentRemoved<Quantum.PlayerSpawner>();
+      BuildSignalsArrayOnComponentAdded<Quantum.ProjectileComponent>();
+      BuildSignalsArrayOnComponentRemoved<Quantum.ProjectileComponent>();
+      BuildSignalsArrayOnComponentAdded<Quantum.SkillFieldComponent>();
+      BuildSignalsArrayOnComponentRemoved<Quantum.SkillFieldComponent>();
       BuildSignalsArrayOnComponentAdded<Transform2D>();
       BuildSignalsArrayOnComponentRemoved<Transform2D>();
       BuildSignalsArrayOnComponentAdded<Transform2DVertical>();
@@ -2254,6 +2438,42 @@ namespace Quantum {
           }
         }
       }
+      public void SpawnProjectile(AssetRef<ProjectileData> projectileData, FPVector2 position, FPVector2 direction, EntityRef owner) {
+        var array = _f._ISignalSpawnProjectileSystems;
+        for (Int32 i = 0; i < array.Length; ++i) {
+          var s = array[i];
+          if (_f.SystemIsEnabledInHierarchy((SystemBase)s)) {
+            s.SpawnProjectile(_f, projectileData, position, direction, owner);
+          }
+        }
+      }
+      public void DestroyProjectile(EntityRef projectile, ProjectileDestroyReason reason) {
+        var array = _f._ISignalDestroyProjectileSystems;
+        for (Int32 i = 0; i < array.Length; ++i) {
+          var s = array[i];
+          if (_f.SystemIsEnabledInHierarchy((SystemBase)s)) {
+            s.DestroyProjectile(_f, projectile, reason);
+          }
+        }
+      }
+      public void SpawnSkillField(AssetRef<SkillFieldData> skillFieldData, FPVector2 position, EntityRef owner) {
+        var array = _f._ISignalSpawnSkillFieldSystems;
+        for (Int32 i = 0; i < array.Length; ++i) {
+          var s = array[i];
+          if (_f.SystemIsEnabledInHierarchy((SystemBase)s)) {
+            s.SpawnSkillField(_f, skillFieldData, position, owner);
+          }
+        }
+      }
+      public void DestroySkillField(EntityRef skillField) {
+        var array = _f._ISignalDestroySkillFieldSystems;
+        for (Int32 i = 0; i < array.Length; ++i) {
+          var s = array[i];
+          if (_f.SystemIsEnabledInHierarchy((SystemBase)s)) {
+            s.DestroySkillField(_f, skillField);
+          }
+        }
+      }
       public void OnStatusEffectsReset(EntityRef playerEntityRef) {
         var array = _f._ISignalOnStatusEffectsResetSystems;
         for (Int32 i = 0; i < array.Length; ++i) {
@@ -2268,10 +2488,12 @@ namespace Quantum {
   public unsafe partial class Statics {
     public static FrameSerializer.Delegate SerializeAbilityType;
     public static FrameSerializer.Delegate SerializeAbility;
+    public static FrameSerializer.Delegate SerializeEntityRef;
     public static FrameSerializer.Delegate SerializeInput;
     static partial void InitStaticDelegatesGen() {
       SerializeAbilityType = (v, s) => {{ s.Stream.Serialize((Int32*)v); }};
       SerializeAbility = Quantum.Ability.Serialize;
+      SerializeEntityRef = EntityRef.Serialize;
       SerializeInput = Quantum.Input.Serialize;
     }
     static partial void RegisterSimulationTypesGen(TypeRegistry typeRegistry) {
@@ -2369,6 +2591,10 @@ namespace Quantum {
       typeRegistry.Register(typeof(Quantum.PlayerLink), Quantum.PlayerLink.SIZE);
       typeRegistry.Register(typeof(PlayerRef), PlayerRef.SIZE);
       typeRegistry.Register(typeof(Quantum.PlayerSpawner), Quantum.PlayerSpawner.SIZE);
+      typeRegistry.Register(typeof(Quantum.ProjectileComponent), Quantum.ProjectileComponent.SIZE);
+      typeRegistry.Register(typeof(Quantum.ProjectileDestroyReason), 4);
+      typeRegistry.Register(typeof(Quantum.ProjectileMovePattern), 4);
+      typeRegistry.Register(typeof(Quantum.ProjectileType), 4);
       typeRegistry.Register(typeof(Ptr), Ptr.SIZE);
       typeRegistry.Register(typeof(QBoolean), QBoolean.SIZE);
       typeRegistry.Register(typeof(Quantum.Ptr), Quantum.Ptr.SIZE);
@@ -2380,6 +2606,8 @@ namespace Quantum {
       typeRegistry.Register(typeof(Shape2D), Shape2D.SIZE);
       typeRegistry.Register(typeof(Shape3D), Shape3D.SIZE);
       typeRegistry.Register(typeof(Quantum.SimpleInput2D), Quantum.SimpleInput2D.SIZE);
+      typeRegistry.Register(typeof(Quantum.SkillFieldComponent), Quantum.SkillFieldComponent.SIZE);
+      typeRegistry.Register(typeof(Quantum.SkillFieldEffectType), 4);
       typeRegistry.Register(typeof(Quantum.SpecialMove), Quantum.SpecialMove.SIZE);
       typeRegistry.Register(typeof(SpringJoint), SpringJoint.SIZE);
       typeRegistry.Register(typeof(SpringJoint3D), SpringJoint3D.SIZE);
@@ -2393,7 +2621,7 @@ namespace Quantum {
       typeRegistry.Register(typeof(Quantum._globals_), Quantum._globals_.SIZE);
     }
     static partial void InitComponentTypeIdGen() {
-      ComponentTypeId.Reset(ComponentTypeId.BuiltInComponentCount + 11)
+      ComponentTypeId.Reset(ComponentTypeId.BuiltInComponentCount + 13)
         .AddBuiltInComponents()
         .Add<Quantum.AbilityEnable>(Quantum.AbilityEnable.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.AbilityInventory>(Quantum.AbilityInventory.Serialize, null, Quantum.AbilityInventory.OnRemoved, ComponentFlags.None)
@@ -2406,6 +2634,8 @@ namespace Quantum {
         .Add<Quantum.MovementComponent>(Quantum.MovementComponent.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.PlayerLink>(Quantum.PlayerLink.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.PlayerSpawner>(Quantum.PlayerSpawner.Serialize, null, null, ComponentFlags.None)
+        .Add<Quantum.ProjectileComponent>(Quantum.ProjectileComponent.Serialize, null, Quantum.ProjectileComponent.OnRemoved, ComponentFlags.None)
+        .Add<Quantum.SkillFieldComponent>(Quantum.SkillFieldComponent.Serialize, null, Quantum.SkillFieldComponent.OnRemoved, ComponentFlags.None)
         .Finish();
     }
     [Preserve()]
@@ -2421,7 +2651,11 @@ namespace Quantum {
       FramePrinter.EnsurePrimitiveNotStripped<Quantum.KCCContactType>();
       FramePrinter.EnsurePrimitiveNotStripped<Quantum.KCCState>();
       FramePrinter.EnsurePrimitiveNotStripped<Quantum.KnockbackMode>();
+      FramePrinter.EnsurePrimitiveNotStripped<Quantum.ProjectileDestroyReason>();
+      FramePrinter.EnsurePrimitiveNotStripped<Quantum.ProjectileMovePattern>();
+      FramePrinter.EnsurePrimitiveNotStripped<Quantum.ProjectileType>();
       FramePrinter.EnsurePrimitiveNotStripped<QueryOptions>();
+      FramePrinter.EnsurePrimitiveNotStripped<Quantum.SkillFieldEffectType>();
       FramePrinter.EnsurePrimitiveNotStripped<Quantum.StatusEffectType>();
     }
   }

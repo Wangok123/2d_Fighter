@@ -534,6 +534,21 @@ namespace Quantum.Prototypes {
         MaterializeUser(frame, ref result, in context);
     }
   }
+  [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.ProjectileComponent))]
+  public unsafe partial class ProjectileComponentPrototype : ComponentPrototype<Quantum.ProjectileComponent> {
+    [HideInInspector()]
+    public Int32 _empty_prototype_dummy_field_;
+    partial void MaterializeUser(Frame frame, ref Quantum.ProjectileComponent result, in PrototypeMaterializationContext context);
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+        Quantum.ProjectileComponent component = default;
+        Materialize((Frame)f, ref component, in context);
+        return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref Quantum.ProjectileComponent result, in PrototypeMaterializationContext context = default) {
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
   [ExcludeFromPrototype()]
   [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.QuantumHighresThumbSticks))]
@@ -614,6 +629,21 @@ namespace Quantum.Prototypes {
         result.HP = this.HP;
         result.Use = this.Use;
         result.Block = this.Block;
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.SkillFieldComponent))]
+  public unsafe partial class SkillFieldComponentPrototype : ComponentPrototype<Quantum.SkillFieldComponent> {
+    [HideInInspector()]
+    public Int32 _empty_prototype_dummy_field_;
+    partial void MaterializeUser(Frame frame, ref Quantum.SkillFieldComponent result, in PrototypeMaterializationContext context);
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+        Quantum.SkillFieldComponent component = default;
+        Materialize((Frame)f, ref component, in context);
+        return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref Quantum.SkillFieldComponent result, in PrototypeMaterializationContext context = default) {
         MaterializeUser(frame, ref result, in context);
     }
   }

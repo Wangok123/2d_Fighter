@@ -1,0 +1,78 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2c523cee387e43a78074a51b0e9e5ed6, type: 3}
+  m_Name: BulletProjectileData
+  m_EditorClassIdentifier: 
+  Identifier:
+    Path: QuantumUser/Resources/DB/Projectile/BulletProjectileData
+    Guid:
+      Value: 317318408739899484
+  ProjectileType: 0
+  Lifetime:
+    RawValue: 196608
+  VisualPrototype: {fileID: 3097001405596171208, guid: 8ef8ac312f2526b4ab14d4e14d9e9b63, type: 3}
+  BaseDamage:
+    RawValue: 655360
+  KnockbackForce:
+    RawValue: 327680
+  KnockbackDirectionX:
+    RawValue: 65536
+  KnockbackDirectionY:
+    RawValue: 32768
+  HitstunDuration:
+    RawValue: 16384
+  HitType: 1
+  CollisionShape:
+    ShapeType: 4
+    PolygonCollider:
+      Id:
+        Value: 0
+    CircleRadius:
+      RawValue: 32768
+    CapsuleSize:
+      X:
+        RawValue: 65536
+      Y:
+        RawValue: 131072
+    EdgeExtent:
+      RawValue: 32768
+    BoxExtents:
+      X:
+        RawValue: 32768
+      Y:
+        RawValue: 32768
+    PositionOffset:
+      X:
+        RawValue: 0
+      Y:
+        RawValue: 0
+    RotationOffset:
+      RawValue: 0
+    UserTag: 0
+    IsPersistent: 1
+    CompoundShapes: []
+  CollisionLayer: 64
+  PierceTargets: 0
+  MaxPierceCount: 1
+  BlockedByEnvironment: 1
+  MoveSpeed:
+    RawValue: 655360
+  MovePattern: 0
+  AutoTargetNearest: 0
+  HomingTurnSpeed:
+    RawValue: 327680
+  Gravity:
+    RawValue: 655360
+  ReturnSpeed:
+    RawValue: 786432
+  ReturnDelay:
+    RawValue: 32768

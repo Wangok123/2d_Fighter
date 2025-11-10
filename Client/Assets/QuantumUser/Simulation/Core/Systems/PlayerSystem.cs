@@ -1,7 +1,10 @@
+using UnityEngine.Scripting;
+
 namespace Quantum
 {
     using Photon.Deterministic;
 
+    [Preserve]
     public unsafe class PlayerSystem : SystemSignalsOnly, ISignalOnPlayerAdded
     {
         public void OnPlayerAdded(Frame f, PlayerRef player, bool firstTime)

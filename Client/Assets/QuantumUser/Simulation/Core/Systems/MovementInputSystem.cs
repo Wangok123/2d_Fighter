@@ -1,3 +1,5 @@
+using UnityEngine.Scripting;
+
 namespace Quantum
 {
     using Photon.Deterministic;
@@ -6,6 +8,7 @@ namespace Quantum
     /// Lightweight system that handles player input and movement execution
     /// Replaces the monolithic MovementSystem with better separation of concerns
     /// </summary>
+    [Preserve]
     public unsafe class MovementInputSystem : SystemMainThreadFilter<MovementInputSystem.Filter>
     {
         public struct Filter

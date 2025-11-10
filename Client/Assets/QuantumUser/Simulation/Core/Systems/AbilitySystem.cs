@@ -1,7 +1,10 @@
+using UnityEngine.Scripting;
+
 namespace Quantum
 {
     using Photon.Deterministic;
 
+    [Preserve]
     public unsafe class AbilitySystem : SystemMainThreadFilter<AbilitySystem.Filter>, ISignalOnActiveAbilityStopped
     {
         public struct Filter

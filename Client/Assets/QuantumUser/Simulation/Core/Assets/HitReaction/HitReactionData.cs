@@ -5,12 +5,10 @@ namespace Quantum
 {
     public unsafe partial class HitReactionData : AssetObject
     {
-        [Header("Core Flags")]
-        [Tooltip("是否可以被击退")]
+        [Header("Core Flags")] [Tooltip("是否可以被击退")]
         public bool CanBeKnockedBack = true;
-        
-        [Tooltip("是否可以被硬直")]
-        public bool CanBeHitstunned = true;
+
+        [Tooltip("是否可以被硬直")] public bool CanBeHitstunned = true;
 
         public virtual void UpdateHitReaction(Frame frame, EntityRef entity, HitReactionComponent* hitReaction)
         {
@@ -18,7 +16,8 @@ namespace Quantum
             UpdateKnockback(frame, entity, hitReaction);
         }
 
-        public virtual void OnHitstunApplied(Frame frame, EntityRef target, HitReactionComponent* hitReaction, FP duration, HitType hitType)
+        public virtual void OnHitstunApplied(Frame frame, EntityRef target, HitReactionComponent* hitReaction,
+            FP duration, HitType hitType)
         {
             if (!CanBeHitstunned)
                 return;
@@ -27,11 +26,12 @@ namespace Quantum
 
             hitReaction->IsHitstunned = true;
             hitReaction->HitstunTimer = FrameTimer.FromSeconds(frame, finalDuration);
-            
+
             OnHitstunStarted(frame, target, hitReaction, hitType);
         }
 
-        public virtual void OnKnockbackApplied(Frame frame, EntityRef target, HitReactionComponent* hitReaction, FP duration, FPVector2 knockbackVelocity)
+        public virtual void OnKnockbackApplied(Frame frame, EntityRef target, HitReactionComponent* hitReaction,
+            FP duration, FPVector2 knockbackVelocity)
         {
             if (!CanBeKnockedBack)
                 return;
@@ -43,23 +43,23 @@ namespace Quantum
             hitReaction->InitialKnockbackVelocity = knockbackVelocity;
             hitReaction->KnockbackStartTime = frame.Number * frame.DeltaTime;
             hitReaction->CurrentMode = config.Mode;
-            
+
             if (config.Mode == KnockbackMode.CustomCurve)
             {
                 hitReaction->KnockbackDuration = config.CurveDuration;
             }
             else
             {
-                hitReaction->KnockbackDecay = config.Mode == KnockbackMode.Physics 
-                    ? config.HorizontalDecayRate 
+                hitReaction->KnockbackDecay = config.Mode == KnockbackMode.Physics
+                    ? config.HorizontalDecayRate
                     : config.LinearDecayRate;
             }
-            
+
             if (frame.Unsafe.TryGetPointer<PhysicsBody2D>(target, out var physicsBody))
             {
                 physicsBody->Velocity = knockbackVelocity;
             }
-            
+
             OnHitstunApplied(frame, target, hitReaction, duration, HitType.Heavy);
             OnKnockbackStarted(frame, target, hitReaction, knockbackVelocity);
         }
@@ -91,13 +91,14 @@ namespace Quantum
             return FP._1 - normalizedTime;
         }
 
-        protected virtual void OnHitstunStarted(Frame frame, EntityRef target, HitReactionComponent* hitReaction, HitType hitType)
+        protected virtual void OnHitstunStarted(Frame frame, EntityRef target, HitReactionComponent* hitReaction,
+            HitType hitType)
         {
             if (frame.Unsafe.TryGetPointer<AbilityEnable>(target, out var abilityEnable))
             {
                 abilityEnable->MovementEnabled = false;
             }
-    
+
             if (frame.Unsafe.TryGetPointer<AbilityInventory>(target, out var abilityInventory))
             {
                 if (abilityInventory->HasActiveAbility)
@@ -107,13 +108,14 @@ namespace Quantum
             }
         }
 
-        protected virtual void OnKnockbackStarted(Frame frame, EntityRef target, HitReactionComponent* hitReaction, FPVector2 velocity)
+        protected virtual void OnKnockbackStarted(Frame frame, EntityRef target, HitReactionComponent* hitReaction,
+            FPVector2 velocity)
         {
             if (frame.Unsafe.TryGetPointer<AbilityEnable>(target, out var abilityEnable))
             {
                 abilityEnable->MovementEnabled = false;
             }
-    
+
             if (frame.Unsafe.TryGetPointer<MovementComponent>(target, out var movementData))
             {
                 FP horizontalDirection = velocity.X;
@@ -131,11 +133,11 @@ namespace Quantum
             if (hitReaction->IsHitstunned && !hitReaction->HitstunTimer.IsRunning(frame))
             {
                 hitReaction->IsHitstunned = false;
-        
+
                 OnHitstunEnded(frame, hitReaction);
             }
         }
-        
+
         protected virtual void OnHitstunEnded(Frame frame, HitReactionComponent* hitReaction)
         {
         }
@@ -153,11 +155,11 @@ namespace Quantum
                 case KnockbackMode.Physics:
                     UpdatePhysicsKnockback(frame, entity, hitReaction, config);
                     break;
-                
+
                 case KnockbackMode.CustomCurve:
                     UpdateCurveKnockback(frame, entity, hitReaction, config);
                     break;
-                
+
                 case KnockbackMode.LinearDecay:
                 default:
                     UpdateLinearKnockback(frame, entity, hitReaction, config);
@@ -165,7 +167,8 @@ namespace Quantum
             }
         }
 
-        protected virtual void UpdatePhysicsKnockback(Frame frame, EntityRef entity, HitReactionComponent* hitReaction, KnockbackConfig config)
+        protected virtual void UpdatePhysicsKnockback(Frame frame, EntityRef entity, HitReactionComponent* hitReaction,
+            KnockbackConfig config)
         {
             FP horizontalSpeed = FPMath.Abs(hitReaction->KnockbackVelocity.X);
 
@@ -173,7 +176,7 @@ namespace Quantum
             {
                 FP decay = hitReaction->KnockbackDecay * frame.DeltaTime;
                 hitReaction->KnockbackVelocity.X *= (FP._1 - decay);
-                
+
                 ApplyPhysicsKnockback(frame, entity, hitReaction, config.UseGravity);
             }
             else
@@ -182,7 +185,8 @@ namespace Quantum
             }
         }
 
-        protected virtual void UpdateCurveKnockback(Frame frame, EntityRef entity, HitReactionComponent* hitReaction, KnockbackConfig config)
+        protected virtual void UpdateCurveKnockback(Frame frame, EntityRef entity, HitReactionComponent* hitReaction,
+            KnockbackConfig config)
         {
             FP currentTime = frame.Number * frame.DeltaTime;
             FP elapsedTime = currentTime - hitReaction->KnockbackStartTime;
@@ -205,7 +209,8 @@ namespace Quantum
             ApplyCurveKnockback(frame, entity, hitReaction);
         }
 
-        protected virtual void UpdateLinearKnockback(Frame frame, EntityRef entity, HitReactionComponent* hitReaction, KnockbackConfig config)
+        protected virtual void UpdateLinearKnockback(Frame frame, EntityRef entity, HitReactionComponent* hitReaction,
+            KnockbackConfig config)
         {
             FP velocityMagnitude = hitReaction->KnockbackVelocity.Magnitude;
 
@@ -213,7 +218,7 @@ namespace Quantum
             {
                 FP decay = hitReaction->KnockbackDecay * frame.DeltaTime;
                 hitReaction->KnockbackVelocity *= (FP._1 - decay);
-                
+
                 ApplyLinearKnockback(frame, entity, hitReaction);
             }
             else
@@ -222,7 +227,8 @@ namespace Quantum
             }
         }
 
-        protected virtual void ApplyPhysicsKnockback(Frame frame, EntityRef entity, HitReactionComponent* hitReaction, bool useGravity)
+        protected virtual void ApplyPhysicsKnockback(Frame frame, EntityRef entity, HitReactionComponent* hitReaction,
+            bool useGravity)
         {
             if (frame.Unsafe.TryGetPointer<PhysicsBody2D>(entity, out var physicsBody))
             {
@@ -257,11 +263,12 @@ namespace Quantum
             if (frame.Unsafe.TryGetPointer<PhysicsBody2D>(entity, out var physicsBody))
             {
                 physicsBody->Velocity = hitReaction->KnockbackVelocity;
-                
+
                 if (physicsBody->IsKinematic && frame.Unsafe.TryGetPointer<Transform2D>(entity, out var trans))
                 {
                     trans->Position += hitReaction->KnockbackVelocity * frame.DeltaTime;
                 }
+
                 return;
             }
 
@@ -278,10 +285,10 @@ namespace Quantum
                 if (physicsBody->IsKinematic)
                 {
                     physicsBody->Velocity = hitReaction->KnockbackVelocity;
-                    
+
                     if (frame.Unsafe.TryGetPointer<Transform2D>(entity, out var trans))
                     {
-                    trans->Position += hitReaction->KnockbackVelocity * frame.DeltaTime;
+                        trans->Position += hitReaction->KnockbackVelocity * frame.DeltaTime;
                     }
                 }
                 else
@@ -291,6 +298,7 @@ namespace Quantum
                         physicsBody->Velocity.Y
                     );
                 }
+
                 return;
             }
 
@@ -300,7 +308,8 @@ namespace Quantum
             }
         }
 
-        protected virtual void EndKnockback(Frame frame, EntityRef entity, HitReactionComponent* hitReaction, bool preserveVerticalVelocity)
+        protected virtual void EndKnockback(Frame frame, EntityRef entity, HitReactionComponent* hitReaction,
+            bool preserveVerticalVelocity)
         {
             hitReaction->IsKnockedBack = false;
             hitReaction->KnockbackVelocity = FPVector2.Zero;
@@ -319,7 +328,7 @@ namespace Quantum
                 }
                 // Dynamic物体地面击退：不清零，让物理引擎自然减速
             }
-    
+
             if (frame.Unsafe.TryGetPointer<AbilityEnable>(entity, out var abilityEnable))
             {
                 if (frame.Unsafe.TryGetPointer<AbilityInventory>(entity, out var abilityInventory))

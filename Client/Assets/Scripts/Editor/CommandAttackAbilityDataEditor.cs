@@ -1,4 +1,4 @@
-// CommandAttackAbilityDataEditor.cs
+// CommandAttackAbilityDataEditor.cs - 更新版本
 #if UNITY_EDITOR
 using UnityEngine;
 using UnityEditor;
@@ -17,12 +17,13 @@ public class CommandAttackAbilityDataEditor : UnityEditor.Editor
         EditorGUILayout.LabelField("指令攻击配置", EditorStyles.boldLabel);
         EditorGUILayout.HelpBox(
             "指令攻击系统说明：\n" +
-            "• 玩家需要在规定时间内完成特定的输入序列\n" +
-            "• 方向输入会根据角色朝向自动镜像（面向右时：右=前，左=后）\n" +
+            "• 支持三种执行类型：\n" +
+            "  - Hitbox: 碰撞盒攻击（瞬时判定，类似普通攻击）\n" +
+            "  - Projectile: 飞行道具（波动拳、火球等）\n" +
+            "  - SkillField: 技能场（AOE持续伤害区域）\n\n" +
             "• 常见指令示例：\n" +
-            "  - 波动拳 (236+P): 下 → 下右 → 右 → LP/HP\n" +
-            "  - 升龙拳 (623+P): 右 → 下 → 下右 → LP/HP\n" +
-            "  - 后前拳 (41236+P): 左 → 下左 → 下 → 下右 → 右 → LP/HP",
+            "  - 波动拳 (236+P): 下 → 下右 → 右 → LP\n" +
+            "  - 升龙拳 (623+P): 右 → 下 → 下右 → HP",
             MessageType.Info);
 
         DrawDefaultInspector();
@@ -46,11 +47,25 @@ public class CommandAttackAbilityDataEditor : UnityEditor.Editor
                 {
                     sequenceStr += GetInputSymbol(sequence.InputSequence[j]);
                     if (j < sequence.InputSequence.Length - 1)
-                        sequenceStr += " → ";
+                        sequenceStr += " , ";
                 }
                 
                 EditorGUILayout.LabelField("输入序列:", sequenceStr);
-                EditorGUILayout.LabelField("伤害类型:", sequence.HitType.ToString());
+                EditorGUILayout.LabelField("执行类型:", GetExecutionTypeDescription(sequence.ExecutionType));
+                
+                switch (sequence.ExecutionType)
+                {
+                    case CommandAttackExecutionType.Hitbox:
+                        EditorGUILayout.LabelField("伤害类型:", sequence.HitType.ToString());
+                        break;
+                    case CommandAttackExecutionType.Projectile:
+                        EditorGUILayout.LabelField("飞行道具:", sequence.ProjectileData.Id.IsValid ? "已配置" : "未配置", sequence.ProjectileData.Id.IsValid ? EditorStyles.label : GetWarningStyle());
+                        break;
+                    case CommandAttackExecutionType.SkillField:
+                        EditorGUILayout.LabelField("技能场:", sequence.SkillFieldData.Id.IsValid ? "已配置" : "未配置", sequence.SkillFieldData.Id.IsValid ? EditorStyles.label : GetWarningStyle());
+                        break;
+                }
+                
                 EditorGUILayout.EndVertical();
                 EditorGUILayout.Space();
             }
@@ -67,20 +82,38 @@ public class CommandAttackAbilityDataEditor : UnityEditor.Editor
     {
         return input switch
         {
-            CommandInput.Down => "↓(下)",
-            CommandInput.DownRight => "↘(下右)",
-            CommandInput.Right => "→(右/前)",
-            CommandInput.UpRight => "↗(上右)",
-            CommandInput.Up => "↑(上)",
-            CommandInput.UpLeft => "↖(上左)",
-            CommandInput.Left => "←(左/后)",
-            CommandInput.DownLeft => "↙(下左)",
-            CommandInput.LP => "LP(轻拳)",
-            CommandInput.HP => "HP(重拳)",
-            CommandInput.Dash => "Dash(冲刺)",
-            CommandInput.Jump => "Jump(跳跃)",
+            CommandInput.Down => "↓",
+            CommandInput.DownRight => "↘",
+            CommandInput.Right => "→",
+            CommandInput.UpRight => "↗",
+            CommandInput.Up => "↑",
+            CommandInput.UpLeft => "↖",
+            CommandInput.Left => "←",
+            CommandInput.DownLeft => "↙",
+            CommandInput.LP => "LP",
+            CommandInput.HP => "HP",
+            CommandInput.Dash => "Dash",
+            CommandInput.Jump => "Jump",
             _ => input.ToString()
         };
+    }
+
+    private string GetExecutionTypeDescription(CommandAttackExecutionType type)
+    {
+        return type switch
+        {
+            CommandAttackExecutionType.Hitbox => "碰撞盒攻击",
+            CommandAttackExecutionType.Projectile => "飞行道具",
+            CommandAttackExecutionType.SkillField => "技能场",
+            _ => type.ToString()
+        };
+    }
+
+    private GUIStyle GetWarningStyle()
+    {
+        GUIStyle style = new GUIStyle(EditorStyles.label);
+        style.normal.textColor = Color.yellow;
+        return style;
     }
 }
 #endif

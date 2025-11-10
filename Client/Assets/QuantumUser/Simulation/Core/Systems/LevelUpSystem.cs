@@ -1,3 +1,5 @@
+using UnityEngine.Scripting;
+
 namespace Quantum
 {
     using Photon.Deterministic;
@@ -7,6 +9,7 @@ namespace Quantum
     /// In a real game, this would be based on XP, kills, etc.
     /// For testing, we can trigger level-ups manually or via conditions
     /// </summary>
+    [Preserve]
     public unsafe class LevelUpSystem : SystemMainThreadFilter<LevelUpSystem.Filter>
     {
         public struct Filter

@@ -1,5 +1,8 @@
-﻿namespace Quantum
+﻿using UnityEngine.Scripting;
+
+namespace Quantum
 {
+    [Preserve]
     public unsafe class CommandInputSystem: SystemMainThreadFilter<CommandInputSystem.Filter>
     {
         public struct Filter
