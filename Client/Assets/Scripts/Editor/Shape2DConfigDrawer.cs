@@ -17,9 +17,14 @@ public class Shape2DConfigDrawer : PropertyDrawer
         var shapeTypeProp = property.FindPropertyRelative("ShapeType");
         var shapeType = shapeTypeProp.enumValueIndex;
 
+        float yPos = position.y;
+        float lineHeight = EditorGUIUtility.singleLineHeight;
+        float spacing = EditorGUIUtility.standardVerticalSpacing;
+
         // 绘制形状类型选择
-        EditorGUILayout.PropertyField(shapeTypeProp, new GUIContent("形状类型 (Shape Type)"));
-        EditorGUILayout.Space(5);
+        Rect shapeTypeRect = new Rect(position.x, yPos, position.width, lineHeight);
+        EditorGUI.PropertyField(shapeTypeRect, shapeTypeProp, new GUIContent("形状类型 (Shape Type)"));
+        yPos += lineHeight + spacing;
 
         // 根据形状类型显示对应的参数
         EditorGUI.indentLevel++;
@@ -27,52 +32,64 @@ public class Shape2DConfigDrawer : PropertyDrawer
         switch (shapeType)
         {
             case 0: // None
-                EditorGUILayout.HelpBox("未设置形状", MessageType.Warning);
+                Rect helpBoxRect = new Rect(position.x, yPos, position.width, lineHeight * 2);
+                EditorGUI.HelpBox(helpBoxRect, "未设置形状", MessageType.Warning);
+                yPos += lineHeight * 2 + spacing;
                 break;
                 
             case 1: // Polygon
-                DrawPolygonProperties(property);
+                yPos = DrawPolygonProperties(position, property, yPos);
                 break;
                 
             case 2: // Circle
-                DrawCircleProperties(property);
+                yPos = DrawCircleProperties(position, property, yPos);
                 break;
                 
             case 3: // Capsule
-                DrawCapsuleProperties(property);
+                yPos = DrawCapsuleProperties(position, property, yPos);
                 break;
                 
             case 4: // Box
-                DrawBoxProperties(property);
+                yPos = DrawBoxProperties(position, property, yPos);
                 break;
                 
             case 5: // Edge
-                DrawEdgeProperties(property);
+                yPos = DrawEdgeProperties(position, property, yPos);
                 break;
                 
             case 6: // Compound
-                DrawCompoundProperties(property);
+                yPos = DrawCompoundProperties(position, property, yPos);
                 break;
         }
         
         EditorGUI.indentLevel--;
         
-        EditorGUILayout.Space(5);
+        yPos += spacing;
         
         // 通用属性
-        EditorGUILayout.LabelField("位置与旋转", EditorStyles.boldLabel);
+        Rect commonLabelRect = new Rect(position.x, yPos, position.width, lineHeight);
+        EditorGUI.LabelField(commonLabelRect, "位置与旋转", EditorStyles.boldLabel);
+        yPos += lineHeight + spacing;
+        
         EditorGUI.indentLevel++;
-        DrawFPVector2Property(property, "PositionOffset", "位置偏移");
-        DrawFPProperty(property, "RotationOffset", "旋转偏移", "°");
+        yPos = DrawFPVector2Property(position, property, yPos, "PositionOffset", "位置偏移");
+        yPos = DrawFPProperty(position, property, yPos, "RotationOffset", "旋转偏移", "°");
         EditorGUI.indentLevel--;
         
-        EditorGUILayout.Space(5);
+        yPos += spacing;
         
         // 其他通用设置
-        EditorGUILayout.LabelField("其他设置", EditorStyles.boldLabel);
+        Rect otherLabelRect = new Rect(position.x, yPos, position.width, lineHeight);
+        EditorGUI.LabelField(otherLabelRect, "其他设置", EditorStyles.boldLabel);
+        yPos += lineHeight + spacing;
+        
         EditorGUI.indentLevel++;
-        EditorGUILayout.PropertyField(property.FindPropertyRelative("UserTag"), new GUIContent("用户标签"));
-        EditorGUILayout.PropertyField(property.FindPropertyRelative("IsPersistent"), new GUIContent("持久化"));
+        Rect userTagRect = new Rect(position.x, yPos, position.width, lineHeight);
+        EditorGUI.PropertyField(userTagRect, property.FindPropertyRelative("UserTag"), new GUIContent("用户标签"));
+        yPos += lineHeight + spacing;
+        
+        Rect persistentRect = new Rect(position.x, yPos, position.width, lineHeight);
+        EditorGUI.PropertyField(persistentRect, property.FindPropertyRelative("IsPersistent"), new GUIContent("持久化"));
         EditorGUI.indentLevel--;
 
         EditorGUI.EndProperty();
@@ -80,23 +97,98 @@ public class Shape2DConfigDrawer : PropertyDrawer
 
     public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
     {
-        return -2f; // 使用 EditorGUILayout，返回 -2 表示不使用固定高度
+        var shapeTypeProp = property.FindPropertyRelative("ShapeType");
+        var shapeType = shapeTypeProp.enumValueIndex;
+        
+        float lineHeight = EditorGUIUtility.singleLineHeight;
+        float spacing = EditorGUIUtility.standardVerticalSpacing;
+        float height = lineHeight + spacing; // Shape type field
+        
+        // Calculate height based on shape type
+        switch (shapeType)
+        {
+            case 0: // None
+                height += lineHeight * 2 + spacing; // Help box
+                break;
+            case 1: // Polygon
+                height += GetPolygonPropertiesHeight(property);
+                break;
+            case 2: // Circle
+                height += GetCirclePropertiesHeight(property);
+                break;
+            case 3: // Capsule
+                height += GetCapsulePropertiesHeight(property);
+                break;
+            case 4: // Box
+                height += GetBoxPropertiesHeight(property);
+                break;
+            case 5: // Edge
+                height += GetEdgePropertiesHeight(property);
+                break;
+            case 6: // Compound
+                height += GetCompoundPropertiesHeight(property);
+                break;
+        }
+        
+        height += spacing; // Extra spacing
+        
+        // Common properties
+        height += lineHeight + spacing; // "位置与旋转" label
+        height += GetFPVector2PropertyHeight(); // PositionOffset
+        height += GetFPPropertyHeight(); // RotationOffset
+        
+        height += spacing; // Extra spacing
+        
+        // Other settings
+        height += lineHeight + spacing; // "其他设置" label
+        height += lineHeight + spacing; // UserTag
+        height += lineHeight + spacing; // IsPersistent
+        
+        return height;
     }
 
-    private void DrawPolygonProperties(SerializedProperty property)
+    private float DrawPolygonProperties(Rect position, SerializedProperty property, float yPos)
     {
-        EditorGUILayout.LabelField("多边形设置", EditorStyles.boldLabel);
+        float lineHeight = EditorGUIUtility.singleLineHeight;
+        float spacing = EditorGUIUtility.standardVerticalSpacing;
+        
+        Rect labelRect = new Rect(position.x, yPos, position.width, lineHeight);
+        EditorGUI.LabelField(labelRect, "多边形设置", EditorStyles.boldLabel);
+        yPos += lineHeight + spacing;
+        
         EditorGUI.indentLevel++;
-        EditorGUILayout.PropertyField(property.FindPropertyRelative("PolygonCollider"), new GUIContent("多边形碰撞器"));
-        EditorGUILayout.HelpBox("需要引用一个预定义的多边形碰撞器资源", MessageType.Info);
+        Rect polyRect = new Rect(position.x, yPos, position.width, lineHeight);
+        EditorGUI.PropertyField(polyRect, property.FindPropertyRelative("PolygonCollider"), new GUIContent("多边形碰撞器"));
+        yPos += lineHeight + spacing;
+        
+        Rect helpRect = new Rect(position.x, yPos, position.width, lineHeight * 2);
+        EditorGUI.HelpBox(helpRect, "需要引用一个预定义的多边形碰撞器资源", MessageType.Info);
+        yPos += lineHeight * 2 + spacing;
         EditorGUI.indentLevel--;
+        
+        return yPos;
+    }
+    
+    private float GetPolygonPropertiesHeight(SerializedProperty property)
+    {
+        float lineHeight = EditorGUIUtility.singleLineHeight;
+        float spacing = EditorGUIUtility.standardVerticalSpacing;
+        return lineHeight + spacing + // Label
+               lineHeight + spacing + // PolygonCollider
+               lineHeight * 2 + spacing; // HelpBox
     }
 
-    private void DrawCircleProperties(SerializedProperty property)
+    private float DrawCircleProperties(Rect position, SerializedProperty property, float yPos)
     {
-        EditorGUILayout.LabelField("圆形设置", EditorStyles.boldLabel);
+        float lineHeight = EditorGUIUtility.singleLineHeight;
+        float spacing = EditorGUIUtility.standardVerticalSpacing;
+        
+        Rect labelRect = new Rect(position.x, yPos, position.width, lineHeight);
+        EditorGUI.LabelField(labelRect, "圆形设置", EditorStyles.boldLabel);
+        yPos += lineHeight + spacing;
+        
         EditorGUI.indentLevel++;
-        DrawFPProperty(property, "CircleRadius", "半径", "");
+        yPos = DrawFPProperty(position, property, yPos, "CircleRadius", "半径", "");
         
         // 可视化
         var radiusProp = property.FindPropertyRelative("CircleRadius");
@@ -104,17 +196,42 @@ public class Shape2DConfigDrawer : PropertyDrawer
         if (rawValue != null)
         {
             float radius = rawValue.longValue / 65536f;
-            DrawCirclePreview(radius);
+            yPos = DrawCirclePreview(position, yPos, radius);
         }
         
         EditorGUI.indentLevel--;
+        
+        return yPos;
+    }
+    
+    private float GetCirclePropertiesHeight(SerializedProperty property)
+    {
+        float lineHeight = EditorGUIUtility.singleLineHeight;
+        float spacing = EditorGUIUtility.standardVerticalSpacing;
+        float height = lineHeight + spacing + // Label
+                      GetFPPropertyHeight(); // CircleRadius
+        
+        var radiusProp = property.FindPropertyRelative("CircleRadius");
+        var rawValue = radiusProp?.FindPropertyRelative("RawValue");
+        if (rawValue != null)
+        {
+            height += 100 + lineHeight + spacing * 2; // Preview
+        }
+        
+        return height;
     }
 
-    private void DrawCapsuleProperties(SerializedProperty property)
+    private float DrawCapsuleProperties(Rect position, SerializedProperty property, float yPos)
     {
-        EditorGUILayout.LabelField("胶囊设置", EditorStyles.boldLabel);
+        float lineHeight = EditorGUIUtility.singleLineHeight;
+        float spacing = EditorGUIUtility.standardVerticalSpacing;
+        
+        Rect labelRect = new Rect(position.x, yPos, position.width, lineHeight);
+        EditorGUI.LabelField(labelRect, "胶囊设置", EditorStyles.boldLabel);
+        yPos += lineHeight + spacing;
+        
         EditorGUI.indentLevel++;
-        DrawFPVector2Property(property, "CapsuleSize", "尺寸 (宽, 高)");
+        yPos = DrawFPVector2Property(position, property, yPos, "CapsuleSize", "尺寸 (宽, 高)");
         
         // 可视化
         var sizeProp = property.FindPropertyRelative("CapsuleSize");
@@ -122,17 +239,41 @@ public class Shape2DConfigDrawer : PropertyDrawer
         {
             float width = GetFPValue(sizeProp, "X");
             float height = GetFPValue(sizeProp, "Y");
-            DrawCapsulePreview(width, height);
+            yPos = DrawCapsulePreview(position, yPos, width, height);
         }
         
         EditorGUI.indentLevel--;
+        
+        return yPos;
+    }
+    
+    private float GetCapsulePropertiesHeight(SerializedProperty property)
+    {
+        float lineHeight = EditorGUIUtility.singleLineHeight;
+        float spacing = EditorGUIUtility.standardVerticalSpacing;
+        float height = lineHeight + spacing + // Label
+                      GetFPVector2PropertyHeight(); // CapsuleSize
+        
+        var sizeProp = property.FindPropertyRelative("CapsuleSize");
+        if (sizeProp != null)
+        {
+            height += lineHeight + spacing; // Preview text
+        }
+        
+        return height;
     }
 
-    private void DrawBoxProperties(SerializedProperty property)
+    private float DrawBoxProperties(Rect position, SerializedProperty property, float yPos)
     {
-        EditorGUILayout.LabelField("矩形设置", EditorStyles.boldLabel);
+        float lineHeight = EditorGUIUtility.singleLineHeight;
+        float spacing = EditorGUIUtility.standardVerticalSpacing;
+        
+        Rect labelRect = new Rect(position.x, yPos, position.width, lineHeight);
+        EditorGUI.LabelField(labelRect, "矩形设置", EditorStyles.boldLabel);
+        yPos += lineHeight + spacing;
+        
         EditorGUI.indentLevel++;
-        DrawFPVector2Property(property, "BoxExtents", "半尺寸 (宽/2, 高/2)");
+        yPos = DrawFPVector2Property(position, property, yPos, "BoxExtents", "半尺寸 (宽/2, 高/2)");
         
         // 可视化
         var extentsProp = property.FindPropertyRelative("BoxExtents");
@@ -140,82 +281,179 @@ public class Shape2DConfigDrawer : PropertyDrawer
         {
             float halfWidth = GetFPValue(extentsProp, "X");
             float halfHeight = GetFPValue(extentsProp, "Y");
-            EditorGUILayout.LabelField($"实际尺寸: {halfWidth * 2:F2} × {halfHeight * 2:F2}", EditorStyles.miniLabel);
-            DrawBoxPreview(halfWidth, halfHeight);
+            
+            Rect sizeRect = new Rect(position.x, yPos, position.width, lineHeight);
+            EditorGUI.LabelField(sizeRect, $"实际尺寸: {halfWidth * 2:F2} × {halfHeight * 2:F2}", EditorStyles.miniLabel);
+            yPos += lineHeight + spacing;
+            
+            yPos = DrawBoxPreview(position, yPos, halfWidth, halfHeight);
         }
         
         EditorGUI.indentLevel--;
+        
+        return yPos;
     }
-
-    private void DrawEdgeProperties(SerializedProperty property)
+    
+    private float GetBoxPropertiesHeight(SerializedProperty property)
     {
-        EditorGUILayout.LabelField("边缘设置", EditorStyles.boldLabel);
-        EditorGUI.indentLevel++;
-        DrawFPProperty(property, "EdgeExtent", "延伸长度", "");
-        EditorGUI.indentLevel--;
+        float lineHeight = EditorGUIUtility.singleLineHeight;
+        float spacing = EditorGUIUtility.standardVerticalSpacing;
+        float height = lineHeight + spacing + // Label
+                      GetFPVector2PropertyHeight(); // BoxExtents
+        
+        var extentsProp = property.FindPropertyRelative("BoxExtents");
+        if (extentsProp != null)
+        {
+            height += lineHeight + spacing; // Size label
+            height += 100 + lineHeight + spacing * 2; // Preview
+        }
+        
+        return height;
     }
 
-    private void DrawCompoundProperties(SerializedProperty property)
+    private float DrawEdgeProperties(Rect position, SerializedProperty property, float yPos)
     {
-        EditorGUILayout.LabelField("复合形状设置", EditorStyles.boldLabel);
+        float lineHeight = EditorGUIUtility.singleLineHeight;
+        float spacing = EditorGUIUtility.standardVerticalSpacing;
+        
+        Rect labelRect = new Rect(position.x, yPos, position.width, lineHeight);
+        EditorGUI.LabelField(labelRect, "边缘设置", EditorStyles.boldLabel);
+        yPos += lineHeight + spacing;
+        
         EditorGUI.indentLevel++;
-        EditorGUILayout.PropertyField(property.FindPropertyRelative("CompoundShapes"), new GUIContent("子形状列表"), true);
-        EditorGUILayout.HelpBox("复合形状由多个子形状组成", MessageType.Info);
+        yPos = DrawFPProperty(position, property, yPos, "EdgeExtent", "延伸长度", "");
         EditorGUI.indentLevel--;
+        
+        return yPos;
+    }
+    
+    private float GetEdgePropertiesHeight(SerializedProperty property)
+    {
+        float lineHeight = EditorGUIUtility.singleLineHeight;
+        float spacing = EditorGUIUtility.standardVerticalSpacing;
+        return lineHeight + spacing + // Label
+               GetFPPropertyHeight(); // EdgeExtent
     }
 
-    private void DrawFPProperty(SerializedProperty property, string fieldName, string label, string unit)
+    private float DrawCompoundProperties(Rect position, SerializedProperty property, float yPos)
+    {
+        float lineHeight = EditorGUIUtility.singleLineHeight;
+        float spacing = EditorGUIUtility.standardVerticalSpacing;
+        
+        Rect labelRect = new Rect(position.x, yPos, position.width, lineHeight);
+        EditorGUI.LabelField(labelRect, "复合形状设置", EditorStyles.boldLabel);
+        yPos += lineHeight + spacing;
+        
+        EditorGUI.indentLevel++;
+        var compoundProp = property.FindPropertyRelative("CompoundShapes");
+        float propHeight = EditorGUI.GetPropertyHeight(compoundProp, true);
+        Rect propRect = new Rect(position.x, yPos, position.width, propHeight);
+        EditorGUI.PropertyField(propRect, compoundProp, new GUIContent("子形状列表"), true);
+        yPos += propHeight + spacing;
+        
+        Rect helpRect = new Rect(position.x, yPos, position.width, lineHeight * 2);
+        EditorGUI.HelpBox(helpRect, "复合形状由多个子形状组成", MessageType.Info);
+        yPos += lineHeight * 2 + spacing;
+        EditorGUI.indentLevel--;
+        
+        return yPos;
+    }
+    
+    private float GetCompoundPropertiesHeight(SerializedProperty property)
+    {
+        float lineHeight = EditorGUIUtility.singleLineHeight;
+        float spacing = EditorGUIUtility.standardVerticalSpacing;
+        var compoundProp = property.FindPropertyRelative("CompoundShapes");
+        float propHeight = EditorGUI.GetPropertyHeight(compoundProp, true);
+        
+        return lineHeight + spacing + // Label
+               propHeight + spacing + // CompoundShapes
+               lineHeight * 2 + spacing; // HelpBox
+    }
+
+    private float DrawFPProperty(Rect position, SerializedProperty property, float yPos, string fieldName, string label, string unit)
     {
         var prop = property.FindPropertyRelative(fieldName);
-        if (prop == null) return;
+        if (prop == null) return yPos;
 
-        EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.PropertyField(prop, new GUIContent(label));
+        float lineHeight = EditorGUIUtility.singleLineHeight;
+        float spacing = EditorGUIUtility.standardVerticalSpacing;
+        
+        Rect propRect = new Rect(position.x, yPos, position.width - 80, lineHeight);
+        EditorGUI.PropertyField(propRect, prop, new GUIContent(label));
         
         var rawValueProp = prop.FindPropertyRelative("RawValue");
         if (rawValueProp != null)
         {
             long rawValue = rawValueProp.longValue;
             float value = rawValue / 65536f;
-            EditorGUILayout.LabelField($"≈ {value:F2}{unit}", GUILayout.Width(80));
+            Rect valueRect = new Rect(position.x + position.width - 80, yPos, 80, lineHeight);
+            EditorGUI.LabelField(valueRect, $"≈ {value:F2}{unit}");
         }
         
-        EditorGUILayout.EndHorizontal();
+        return yPos + lineHeight + spacing;
+    }
+    
+    private float GetFPPropertyHeight()
+    {
+        float lineHeight = EditorGUIUtility.singleLineHeight;
+        float spacing = EditorGUIUtility.standardVerticalSpacing;
+        return lineHeight + spacing;
     }
 
-    private void DrawFPVector2Property(SerializedProperty property, string fieldName, string label)
+    private float DrawFPVector2Property(Rect position, SerializedProperty property, float yPos, string fieldName, string label)
     {
         var prop = property.FindPropertyRelative(fieldName);
-        if (prop == null) return;
+        if (prop == null) return yPos;
 
-        EditorGUILayout.LabelField(label);
+        float lineHeight = EditorGUIUtility.singleLineHeight;
+        float spacing = EditorGUIUtility.standardVerticalSpacing;
+        
+        Rect labelRect = new Rect(position.x, yPos, position.width, lineHeight);
+        EditorGUI.LabelField(labelRect, label);
+        yPos += lineHeight + spacing;
+        
         EditorGUI.indentLevel++;
         
         float x = GetFPValue(prop, "X");
         float y = GetFPValue(prop, "Y");
         
-        EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.LabelField("X:", GUILayout.Width(20));
-        DrawFPSubProperty(prop, "X");
-        EditorGUILayout.LabelField($"≈ {x:F2}", GUILayout.Width(60));
-        EditorGUILayout.EndHorizontal();
+        // X field
+        Rect xLabelRect = new Rect(position.x, yPos, 20, lineHeight);
+        EditorGUI.LabelField(xLabelRect, "X:");
         
-        EditorGUILayout.BeginHorizontal();
-        EditorGUILayout.LabelField("Y:", GUILayout.Width(20));
-        DrawFPSubProperty(prop, "Y");
-        EditorGUILayout.LabelField($"≈ {y:F2}", GUILayout.Width(60));
-        EditorGUILayout.EndHorizontal();
+        var xProp = prop.FindPropertyRelative("X");
+        Rect xFieldRect = new Rect(position.x + 20, yPos, position.width - 80, lineHeight);
+        EditorGUI.PropertyField(xFieldRect, xProp, GUIContent.none);
+        
+        Rect xValueRect = new Rect(position.x + position.width - 60, yPos, 60, lineHeight);
+        EditorGUI.LabelField(xValueRect, $"≈ {x:F2}");
+        yPos += lineHeight + spacing;
+        
+        // Y field
+        Rect yLabelRect = new Rect(position.x, yPos, 20, lineHeight);
+        EditorGUI.LabelField(yLabelRect, "Y:");
+        
+        var yProp = prop.FindPropertyRelative("Y");
+        Rect yFieldRect = new Rect(position.x + 20, yPos, position.width - 80, lineHeight);
+        EditorGUI.PropertyField(yFieldRect, yProp, GUIContent.none);
+        
+        Rect yValueRect = new Rect(position.x + position.width - 60, yPos, 60, lineHeight);
+        EditorGUI.LabelField(yValueRect, $"≈ {y:F2}");
+        yPos += lineHeight + spacing;
         
         EditorGUI.indentLevel--;
+        
+        return yPos;
     }
-
-    private void DrawFPSubProperty(SerializedProperty vectorProp, string axis)
+    
+    private float GetFPVector2PropertyHeight()
     {
-        var axisProp = vectorProp.FindPropertyRelative(axis);
-        if (axisProp != null)
-        {
-            EditorGUILayout.PropertyField(axisProp, GUIContent.none);
-        }
+        float lineHeight = EditorGUIUtility.singleLineHeight;
+        float spacing = EditorGUIUtility.standardVerticalSpacing;
+        return lineHeight + spacing + // Label
+               lineHeight + spacing + // X field
+               lineHeight + spacing;  // Y field
     }
 
     private float GetFPValue(SerializedProperty vectorProp, string axis)
@@ -229,10 +467,14 @@ public class Shape2DConfigDrawer : PropertyDrawer
         return 0f;
     }
 
-    private void DrawCirclePreview(float radius)
+    private float DrawCirclePreview(Rect position, float yPos, float radius)
     {
-        EditorGUILayout.Space(5);
-        Rect rect = GUILayoutUtility.GetRect(100, 100, GUILayout.ExpandWidth(false));
+        float lineHeight = EditorGUIUtility.singleLineHeight;
+        float spacing = EditorGUIUtility.standardVerticalSpacing;
+        
+        yPos += spacing;
+        
+        Rect rect = new Rect(position.x, yPos, 100, 100);
         
         EditorGUI.DrawRect(rect, new Color(0.2f, 0.2f, 0.2f));
         
@@ -244,19 +486,36 @@ public class Shape2DConfigDrawer : PropertyDrawer
         Handles.color = Color.green;
         Handles.DrawWireDisc(center, Vector3.forward, displayRadius);
         
-        EditorGUILayout.LabelField($"预览 (比例缩放)", EditorStyles.miniLabel);
+        yPos += 100 + spacing;
+        
+        Rect labelRect = new Rect(position.x, yPos, position.width, lineHeight);
+        EditorGUI.LabelField(labelRect, $"预览 (比例缩放)", EditorStyles.miniLabel);
+        yPos += lineHeight + spacing;
+        
+        return yPos;
     }
 
-    private void DrawCapsulePreview(float width, float height)
+    private float DrawCapsulePreview(Rect position, float yPos, float width, float height)
     {
-        EditorGUILayout.Space(5);
-        EditorGUILayout.LabelField($"预览: 宽 {width:F2} × 高 {height:F2}", EditorStyles.miniLabel);
+        float lineHeight = EditorGUIUtility.singleLineHeight;
+        float spacing = EditorGUIUtility.standardVerticalSpacing;
+        
+        yPos += spacing;
+        Rect labelRect = new Rect(position.x, yPos, position.width, lineHeight);
+        EditorGUI.LabelField(labelRect, $"预览: 宽 {width:F2} × 高 {height:F2}", EditorStyles.miniLabel);
+        yPos += lineHeight + spacing;
+        
+        return yPos;
     }
 
-    private void DrawBoxPreview(float halfWidth, float halfHeight)
+    private float DrawBoxPreview(Rect position, float yPos, float halfWidth, float halfHeight)
     {
-        EditorGUILayout.Space(5);
-        Rect rect = GUILayoutUtility.GetRect(100, 100, GUILayout.ExpandWidth(false));
+        float lineHeight = EditorGUIUtility.singleLineHeight;
+        float spacing = EditorGUIUtility.standardVerticalSpacing;
+        
+        yPos += spacing;
+        
+        Rect rect = new Rect(position.x, yPos, 100, 100);
         
         EditorGUI.DrawRect(rect, new Color(0.2f, 0.2f, 0.2f));
         
@@ -273,7 +532,13 @@ public class Shape2DConfigDrawer : PropertyDrawer
         Handles.DrawLine(new Vector2(boxRect.xMax, boxRect.yMax), new Vector2(boxRect.xMin, boxRect.yMax));
         Handles.DrawLine(new Vector2(boxRect.xMin, boxRect.yMax), new Vector2(boxRect.xMin, boxRect.yMin));
         
-        EditorGUILayout.LabelField($"预览 (比例缩放)", EditorStyles.miniLabel);
+        yPos += 100 + spacing;
+        
+        Rect labelRect = new Rect(position.x, yPos, position.width, lineHeight);
+        EditorGUI.LabelField(labelRect, $"预览 (比例缩放)", EditorStyles.miniLabel);
+        yPos += lineHeight + spacing;
+        
+        return yPos;
     }
 }
 #endif
