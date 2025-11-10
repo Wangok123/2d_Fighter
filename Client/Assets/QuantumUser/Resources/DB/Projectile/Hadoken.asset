@@ -9,13 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2c523cee387e43a78074a51b0e9e5ed6, type: 3}
-  m_Name: HadokenProjectileData
+  m_Script: {fileID: 11500000, guid: b5706c1f50084486afc5188a5be3e846, type: 3}
+  m_Name: Hadoken
   m_EditorClassIdentifier: 
   Identifier:
-    Path: QuantumUser/Resources/DB/Projectile/HadokenProjectileData
+    Path: QuantumUser/Resources/DB/Projectile/Hadoken
     Guid:
-      Value: 317318408739899484
+      Value: 406473470409463380
   ProjectileType: 0
   Lifetime:
     RawValue: 196608
@@ -32,12 +32,12 @@ MonoBehaviour:
     RawValue: 16384
   HitType: 1
   CollisionShape:
-    ShapeType: 4
+    ShapeType: 1
     PolygonCollider:
       Id:
         Value: 0
     CircleRadius:
-      RawValue: 32768
+      RawValue: 19661
     CapsuleSize:
       X:
         RawValue: 65536
@@ -66,13 +66,3 @@ MonoBehaviour:
   BlockedByEnvironment: 1
   MoveSpeed:
     RawValue: 655360
-  MovePattern: 0
-  AutoTargetNearest: 0
-  HomingTurnSpeed:
-    RawValue: 327680
-  Gravity:
-    RawValue: 655360
-  ReturnSpeed:
-    RawValue: 786432
-  ReturnDelay:
-    RawValue: 32768

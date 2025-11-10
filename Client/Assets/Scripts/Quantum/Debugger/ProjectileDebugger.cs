@@ -49,17 +49,17 @@ namespace Quantum
         [Tooltip("字体大小")]
         public int FontSize = 12;
 
-        [Header("不同移动模式颜色")]
-        [Tooltip("直线模式颜色")]
+        [Header("不同弹道类型颜色")]
+        [Tooltip("直线弹道颜色")]
         public Color StraightColor = new Color(0f, 1f, 1f, 0.3f);
         
-        [Tooltip("追踪模式颜色")]
+        [Tooltip("追踪弹道颜色")]
         public Color HomingColor = new Color(1f, 0.5f, 0f, 0.3f);
         
-        [Tooltip("弧形模式颜色")]
+        [Tooltip("抛物线弹道颜色")]
         public Color ArcColor = new Color(0.5f, 1f, 0f, 0.3f);
         
-        [Tooltip("回旋镖模式颜色")]
+        [Tooltip("回旋镖弹道颜色")]
         public Color BoomerangColor = new Color(1f, 0f, 1f, 0.3f);
 
         private List<Vector3> _trajectoryPoints = new List<Vector3>(100);
@@ -123,13 +123,36 @@ namespace Quantum
             FP remainingLifetime = _projectileData.Lifetime - _projectile->LifetimeTimer.ElapsedSeconds(frame);
             FP speed = _projectile->Speed;
             
-            string movePattern = "Unknown";
-            if (_projectileData is BulletProjectileData bulletData)
-            {
-                movePattern = bulletData.MovePattern.ToString();
-            }
+            string projectileType = GetProjectileTypeName();
+            string extraInfo = GetExtraInfo(frame);
 
-            _cachedInfo = $"Projectile\nType: {movePattern}\nSpeed: {speed.AsFloat:F2}\nLifetime: {remainingLifetime.AsFloat:F2}s";
+            _cachedInfo = $"Projectile\nType: {projectileType}\nSpeed: {speed.AsFloat:F2}\nLifetime: {remainingLifetime.AsFloat:F2}s{extraInfo}";
+        }
+
+        private string GetProjectileTypeName()
+        {
+            if (_projectileData is StraightProjectileData)
+                return "Straight";
+            if (_projectileData is HomingProjectileData)
+                return "Homing";
+            if (_projectileData is ArcProjectileData)
+                return "Arc";
+            if (_projectileData is BoomerangProjectileData)
+                return "Boomerang";
+            
+            return "Unknown";
+        }
+
+        private string GetExtraInfo(Frame frame)
+        {
+            if (_projectileData is BoomerangProjectileData boomerangData)
+            {
+                FP elapsed = _projectile->LifetimeTimer.ElapsedSeconds(frame);
+                bool isReturning = elapsed >= boomerangData.ReturnDelay;
+                return $"\nPhase: {(isReturning ? "Returning" : "Forward")}";
+            }
+            
+            return "";
         }
 
         private void OnDrawGizmos()
@@ -146,9 +169,9 @@ namespace Quantum
             DrawTrajectory();
             DrawCollisionShape();
             
-            if (ShowPredictedTrajectory && _projectileData is BulletProjectileData bulletData)
+            if (ShowPredictedTrajectory)
             {
-                DrawPredictedTrajectory(bulletData);
+                DrawPredictedTrajectory();
             }
 
             if (ShowProjectileInfo && !string.IsNullOrEmpty(_cachedInfo))
@@ -178,7 +201,7 @@ namespace Quantum
             if (shape == null) return;
 
             Vector3 position = _transform->Position.ToUnityVector3();
-            Color fillColor = GetMovePatternColor();
+            Color fillColor = GetProjectileTypeColor();
 
             switch (shape.ShapeType)
             {
@@ -196,24 +219,24 @@ namespace Quantum
             }
         }
 
-        private Color GetMovePatternColor()
+        private Color GetProjectileTypeColor()
         {
-            if (_projectileData is BulletProjectileData bulletData)
-            {
-                return bulletData.MovePattern switch
-                {
-                    ProjectileMovePattern.Straight => StraightColor,
-                    ProjectileMovePattern.Homing => HomingColor,
-                    ProjectileMovePattern.Arc => ArcColor,
-                    ProjectileMovePattern.Boomerang => BoomerangColor,
-                    _ => CollisionShapeColor
-                };
-            }
+            if (_projectileData is StraightProjectileData)
+                return StraightColor;
+            if (_projectileData is HomingProjectileData)
+                return HomingColor;
+            if (_projectileData is ArcProjectileData)
+                return ArcColor;
+            if (_projectileData is BoomerangProjectileData)
+                return BoomerangColor;
+            
             return CollisionShapeColor;
         }
 
-        private void DrawPredictedTrajectory(BulletProjectileData bulletData)
+        private void DrawPredictedTrajectory()
         {
+            if (_projectileData == null) return;
+
             Vector3 position = _transform->Position.ToUnityVector3();
             Vector2 direction = new Vector2(_projectile->Direction.X.AsFloat, _projectile->Direction.Y.AsFloat);
             float speed = _projectile->Speed.AsFloat;
@@ -224,30 +247,44 @@ namespace Quantum
             float timeStep = 0.1f;
             int steps = Mathf.CeilToInt(PredictionTime / timeStep);
 
-            for (int i = 0; i < steps; i++)
+            if (_projectileData is StraightProjectileData straightData)
             {
-                switch (bulletData.MovePattern)
-                {
-                    case ProjectileMovePattern.Straight:
-                        position += new Vector3(direction.x, direction.y, 0) * speed * timeStep;
-                        break;
-
-                    case ProjectileMovePattern.Arc:
-                        direction.y -= bulletData.Gravity.AsFloat * timeStep;
-                        position += new Vector3(direction.x, direction.y, 0) * timeStep;
-                        break;
-                }
-
-                predictedPoints.Add(position);
+                DrawStraightPrediction(position, direction, straightData.MoveSpeed.AsFloat, timeStep, steps, predictedPoints);
+            }
+            else if (_projectileData is ArcProjectileData arcData)
+            {
+                DrawArcPrediction(position, direction, arcData.Gravity.AsFloat, timeStep, steps, predictedPoints);
             }
 
 #if UNITY_EDITOR
-            UnityEditor.Handles.color = PredictedTrajectoryColor;
-            for (int i = 0; i < predictedPoints.Count - 1; i++)
+            if (predictedPoints.Count > 1)
             {
-                UnityEditor.Handles.DrawDottedLine(predictedPoints[i], predictedPoints[i + 1], 3f);
+                UnityEditor.Handles.color = PredictedTrajectoryColor;
+                for (int i = 0; i < predictedPoints.Count - 1; i++)
+                {
+                    UnityEditor.Handles.DrawDottedLine(predictedPoints[i], predictedPoints[i + 1], 3f);
+                }
             }
 #endif
+        }
+
+        private void DrawStraightPrediction(Vector3 position, Vector2 direction, float speed, float timeStep, int steps, List<Vector3> points)
+        {
+            for (int i = 0; i < steps; i++)
+            {
+                position += new Vector3(direction.x, direction.y, 0) * speed * timeStep;
+                points.Add(position);
+            }
+        }
+
+        private void DrawArcPrediction(Vector3 position, Vector2 direction, float gravity, float timeStep, int steps, List<Vector3> points)
+        {
+            for (int i = 0; i < steps; i++)
+            {
+                direction.y -= gravity * timeStep;
+                position += new Vector3(direction.x, direction.y, 0) * timeStep;
+                points.Add(position);
+            }
         }
 
         private void DrawProjectileInfo()

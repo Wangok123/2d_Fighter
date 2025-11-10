@@ -124,10 +124,11 @@ namespace Quantum {
     LinearDecay = 2,
   }
   public enum ProjectileDestroyReason : int {
+    Manual,
     Lifetime,
     HitTarget,
     HitEnvironment,
-    Manual,
+    Caught,
   }
   public enum ProjectileMovePattern : int {
     Straight,

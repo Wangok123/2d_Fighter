@@ -23,7 +23,7 @@ MonoBehaviour:
   Duration:
     RawValue: 65536
   Cooldown:
-    RawValue: 0
+    RawValue: 65536
   CastDirectionType: 4
   FaceCastDirection: 1
   KeepVelocity: 0
@@ -42,7 +42,7 @@ MonoBehaviour:
     Duration:
       RawValue: 65536
     Cooldown:
-      RawValue: 196608
+      RawValue: 65536
     HitboxActiveTime:
       RawValue: 0
     HitboxActiveDuration:
@@ -87,7 +87,7 @@ MonoBehaviour:
     HitType: 2
     ProjectileData:
       Id:
-        Value: 317318408739899484
+        Value: 406473470409463380
     SpawnOffset:
       X:
         RawValue: 65536

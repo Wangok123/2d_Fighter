@@ -14,10 +14,11 @@ enum ProjectileType
 
 enum ProjectileDestroyReason
 {
+    Manual,
     Lifetime,
     HitTarget,
     HitEnvironment,
-    Manual,
+    Caught,
 }
 
 enum SkillFieldEffectType

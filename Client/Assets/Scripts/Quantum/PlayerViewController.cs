@@ -248,8 +248,6 @@ namespace Quantum.QuantumView
             if (e.PlayerEntityRef != EntityRef) return;
 
             _isPlayingAbilityAnimation = true;
-            
-            Debug.Log($"我正在使用{e.MoveId}");
         }
     }
 }

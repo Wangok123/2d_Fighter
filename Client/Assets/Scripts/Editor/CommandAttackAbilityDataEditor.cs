@@ -119,7 +119,7 @@ public class CommandAttackAbilityDataEditor : UnityEditor.Editor
         EditorGUILayout.Space(5);
     }
 
-    private void DrawCommandSequence(CommandSequence sequence, int index)
+    private void DrawCommandSequence(CommandSequenceConfig sequence, int index)
     {
         if (sequence.InputSequence == null || sequence.InputSequence.Length == 0)
             return;
@@ -278,7 +278,7 @@ public class CommandAttackAbilityDataEditor : UnityEditor.Editor
         GUI.Label(badgeRect, badgeText, badgeStyle);
     }
 
-    private void DrawExecutionDetails(CommandSequence sequence)
+    private void DrawExecutionDetails(CommandSequenceConfig sequence)
     {
         EditorGUILayout.BeginVertical(EditorStyles.helpBox);
         EditorGUILayout.LabelField("执行类型详情:", EditorStyles.miniBoldLabel);
@@ -363,7 +363,7 @@ public class CommandAttackAbilityDataEditor : UnityEditor.Editor
         Handles.DrawWireDisc(center, Vector3.forward, 25f);
     }
 
-    private void DrawConfigurationStatus(CommandSequence sequence)
+    private void DrawConfigurationStatus(CommandSequenceConfig sequence)
     {
         bool isConfigured = sequence.ExecutionType switch
         {
