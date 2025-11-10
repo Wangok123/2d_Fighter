@@ -219,17 +219,17 @@ namespace Quantum.Prototypes {
     }
   }
   [System.SerializableAttribute()]
-  [Quantum.Prototypes.Prototype(typeof(Quantum.CommandInputData))]
-  public unsafe partial class CommandInputDataPrototype : ComponentPrototype<Quantum.CommandInputData> {
+  [Quantum.Prototypes.Prototype(typeof(Quantum.CommandInputComponent))]
+  public unsafe partial class CommandInputComponentPrototype : ComponentPrototype<Quantum.CommandInputComponent> {
     [HideInInspector()]
     public Int32 _empty_prototype_dummy_field_;
-    partial void MaterializeUser(Frame frame, ref Quantum.CommandInputData result, in PrototypeMaterializationContext context);
+    partial void MaterializeUser(Frame frame, ref Quantum.CommandInputComponent result, in PrototypeMaterializationContext context);
     public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
-        Quantum.CommandInputData component = default;
+        Quantum.CommandInputComponent component = default;
         Materialize((Frame)f, ref component, in context);
         return f.Set(entity, component) == SetResult.ComponentAdded;
     }
-    public void Materialize(Frame frame, ref Quantum.CommandInputData result, in PrototypeMaterializationContext context = default) {
+    public void Materialize(Frame frame, ref Quantum.CommandInputComponent result, in PrototypeMaterializationContext context = default) {
         MaterializeUser(frame, ref result, in context);
     }
   }

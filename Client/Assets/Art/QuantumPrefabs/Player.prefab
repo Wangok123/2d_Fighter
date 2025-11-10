@@ -21,6 +21,7 @@ GameObject:
   - component: {fileID: 294399432298058463}
   - component: {fileID: 1613700388019197692}
   - component: {fileID: 830373370507069944}
+  - component: {fileID: 2045562779670424827}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -560,6 +561,21 @@ MonoBehaviour:
             RawValue: 0
         UsageCount: 0
         ComboStep: 0
+    - Key:
+        Value: 300
+      Value:
+        RuntimeDuration:
+          RawValue: 0
+        AbilityData:
+          Id:
+            Value: 522406370507022107
+        ChargeTimer:
+          Mode: 0
+          Frames: 0
+          Seconds:
+            RawValue: 0
+        UsageCount: 0
+        ComboStep: 0
 --- !u!114 &294399432298058463
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -618,6 +634,20 @@ MonoBehaviour:
       Frames: 0
       Seconds:
         RawValue: 0
+--- !u!114 &2045562779670424827
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 747601124680124256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fbebed6e8a1323945821f7329f44e563, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Prototype:
+    _empty_prototype_dummy_field_: 0
 --- !u!1 &4774830198564325150
 GameObject:
   m_ObjectHideFlags: 0

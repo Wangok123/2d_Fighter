@@ -21,7 +21,7 @@ MonoBehaviour:
   Delay:
     RawValue: 0
   Duration:
-    RawValue: 19661
+    RawValue: 26214
   Cooldown:
     RawValue: 0
   CastDirectionType: 4
@@ -49,12 +49,12 @@ MonoBehaviour:
       RawValue: 0
     BoxExtents:
       X:
-        RawValue: 49152
+        RawValue: 65536
       Y:
         RawValue: 65536
     PositionOffset:
       X:
-        RawValue: 78643
+        RawValue: 98304
       Y:
         RawValue: 0
     RotationOffset:
@@ -63,15 +63,15 @@ MonoBehaviour:
     IsPersistent: 0
     CompoundShapes: []
   HitboxActiveTime:
-    RawValue: 9830
+    RawValue: 19661
   HitboxActiveDuration:
-    RawValue: 6554
+    RawValue: 3277
   KnockbackForce:
-    RawValue: 524288
+    RawValue: 327680
   KnockbackDirectionX:
-    RawValue: 655360
+    RawValue: 65536
   KnockbackDirectionY:
-    RawValue: 1310720
+    RawValue: 0
   HitstunDuration:
     RawValue: 16384
   HitType: 0

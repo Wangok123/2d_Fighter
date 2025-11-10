@@ -32,6 +32,7 @@ namespace Quantum.QuantumView
             QuantumEvent.Subscribe<EventChargingStarted>(this, OnChargeAttackStarted);
             QuantumEvent.Subscribe<EventChargingCancelled>(this, OnChargeAttackCancelled);
             QuantumEvent.Subscribe<EventChargeAttackReleased>(this, OnChargeAttackReleased);
+            QuantumEvent.Subscribe<EventCommandAttackExecuted>(this, OnCommandAttackExecuted);
         }
 
         public override void OnDeactivate()
@@ -240,6 +241,15 @@ namespace Quantum.QuantumView
             {
                 _manager.PlayHeavyAttack(); // Attack（普通重攻击）
             }
+        }
+        
+        private void OnCommandAttackExecuted(EventCommandAttackExecuted e)
+        {
+            if (e.PlayerEntityRef != EntityRef) return;
+
+            _isPlayingAbilityAnimation = true;
+            
+            Debug.Log($"我正在使用{e.MoveId}");
         }
     }
 }

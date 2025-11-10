@@ -23,4 +23,17 @@ struct SpecialMove
     FP Damage;
 }
 
+component CommandInputComponent
+{
+	[ExcludeFromPrototype] Int32 InputBufferSize;
+	[ExcludeFromPrototype] array<Int32>[8] InputBuffer;
+	[ExcludeFromPrototype] Int32 InputBufferIndex;
+	[ExcludeFromPrototype] FrameTimer InputExpiryTimer;
+}
+
 signal OnClearInputBuffer(entity_ref playerEntityRef);
+
+event CommandAttackExecuted{
+    entity_ref PlayerEntityRef;
+    Int32 MoveId;
+}

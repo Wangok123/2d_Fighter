@@ -1682,7 +1682,7 @@ namespace Quantum {
     }
   }
   [StructLayout(LayoutKind.Explicit)]
-  public unsafe partial struct CommandInputData : Quantum.IComponent {
+  public unsafe partial struct CommandInputComponent : Quantum.IComponent {
     public const Int32 SIZE = 48;
     public const Int32 ALIGNMENT = 8;
     [FieldOffset(36)]
@@ -1699,7 +1699,7 @@ namespace Quantum {
     public FrameTimer InputExpiryTimer;
     public override readonly Int32 GetHashCode() {
       unchecked { 
-        var hash = 20101;
+        var hash = 4289;
         hash = hash * 31 + InputBufferSize.GetHashCode();
         fixed (Int32* p = InputBuffer) hash = hash * 31 + HashCodeUtils.GetArrayHashCode(p, 8);
         hash = hash * 31 + InputBufferIndex.GetHashCode();
@@ -1708,7 +1708,7 @@ namespace Quantum {
       }
     }
     public static void Serialize(void* ptr, FrameSerializer serializer) {
-        var p = (CommandInputData*)ptr;
+        var p = (CommandInputComponent*)ptr;
         serializer.Stream.SerializeBuffer(&p->InputBuffer[0], 8);
         serializer.Stream.Serialize(&p->InputBufferIndex);
         serializer.Stream.Serialize(&p->InputBufferSize);
@@ -2023,8 +2023,8 @@ namespace Quantum {
       BuildSignalsArrayOnComponentRemoved<Quantum.CharacterLevelComponent>();
       BuildSignalsArrayOnComponentAdded<Quantum.CharacterStatusComponent>();
       BuildSignalsArrayOnComponentRemoved<Quantum.CharacterStatusComponent>();
-      BuildSignalsArrayOnComponentAdded<Quantum.CommandInputData>();
-      BuildSignalsArrayOnComponentRemoved<Quantum.CommandInputData>();
+      BuildSignalsArrayOnComponentAdded<Quantum.CommandInputComponent>();
+      BuildSignalsArrayOnComponentRemoved<Quantum.CommandInputComponent>();
       BuildSignalsArrayOnComponentAdded<Quantum.HitReactionComponent>();
       BuildSignalsArrayOnComponentRemoved<Quantum.HitReactionComponent>();
       BuildSignalsArrayOnComponentAdded<Quantum.KCC2D>();
@@ -2299,7 +2299,7 @@ namespace Quantum {
       typeRegistry.Register(typeof(Quantum.CharacterTeam), 4);
       typeRegistry.Register(typeof(ColorRGBA), ColorRGBA.SIZE);
       typeRegistry.Register(typeof(Quantum.CommandInput), 4);
-      typeRegistry.Register(typeof(Quantum.CommandInputData), Quantum.CommandInputData.SIZE);
+      typeRegistry.Register(typeof(Quantum.CommandInputComponent), Quantum.CommandInputComponent.SIZE);
       typeRegistry.Register(typeof(ComponentPrototypeRef), ComponentPrototypeRef.SIZE);
       typeRegistry.Register(typeof(ComponentTypeRef), ComponentTypeRef.SIZE);
       typeRegistry.Register(typeof(Quantum.CountdownTimer), Quantum.CountdownTimer.SIZE);
@@ -2400,7 +2400,7 @@ namespace Quantum {
         .Add<Quantum.AttackComponent>(Quantum.AttackComponent.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.CharacterLevelComponent>(Quantum.CharacterLevelComponent.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.CharacterStatusComponent>(Quantum.CharacterStatusComponent.Serialize, null, null, ComponentFlags.None)
-        .Add<Quantum.CommandInputData>(Quantum.CommandInputData.Serialize, null, null, ComponentFlags.None)
+        .Add<Quantum.CommandInputComponent>(Quantum.CommandInputComponent.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.HitReactionComponent>(Quantum.HitReactionComponent.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.KCC2D>(Quantum.KCC2D.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.MovementComponent>(Quantum.MovementComponent.Serialize, null, null, ComponentFlags.None)
