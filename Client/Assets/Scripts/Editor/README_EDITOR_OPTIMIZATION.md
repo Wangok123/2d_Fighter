@@ -146,6 +146,11 @@
 - 旋转偏移（FP，度数）
 - 用户标签和持久化选项
 
+**实现细节**:
+- 使用 `EditorGUI` 手动布局（PropertyDrawer 必须要求）
+- 实现了 `GetPropertyHeight()` 动态计算控件高度
+- 所有绘制方法返回更新后的 Y 坐标位置
+
 ---
 
 ### 7. KnockbackCurveProfileDrawer.cs (已存在)
@@ -270,8 +275,15 @@ public class YourDrawer : PropertyDrawer
 
 ### EditorGUILayout vs EditorGUI
 
-- **EditorGUILayout**: 自动布局，适合复杂界面 (本项目主要使用)
+- **EditorGUILayout**: 自动布局，适合复杂界面
+  - 用于 **CustomEditor** (ScriptableObject/MonoBehaviour 编辑器)
+  - `AbilityDataEditor`, `AttackAbilityDataEditor`, `ChargeAttackAbilityDataEditor`, `HitReactionDataEditor`
+  
 - **EditorGUI**: 手动布局，需要计算 Rect 位置
+  - **必须**用于 **CustomPropertyDrawer** (属性绘制器)
+  - `ComboStepConfigDrawer`, `Shape2DConfigDrawer`, `KnockbackCurveProfileDrawer`
+  - PropertyDrawer 的 `OnGUI` 方法接收 `Rect position` 参数，必须使用 `EditorGUI` API
+  - 需要实现 `GetPropertyHeight()` 来正确计算控件总高度
 
 ### 编译指令
 
@@ -331,5 +343,26 @@ public class YourDrawer : PropertyDrawer
 
 ---
 
-**版本**: 1.0  
+## 更新日志
+
+### 版本 1.1 - 2025-11-10
+**修复内容**:
+- 修复了 `Shape2DConfigDrawer` 导致的 Unity Editor 错误
+- **问题**: 在 `LightAttackAbilityData_Combo` 资产的 ComboSteps 页签中打开时报错：
+  - `ArgumentException: Getting control 64's position in a group with only 64 controls when doing repaint`
+- **原因**: PropertyDrawer 错误地使用了 `EditorGUILayout` 自动布局 API
+- **解决方案**: 
+  - 将 `Shape2DConfigDrawer` 中所有 `EditorGUILayout` 调用改为 `EditorGUI` 手动布局
+  - 实现了完整的 `GetPropertyHeight()` 方法来正确计算控件高度
+  - 所有绘制方法现在使用 `Rect` 位置参数并返回更新后的 Y 坐标
+- 更新了 README 文档，明确了 CustomEditor 和 CustomPropertyDrawer 的 API 使用规范
+
+### 版本 1.0 - 2025-11-10
+**初始版本**:
+- 添加了所有自定义编辑器和属性绘制器
+- 优化了 Ability 和 HitReaction 配置资产的编辑体验
+
+---
+
+**版本**: 1.1  
 **最后更新**: 2025-11-10
