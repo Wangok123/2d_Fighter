@@ -175,6 +175,31 @@ namespace Quantum
                 hitReaction->KnockbackVelocity.X *= (FP._1 - decay);
                 
                 ApplyPhysicsKnockback(frame, entity, hitReaction, config.UseGravity);
+                
+                // Check if collision stopped the velocity - detect wall collision
+                if (frame.Unsafe.TryGetPointer<PhysicsBody2D>(entity, out var physicsBody))
+                {
+                    if (!physicsBody->IsKinematic)
+                    {
+                        // For dynamic bodies, check if the actual velocity is significantly different from expected
+                        FP expectedVelocityX = hitReaction->KnockbackVelocity.X;
+                        FP actualVelocityX = physicsBody->Velocity.X;
+                        FP velocityDifference = FPMath.Abs(expectedVelocityX - actualVelocityX);
+                        
+                        // If velocity difference is large, collision likely occurred
+                        if (velocityDifference > config.MinThreshold)
+                        {
+                            // Sync knockback velocity with actual physics velocity
+                            hitReaction->KnockbackVelocity.X = actualVelocityX;
+                            
+                            // If velocity is effectively zero, end knockback
+                            if (FPMath.Abs(actualVelocityX) <= config.MinThreshold)
+                            {
+                                EndKnockback(frame, entity, hitReaction, config.UseGravity);
+                            }
+                        }
+                    }
+                }
             }
             else
             {
@@ -203,6 +228,25 @@ namespace Quantum
             );
 
             ApplyCurveKnockback(frame, entity, hitReaction);
+            
+            // Check if collision stopped the velocity - detect wall collision
+            if (frame.Unsafe.TryGetPointer<PhysicsBody2D>(entity, out var physicsBody))
+            {
+                if (!physicsBody->IsKinematic)
+                {
+                    // For dynamic bodies, check if the actual velocity is significantly different from expected
+                    FPVector2 expectedVelocity = hitReaction->KnockbackVelocity;
+                    FP actualVelocityX = physicsBody->Velocity.X;
+                    FP velocityDifferenceX = FPMath.Abs(expectedVelocity.X - actualVelocityX);
+                    
+                    // If horizontal velocity difference is large, collision likely occurred
+                    if (velocityDifferenceX > config.MinThreshold)
+                    {
+                        // Sync knockback velocity with actual physics velocity to prevent jitter
+                        hitReaction->KnockbackVelocity.X = actualVelocityX;
+                    }
+                }
+            }
         }
 
         protected virtual void UpdateLinearKnockback(Frame frame, EntityRef entity, HitReactionComponent* hitReaction, KnockbackConfig config)
@@ -215,6 +259,32 @@ namespace Quantum
                 hitReaction->KnockbackVelocity *= (FP._1 - decay);
                 
                 ApplyLinearKnockback(frame, entity, hitReaction);
+                
+                // Check if collision stopped the velocity - detect wall collision
+                if (frame.Unsafe.TryGetPointer<PhysicsBody2D>(entity, out var physicsBody))
+                {
+                    if (!physicsBody->IsKinematic)
+                    {
+                        // For dynamic bodies, check if the actual velocity is significantly different from expected
+                        FPVector2 expectedVelocity = hitReaction->KnockbackVelocity;
+                        FP actualVelocityX = physicsBody->Velocity.X;
+                        FP velocityDifferenceX = FPMath.Abs(expectedVelocity.X - actualVelocityX);
+                        
+                        // If horizontal velocity difference is large, collision likely occurred
+                        if (velocityDifferenceX > config.MinThreshold)
+                        {
+                            // Sync knockback velocity with actual physics velocity
+                            hitReaction->KnockbackVelocity.X = actualVelocityX;
+                            
+                            // Check if we should end knockback
+                            FP updatedMagnitude = hitReaction->KnockbackVelocity.Magnitude;
+                            if (updatedMagnitude <= config.MinThreshold)
+                            {
+                                EndKnockback(frame, entity, hitReaction, false);
+                            }
+                        }
+                    }
+                }
             }
             else
             {
