@@ -220,39 +220,143 @@ public class ChargeAttackAbilityDataEditor : AttackAbilityDataEditor
             
             EditorGUILayout.Space(5);
             
-            Rect rect = GUILayoutUtility.GetRect(0, 60, GUILayout.ExpandWidth(true));
+            Rect rect = GUILayoutUtility.GetRect(0, 80, GUILayout.ExpandWidth(true));
             
-            // 背景
-            EditorGUI.DrawRect(rect, new Color(0.2f, 0.2f, 0.2f));
+            // 背景渐变
+            DrawGradientBackground(rect);
+            
+            // 绘制网格
+            DrawGrid(rect);
             
             // 绘制曲线（线性插值）
-            Handles.color = Color.cyan;
+            Handles.color = new Color(0.3f, 1f, 1f);
+            Handles.DrawAAPolyLine(3f, GetCurvePoints(rect, minValue, maxValue));
             
-            int segments = 20;
-            for (int i = 0; i < segments; i++)
-            {
-                float t1 = i / (float)segments;
-                float t2 = (i + 1) / (float)segments;
-                
-                float value1 = Mathf.Lerp(minValue, maxValue, t1);
-                float value2 = Mathf.Lerp(minValue, maxValue, t2);
-                
-                float x1 = rect.x + rect.width * t1;
-                float x2 = rect.x + rect.width * t2;
-                
-                float maxDisplayValue = Mathf.Max(maxValue, 2f);
-                float y1 = rect.y + rect.height - (value1 / maxDisplayValue) * rect.height;
-                float y2 = rect.y + rect.height - (value2 / maxDisplayValue) * rect.height;
-                
-                Handles.DrawLine(new Vector2(x1, y1), new Vector2(x2, y2));
-            }
+            // 绘制起点和终点标记
+            DrawValueMarkers(rect, minValue, maxValue);
             
-            // 绘制基准线
-            Handles.color = new Color(0.5f, 0.5f, 0.5f);
-            float baselineY = rect.y + rect.height - (1f / Mathf.Max(maxValue, 2f)) * rect.height;
-            Handles.DrawLine(new Vector2(rect.x, baselineY), new Vector2(rect.x + rect.width, baselineY));
+            // 绘制基准线 (1.0倍率)
+            DrawBaselineLine(rect, maxValue);
             
-            EditorGUILayout.LabelField($"{typeName}缩放: ×{minValue:F2} → ×{maxValue:F2}", EditorStyles.miniLabel);
+            // 显示示例值
+            DrawSampleValues(rect, minValue, maxValue);
+            
+            EditorGUILayout.Space(5);
+            EditorGUILayout.LabelField($"📊 {typeName}缩放曲线: ×{minValue:F2} → ×{maxValue:F2}", EditorStyles.miniLabel);
+        }
+    }
+
+    private void DrawGradientBackground(Rect rect)
+    {
+        // 绘制渐变背景
+        Texture2D gradientTex = new Texture2D(1, 2);
+        gradientTex.SetPixel(0, 0, new Color(0.15f, 0.15f, 0.2f));
+        gradientTex.SetPixel(0, 1, new Color(0.25f, 0.25f, 0.3f));
+        gradientTex.Apply();
+        GUI.DrawTexture(rect, gradientTex);
+    }
+
+    private void DrawGrid(Rect rect)
+    {
+        Handles.color = new Color(0.4f, 0.4f, 0.4f, 0.3f);
+        
+        // 横向网格线
+        for (int i = 1; i < 4; i++)
+        {
+            float y = rect.y + rect.height * i / 4f;
+            Handles.DrawLine(new Vector2(rect.x, y), new Vector2(rect.x + rect.width, y));
+        }
+        
+        // 纵向网格线
+        for (int i = 1; i < 4; i++)
+        {
+            float x = rect.x + rect.width * i / 4f;
+            Handles.DrawLine(new Vector2(x, rect.y), new Vector2(x, rect.y + rect.height));
+        }
+    }
+
+    private Vector3[] GetCurvePoints(Rect rect, float minValue, float maxValue)
+    {
+        int segments = 30;
+        Vector3[] points = new Vector3[segments + 1];
+        float maxDisplayValue = Mathf.Max(maxValue, 2f);
+        
+        for (int i = 0; i <= segments; i++)
+        {
+            float t = i / (float)segments;
+            float value = Mathf.Lerp(minValue, maxValue, t);
+            
+            float x = rect.x + rect.width * t;
+            float y = rect.y + rect.height - (value / maxDisplayValue) * (rect.height - 10);
+            
+            points[i] = new Vector2(x, y);
+        }
+        
+        return points;
+    }
+
+    private void DrawValueMarkers(Rect rect, float minValue, float maxValue)
+    {
+        float maxDisplayValue = Mathf.Max(maxValue, 2f);
+        
+        // 起点标记
+        Vector2 startPos = new Vector2(rect.x, rect.y + rect.height - (minValue / maxDisplayValue) * (rect.height - 10));
+        Handles.color = new Color(0.3f, 1f, 0.3f);
+        Handles.DrawSolidDisc(startPos, Vector3.forward, 4f);
+        
+        GUIStyle startStyle = new GUIStyle(EditorStyles.miniLabel);
+        startStyle.normal.textColor = new Color(0.3f, 1f, 0.3f);
+        GUI.Label(new Rect(startPos.x - 20, startPos.y - 20, 40, 15), $"×{minValue:F2}", startStyle);
+        
+        // 终点标记
+        Vector2 endPos = new Vector2(rect.x + rect.width, rect.y + rect.height - (maxValue / maxDisplayValue) * (rect.height - 10));
+        Handles.color = new Color(1f, 0.3f, 0.3f);
+        Handles.DrawSolidDisc(endPos, Vector3.forward, 4f);
+        
+        GUIStyle endStyle = new GUIStyle(EditorStyles.miniLabel);
+        endStyle.normal.textColor = new Color(1f, 0.3f, 0.3f);
+        GUI.Label(new Rect(endPos.x - 20, endPos.y - 20, 40, 15), $"×{maxValue:F2}", endStyle);
+    }
+
+    private void DrawBaselineLine(Rect rect, float maxValue)
+    {
+        float maxDisplayValue = Mathf.Max(maxValue, 2f);
+        float baselineY = rect.y + rect.height - (1f / maxDisplayValue) * (rect.height - 10);
+        
+        Handles.color = new Color(1f, 1f, 0.5f, 0.5f);
+        Handles.DrawDottedLine(
+            new Vector2(rect.x, baselineY), 
+            new Vector2(rect.x + rect.width, baselineY), 
+            2f
+        );
+        
+        GUIStyle baselineStyle = new GUIStyle(EditorStyles.miniLabel);
+        baselineStyle.normal.textColor = new Color(1f, 1f, 0.5f);
+        GUI.Label(new Rect(rect.x + 5, baselineY - 15, 50, 15), "×1.0", baselineStyle);
+    }
+
+    private void DrawSampleValues(Rect rect, float minValue, float maxValue)
+    {
+        // 在25%, 50%, 75%位置显示示例值
+        float[] samplePositions = { 0.25f, 0.5f, 0.75f };
+        
+        foreach (float t in samplePositions)
+        {
+            float value = Mathf.Lerp(minValue, maxValue, t);
+            float x = rect.x + rect.width * t;
+            
+            // 绘制竖线
+            Handles.color = new Color(1f, 1f, 1f, 0.2f);
+            Handles.DrawLine(
+                new Vector2(x, rect.y), 
+                new Vector2(x, rect.y + rect.height)
+            );
+            
+            // 显示百分比和值
+            GUIStyle sampleStyle = new GUIStyle(EditorStyles.miniLabel);
+            sampleStyle.alignment = TextAnchor.UpperCenter;
+            sampleStyle.normal.textColor = new Color(0.8f, 0.8f, 1f);
+            GUI.Label(new Rect(x - 25, rect.y + rect.height - 10, 50, 15), $"{t * 100:F0}%\n×{value:F2}", sampleStyle);
         }
     }
 }
