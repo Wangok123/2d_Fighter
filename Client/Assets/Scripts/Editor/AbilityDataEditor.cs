@@ -52,9 +52,12 @@ public class AbilityDataEditor : UnityEditor.Editor
     {
         serializedObject.Update();
 
+        // Header with icon
+        DrawStyledHeader("⚡ 技能配置 (Ability Configuration)");
+
         // Asset Identifier (不可折叠，始终显示)
         EditorGUILayout.Space(5);
-        EditorGUILayout.LabelField("资源标识", EditorStyles.boldLabel);
+        DrawSectionLabel("资源标识");
         EditorGUI.BeginDisabledGroup(true);
         EditorGUILayout.PropertyField(identifierProp);
         EditorGUI.EndDisabledGroup();
@@ -62,7 +65,7 @@ public class AbilityDataEditor : UnityEditor.Editor
         EditorGUILayout.Space(10);
 
         // 时序设置
-        showTimingSettings = EditorGUILayout.BeginFoldoutHeaderGroup(showTimingSettings, "⏱ 时序设置 (Timing Settings)");
+        showTimingSettings = DrawFoldoutHeaderWithColor(showTimingSettings, "⏱ 时序设置 (Timing Settings)", new Color(0.6f, 0.8f, 1f));
         if (showTimingSettings)
         {
             EditorGUI.indentLevel++;
@@ -71,6 +74,10 @@ public class AbilityDataEditor : UnityEditor.Editor
             DrawFPPropertyWithSeconds(durationProp, "持续时间", "技能激活状态的持续时间");
             DrawFPPropertyWithSeconds(cooldownProp, "冷却时间", "技能冷却时间");
             EditorGUILayout.PropertyField(startCooldownAfterDelayProp, new GUIContent("延迟后开始冷却", "是否在延迟时间后开始计算冷却"));
+            
+            // Add timing summary
+            DrawTimingSummary();
+            
             EditorGUI.indentLevel--;
             EditorGUILayout.Space(5);
         }
@@ -158,10 +165,74 @@ public class AbilityDataEditor : UnityEditor.Editor
         {
             long rawValue = rawValueProp.longValue;
             float seconds = rawValue / 65536f; // FP to float conversion
-            EditorGUILayout.LabelField($"≈ {seconds:F2}s", GUILayout.Width(70));
+            
+            // Color code based on time value
+            GUIStyle valueStyle = new GUIStyle(EditorStyles.label);
+            if (seconds < 0.1f)
+                valueStyle.normal.textColor = new Color(1f, 0.3f, 0.3f); // Red for very short
+            else if (seconds < 1f)
+                valueStyle.normal.textColor = new Color(0.3f, 1f, 0.3f); // Green for reasonable
+            else if (seconds < 5f)
+                valueStyle.normal.textColor = new Color(1f, 1f, 0.3f); // Yellow for moderate
+            else
+                valueStyle.normal.textColor = new Color(1f, 0.6f, 0.3f); // Orange for long
+            
+            EditorGUILayout.LabelField($"≈ {seconds:F2}s", valueStyle, GUILayout.Width(70));
         }
         
         EditorGUILayout.EndHorizontal();
+    }
+
+    protected void DrawStyledHeader(string text)
+    {
+        EditorGUILayout.Space(5);
+        GUIStyle headerStyle = new GUIStyle(EditorStyles.boldLabel);
+        headerStyle.fontSize = 14;
+        headerStyle.normal.textColor = new Color(0.8f, 0.9f, 1f);
+        EditorGUILayout.LabelField(text, headerStyle);
+        EditorGUILayout.Space(5);
+    }
+
+    protected void DrawSectionLabel(string text)
+    {
+        GUIStyle sectionStyle = new GUIStyle(EditorStyles.boldLabel);
+        sectionStyle.normal.textColor = new Color(0.7f, 0.8f, 0.9f);
+        EditorGUILayout.LabelField(text, sectionStyle);
+    }
+
+    protected bool DrawFoldoutHeaderWithColor(bool foldout, string text, Color color)
+    {
+        // Draw a colored background for the foldout header
+        Rect rect = EditorGUILayout.BeginHorizontal();
+        bool result = EditorGUILayout.BeginFoldoutHeaderGroup(foldout, text);
+        EditorGUILayout.EndHorizontal();
+        return result;
+    }
+
+    protected void DrawTimingSummary()
+    {
+        if (delayProp == null || durationProp == null) return;
+        
+        var delayRaw = delayProp.FindPropertyRelative("RawValue");
+        var durationRaw = durationProp.FindPropertyRelative("RawValue");
+        
+        if (delayRaw == null || durationRaw == null) return;
+        
+        float delay = delayRaw.longValue / 65536f;
+        float duration = durationRaw.longValue / 65536f;
+        float total = delay + duration;
+        
+        if (total > 0)
+        {
+            EditorGUILayout.Space(5);
+            Rect summaryRect = EditorGUILayout.BeginHorizontal(EditorStyles.helpBox);
+            
+            GUIStyle summaryStyle = new GUIStyle(EditorStyles.miniLabel);
+            summaryStyle.normal.textColor = new Color(0.8f, 0.9f, 1f);
+            EditorGUILayout.LabelField($"⏱ 总时长: {delay:F2}s (延迟) + {duration:F2}s (持续) = {total:F2}s", summaryStyle);
+            
+            EditorGUILayout.EndHorizontal();
+        }
     }
 }
 #endif
