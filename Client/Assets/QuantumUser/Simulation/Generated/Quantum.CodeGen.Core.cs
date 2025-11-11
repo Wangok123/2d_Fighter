@@ -71,11 +71,22 @@ namespace Quantum {
     SpecialTransformation = 301,
     SpecialSummon = 302,
   }
+  public enum AttackKnockbackType : int {
+    AwayFromAttacker,
+    AttackerFacingDirection,
+    Up,
+    Fixed,
+  }
   public enum CharacterTeam : int {
     None,
     Blue,
     Red,
     Neutral,
+  }
+  public enum CommandAttackExecutionType : int {
+    Hitbox,
+    Projectile,
+    SkillField,
   }
   public enum CommandInput : int {
     None = 0,
@@ -117,6 +128,13 @@ namespace Quantum {
     DASHING = 4,
     JUMPED = 5,
     DOUBLE_JUMPED = 6,
+  }
+  public enum KnockbackDirectionType : int {
+    AwayFromSource,
+    AwayFromAttacker,
+    ProjectileDirection,
+    Up,
+    Fixed,
   }
   public enum KnockbackMode : int {
     Physics = 0,
@@ -709,6 +727,90 @@ namespace Quantum {
         FPVector2.Serialize(&p->CastDirection, serializer);
         FPVector2.Serialize(&p->CastVelocity, serializer);
         FPQuaternion.Serialize(&p->CastRotation, serializer);
+    }
+  }
+  [StructLayout(LayoutKind.Explicit)]
+  public unsafe partial struct AttackAbilityCache {
+    public const Int32 SIZE = 40;
+    public const Int32 ALIGNMENT = 8;
+    [FieldOffset(0)]
+    public FP Duration;
+    [FieldOffset(16)]
+    public FP HitboxActiveTime;
+    [FieldOffset(8)]
+    public FP HitboxActiveDuration;
+    [FieldOffset(32)]
+    public FP KnockbackForce;
+    [FieldOffset(24)]
+    public FP HitstunDuration;
+    public override readonly Int32 GetHashCode() {
+      unchecked { 
+        var hash = 10457;
+        hash = hash * 31 + Duration.GetHashCode();
+        hash = hash * 31 + HitboxActiveTime.GetHashCode();
+        hash = hash * 31 + HitboxActiveDuration.GetHashCode();
+        hash = hash * 31 + KnockbackForce.GetHashCode();
+        hash = hash * 31 + HitstunDuration.GetHashCode();
+        return hash;
+      }
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+        var p = (AttackAbilityCache*)ptr;
+        FP.Serialize(&p->Duration, serializer);
+        FP.Serialize(&p->HitboxActiveDuration, serializer);
+        FP.Serialize(&p->HitboxActiveTime, serializer);
+        FP.Serialize(&p->HitstunDuration, serializer);
+        FP.Serialize(&p->KnockbackForce, serializer);
+    }
+  }
+  [StructLayout(LayoutKind.Explicit)]
+  public unsafe partial struct ComboRuntimeConfig {
+    public const Int32 SIZE = 64;
+    public const Int32 ALIGNMENT = 8;
+    [FieldOffset(8)]
+    public FP Duration;
+    [FieldOffset(24)]
+    public FP HitboxActiveTime;
+    [FieldOffset(16)]
+    public FP HitboxActiveDuration;
+    [FieldOffset(56)]
+    public FP KnockbackForce;
+    [FieldOffset(40)]
+    public FP KnockbackDirectionX;
+    [FieldOffset(48)]
+    public FP KnockbackDirectionY;
+    [FieldOffset(32)]
+    public FP HitstunDuration;
+    [FieldOffset(0)]
+    public HitType HitType;
+    [FieldOffset(4)]
+    public Int32 ComboStepIndex;
+    public override readonly Int32 GetHashCode() {
+      unchecked { 
+        var hash = 14293;
+        hash = hash * 31 + Duration.GetHashCode();
+        hash = hash * 31 + HitboxActiveTime.GetHashCode();
+        hash = hash * 31 + HitboxActiveDuration.GetHashCode();
+        hash = hash * 31 + KnockbackForce.GetHashCode();
+        hash = hash * 31 + KnockbackDirectionX.GetHashCode();
+        hash = hash * 31 + KnockbackDirectionY.GetHashCode();
+        hash = hash * 31 + HitstunDuration.GetHashCode();
+        hash = hash * 31 + (Int32)HitType;
+        hash = hash * 31 + ComboStepIndex.GetHashCode();
+        return hash;
+      }
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+        var p = (ComboRuntimeConfig*)ptr;
+        serializer.Stream.Serialize((Int32*)&p->HitType);
+        serializer.Stream.Serialize(&p->ComboStepIndex);
+        FP.Serialize(&p->Duration, serializer);
+        FP.Serialize(&p->HitboxActiveDuration, serializer);
+        FP.Serialize(&p->HitboxActiveTime, serializer);
+        FP.Serialize(&p->HitstunDuration, serializer);
+        FP.Serialize(&p->KnockbackDirectionX, serializer);
+        FP.Serialize(&p->KnockbackDirectionY, serializer);
+        FP.Serialize(&p->KnockbackForce, serializer);
     }
   }
   [StructLayout(LayoutKind.Explicit)]
@@ -1597,32 +1699,41 @@ namespace Quantum {
   }
   [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct AttackComponent : Quantum.IComponent {
-    public const Int32 SIZE = 56;
+    public const Int32 SIZE = 80;
     public const Int32 ALIGNMENT = 8;
     [FieldOffset(0)]
     [ExcludeFromPrototype()]
     public Int32 ComboCounter;
-    [FieldOffset(40)]
-    [ExcludeFromPrototype()]
-    public FrameTimer ComboResetTimer;
-    [FieldOffset(24)]
-    [ExcludeFromPrototype()]
-    public FrameTimer AttackCooldown;
-    [FieldOffset(4)]
-    [ExcludeFromPrototype()]
-    public QBoolean IsAttacking;
-    [FieldOffset(16)]
-    [ExcludeFromPrototype()]
-    public FP HeavyChargeTime;
-    [FieldOffset(8)]
-    [ExcludeFromPrototype()]
-    public QBoolean IsChargingHeavy;
-    [FieldOffset(32)]
-    [ExcludeFromPrototype()]
-    public FrameTimer ChargeTimer;
     [FieldOffset(48)]
     [ExcludeFromPrototype()]
+    public FrameTimer ComboResetTimer;
+    [FieldOffset(32)]
+    [ExcludeFromPrototype()]
+    public FrameTimer AttackCooldown;
+    [FieldOffset(8)]
+    [ExcludeFromPrototype()]
+    public QBoolean IsAttacking;
+    [FieldOffset(24)]
+    [ExcludeFromPrototype()]
+    public FP HeavyChargeTime;
+    [FieldOffset(12)]
+    [ExcludeFromPrototype()]
+    public QBoolean IsChargingHeavy;
+    [FieldOffset(40)]
+    [ExcludeFromPrototype()]
+    public FrameTimer ChargeTimer;
+    [FieldOffset(56)]
+    [ExcludeFromPrototype()]
     public FrameTimer ComboWindowTimer;
+    [FieldOffset(64)]
+    [ExcludeFromPrototype()]
+    public FPVector2 KnockbackDirection;
+    [FieldOffset(4)]
+    [ExcludeFromPrototype()]
+    public QBoolean HasStartedHitboxWindow;
+    [FieldOffset(16)]
+    [ExcludeFromPrototype()]
+    public QListPtr<EntityRef> HitEntitiesThisAttack;
     public override readonly Int32 GetHashCode() {
       unchecked { 
         var hash = 443;
@@ -1634,19 +1745,32 @@ namespace Quantum {
         hash = hash * 31 + IsChargingHeavy.GetHashCode();
         hash = hash * 31 + ChargeTimer.GetHashCode();
         hash = hash * 31 + ComboWindowTimer.GetHashCode();
+        hash = hash * 31 + KnockbackDirection.GetHashCode();
+        hash = hash * 31 + HasStartedHitboxWindow.GetHashCode();
+        hash = hash * 31 + HitEntitiesThisAttack.GetHashCode();
         return hash;
       }
+    }
+    public void ClearPointers(FrameBase f, EntityRef entity) {
+      HitEntitiesThisAttack = default;
+    }
+    public static void OnRemoved(FrameBase frame, EntityRef entity, void* ptr) {
+      var p = (Quantum.AttackComponent*)ptr;
+      p->ClearPointers((Frame)frame, entity);
     }
     public static void Serialize(void* ptr, FrameSerializer serializer) {
         var p = (AttackComponent*)ptr;
         serializer.Stream.Serialize(&p->ComboCounter);
+        QBoolean.Serialize(&p->HasStartedHitboxWindow, serializer);
         QBoolean.Serialize(&p->IsAttacking, serializer);
         QBoolean.Serialize(&p->IsChargingHeavy, serializer);
+        QList.Serialize(&p->HitEntitiesThisAttack, serializer, Statics.SerializeEntityRef);
         FP.Serialize(&p->HeavyChargeTime, serializer);
         FrameTimer.Serialize(&p->AttackCooldown, serializer);
         FrameTimer.Serialize(&p->ChargeTimer, serializer);
         FrameTimer.Serialize(&p->ComboResetTimer, serializer);
         FrameTimer.Serialize(&p->ComboWindowTimer, serializer);
+        FPVector2.Serialize(&p->KnockbackDirection, serializer);
     }
   }
   [StructLayout(LayoutKind.Explicit)]
@@ -1703,6 +1827,42 @@ namespace Quantum {
         AssetRef.Serialize(&p->StatusData, serializer);
         FP.Serialize(&p->CurrentHealth, serializer);
         FrameTimer.Serialize(&p->DisconnectedTimer, serializer);
+    }
+  }
+  [StructLayout(LayoutKind.Explicit)]
+  public unsafe partial struct CommandAttackRuntimeComponent : Quantum.IComponent {
+    public const Int32 SIZE = 12;
+    public const Int32 ALIGNMENT = 4;
+    [FieldOffset(0)]
+    [ExcludeFromPrototype()]
+    public Int32 MatchedSequenceIndex;
+    [FieldOffset(4)]
+    [ExcludeFromPrototype()]
+    public QBoolean HasStartedHitboxWindow;
+    [FieldOffset(8)]
+    [ExcludeFromPrototype()]
+    public QListPtr<EntityRef> HitEntitiesThisAttack;
+    public override readonly Int32 GetHashCode() {
+      unchecked { 
+        var hash = 7669;
+        hash = hash * 31 + MatchedSequenceIndex.GetHashCode();
+        hash = hash * 31 + HasStartedHitboxWindow.GetHashCode();
+        hash = hash * 31 + HitEntitiesThisAttack.GetHashCode();
+        return hash;
+      }
+    }
+    public void ClearPointers(FrameBase f, EntityRef entity) {
+      HitEntitiesThisAttack = default;
+    }
+    public static void OnRemoved(FrameBase frame, EntityRef entity, void* ptr) {
+      var p = (Quantum.CommandAttackRuntimeComponent*)ptr;
+      p->ClearPointers((Frame)frame, entity);
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+        var p = (CommandAttackRuntimeComponent*)ptr;
+        serializer.Stream.Serialize(&p->MatchedSequenceIndex);
+        QBoolean.Serialize(&p->HasStartedHitboxWindow, serializer);
+        QList.Serialize(&p->HitEntitiesThisAttack, serializer, Statics.SerializeEntityRef);
     }
   }
   [StructLayout(LayoutKind.Explicit)]
@@ -2199,6 +2359,8 @@ namespace Quantum {
       BuildSignalsArrayOnComponentRemoved<Quantum.CharacterLevelComponent>();
       BuildSignalsArrayOnComponentAdded<Quantum.CharacterStatusComponent>();
       BuildSignalsArrayOnComponentRemoved<Quantum.CharacterStatusComponent>();
+      BuildSignalsArrayOnComponentAdded<Quantum.CommandAttackRuntimeComponent>();
+      BuildSignalsArrayOnComponentRemoved<Quantum.CommandAttackRuntimeComponent>();
       BuildSignalsArrayOnComponentAdded<Quantum.CommandInputComponent>();
       BuildSignalsArrayOnComponentRemoved<Quantum.CommandInputComponent>();
       BuildSignalsArrayOnComponentAdded<Quantum.HitReactionComponent>();
@@ -2500,7 +2662,9 @@ namespace Quantum {
       typeRegistry.Register(typeof(Quantum.ActiveAbilityInfo), Quantum.ActiveAbilityInfo.SIZE);
       typeRegistry.Register(typeof(AssetGuid), AssetGuid.SIZE);
       typeRegistry.Register(typeof(AssetRef), AssetRef.SIZE);
+      typeRegistry.Register(typeof(Quantum.AttackAbilityCache), Quantum.AttackAbilityCache.SIZE);
       typeRegistry.Register(typeof(Quantum.AttackComponent), Quantum.AttackComponent.SIZE);
+      typeRegistry.Register(typeof(Quantum.AttackKnockbackType), 4);
       typeRegistry.Register(typeof(Quantum.BitSet1024), Quantum.BitSet1024.SIZE);
       typeRegistry.Register(typeof(Quantum.BitSet128), Quantum.BitSet128.SIZE);
       typeRegistry.Register(typeof(Quantum.BitSet2048), Quantum.BitSet2048.SIZE);
@@ -2516,6 +2680,9 @@ namespace Quantum {
       typeRegistry.Register(typeof(Quantum.CharacterStatusComponent), Quantum.CharacterStatusComponent.SIZE);
       typeRegistry.Register(typeof(Quantum.CharacterTeam), 4);
       typeRegistry.Register(typeof(ColorRGBA), ColorRGBA.SIZE);
+      typeRegistry.Register(typeof(Quantum.ComboRuntimeConfig), Quantum.ComboRuntimeConfig.SIZE);
+      typeRegistry.Register(typeof(Quantum.CommandAttackExecutionType), 4);
+      typeRegistry.Register(typeof(Quantum.CommandAttackRuntimeComponent), Quantum.CommandAttackRuntimeComponent.SIZE);
       typeRegistry.Register(typeof(Quantum.CommandInput), 4);
       typeRegistry.Register(typeof(Quantum.CommandInputComponent), Quantum.CommandInputComponent.SIZE);
       typeRegistry.Register(typeof(ComponentPrototypeRef), ComponentPrototypeRef.SIZE);
@@ -2558,6 +2725,7 @@ namespace Quantum {
       typeRegistry.Register(typeof(Quantum.KCCQueryResult), Quantum.KCCQueryResult.SIZE);
       typeRegistry.Register(typeof(Quantum.KCCState), 4);
       typeRegistry.Register(typeof(Quantum.KnockbackConfig), Quantum.KnockbackConfig.SIZE);
+      typeRegistry.Register(typeof(Quantum.KnockbackDirectionType), 4);
       typeRegistry.Register(typeof(Quantum.KnockbackMode), 4);
       typeRegistry.Register(typeof(Quantum.KnockbackStatusEffect), Quantum.KnockbackStatusEffect.SIZE);
       typeRegistry.Register(typeof(LayerMask), LayerMask.SIZE);
@@ -2617,13 +2785,14 @@ namespace Quantum {
       typeRegistry.Register(typeof(Quantum._globals_), Quantum._globals_.SIZE);
     }
     static partial void InitComponentTypeIdGen() {
-      ComponentTypeId.Reset(ComponentTypeId.BuiltInComponentCount + 13)
+      ComponentTypeId.Reset(ComponentTypeId.BuiltInComponentCount + 14)
         .AddBuiltInComponents()
         .Add<Quantum.AbilityEnable>(Quantum.AbilityEnable.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.AbilityInventory>(Quantum.AbilityInventory.Serialize, null, Quantum.AbilityInventory.OnRemoved, ComponentFlags.None)
-        .Add<Quantum.AttackComponent>(Quantum.AttackComponent.Serialize, null, null, ComponentFlags.None)
+        .Add<Quantum.AttackComponent>(Quantum.AttackComponent.Serialize, null, Quantum.AttackComponent.OnRemoved, ComponentFlags.None)
         .Add<Quantum.CharacterLevelComponent>(Quantum.CharacterLevelComponent.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.CharacterStatusComponent>(Quantum.CharacterStatusComponent.Serialize, null, null, ComponentFlags.None)
+        .Add<Quantum.CommandAttackRuntimeComponent>(Quantum.CommandAttackRuntimeComponent.Serialize, null, Quantum.CommandAttackRuntimeComponent.OnRemoved, ComponentFlags.None)
         .Add<Quantum.CommandInputComponent>(Quantum.CommandInputComponent.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.HitReactionComponent>(Quantum.HitReactionComponent.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.KCC2D>(Quantum.KCC2D.Serialize, null, null, ComponentFlags.None)
@@ -2638,14 +2807,17 @@ namespace Quantum {
     public static void EnsureNotStrippedGen() {
       FramePrinter.EnsureNotStripped();
       FramePrinter.EnsurePrimitiveNotStripped<Quantum.AbilityType>();
+      FramePrinter.EnsurePrimitiveNotStripped<Quantum.AttackKnockbackType>();
       FramePrinter.EnsurePrimitiveNotStripped<CallbackFlags>();
       FramePrinter.EnsurePrimitiveNotStripped<Quantum.CharacterTeam>();
+      FramePrinter.EnsurePrimitiveNotStripped<Quantum.CommandAttackExecutionType>();
       FramePrinter.EnsurePrimitiveNotStripped<Quantum.CommandInput>();
       FramePrinter.EnsurePrimitiveNotStripped<Quantum.DashDirection>();
       FramePrinter.EnsurePrimitiveNotStripped<Quantum.HitType>();
       FramePrinter.EnsurePrimitiveNotStripped<Quantum.InputButtons>();
       FramePrinter.EnsurePrimitiveNotStripped<Quantum.KCCContactType>();
       FramePrinter.EnsurePrimitiveNotStripped<Quantum.KCCState>();
+      FramePrinter.EnsurePrimitiveNotStripped<Quantum.KnockbackDirectionType>();
       FramePrinter.EnsurePrimitiveNotStripped<Quantum.KnockbackMode>();
       FramePrinter.EnsurePrimitiveNotStripped<Quantum.ProjectileDestroyReason>();
       FramePrinter.EnsurePrimitiveNotStripped<Quantum.ProjectileMovePattern>();

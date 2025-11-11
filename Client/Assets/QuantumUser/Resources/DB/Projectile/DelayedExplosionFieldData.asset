@@ -20,14 +20,14 @@ MonoBehaviour:
     RawValue: 327680
   TickInterval:
     RawValue: 32768
-  VisualPrototype: {fileID: 3097001405596171208, guid: f028cbea49572ee4a9318af93051297b, type: 3}
+  VisualPrototype: {fileID: 0}
   EffectArea:
-    ShapeType: 4
+    ShapeType: 1
     PolygonCollider:
       Id:
         Value: 0
     CircleRadius:
-      RawValue: 32768
+      RawValue: 131072
     CapsuleSize:
       X:
         RawValue: 65536
@@ -37,9 +37,9 @@ MonoBehaviour:
       RawValue: 32768
     BoxExtents:
       X:
-        RawValue: 32768
+        RawValue: 98304
       Y:
-        RawValue: 32768
+        RawValue: 98959
     PositionOffset:
       X:
         RawValue: 0
@@ -50,11 +50,12 @@ MonoBehaviour:
     UserTag: 0
     IsPersistent: 1
     CompoundShapes: []
-  TargetLayer: 64
+  TargetLayer:
+    BitMask: 64
   AffectAllies: 0
   AffectEnemies: 1
   ExplosionDelay:
-    RawValue: 65536
+    RawValue: 0
   ShowCountdown: 1
   ShowWarningCircle: 1
   ExplosionDamage:

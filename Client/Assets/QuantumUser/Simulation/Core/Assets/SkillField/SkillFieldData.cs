@@ -21,7 +21,7 @@ namespace Quantum
         public Shape2DConfig EffectArea;
         
         [Tooltip("影响层")]
-        public int TargetLayer = 1 << 6;
+        public LayerMask TargetLayer = 1 << 6;
         
         [Tooltip("是否影响友军")]
         public bool AffectAllies = false;
@@ -64,6 +64,14 @@ namespace Quantum
 
         public virtual void ApplyEffect(Frame frame, EntityRef skillFieldEntity, EntityRef target, FPVector2 hitPoint)
         {
+        }
+        
+        protected virtual HitCollection DetectTargetsInEffectArea(Frame frame, EntityRef skillFieldEntity)
+        {
+            Transform2D* transform = frame.Unsafe.GetPointer<Transform2D>(skillFieldEntity);
+
+            Shape2D shape = EffectArea.CreateShape(frame);
+            return frame.Physics2D.OverlapShape(*transform, shape, TargetLayer, QueryOptions.HitDynamics);
         }
     }
 }

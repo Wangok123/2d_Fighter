@@ -68,13 +68,14 @@ MonoBehaviour:
     RawValue: 3277
   KnockbackForce:
     RawValue: 327680
-  KnockbackDirectionX:
-    RawValue: 65536
-  KnockbackDirectionY:
-    RawValue: 0
+  KnockbackType: 0
+  FixedKnockbackDirection:
+    X:
+      RawValue: 65536
+    Y:
+      RawValue: 32768
   HitstunDuration:
     RawValue: 16384
-  HitType: 0
   MaxComboCount: 2
   ComboWindow:
     RawValue: 49152
@@ -87,13 +88,13 @@ MonoBehaviour:
       RawValue: 26214
     KnockbackForce:
       RawValue: 327680
-    KnockbackDirectionX:
-      RawValue: 65536
-    KnockbackDirectionY:
-      RawValue: 0
+    KnockbackDirection:
+      X:
+        RawValue: 65536
+      Y:
+        RawValue: 32768
     HitstunDuration:
       RawValue: 16384
-    HitType: 0
     AttackShape:
       ShapeType: 4
       PolygonCollider:
@@ -124,20 +125,20 @@ MonoBehaviour:
       IsPersistent: 0
       CompoundShapes: []
   - HitboxActiveTime:
-      RawValue: 9830
+      RawValue: 6554
     HitboxActiveDuration:
       RawValue: 6554
     Duration:
       RawValue: 19661
     KnockbackForce:
       RawValue: 524288
-    KnockbackDirectionX:
-      RawValue: 655360
-    KnockbackDirectionY:
-      RawValue: 1310720
+    KnockbackDirection:
+      X:
+        RawValue: 65536
+      Y:
+        RawValue: 32768
     HitstunDuration:
       RawValue: 16384
-    HitType: 0
     AttackShape:
       ShapeType: 4
       PolygonCollider:

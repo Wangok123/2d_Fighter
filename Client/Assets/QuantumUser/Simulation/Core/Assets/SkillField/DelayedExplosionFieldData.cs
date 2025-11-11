@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Photon.Deterministic;
+using Quantum.Physics2D;
 
 namespace Quantum
 {
@@ -57,7 +58,11 @@ namespace Quantum
             
             if (WarningEffect != null)
             {
-                frame.Create(WarningEffect);
+                EntityRef warning = frame.Create(WarningEffect);
+                if (frame.Unsafe.TryGetPointer<Transform2D>(warning, out var warningTransform))
+                {
+                    warningTransform->Position = position;
+                }
             }
         }
 
@@ -65,14 +70,14 @@ namespace Quantum
         {
             if (_hasExploded) return;
 
-            FP elapsed = skillField->TickTimer.ElapsedSeconds(frame);
+            FP elapsed = skillField->LifetimeTimer.ElapsedSeconds(frame);
 
             if (elapsed >= ExplosionDelay)
             {
                 Explode(frame, skillFieldEntity, skillField);
                 _hasExploded = true;
                 
-                frame.Destroy(skillFieldEntity);
+                frame.DestroySkillField(skillFieldEntity);
             }
         }
 
@@ -90,38 +95,35 @@ namespace Quantum
                 }
             }
 
-            FindAndDamageTargets(frame, skillField->Owner, explosionCenter);
+            FindAndDamageTargets(frame, skillFieldEntity, skillField->Owner, explosionCenter);
         }
 
-        private void FindAndDamageTargets(Frame frame, EntityRef owner, FPVector2 center)
+        private void FindAndDamageTargets(Frame frame, EntityRef skillFieldEntity, EntityRef owner, FPVector2 center)
         {
             if (EffectArea == null) return;
 
-            var filter = frame.Filter<Transform2D>();
-            
-            while (filter.NextUnsafe(out var entity, out var transform))
+            Transform2D* centerTransform = frame.Unsafe.GetPointer<Transform2D>(skillFieldEntity);
+            Shape2D shape = EffectArea.CreateShape(frame);
+            HitCollection hits = frame.Physics2D.OverlapShape(*centerTransform, shape, TargetLayer, QueryOptions.HitDynamics);
+
+            if (hits.Count > 0)
             {
-                if (entity == owner) continue;
+                for (int i = 0; i < hits.Count; i++)
+                {
+                    Hit hit = hits[i];
+                    
+                    if (hit.Entity == owner)
+                        continue;
 
-                if (!IsInRange(center, transform->Position))
-                    continue;
+                    if (!ShouldAffectTarget(frame, owner, hit.Entity))
+                        continue;
 
-                if (!ShouldAffectTarget(frame, owner, entity))
-                    continue;
+                    if (!frame.Unsafe.TryGetPointer<Transform2D>(hit.Entity, out var targetTransform))
+                        continue;
 
-                ApplyExplosionDamage(frame, owner, entity, center, transform->Position);
+                    ApplyExplosionDamage(frame, owner, hit.Entity, center, targetTransform->Position);
+                }
             }
-        }
-
-        private bool IsInRange(FPVector2 center, FPVector2 targetPos)
-        {
-            if (EffectArea.ShapeType == Shape2DType.Circle)
-            {
-                FP distance = FPVector2.Distance(center, targetPos);
-                return distance <= EffectArea.CircleRadius;
-            }
-
-            return false;
         }
 
         private void ApplyExplosionDamage(Frame frame, EntityRef owner, EntityRef target, FPVector2 center, FPVector2 targetPos)
@@ -167,7 +169,6 @@ namespace Quantum
 
             return direction * KnockbackForce;
         }
-        
     }
 
     public enum ExplosionKnockbackType

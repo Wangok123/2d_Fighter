@@ -38,9 +38,10 @@ namespace Quantum
             {
                 if (transform->Position.Y <= GroundHeight && projectile->Direction.Y <= FP._0)
                 {
-                    SpawnExplosionField(frame, projectile, transform->Position);
+                    FPVector2 explosionPosition = new FPVector2(transform->Position.X, GroundHeight);
+                    SpawnExplosionField(frame, projectile, explosionPosition.XY);
                     _hasDetonated = true;
-                    frame.Destroy(projectileEntity);
+                    frame.DestroyProjectile(projectileEntity, ProjectileDestroyReason.HitTarget);
                 }
             }
         }
@@ -51,7 +52,15 @@ namespace Quantum
 
             if (CanDetonateInAir || DetonateType == GrenadeDetonateType.FirstContact)
             {
-                SpawnExplosionField(frame, projectile, hitPoint);
+                Transform2D* transform = frame.Unsafe.GetPointer<Transform2D>(projectileEntity);
+                FPVector2 explosionPosition = transform->Position;
+                
+                if (!CanDetonateInAir)
+                {
+                    explosionPosition.Y = GroundHeight;
+                }
+                
+                SpawnExplosionField(frame, projectile, explosionPosition);
                 _hasDetonated = true;
                 return true;
             }

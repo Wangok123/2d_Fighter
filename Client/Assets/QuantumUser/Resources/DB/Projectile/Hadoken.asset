@@ -16,7 +16,6 @@ MonoBehaviour:
     Path: QuantumUser/Resources/DB/Projectile/Hadoken
     Guid:
       Value: 406473470409463380
-  ProjectileType: 0
   Lifetime:
     RawValue: 196608
   VisualPrototype: {fileID: 3097001405596171208, guid: 8ef8ac312f2526b4ab14d4e14d9e9b63, type: 3}
@@ -60,7 +59,8 @@ MonoBehaviour:
     UserTag: 0
     IsPersistent: 1
     CompoundShapes: []
-  CollisionLayer: 64
+  CollisionLayer:
+    BitMask: 64
   PierceTargets: 0
   MaxPierceCount: 1
   BlockedByEnvironment: 1

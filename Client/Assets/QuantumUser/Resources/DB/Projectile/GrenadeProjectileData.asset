@@ -31,12 +31,12 @@ MonoBehaviour:
     RawValue: 16384
   HitType: 2
   CollisionShape:
-    ShapeType: 4
+    ShapeType: 1
     PolygonCollider:
       Id:
         Value: 0
     CircleRadius:
-      RawValue: 32768
+      RawValue: 19661
     CapsuleSize:
       X:
         RawValue: 65536
@@ -46,9 +46,9 @@ MonoBehaviour:
       RawValue: 32768
     BoxExtents:
       X:
-        RawValue: 32768
+        RawValue: 6554
       Y:
-        RawValue: 32768
+        RawValue: 6554
     PositionOffset:
       X:
         RawValue: 0
@@ -65,16 +65,19 @@ MonoBehaviour:
   MaxPierceCount: 1
   BlockedByEnvironment: 1
   InitialSpeed:
-    RawValue: 655360
+    RawValue: 262144
   Gravity:
-    RawValue: 655360
+    RawValue: 327680
   LaunchAngle:
-    RawValue: 2949120
+    RawValue: 5898240
   UseCustomAngle: 0
+  MinimumHeight:
+    RawValue: 0
+  EnableGroundClamp: 0
   ExplosionFieldData:
     Id:
       Value: 304643639164399060
   GroundHeight:
     RawValue: 0
-  DetonateType: 0
+  DetonateType: 1
   CanDetonateInAir: 0

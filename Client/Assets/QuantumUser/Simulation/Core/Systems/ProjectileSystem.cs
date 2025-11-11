@@ -1,9 +1,11 @@
 ﻿using Photon.Deterministic;
 using Quantum.Physics2D;
 using UnityEngine;
+using UnityEngine.Scripting;
 
 namespace Quantum
 {
+    [Preserve]
     public unsafe class ProjectileSystem: SystemMainThreadFilter<ProjectileSystem.Filter>, ISignalSpawnProjectile,
         ISignalDestroyProjectile
     {

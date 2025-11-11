@@ -42,9 +42,6 @@ namespace Quantum
         [Tooltip("最大蓄力时的攻击范围倍率")]
         public FP MaxChargeRangeMultiplier = FP._1_50;
 
-        protected bool _isCharging;
-        protected FP _currentChargeTime;
-
         public override void UpdateInput(Frame frame, EntityRef entityRef, AbilityType abilityType, Ability* ability, SimpleInput2D input)
         {
             if (!ability->AbilityData.Id.IsValid || ability->AbilityData.Id != Guid)
@@ -54,7 +51,7 @@ namespace Quantum
 
             AttackComponent* attackComponent = frame.Unsafe.GetPointer<AttackComponent>(entityRef);
 
-            if (_isCharging)
+            if (attackComponent->IsChargingHeavy)
             {
                 bool wasButtonReleased = input.GetAbilityInputWasPressed(abilityType) == false && 
                                          (abilityType == AbilityType.AttackHeavy ? input.HP.WasReleased : input.LP.WasReleased);
@@ -74,7 +71,6 @@ namespace Quantum
                     }
                     else
                     {
-                        _isCharging = false;
                         attackComponent->IsChargingHeavy = false;
                         attackComponent->ChargeTimer = FrameTimer.None;
                         
@@ -98,7 +94,6 @@ namespace Quantum
                         
                         if (!playerStatus->IsIncapacitated && !abilityInventory->HasActiveAbility)
                         {
-                            _isCharging = true;
                             attackComponent->IsChargingHeavy = true;
                             attackComponent->ChargeTimer = FrameTimer.FromSeconds(frame, MaxChargeTime);
                             
@@ -116,12 +111,13 @@ namespace Quantum
 
         public override bool TryActivateAbility(Frame frame, EntityRef entityRef, PlayerLink* playerLink, AbilityType abilityType, ref Ability ability)
         {
-            if (!_isCharging)
+            AttackComponent* attackComponent = frame.Unsafe.GetPointer<AttackComponent>(entityRef);
+            
+            if (!attackComponent->IsChargingHeavy)
             {
                 return false;
             }
-
-            AttackComponent* attackComponent = frame.Unsafe.GetPointer<AttackComponent>(entityRef);
+            
             FP currentChargeTime = attackComponent->ChargeTimer.ElapsedSeconds(frame);
 
             if (currentChargeTime < MinChargeTime)
@@ -137,7 +133,6 @@ namespace Quantum
             {
                 attackComponent->IsChargingHeavy = false;
                 attackComponent->ChargeTimer = FrameTimer.None;
-                _isCharging = false;
                 
                 if (!CanMoveWhileCharging && frame.Unsafe.TryGetPointer<AbilityEnable>(entityRef, out var abilityEnable))
                 {
@@ -150,7 +145,7 @@ namespace Quantum
             return activated;
         }
 
-        protected override void OnHitTarget(Frame frame, EntityRef attacker, Hit hit, FPVector2 hitLateralDirection)
+        protected override void OnHitTarget(Frame frame, EntityRef attacker, EntityRef target, FPVector2 attackerPos, FPVector2 targetPos)
         {
             AttackComponent* attackComponent = frame.Unsafe.GetPointer<AttackComponent>(attacker);
             FP chargeTime = attackComponent->HeavyChargeTime;
@@ -165,7 +160,7 @@ namespace Quantum
                 KnockbackForce *= knockbackMultiplier;
             }
 
-            base.OnHitTarget(frame, attacker, hit, hitLateralDirection);
+            base.OnHitTarget(frame, attacker, target, attackerPos, targetPos);
             
             KnockbackForce = oldKnockbackForce;
         }
@@ -233,10 +228,10 @@ namespace Quantum
 
         protected override void OnAbilityCancelled(Frame frame, EntityRef entityRef, AbilityType cancelledAbilityType)
         {
-            if (_isCharging)
+            AttackComponent* attackComponent = frame.Unsafe.GetPointer<AttackComponent>(entityRef);
+            
+            if (attackComponent->IsChargingHeavy)
             {
-                AttackComponent* attackComponent = frame.Unsafe.GetPointer<AttackComponent>(entityRef);
-                _isCharging = false;
                 attackComponent->IsChargingHeavy = false;
                 attackComponent->ChargeTimer = FrameTimer.None;
                 

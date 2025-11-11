@@ -21,17 +21,14 @@ namespace Quantum
         [Tooltip("击退力度")]
         public FP KnockbackForce = 5;
         
-        [Tooltip("击退方向X")]
-        public FP KnockbackDirectionX = FP._1;
+        [Tooltip("击退类型")]
+        public KnockbackDirectionType KnockbackType = KnockbackDirectionType.AwayFromSource;
         
-        [Tooltip("击退方向Y")]
-        public FP KnockbackDirectionY = FP._0_50;
+        [Tooltip("固定击退方向（仅当类型为Fixed时使用）")]
+        public FPVector2 FixedKnockbackDirection = new FPVector2(FP._1, FP._0_50);
         
         [Tooltip("受击硬直时间")]
         public FP HitstunDuration = FP._0_25;
-        
-        [Tooltip("受击类型")]
-        public HitType HitType = HitType.Light;
 
         [Header("碰撞设置")]
         [Tooltip("碰撞形状")]
@@ -65,19 +62,58 @@ namespace Quantum
         {
             if (frame.Unsafe.TryGetPointer<HitReactionComponent>(target, out var hitReaction))
             {
-                ApplyDamageAndKnockback(frame, projectile->Owner, target, hitReaction);
+                ApplyDamageAndKnockback(frame, projectileEntity, projectile->Owner, target, hitReaction, hitPoint);
                 return true;
             }
 
             return false;
         }
 
-        protected virtual void ApplyDamageAndKnockback(Frame frame, EntityRef attacker, EntityRef target, HitReactionComponent* hitReaction)
+        protected virtual void ApplyDamageAndKnockback(Frame frame, EntityRef projectileEntity, EntityRef attacker, EntityRef target, HitReactionComponent* hitReaction, FPVector2 hitPoint)
         {
-            FPVector2 knockbackDirection = new FPVector2(KnockbackDirectionX, KnockbackDirectionY).Normalized;
+            FPVector2 knockbackDirection = CalculateKnockbackDirection(frame, projectileEntity, attacker, target, hitPoint);
             FPVector2 knockbackVelocity = knockbackDirection * KnockbackForce;
 
             hitReaction->ApplyKnockback(frame, target, knockbackVelocity, HitstunDuration);
+        }
+        
+        protected virtual FPVector2 CalculateKnockbackDirection(Frame frame, EntityRef projectileEntity, EntityRef attacker, EntityRef target, FPVector2 hitPoint)
+        {
+            switch (KnockbackType)
+            {
+                case KnockbackDirectionType.AwayFromSource:
+                    if (frame.Unsafe.TryGetPointer<Transform2D>(projectileEntity, out var projectileTransform) &&
+                        frame.Unsafe.TryGetPointer<Transform2D>(target, out var targetTransform))
+                    {
+                        FPVector2 direction = targetTransform->Position - projectileTransform->Position;
+                        return direction.Normalized;
+                    }
+                    break;
+
+                case KnockbackDirectionType.AwayFromAttacker:
+                    if (frame.Unsafe.TryGetPointer<Transform2D>(attacker, out var attackerTransform) &&
+                        frame.Unsafe.TryGetPointer<Transform2D>(target, out var targetTransform2))
+                    {
+                        FPVector2 direction = targetTransform2->Position - attackerTransform->Position;
+                        return direction.Normalized;
+                    }
+                    break;
+
+                case KnockbackDirectionType.ProjectileDirection:
+                    if (frame.Unsafe.TryGetPointer<ProjectileComponent>(projectileEntity, out var projectileComp))
+                    {
+                        return projectileComp->Direction.Normalized;
+                    }
+                    break;
+
+                case KnockbackDirectionType.Up:
+                    return FPVector2.Up;
+
+                case KnockbackDirectionType.Fixed:
+                    return FixedKnockbackDirection.Normalized;
+            }
+
+            return FixedKnockbackDirection.Normalized;
         }
     }
 }

@@ -6,13 +6,6 @@ using UnityEngine;
 
 namespace Quantum
 {
-    public enum CommandAttackExecutionType
-    {
-        Hitbox,
-        Projectile,
-        SkillField,
-    }
-
     [Serializable]
     public class CommandSequenceConfig
     {
@@ -78,8 +71,7 @@ namespace Quantum
         [Tooltip("生成位置偏移")]
         public FPVector2 FieldSpawnOffset = FPVector2.Zero;
     }
-
-    [Serializable]
+    
     public unsafe partial class CommandAttackAbilityData : AbilityData
     {
         [Header("指令输入设置")]
@@ -88,11 +80,6 @@ namespace Quantum
         
         [Tooltip("指令序列配置")]
         public CommandSequenceConfig[] CommandSequences = new CommandSequenceConfig[0];
-
-        private int _matchedSequenceIndex = -1;
-        private CommandSequenceConfig _currentSequence;
-        private bool _hasStartedHitboxWindow;
-        private HashSet<EntityRef> _hitEntitiesThisAttack = new HashSet<EntityRef>();
 
         public override void UpdateInput(Frame frame, EntityRef entityRef, AbilityType abilityType, Ability* ability, SimpleInput2D input)
         {
@@ -116,10 +103,12 @@ namespace Quantum
             {
                 commandInput->RecordInput(frame, buttonInput);
                 
-                _matchedSequenceIndex = CheckForMatchingSequence(frame, entityRef, commandInput);
+                int matchedSequenceIndex = CheckForMatchingSequence(frame, entityRef, commandInput);
                 
-                if (_matchedSequenceIndex >= 0)
+                if (matchedSequenceIndex >= 0)
                 {
+                    CommandAttackRuntimeComponent* runtime = GetOrCreateRuntimeComponent(frame, entityRef);
+                    runtime->MatchedSequenceIndex = matchedSequenceIndex;
                     ability->BufferInput(frame);
                 }
             }
@@ -132,13 +121,16 @@ namespace Quantum
 
         public override bool TryActivateAbility(Frame frame, EntityRef entityRef, PlayerLink* playerLink, AbilityType abilityType, ref Ability ability)
         {
-            if (_matchedSequenceIndex < 0 || _matchedSequenceIndex >= CommandSequences.Length)
+            if (!frame.Unsafe.TryGetPointer<CommandAttackRuntimeComponent>(entityRef, out var runtime))
                 return false;
 
-            _currentSequence = CommandSequences[_matchedSequenceIndex];
+            if (runtime->MatchedSequenceIndex < 0 || runtime->MatchedSequenceIndex >= CommandSequences.Length)
+                return false;
 
-            Duration = _currentSequence.Duration;
-            Cooldown = _currentSequence.Cooldown;
+            CommandSequenceConfig currentSequence = CommandSequences[runtime->MatchedSequenceIndex];
+
+            Duration = currentSequence.Duration;
+            Cooldown = currentSequence.Cooldown;
 
             bool activated = base.TryActivateAbility(frame, entityRef, playerLink, abilityType, ref ability);
 
@@ -149,15 +141,19 @@ namespace Quantum
                     commandInput->ClearBuffer();
                 }
 
-                _hasStartedHitboxWindow = false;
-                _hitEntitiesThisAttack.Clear();
-
-                ExecuteCommandAttack(frame, entityRef, ref ability);
+                runtime->HasStartedHitboxWindow = false;
                 
-                frame.Events.CommandAttackExecuted(entityRef, _matchedSequenceIndex);
+                if (runtime->HitEntitiesThisAttack.Ptr != default)
+                {
+                    frame.FreeList(runtime->HitEntitiesThisAttack);
+                }
+                runtime->HitEntitiesThisAttack = frame.AllocateList<EntityRef>();
+
+                ExecuteCommandAttack(frame, entityRef, currentSequence, runtime->MatchedSequenceIndex);
+                
+                frame.Events.CommandAttackExecuted(entityRef, runtime->MatchedSequenceIndex);
             }
 
-            _matchedSequenceIndex = -1;
             return activated;
         }
 
@@ -165,67 +161,91 @@ namespace Quantum
         {
             Ability.AbilityState abilityState = base.UpdateAbility(frame, entityRef, ability);
 
-            if (_currentSequence != null && _currentSequence.ExecutionType == CommandAttackExecutionType.Hitbox)
+            if (!frame.Unsafe.TryGetPointer<CommandAttackRuntimeComponent>(entityRef, out var runtime))
+                return abilityState;
+
+            if (runtime->MatchedSequenceIndex >= 0 && runtime->MatchedSequenceIndex < CommandSequences.Length)
             {
-                UpdateHitboxAttack(frame, entityRef, ability, abilityState);
+                CommandSequenceConfig currentSequence = CommandSequences[runtime->MatchedSequenceIndex];
+                
+                if (currentSequence.ExecutionType == CommandAttackExecutionType.Hitbox)
+                {
+                    UpdateHitboxAttack(frame, entityRef, ability, currentSequence, runtime);
+                }
+            }
+
+            if (abilityState.IsActiveEndTick)
+            {
+                if (runtime->HitEntitiesThisAttack.Ptr != default)
+                {
+                    frame.FreeList(runtime->HitEntitiesThisAttack);
+                    runtime->HitEntitiesThisAttack = default;
+                }
+                runtime->MatchedSequenceIndex = -1;
             }
 
             return abilityState;
         }
-
-        private void ExecuteCommandAttack(Frame frame, EntityRef entityRef, ref Ability ability)
+        
+        private CommandAttackRuntimeComponent* GetOrCreateRuntimeComponent(Frame frame, EntityRef entityRef)
         {
-            switch (_currentSequence.ExecutionType)
+            frame.AddOrGet<CommandAttackRuntimeComponent>(entityRef, out var result);
+            return result;
+        }
+
+        private void ExecuteCommandAttack(Frame frame, EntityRef entityRef, CommandSequenceConfig sequence, int sequenceIndex)
+        {
+            switch (sequence.ExecutionType)
             {
                 case CommandAttackExecutionType.Hitbox:
                     break;
                     
                 case CommandAttackExecutionType.Projectile:
-                    SpawnProjectile(frame, entityRef);
+                    SpawnProjectile(frame, entityRef, sequence);
                     break;
                     
                 case CommandAttackExecutionType.SkillField:
-                    SpawnSkillField(frame, entityRef);
+                    SpawnSkillField(frame, entityRef, sequence);
                     break;
             }
         }
 
-        private void UpdateHitboxAttack(Frame frame, EntityRef entityRef, Ability* ability, Ability.AbilityState abilityState)
+        private void UpdateHitboxAttack(Frame frame, EntityRef entityRef, Ability* ability, CommandSequenceConfig sequence, CommandAttackRuntimeComponent* runtime)
         {
             FP elapsedTime = ability->DurationTimer.ElapsedTime;
-            FP hitboxStartTime = _currentSequence.HitboxActiveTime;
-            FP hitboxEndTime = hitboxStartTime + _currentSequence.HitboxActiveDuration;
+            FP hitboxStartTime = sequence.HitboxActiveTime;
+            FP hitboxEndTime = hitboxStartTime + sequence.HitboxActiveDuration;
 
             if (elapsedTime >= hitboxStartTime && elapsedTime < hitboxEndTime)
             {
-                if (!_hasStartedHitboxWindow)
+                if (!runtime->HasStartedHitboxWindow)
                 {
-                    _hasStartedHitboxWindow = true;
-                    OnHitboxWindowStart(frame, entityRef, ability);
+                    runtime->HasStartedHitboxWindow = true;
+                    OnHitboxWindowStart(frame, entityRef, ability, runtime->MatchedSequenceIndex);
                 }
 
-                ExecuteAttackHitbox(frame, entityRef, ability);
+                ExecuteAttackHitbox(frame, entityRef, sequence, runtime);
             }
         }
 
-        private void OnHitboxWindowStart(Frame frame, EntityRef entityRef, Ability* ability)
+        private void OnHitboxWindowStart(Frame frame, EntityRef entityRef, Ability* ability, int sequenceIndex)
         {
-#if UNITY_EDITOR
-            frame.Events.AttackHitboxActivated(entityRef, _matchedSequenceIndex);
-#endif
+            frame.Events.AttackHitboxActivated(entityRef, sequenceIndex);
         }
 
-        private void ExecuteAttackHitbox(Frame frame, EntityRef entityRef, Ability* ability)
+        private void ExecuteAttackHitbox(Frame frame, EntityRef entityRef, CommandSequenceConfig sequence, CommandAttackRuntimeComponent* runtime)
         {
             Transform2D* transform = frame.Unsafe.GetPointer<Transform2D>(entityRef);
             MovementComponent* movement = frame.Unsafe.GetPointer<MovementComponent>(entityRef);
             GameSettingsData gameSettings = frame.FindAsset<GameSettingsData>(frame.RuntimeConfig.GameSettingsData.Id);
 
-            var shape = CreateAttackShapeWithDirection(frame, _currentSequence.AttackShape, movement->IsFacingRight);
+            var shape = CreateAttackShapeWithDirection(frame, sequence.AttackShape, movement->IsFacingRight);
             HitCollection hits = frame.Physics2D.OverlapShape(*transform, shape, gameSettings.PlayerLayerMask, QueryOptions.HitDynamics);
 
             if (hits.Count > 0)
             {
+                var hitList = frame.ResolveList(runtime->HitEntitiesThisAttack);
+                
                 for (int i = 0; i < hits.Count; i++)
                 {
                     Hit hit = hits[i];
@@ -233,44 +253,45 @@ namespace Quantum
                     if (hit.Entity == entityRef)
                         continue;
 
-                    if (_hitEntitiesThisAttack.Contains(hit.Entity))
+                    if (hitList.Contains(hit.Entity))
                         continue;
 
                     if (!frame.Has<HitReactionComponent>(hit.Entity))
                         continue;
 
-                    _hitEntitiesThisAttack.Add(hit.Entity);
+                    hitList.Add(hit.Entity);
 
                     Transform2D* targetTransform = frame.Unsafe.GetPointer<Transform2D>(hit.Entity);
                     FPVector2 hitDirection = (targetTransform->Position - transform->Position).Normalized;
 
-                    ApplyHitboxDamage(frame, entityRef, hit.Entity, hitDirection);
+                    ApplyHitboxDamage(frame, hit.Entity, sequence);
                 }
             }
         }
 
-        private void ApplyHitboxDamage(Frame frame, EntityRef attacker, EntityRef target, FPVector2 hitDirection)
+        private void ApplyHitboxDamage(Frame frame, EntityRef target, CommandSequenceConfig sequence)
         {
             if (!frame.Unsafe.TryGetPointer<HitReactionComponent>(target, out var hitReaction))
                 return;
 
             FPVector2 knockbackDirection = new FPVector2(
-                _currentSequence.KnockbackDirectionX, 
-                _currentSequence.KnockbackDirectionY
+                sequence.KnockbackDirectionX, 
+                sequence.KnockbackDirectionY
             ).Normalized;
             
-            FPVector2 knockbackVelocity = knockbackDirection * _currentSequence.KnockbackForce;
+            FPVector2 knockbackVelocity = knockbackDirection * sequence.KnockbackForce;
 
             if (frame.Unsafe.TryGetPointer<HitReactionComponent>(target, out var hitReactionData))
             {
                 var data = frame.FindAsset(hitReactionData->HitReactionData);
-                data.OnKnockbackApplied(frame, target, hitReaction, _currentSequence.HitstunDuration, knockbackVelocity);
+                data.OnKnockbackApplied(frame, target, hitReaction, sequence.HitstunDuration, knockbackVelocity);
             }
         }
 
-        private void SpawnProjectile(Frame frame, EntityRef entityRef)
+
+        private void SpawnProjectile(Frame frame, EntityRef entityRef, CommandSequenceConfig sequence)
         {
-            if (!_currentSequence.ProjectileData.Id.IsValid)
+            if (!sequence.ProjectileData.Id.IsValid)
                 return;
 
             Transform2D* transform = frame.Unsafe.GetPointer<Transform2D>(entityRef);
@@ -278,29 +299,29 @@ namespace Quantum
 
             FPVector2 direction = movement->IsFacingRight ? FPVector2.Right : FPVector2.Left;
             FPVector2 spawnOffset = new FPVector2(
-                _currentSequence.SpawnOffset.X * (movement->IsFacingRight ? FP._1 : -FP._1),
-                _currentSequence.SpawnOffset.Y
+                sequence.SpawnOffset.X * (movement->IsFacingRight ? FP._1 : -FP._1),
+                sequence.SpawnOffset.Y
             );
             FPVector2 spawnPosition = transform->Position + spawnOffset;
 
-            frame.SpawnProjectile(_currentSequence.ProjectileData, spawnPosition, direction, entityRef);
+            frame.SpawnProjectile(sequence.ProjectileData, spawnPosition, direction, entityRef);
         }
 
-        private void SpawnSkillField(Frame frame, EntityRef entityRef)
+        private void SpawnSkillField(Frame frame, EntityRef entityRef, CommandSequenceConfig sequence)
         {
-            if (!_currentSequence.SkillFieldData.Id.IsValid)
+            if (!sequence.SkillFieldData.Id.IsValid)
                 return;
 
             Transform2D* transform = frame.Unsafe.GetPointer<Transform2D>(entityRef);
             MovementComponent* movement = frame.Unsafe.GetPointer<MovementComponent>(entityRef);
 
             FPVector2 spawnOffset = new FPVector2(
-                _currentSequence.FieldSpawnOffset.X * (movement->IsFacingRight ? FP._1 : -FP._1),
-                _currentSequence.FieldSpawnOffset.Y
+                sequence.FieldSpawnOffset.X * (movement->IsFacingRight ? FP._1 : -FP._1),
+                sequence.FieldSpawnOffset.Y
             );
             FPVector2 spawnPosition = transform->Position + spawnOffset;
 
-            frame.SpawnSkillField(_currentSequence.SkillFieldData, spawnPosition, entityRef);
+            frame.SpawnSkillField(sequence.SkillFieldData, spawnPosition, entityRef);
         }
 
         private int CheckForMatchingSequence(Frame frame, EntityRef entityRef, CommandInputComponent* commandInput)
@@ -321,16 +342,27 @@ namespace Quantum
 
         private Shape2D CreateAttackShapeWithDirection(Frame frame, Shape2DConfig shapeConfig, bool isFacingRight)
         {
-            Shape2D shape = shapeConfig.CreateShape(frame);
-            
-            if (!isFacingRight && shape.Type == Shape2DType.Box)
+            Shape2DConfig adjustedConfig = new Shape2DConfig
             {
-                FPVector2 center = shape.Box.Extents;
-                center.X = -center.X;
-                shape.Box.Extents = center;
+                ShapeType = shapeConfig.ShapeType,
+                PolygonCollider = shapeConfig.PolygonCollider,
+                CircleRadius = shapeConfig.CircleRadius,
+                CapsuleSize = shapeConfig.CapsuleSize,
+                EdgeExtent = shapeConfig.EdgeExtent,
+                BoxExtents = shapeConfig.BoxExtents,
+                PositionOffset = shapeConfig.PositionOffset,
+                RotationOffset = shapeConfig.RotationOffset,
+                UserTag = shapeConfig.UserTag,
+                IsPersistent = shapeConfig.IsPersistent,
+                CompoundShapes = shapeConfig.CompoundShapes
+            };
+    
+            if (!isFacingRight)
+            {
+                adjustedConfig.PositionOffset.X = -adjustedConfig.PositionOffset.X;
             }
 
-            return shape;
+            return adjustedConfig.CreateShape(frame);
         }
     }
 }

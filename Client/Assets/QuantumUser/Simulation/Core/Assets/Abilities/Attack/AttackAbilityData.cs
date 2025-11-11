@@ -1,12 +1,11 @@
 using Photon.Deterministic;
 using System;
-using System.Collections.Generic;
+using Quantum.Collections;
 using Quantum.Physics2D;
 using UnityEngine;
 
 namespace Quantum
 {
-    [Serializable]
     public unsafe partial class AttackAbilityData : AbilityData
     {
         [Header("Attack Range")]
@@ -24,30 +23,32 @@ namespace Quantum
         [Tooltip("击退力度")]
         public FP KnockbackForce = 5;
         
-        [Tooltip("击退方向（水平）")]
-        public FP KnockbackDirectionX = FP._1;
+        [Tooltip("击退类型")]
+        public AttackKnockbackType KnockbackType = AttackKnockbackType.AwayFromAttacker;
         
-        [Tooltip("击退方向（垂直）")]
-        public FP KnockbackDirectionY = FP._0_50;
+        [Tooltip("固定击退方向（仅当类型为Fixed时使用）")]
+        public FPVector2 FixedKnockbackDirection = new FPVector2(FP._1, FP._0_50);
         
         [Header("Hitstun")]
         [Tooltip("受击硬直时间")]
         public FP HitstunDuration = FP._0_25;
-        
-        [Tooltip("受击类型")]
-        public HitType HitType = HitType.Light;
-
-        protected bool _hasStartedHitboxWindow;
-        protected HashSet<EntityRef> _hitEntitiesThisAttack = new HashSet<EntityRef>();
 
         public override Ability.AbilityState UpdateAbility(Frame frame, EntityRef entityRef, Ability* ability)
         {
             Ability.AbilityState abilityState = base.UpdateAbility(frame, entityRef, ability);
+            
+            AttackComponent* attackComponent = frame.Unsafe.GetPointer<AttackComponent>(entityRef);
 
             if (abilityState.IsActiveStartTick)
             {
-                _hasStartedHitboxWindow = false;
-                _hitEntitiesThisAttack.Clear();
+                attackComponent->HasStartedHitboxWindow = false;
+                
+                if (attackComponent->HitEntitiesThisAttack.Ptr != default)
+                {
+                    frame.FreeList(attackComponent->HitEntitiesThisAttack);
+                }
+                attackComponent->HitEntitiesThisAttack = frame.AllocateList<EntityRef>();
+                
                 OnAttackActivate(frame, entityRef, ability);
             }
 
@@ -59,13 +60,22 @@ namespace Quantum
 
                 if (elapsedTime >= hitboxStartTime && elapsedTime < hitboxEndTime)
                 {
-                    if (!_hasStartedHitboxWindow)
+                    if (!attackComponent->HasStartedHitboxWindow)
                     {
                         OnHitboxWindowStart(frame, entityRef, ability);
-                        _hasStartedHitboxWindow = true;
+                        attackComponent->HasStartedHitboxWindow = true;
                     }
                     
                     ExecuteAttackHitbox(frame, entityRef, ability);
+                }
+            }
+            
+            if (abilityState.IsActiveEndTick)
+            {
+                if (attackComponent->HitEntitiesThisAttack.Ptr != default)
+                {
+                    frame.FreeList(attackComponent->HitEntitiesThisAttack);
+                    attackComponent->HitEntitiesThisAttack = default;
                 }
             }
             
@@ -89,6 +99,7 @@ namespace Quantum
         protected virtual void ExecuteAttackHitbox(Frame frame, EntityRef entityRef, Ability* ability)
         {
             Transform2D* transform = frame.Unsafe.GetPointer<Transform2D>(entityRef);
+            AttackComponent* attackComponent = frame.Unsafe.GetPointer<AttackComponent>(entityRef);
             GameSettingsData gameSettingsData = frame.FindAsset<GameSettingsData>(frame.RuntimeConfig.GameSettingsData.Id);
 
             bool isFacingRight = GetIsFacingRight(frame, entityRef);
@@ -98,6 +109,8 @@ namespace Quantum
 
             if (hits.Count > 0)
             {
+                var hitList = frame.ResolveList(attackComponent->HitEntitiesThisAttack);
+                
                 for (int i = 0; i < hits.Count; i++)
                 {
                     Hit hit = hits[i];
@@ -105,57 +118,58 @@ namespace Quantum
                     if (hit.Entity == entityRef)
                         continue;
                     
-                    if (_hitEntitiesThisAttack.Contains(hit.Entity))
+                    if (hitList.Contains(hit.Entity))
                         continue;
 
                     if (!frame.Unsafe.TryGetPointer<Transform2D>(hit.Entity, out var hitPlayerTransform))
                         continue;
 
-                    _hitEntitiesThisAttack.Add(hit.Entity);
+                    hitList.Add(hit.Entity);
 
-                    FPVector2 hitLateralDirection = hitPlayerTransform->Position - transform->Position;
-                    hitLateralDirection = hitLateralDirection.Normalized;
-
-                    OnHitTarget(frame, entityRef, hit, hitLateralDirection);
+                    OnHitTarget(frame, entityRef, hit.Entity, transform->Position, hitPlayerTransform->Position);
                 }
             }
         }
         
-        public override unsafe bool TryActivateAbility(Frame frame, EntityRef entityRef, PlayerLink* playerLink, AbilityType abilityType, ref Ability ability)
+        protected virtual void OnHitTarget(Frame frame, EntityRef attacker, EntityRef target, FPVector2 attackerPos, FPVector2 targetPos)
         {
-            bool activated = base.TryActivateAbility(frame, entityRef, playerLink, abilityType, ref ability);
-
-            if (activated)
-            {
-                //frame.Events.OnPlayerAttacked(entityRef);
-            }
-
-            return activated;
-        }
-        
-        protected virtual void OnHitTarget(Frame frame, EntityRef attacker, Hit hit, FPVector2 hitLateralDirection)
-        {
-            EntityRef target = hit.Entity;
-    
             if (frame.Has<HitReactionComponent>(target))
             {
-                ApplyKnockback(frame, attacker, target, hitLateralDirection);
+                ApplyKnockback(frame, attacker, target, attackerPos, targetPos);
             }
         }
 
-        protected virtual void ApplyKnockback(Frame frame, EntityRef attacker, EntityRef target, FPVector2 hitDirection)
+        protected virtual void ApplyKnockback(Frame frame, EntityRef attacker, EntityRef target, FPVector2 attackerPos, FPVector2 targetPos)
         {
             if (!frame.Unsafe.TryGetPointer<HitReactionComponent>(target, out var hitReaction))
                 return;
 
-            FPVector2 knockbackDirection2D = new FPVector2(
-                KnockbackDirectionX * (hitDirection.X > 0 ? FP._1 : -FP._1),
-                KnockbackDirectionY
-            ).Normalized;
-    
-            FPVector2 knockbackVelocity = knockbackDirection2D * KnockbackForce;
+            FPVector2 knockbackDirection = CalculateKnockbackDirection(frame, attacker, attackerPos, targetPos);
+            FPVector2 knockbackVelocity = knockbackDirection * KnockbackForce;
     
             hitReaction->ApplyKnockback(frame, target, knockbackVelocity, HitstunDuration);
+        }
+
+        protected virtual FPVector2 CalculateKnockbackDirection(Frame frame, EntityRef attacker, FPVector2 attackerPos, FPVector2 targetPos)
+        {
+            switch (KnockbackType)
+            {
+                case AttackKnockbackType.AwayFromAttacker:
+                    FPVector2 awayDirection = targetPos - attackerPos;
+                    return awayDirection.Normalized;
+
+                case AttackKnockbackType.AttackerFacingDirection:
+                    bool isFacingRight = GetIsFacingRight(frame, attacker);
+                    return new FPVector2(isFacingRight ? FP._1 : -FP._1, FixedKnockbackDirection.Y).Normalized;
+
+                case AttackKnockbackType.Up:
+                    return FPVector2.Up;
+
+                case AttackKnockbackType.Fixed:
+                    return FixedKnockbackDirection.Normalized;
+            }
+
+            return FixedKnockbackDirection.Normalized;
         }
         
         protected virtual bool GetIsFacingRight(Frame frame, EntityRef entityRef)

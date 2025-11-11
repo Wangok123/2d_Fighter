@@ -28,7 +28,6 @@ component CharacterLevelComponent
 
 component AttackComponent
 {
-	// Single source of character configuration - ModularCharacterConfig replaces legacy AttackConfig
 	[ExcludeFromPrototype] Int32 ComboCounter;
 	[ExcludeFromPrototype] FrameTimer ComboResetTimer;
 	[ExcludeFromPrototype] FrameTimer AttackCooldown;
@@ -38,6 +37,14 @@ component AttackComponent
 	
 	[ExcludeFromPrototype] FrameTimer ChargeTimer;
     [ExcludeFromPrototype] FrameTimer ComboWindowTimer;
+    
+    [ExcludeFromPrototype] FPVector2 KnockbackDirection;
+    
+    [ExcludeFromPrototype]
+    QBoolean HasStartedHitboxWindow;
+    
+    [ExcludeFromPrototype]
+    list<EntityRef> HitEntitiesThisAttack;
 }
 
 // Signals
