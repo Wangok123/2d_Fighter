@@ -30,9 +30,6 @@ namespace Quantum
         
         [Tooltip("击退方向")]
         public KnockbackDirection KnockbackDirection = KnockbackDirection.FromCenter;
-        
-        [Tooltip("受击硬直时间")]
-        public FP HitstunDuration = FP._0_25;
     }
 
     public enum DamageType

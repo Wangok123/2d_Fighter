@@ -25,7 +25,7 @@ namespace Quantum
 
             if (!filter.SkillField->LifetimeTimer.IsRunning(frame))
             {
-                frame.Signals.DestroySkillField(filter.Entity);
+                DestroySkillField(frame, filter.Entity);
                 return;
             }
 
@@ -144,7 +144,7 @@ namespace Quantum
                 {
                     TriggerDelayedExplosion(frame, skillFieldEntity, skillField, delayedData);
                     runtime->HasExploded = true;
-                    frame.Signals.DestroySkillField(skillFieldEntity);
+                    DestroySkillField(frame, skillFieldEntity);
                 }
             }
         }
@@ -359,12 +359,11 @@ namespace Quantum
                     if (!skillFieldData.ShouldAffectTarget(frame, skillField->Owner, hit.Entity))
                         continue;
 
-                    frame.Signals.OnSkillFieldApplyEffect(skillFieldEntity, hit.Entity, hit.Point);
+                    OnSkillFieldApplyEffect(frame, skillFieldEntity, hit.Entity, hit.Point);
                     affectedList.Add(hit.Entity);
                 }
             }
-
-            frame.Signals.OnSkillFieldTick(skillFieldEntity);
+            
             frame.Events.OnSkillFieldTick(skillFieldEntity, skillField->AffectedEntities);
         }
     }

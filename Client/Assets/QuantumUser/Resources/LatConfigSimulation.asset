@@ -95,6 +95,7 @@ MonoBehaviour:
     - Water
     - UI
     - Player
+    - Projectile
     - 
     - 
     - 
@@ -119,8 +120,7 @@ MonoBehaviour:
     - 
     - 
     - 
-    - 
-    LayerMatrix: ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
+    LayerMatrix: ffffffffffffffffffffffffffffffffffffffffffffffff7fffffff3fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
   Navigation:
     DefaultNavMeshAgent:
       Id:

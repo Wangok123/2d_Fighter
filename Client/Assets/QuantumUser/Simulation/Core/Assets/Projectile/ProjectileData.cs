@@ -42,9 +42,6 @@ namespace Quantum
         
         [Tooltip("最大穿透数量（-1为无限）")]
         public int MaxPierceCount = 1;
-        
-        [Tooltip("是否被环境阻挡")]
-        public bool BlockedByEnvironment = true;
 
         public virtual FP GetBaseDamage(Frame frame, EntityRef projectileEntity)
         {

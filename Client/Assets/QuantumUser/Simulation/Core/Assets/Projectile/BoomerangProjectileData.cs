@@ -26,6 +26,14 @@ namespace Quantum
         
         [Tooltip("旋转速度（度/秒）")]
         public FP RotationSpeed = 360;
+        
+        // 修改：添加可选KCC配置
+        [Header("物理设置（可选）")]
+        [Tooltip("是否使用KCC2D物理")]
+        public bool UseKCC = false;
+        
+        [Tooltip("KCC配置")]
+        public AssetRef<CharacterController2DConfig> KCCConfig;
     }
 
     public enum BoomerangBehaviorOnOwnerLost

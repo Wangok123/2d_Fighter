@@ -54,21 +54,25 @@ MonoBehaviour:
     BitMask: 64
   AffectAllies: 0
   AffectEnemies: 1
+  DamagePerTick:
+    RawValue: 327680
+  KnockbackForce:
+    RawValue: 655360
+  KnockbackDirection:
+    X:
+      RawValue: 65536
+    Y:
+      RawValue: 65536
+  HitstunDuration:
+    RawValue: 32768
   ExplosionDelay:
     RawValue: 0
-  ShowCountdown: 1
-  ShowWarningCircle: 1
   ExplosionDamage:
     RawValue: 3276800
-  DamageType: 0
   DamageFalloff: 1
   CenterDamageMultiplier:
     RawValue: 98304
   ApplyKnockback: 1
-  KnockbackForce:
-    RawValue: 655360
   KnockbackType: 1
-  HitstunDuration:
-    RawValue: 32768
   ExplosionEffect: {fileID: 0}
   WarningEffect: {fileID: 0}

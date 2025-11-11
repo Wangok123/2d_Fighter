@@ -71,6 +71,13 @@ namespace Quantum
         
         [Tooltip("爆炸预览颜色")]
         public Color ExplosionPreviewColor = new Color(1f, 0f, 0f, 0.15f);
+        
+        [Header("物理调试")]
+        [Tooltip("是否显示物理信息")]
+        public bool ShowPhysicsInfo = true;
+        
+        [Tooltip("速度向量颜色")]
+        public Color VelocityColor = new Color(0f, 1f, 0f, 0.8f);
 
         private List<Vector3> _trajectoryPoints = new List<Vector3>(100);
         private ProjectileComponent* _projectile;
@@ -157,47 +164,69 @@ namespace Quantum
 
         private string GetExtraInfo(Frame frame)
         {
+            // 修改：优先从PhysicsBody2D读取，其次从KCC读取
+            string physicsInfo = "";
+            
+            if (ShowPhysicsInfo)
+            {
+                if (frame.Unsafe.TryGetPointer<PhysicsBody2D>(EntityRef, out var body))
+                {
+                    physicsInfo = $"\n[Body] Vel: ({body->Velocity.X.AsFloat:F2}, {body->Velocity.Y.AsFloat:F2})";
+                    physicsInfo += $"\nAngVel: {body->AngularVelocity.AsFloat:F2}";
+                }
+                else if (frame.Unsafe.TryGetPointer<CharacterController2D>(EntityRef, out var kcc))
+                {
+                    physicsInfo = $"\n[KCC] Vel: ({kcc->Velocity.X.AsFloat:F2}, {kcc->Velocity.Y.AsFloat:F2})";
+                    physicsInfo += $"\nGrounded: {kcc->Grounded}";
+                }
+            }
+    
             if (_projectileData is GrenadeProjectileData grenadeData)
             {
                 FP currentHeight = _transform->Position.Y;
                 bool hasDetonated = false;
-                
+        
                 if (frame.Unsafe.TryGetPointer<GrenadeRuntimeComponent>(EntityRef, out var grenadeRuntime))
                 {
                     hasDetonated = grenadeRuntime->HasDetonated;
                 }
-                
-                return $"\nHeight: {currentHeight.AsFloat:F2}\nDetonated: {hasDetonated}";
+        
+                return $"\nHeight: {currentHeight.AsFloat:F2}\nDetonated: {hasDetonated}{physicsInfo}";
             }
-            
+    
             if (_projectileData is BoomerangProjectileData boomerangData)
             {
                 string phase = "Forward";
                 FP distanceTraveled = FP._0;
-                
+        
                 if (frame.Unsafe.TryGetPointer<BoomerangRuntimeComponent>(EntityRef, out var boomerangRuntime))
                 {
                     phase = boomerangRuntime->CurrentPhase == BoomerangPhase.Forward ? "Forward" : "Returning";
                     distanceTraveled = boomerangRuntime->DistanceTraveled;
                 }
-                
-                return $"\nPhase: {phase}\nDistance: {distanceTraveled.AsFloat:F2}";
+        
+                return $"\nPhase: {phase}\nDistance: {distanceTraveled.AsFloat:F2}{physicsInfo}";
             }
-            
+    
+            // 修改：Arc弹道从物理组件读取
             if (_projectileData is ArcProjectileData arcData)
             {
                 FP currentHeight = _transform->Position.Y;
-                FPVector2 velocity = _projectile->Direction;
-                
-                if (frame.Unsafe.TryGetPointer<ArcProjectileRuntimeComponent>(EntityRef, out var arcRuntime))
+                FPVector2 velocity = FPVector2.Zero;
+        
+                if (frame.Unsafe.TryGetPointer<PhysicsBody2D>(EntityRef, out var body))
                 {
-                    velocity = arcRuntime->Velocity;
+                    velocity = body->Velocity;
                 }
-                
-                return $"\nHeight: {currentHeight.AsFloat:F2}\nVelocity Y: {velocity.Y.AsFloat:F2}";
+                else if (frame.Unsafe.TryGetPointer<CharacterController2D>(EntityRef, out var kcc))
+                {
+                    velocity = kcc->Velocity;
+                }
+        
+                return $"\nHeight: {currentHeight.AsFloat:F2}\nVelocity Y: {velocity.Y.AsFloat:F2}{physicsInfo}";
             }
-            
-            return "";
+    
+            return physicsInfo;
         }
 
         private void OnDrawGizmos()
@@ -214,6 +243,19 @@ namespace Quantum
             DrawTrajectory();
             DrawCollisionShape();
             
+            // 修改：显示速度向量（支持PhysicsBody和KCC）
+            if (ShowPhysicsInfo)
+            {
+                if (frame.Unsafe.TryGetPointer<PhysicsBody2D>(EntityRef, out var body))
+                {
+                    DrawVelocityVector(body->Velocity);
+                }
+                else if (frame.Unsafe.TryGetPointer<CharacterController2D>(EntityRef, out var kcc))
+                {
+                    DrawVelocityVector(kcc->Velocity);
+                }
+            }
+            
             if (ShowPredictedTrajectory)
             {
                 DrawPredictedTrajectory();
@@ -228,6 +270,21 @@ namespace Quantum
             {
                 DrawProjectileInfo();
             }
+        }
+
+        // 修改：统一的速度向量绘制方法
+        private void DrawVelocityVector(FPVector2 velocity)
+        {
+            Vector3 position = _transform->Position.ToUnityVector3();
+            Vector3 velocityVector = new Vector3(velocity.X.AsFloat, velocity.Y.AsFloat, 0);
+            
+            if (velocityVector.magnitude < 0.01f) return;
+            
+#if UNITY_EDITOR
+            UnityEditor.Handles.color = VelocityColor;
+            UnityEditor.Handles.DrawLine(position, position + velocityVector, 3f);
+            UnityEditor.Handles.ArrowHandleCap(0, position + velocityVector, Quaternion.LookRotation(Vector3.forward, velocityVector), 0.2f, EventType.Repaint);
+#endif
         }
 
         private void DrawTrajectory()
@@ -289,6 +346,9 @@ namespace Quantum
         {
             if (_projectileData == null) return;
 
+            var frame = VerifiedFrame;
+            if (frame == null) return;
+
             Vector3 position = _transform->Position.ToUnityVector3();
             Vector2 direction = new Vector2(_projectile->Direction.X.AsFloat, _projectile->Direction.Y.AsFloat);
             float speed = _projectile->Speed.AsFloat;
@@ -301,34 +361,67 @@ namespace Quantum
 
             if (_projectileData is StraightProjectileData straightData)
             {
-                DrawStraightPrediction(position, direction, straightData.MoveSpeed.AsFloat, timeStep, steps, predictedPoints);
+                // 修改：优先从PhysicsBody读取速度
+                Vector2 velocity = direction * straightData.MoveSpeed.AsFloat;
+                
+                if (frame.Unsafe.TryGetPointer<PhysicsBody2D>(EntityRef, out var body))
+                {
+                    velocity = new Vector2(body->Velocity.X.AsFloat, body->Velocity.Y.AsFloat);
+                }
+                
+                DrawStraightPrediction(position, velocity, timeStep, steps, predictedPoints);
             }
             else if (_projectileData is ArcProjectileData arcData)
             {
-                var frame = VerifiedFrame;
-                Vector2 currentVelocity = direction;
+                Vector2 currentVelocity = direction * speed;
+                float gravity = 10f;
                 
-                if (frame != null && frame.Unsafe.TryGetPointer<ArcProjectileRuntimeComponent>(EntityRef, out var arcRuntime))
+                if (frame.Unsafe.TryGetPointer<PhysicsBody2D>(EntityRef, out var body))
                 {
-                    currentVelocity = new Vector2(arcRuntime->Velocity.X.AsFloat, arcRuntime->Velocity.Y.AsFloat);
+                    currentVelocity = new Vector2(body->Velocity.X.AsFloat, body->Velocity.Y.AsFloat);
+                    gravity = frame.PhysicsSceneSettings->Gravity.Y.AsFloat;
                 }
-                
-                DrawArcPrediction(position, currentVelocity, arcData.Gravity.AsFloat, arcData.MinimumHeight.AsFloat, arcData.EnableGroundClamp, timeStep, steps, predictedPoints);
+    
+                DrawArcPrediction(position, currentVelocity, gravity, arcData.MinimumHeight.AsFloat, arcData.EnableGroundClamp, timeStep, steps, predictedPoints);
             }
             else if (_projectileData is GrenadeProjectileData grenadeData)
             {
-                var frame = VerifiedFrame;
-                Vector2 currentVelocity = direction;
+                Vector2 currentVelocity = direction * speed;
+                float gravity = 10f;
                 
-                if (frame != null && frame.Unsafe.TryGetPointer<GrenadeRuntimeComponent>(EntityRef, out var grenadeRuntime))
+                // 修改：优先从PhysicsBody读取
+                if (frame.Unsafe.TryGetPointer<PhysicsBody2D>(EntityRef, out var body))
                 {
-                    if (!grenadeRuntime->HasDetonated && frame.Has<GrenadeRuntimeComponent>(EntityRef))
-                    {
-                        currentVelocity = direction;
-                    }
+                    currentVelocity = new Vector2(body->Velocity.X.AsFloat, body->Velocity.Y.AsFloat);
+                    gravity = frame.PhysicsSceneSettings->Gravity.Y.AsFloat;
                 }
                 
-                DrawGrenadePrediction(position, currentVelocity, grenadeData.Gravity.AsFloat, 0f, timeStep, steps, predictedPoints);
+                DrawGrenadePrediction(position, currentVelocity, gravity, 0f, timeStep, steps, predictedPoints);
+            }
+            else if (_projectileData is HomingProjectileData homingData)
+            {
+                Vector2 velocity = direction * homingData.MoveSpeed.AsFloat;
+                
+                if (frame.Unsafe.TryGetPointer<PhysicsBody2D>(EntityRef, out var body))
+                {
+                    velocity = new Vector2(body->Velocity.X.AsFloat, body->Velocity.Y.AsFloat);
+                }
+                DrawStraightPrediction(position, velocity, timeStep, steps, predictedPoints);
+            }
+            else if (_projectileData is BoomerangProjectileData boomerangData)
+            {
+                Vector2 velocity = direction * speed;
+                
+                if (frame.Unsafe.TryGetPointer<PhysicsBody2D>(EntityRef, out var body))
+                {
+                    velocity = new Vector2(body->Velocity.X.AsFloat, body->Velocity.Y.AsFloat);
+                }
+                else if (boomerangData.UseKCC && frame.Unsafe.TryGetPointer<CharacterController2D>(EntityRef, out var kcc))
+                {
+                    velocity = new Vector2(kcc->Velocity.X.AsFloat, kcc->Velocity.Y.AsFloat);
+                }
+                
+                DrawStraightPrediction(position, velocity, timeStep, steps, predictedPoints);
             }
 
 #if UNITY_EDITOR
@@ -343,11 +436,11 @@ namespace Quantum
 #endif
         }
 
-        private void DrawStraightPrediction(Vector3 position, Vector2 direction, float speed, float timeStep, int steps, List<Vector3> points)
+        private void DrawStraightPrediction(Vector3 position, Vector2 velocity, float timeStep, int steps, List<Vector3> points)
         {
             for (int i = 0; i < steps; i++)
             {
-                position += new Vector3(direction.x, direction.y, 0) * speed * timeStep;
+                position += new Vector3(velocity.x, velocity.y, 0) * timeStep;
                 points.Add(position);
             }
         }
@@ -400,7 +493,6 @@ namespace Quantum
 
             Vector3 currentPos = _transform->Position.ToUnityVector3();
             Vector3 explosionPos = currentPos;
-            explosionPos.y = 0f;
 
             Shape2DConfig explosionShape = explosionData.EffectArea;
 

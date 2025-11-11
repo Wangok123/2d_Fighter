@@ -17,8 +17,5 @@ namespace Quantum
         
         [Tooltip("追踪范围（0为无限制）")]
         public FP TrackingRange = 0;
-        
-        [Tooltip("目标丢失后是否继续直线飞行")]
-        public bool ContinueStraightOnLostTarget = true;
     }
 }

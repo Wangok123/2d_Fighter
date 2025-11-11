@@ -164,21 +164,6 @@ namespace Quantum.Prototypes {
     }
   }
   [System.SerializableAttribute()]
-  [Quantum.Prototypes.Prototype(typeof(Quantum.ArcProjectileRuntimeComponent))]
-  public unsafe partial class ArcProjectileRuntimeComponentPrototype : ComponentPrototype<Quantum.ArcProjectileRuntimeComponent> {
-    [HideInInspector()]
-    public Int32 _empty_prototype_dummy_field_;
-    partial void MaterializeUser(Frame frame, ref Quantum.ArcProjectileRuntimeComponent result, in PrototypeMaterializationContext context);
-    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
-        Quantum.ArcProjectileRuntimeComponent component = default;
-        Materialize((Frame)f, ref component, in context);
-        return f.Set(entity, component) == SetResult.ComponentAdded;
-    }
-    public void Materialize(Frame frame, ref Quantum.ArcProjectileRuntimeComponent result, in PrototypeMaterializationContext context = default) {
-        MaterializeUser(frame, ref result, in context);
-    }
-  }
-  [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.AttackAbilityCache))]
   public unsafe partial class AttackAbilityCachePrototype : StructPrototype {
     public FP Duration;
@@ -367,8 +352,8 @@ namespace Quantum.Prototypes {
   [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.GrenadeRuntimeComponent))]
   public unsafe partial class GrenadeRuntimeComponentPrototype : ComponentPrototype<Quantum.GrenadeRuntimeComponent> {
-    [HideInInspector()]
-    public Int32 _empty_prototype_dummy_field_;
+    public FP TimeAlive;
+    public QBoolean HasDetonated;
     partial void MaterializeUser(Frame frame, ref Quantum.GrenadeRuntimeComponent result, in PrototypeMaterializationContext context);
     public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
         Quantum.GrenadeRuntimeComponent component = default;
@@ -376,6 +361,8 @@ namespace Quantum.Prototypes {
         return f.Set(entity, component) == SetResult.ComponentAdded;
     }
     public void Materialize(Frame frame, ref Quantum.GrenadeRuntimeComponent result, in PrototypeMaterializationContext context = default) {
+        result.TimeAlive = this.TimeAlive;
+        result.HasDetonated = this.HasDetonated;
         MaterializeUser(frame, ref result, in context);
     }
   }

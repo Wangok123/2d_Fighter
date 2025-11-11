@@ -11,9 +11,6 @@ namespace Quantum
         
         [Tooltip("初始向上速度")]
         public FP InitialUpwardVelocity = 5;
-        
-        [Tooltip("重力加速度")]
-        public FP Gravity = 10;
 
         [Header("地面限制")]
         [Tooltip("最低高度限制（防止穿地）")]
