@@ -31,32 +31,5 @@ namespace Quantum
         
         [Tooltip("是否移除负面状态")]
         public bool RemoveDebuffs = false;
-
-        public override void ApplyEffect(Frame frame, EntityRef skillFieldEntity, EntityRef target, FPVector2 hitPoint)
-        {
-            ApplyHealToTarget(frame, target);
-            
-            if (GrantShield)
-            {
-                ApplyShieldToTarget(frame, target);
-            }
-            
-            if (RemoveDebuffs)
-            {
-                RemoveDebuffsFromTarget(frame, target);
-            }
-        }
-
-        private void ApplyHealToTarget(Frame frame, EntityRef target)
-        {
-        }
-
-        private void ApplyShieldToTarget(Frame frame, EntityRef target)
-        {
-        }
-
-        private void RemoveDebuffsFromTarget(Frame frame, EntityRef target)
-        {
-        }
     }
 }

@@ -29,17 +29,18 @@ namespace Quantum
         [Tooltip("是否影响敌人")]
         public bool AffectEnemies = true;
 
-        public virtual void OnSkillFieldSpawned(Frame frame, EntityRef skillFieldEntity, SkillFieldComponent* skillField, EntityRef owner, FPVector2 position)
-        {
-        }
-
-        public virtual void OnSkillFieldTick(Frame frame, EntityRef skillFieldEntity, SkillFieldComponent* skillField)
-        {
-        }
-
-        public virtual void OnSkillFieldDestroyed(Frame frame, EntityRef skillFieldEntity, SkillFieldComponent* skillField)
-        {
-        }
+        [Header("伤害设置")]
+        [Tooltip("每次Tick伤害")]
+        public FP DamagePerTick = 5;
+        
+        [Tooltip("击退力度")]
+        public FP KnockbackForce = 3;
+        
+        [Tooltip("击退方向")]
+        public FPVector2 KnockbackDirection = FPVector2.Up;
+        
+        [Tooltip("受击硬直时间")]
+        public FP HitstunDuration = FP._0_10;
 
         public virtual bool ShouldAffectTarget(Frame frame, EntityRef owner, EntityRef target)
         {
@@ -62,16 +63,31 @@ namespace Quantum
             return false;
         }
 
-        public virtual void ApplyEffect(Frame frame, EntityRef skillFieldEntity, EntityRef target, FPVector2 hitPoint)
+        public virtual FP GetDamagePerTick(Frame frame, EntityRef skillFieldEntity)
+        {
+            return DamagePerTick;
+        }
+
+        public virtual FP GetKnockbackForce(Frame frame, EntityRef skillFieldEntity)
+        {
+            return KnockbackForce;
+        }
+
+        public virtual FPVector2 GetKnockbackDirection(Frame frame, EntityRef skillFieldEntity, EntityRef target, FPVector2 hitPoint)
+        {
+            return KnockbackDirection.Normalized;
+        }
+
+        public virtual void OnCustomSpawn(Frame frame, EntityRef skillFieldEntity, SkillFieldComponent* skillField)
         {
         }
-        
-        protected virtual HitCollection DetectTargetsInEffectArea(Frame frame, EntityRef skillFieldEntity)
-        {
-            Transform2D* transform = frame.Unsafe.GetPointer<Transform2D>(skillFieldEntity);
 
-            Shape2D shape = EffectArea.CreateShape(frame);
-            return frame.Physics2D.OverlapShape(*transform, shape, TargetLayer, QueryOptions.HitDynamics);
+        public virtual void OnCustomTick(Frame frame, EntityRef skillFieldEntity, SkillFieldComponent* skillField)
+        {
+        }
+
+        public virtual void OnCustomDestroy(Frame frame, EntityRef skillFieldEntity, SkillFieldComponent* skillField)
+        {
         }
     }
 }

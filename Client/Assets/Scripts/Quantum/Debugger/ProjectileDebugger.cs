@@ -160,14 +160,41 @@ namespace Quantum
             if (_projectileData is GrenadeProjectileData grenadeData)
             {
                 FP currentHeight = _transform->Position.Y;
-                return $"\nHeight: {currentHeight.AsFloat:F2}\nGround: {grenadeData.GroundHeight.AsFloat:F2}";
+                bool hasDetonated = false;
+                
+                if (frame.Unsafe.TryGetPointer<GrenadeRuntimeComponent>(EntityRef, out var grenadeRuntime))
+                {
+                    hasDetonated = grenadeRuntime->HasDetonated;
+                }
+                
+                return $"\nHeight: {currentHeight.AsFloat:F2}\nDetonated: {hasDetonated}";
             }
             
             if (_projectileData is BoomerangProjectileData boomerangData)
             {
-                FP elapsed = _projectile->LifetimeTimer.ElapsedSeconds(frame);
-                bool isReturning = elapsed >= boomerangData.ReturnDelay;
-                return $"\nPhase: {(isReturning ? "Returning" : "Forward")}";
+                string phase = "Forward";
+                FP distanceTraveled = FP._0;
+                
+                if (frame.Unsafe.TryGetPointer<BoomerangRuntimeComponent>(EntityRef, out var boomerangRuntime))
+                {
+                    phase = boomerangRuntime->CurrentPhase == BoomerangPhase.Forward ? "Forward" : "Returning";
+                    distanceTraveled = boomerangRuntime->DistanceTraveled;
+                }
+                
+                return $"\nPhase: {phase}\nDistance: {distanceTraveled.AsFloat:F2}";
+            }
+            
+            if (_projectileData is ArcProjectileData arcData)
+            {
+                FP currentHeight = _transform->Position.Y;
+                FPVector2 velocity = _projectile->Direction;
+                
+                if (frame.Unsafe.TryGetPointer<ArcProjectileRuntimeComponent>(EntityRef, out var arcRuntime))
+                {
+                    velocity = arcRuntime->Velocity;
+                }
+                
+                return $"\nHeight: {currentHeight.AsFloat:F2}\nVelocity Y: {velocity.Y.AsFloat:F2}";
             }
             
             return "";
@@ -278,11 +305,30 @@ namespace Quantum
             }
             else if (_projectileData is ArcProjectileData arcData)
             {
-                DrawArcPrediction(position, direction, arcData.Gravity.AsFloat, timeStep, steps, predictedPoints);
+                var frame = VerifiedFrame;
+                Vector2 currentVelocity = direction;
+                
+                if (frame != null && frame.Unsafe.TryGetPointer<ArcProjectileRuntimeComponent>(EntityRef, out var arcRuntime))
+                {
+                    currentVelocity = new Vector2(arcRuntime->Velocity.X.AsFloat, arcRuntime->Velocity.Y.AsFloat);
+                }
+                
+                DrawArcPrediction(position, currentVelocity, arcData.Gravity.AsFloat, arcData.MinimumHeight.AsFloat, arcData.EnableGroundClamp, timeStep, steps, predictedPoints);
             }
             else if (_projectileData is GrenadeProjectileData grenadeData)
             {
-                DrawGrenadePrediction(position, direction, grenadeData.Gravity.AsFloat, grenadeData.GroundHeight.AsFloat, timeStep, steps, predictedPoints);
+                var frame = VerifiedFrame;
+                Vector2 currentVelocity = direction;
+                
+                if (frame != null && frame.Unsafe.TryGetPointer<GrenadeRuntimeComponent>(EntityRef, out var grenadeRuntime))
+                {
+                    if (!grenadeRuntime->HasDetonated && frame.Has<GrenadeRuntimeComponent>(EntityRef))
+                    {
+                        currentVelocity = direction;
+                    }
+                }
+                
+                DrawGrenadePrediction(position, currentVelocity, grenadeData.Gravity.AsFloat, 0f, timeStep, steps, predictedPoints);
             }
 
 #if UNITY_EDITOR
@@ -306,25 +352,35 @@ namespace Quantum
             }
         }
 
-        private void DrawArcPrediction(Vector3 position, Vector2 direction, float gravity, float timeStep, int steps, List<Vector3> points)
+        private void DrawArcPrediction(Vector3 position, Vector2 velocity, float gravity, float minHeight, bool clampGround, float timeStep, int steps, List<Vector3> points)
         {
             for (int i = 0; i < steps; i++)
             {
-                direction.y -= gravity * timeStep;
-                position += new Vector3(direction.x, direction.y, 0) * timeStep;
+                velocity.y -= gravity * timeStep;
+                position += new Vector3(velocity.x, velocity.y, 0) * timeStep;
+                
+                if (clampGround && position.y < minHeight)
+                {
+                    position.y = minHeight;
+                    if (velocity.y < 0)
+                    {
+                        velocity.y = 0;
+                    }
+                }
+                
                 points.Add(position);
             }
         }
 
-        private void DrawGrenadePrediction(Vector3 position, Vector2 direction, float gravity, float groundHeight, float timeStep, int steps, List<Vector3> points)
+        private void DrawGrenadePrediction(Vector3 position, Vector2 velocity, float gravity, float groundHeight, float timeStep, int steps, List<Vector3> points)
         {
             for (int i = 0; i < steps; i++)
             {
-                direction.y -= gravity * timeStep;
-                position += new Vector3(direction.x, direction.y, 0) * timeStep;
+                velocity.y -= gravity * timeStep;
+                position += new Vector3(velocity.x, velocity.y, 0) * timeStep;
                 points.Add(position);
 
-                if (position.y <= groundHeight && direction.y <= 0)
+                if (position.y <= groundHeight && velocity.y <= 0)
                 {
                     break;
                 }
@@ -339,12 +395,12 @@ namespace Quantum
             var frame = VerifiedFrame;
             if (frame == null) return;
 
-            var explosionData = frame.FindAsset<DelayedExplosionFieldData>(grenadeData.ExplosionFieldData.Id);
+            var explosionData = frame.FindAsset<SkillFieldData>(grenadeData.ExplosionFieldData.Id);
             if (explosionData == null || explosionData.EffectArea == null) return;
 
             Vector3 currentPos = _transform->Position.ToUnityVector3();
             Vector3 explosionPos = currentPos;
-            explosionPos.y = grenadeData.GroundHeight.AsFloat;
+            explosionPos.y = 0f;
 
             Shape2DConfig explosionShape = explosionData.EffectArea;
 

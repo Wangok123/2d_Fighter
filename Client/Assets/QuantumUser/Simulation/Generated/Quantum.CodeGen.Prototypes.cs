@@ -164,6 +164,21 @@ namespace Quantum.Prototypes {
     }
   }
   [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.ArcProjectileRuntimeComponent))]
+  public unsafe partial class ArcProjectileRuntimeComponentPrototype : ComponentPrototype<Quantum.ArcProjectileRuntimeComponent> {
+    [HideInInspector()]
+    public Int32 _empty_prototype_dummy_field_;
+    partial void MaterializeUser(Frame frame, ref Quantum.ArcProjectileRuntimeComponent result, in PrototypeMaterializationContext context);
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+        Quantum.ArcProjectileRuntimeComponent component = default;
+        Materialize((Frame)f, ref component, in context);
+        return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref Quantum.ArcProjectileRuntimeComponent result, in PrototypeMaterializationContext context = default) {
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.AttackAbilityCache))]
   public unsafe partial class AttackAbilityCachePrototype : StructPrototype {
     public FP Duration;
@@ -193,6 +208,21 @@ namespace Quantum.Prototypes {
         return f.Set(entity, component) == SetResult.ComponentAdded;
     }
     public void Materialize(Frame frame, ref Quantum.AttackComponent result, in PrototypeMaterializationContext context = default) {
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.BoomerangRuntimeComponent))]
+  public unsafe partial class BoomerangRuntimeComponentPrototype : ComponentPrototype<Quantum.BoomerangRuntimeComponent> {
+    [HideInInspector()]
+    public Int32 _empty_prototype_dummy_field_;
+    partial void MaterializeUser(Frame frame, ref Quantum.BoomerangRuntimeComponent result, in PrototypeMaterializationContext context);
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+        Quantum.BoomerangRuntimeComponent component = default;
+        Materialize((Frame)f, ref component, in context);
+        return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref Quantum.BoomerangRuntimeComponent result, in PrototypeMaterializationContext context = default) {
         MaterializeUser(frame, ref result, in context);
     }
   }
@@ -233,6 +263,21 @@ namespace Quantum.Prototypes {
         result.IsDead = this.IsDead;
         result.IsIncapacitated = this.IsIncapacitated;
         this.DisconnectedTimer.Materialize(frame, ref result.DisconnectedTimer, in context);
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.ComboAttackRuntimeComponent))]
+  public unsafe partial class ComboAttackRuntimeComponentPrototype : ComponentPrototype<Quantum.ComboAttackRuntimeComponent> {
+    [HideInInspector()]
+    public Int32 _empty_prototype_dummy_field_;
+    partial void MaterializeUser(Frame frame, ref Quantum.ComboAttackRuntimeComponent result, in PrototypeMaterializationContext context);
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+        Quantum.ComboAttackRuntimeComponent component = default;
+        Materialize((Frame)f, ref component, in context);
+        return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref Quantum.ComboAttackRuntimeComponent result, in PrototypeMaterializationContext context = default) {
         MaterializeUser(frame, ref result, in context);
     }
   }
@@ -301,6 +346,36 @@ namespace Quantum.Prototypes {
     public void Materialize(Frame frame, ref Quantum.CountdownTimer result, in PrototypeMaterializationContext context = default) {
         result.TimeLeft = this.TimeLeft;
         result.StartTime = this.StartTime;
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.DelayedExplosionRuntimeComponent))]
+  public unsafe partial class DelayedExplosionRuntimeComponentPrototype : ComponentPrototype<Quantum.DelayedExplosionRuntimeComponent> {
+    [HideInInspector()]
+    public Int32 _empty_prototype_dummy_field_;
+    partial void MaterializeUser(Frame frame, ref Quantum.DelayedExplosionRuntimeComponent result, in PrototypeMaterializationContext context);
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+        Quantum.DelayedExplosionRuntimeComponent component = default;
+        Materialize((Frame)f, ref component, in context);
+        return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref Quantum.DelayedExplosionRuntimeComponent result, in PrototypeMaterializationContext context = default) {
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.GrenadeRuntimeComponent))]
+  public unsafe partial class GrenadeRuntimeComponentPrototype : ComponentPrototype<Quantum.GrenadeRuntimeComponent> {
+    [HideInInspector()]
+    public Int32 _empty_prototype_dummy_field_;
+    partial void MaterializeUser(Frame frame, ref Quantum.GrenadeRuntimeComponent result, in PrototypeMaterializationContext context);
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+        Quantum.GrenadeRuntimeComponent component = default;
+        Materialize((Frame)f, ref component, in context);
+        return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref Quantum.GrenadeRuntimeComponent result, in PrototypeMaterializationContext context = default) {
         MaterializeUser(frame, ref result, in context);
     }
   }

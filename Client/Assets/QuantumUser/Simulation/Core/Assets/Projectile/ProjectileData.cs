@@ -46,38 +46,17 @@ namespace Quantum
         [Tooltip("是否被环境阻挡")]
         public bool BlockedByEnvironment = true;
 
-        public virtual void OnProjectileSpawned(Frame frame, EntityRef projectileEntity, ProjectileComponent* projectile, EntityRef owner)
+        public virtual FP GetBaseDamage(Frame frame, EntityRef projectileEntity)
         {
+            return BaseDamage;
         }
 
-        public virtual void OnProjectileUpdate(Frame frame, EntityRef projectileEntity, ProjectileComponent* projectile)
+        public virtual FP GetKnockbackForce(Frame frame, EntityRef projectileEntity)
         {
+            return KnockbackForce;
         }
 
-        public virtual void OnProjectileDestroyed(Frame frame, EntityRef projectileEntity, ProjectileComponent* projectile, ProjectileDestroyReason reason)
-        {
-        }
-
-        public virtual bool OnHitTarget(Frame frame, EntityRef projectileEntity, ProjectileComponent* projectile, EntityRef target, FPVector2 hitPoint)
-        {
-            if (frame.Unsafe.TryGetPointer<HitReactionComponent>(target, out var hitReaction))
-            {
-                ApplyDamageAndKnockback(frame, projectileEntity, projectile->Owner, target, hitReaction, hitPoint);
-                return true;
-            }
-
-            return false;
-        }
-
-        protected virtual void ApplyDamageAndKnockback(Frame frame, EntityRef projectileEntity, EntityRef attacker, EntityRef target, HitReactionComponent* hitReaction, FPVector2 hitPoint)
-        {
-            FPVector2 knockbackDirection = CalculateKnockbackDirection(frame, projectileEntity, attacker, target, hitPoint);
-            FPVector2 knockbackVelocity = knockbackDirection * KnockbackForce;
-
-            hitReaction->ApplyKnockback(frame, target, knockbackVelocity, HitstunDuration);
-        }
-        
-        protected virtual FPVector2 CalculateKnockbackDirection(Frame frame, EntityRef projectileEntity, EntityRef attacker, EntityRef target, FPVector2 hitPoint)
+        public virtual FPVector2 GetKnockbackDirection(Frame frame, EntityRef projectileEntity, EntityRef attacker, EntityRef target, FPVector2 hitPoint)
         {
             switch (KnockbackType)
             {
@@ -114,6 +93,24 @@ namespace Quantum
             }
 
             return FixedKnockbackDirection.Normalized;
+        }
+
+        public virtual bool ShouldDestroyOnHit(Frame frame, EntityRef projectileEntity, EntityRef target)
+        {
+            if (!frame.Unsafe.TryGetPointer<ProjectileComponent>(projectileEntity, out var projectile))
+                return true;
+
+            if (!PierceTargets)
+                return true;
+
+            if (MaxPierceCount >= 0 && projectile->CurrentPierceCount >= MaxPierceCount)
+                return true;
+
+            return false;
+        }
+
+        public virtual void OnCustomUpdate(Frame frame, EntityRef projectileEntity, ProjectileComponent* projectile)
+        {
         }
     }
 }

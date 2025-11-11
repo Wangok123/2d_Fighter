@@ -39,6 +39,12 @@ enum SkillFieldEffectType
     Control,
 }
 
+enum BoomerangPhase
+{
+    Forward,
+    Return
+}
+
 component ProjectileComponent
 {
     [ExcludeFromPrototype] asset_ref<ProjectileData> ProjectileData;
@@ -65,10 +71,59 @@ component SkillFieldComponent
     [ExcludeFromPrototype] list<EntityRef> AffectedEntities;
 }
 
+component ArcProjectileRuntimeComponent
+{
+    [ExcludeFromPrototype]
+    FPVector2 Velocity;
+    
+    [ExcludeFromPrototype]
+    FP TimeAlive;
+}
+
+component BoomerangRuntimeComponent
+{
+    [ExcludeFromPrototype]
+    BoomerangPhase CurrentPhase;
+    
+    [ExcludeFromPrototype]
+    FP DistanceTraveled;
+}
+
+component GrenadeRuntimeComponent
+{
+    [ExcludeFromPrototype]
+    QBoolean HasDetonated;
+    
+    [ExcludeFromPrototype]
+    FPVector2 Velocity;
+    
+    [ExcludeFromPrototype]
+    FP TimeAlive;
+    
+    [ExcludeFromPrototype]
+    QBoolean IsGrounded;
+}
+
+component DelayedExplosionRuntimeComponent
+{
+    [ExcludeFromPrototype]
+    QBoolean HasExploded;
+}
+
 signal SpawnProjectile(asset_ref<ProjectileData> projectileData, FPVector2 position, FPVector2 direction, entity_ref owner);
 signal DestroyProjectile(entity_ref projectile, ProjectileDestroyReason reason);
 signal SpawnSkillField(asset_ref<SkillFieldData> skillFieldData, FPVector2 position, entity_ref owner);
 signal DestroySkillField(entity_ref skillField);
+
+// Projectile生命周期Signals
+signal OnProjectileSpawned(entity_ref projectile, entity_ref owner);
+signal OnProjectileUpdate(entity_ref projectile);
+signal OnProjectileHitTarget(entity_ref projectile, entity_ref target, FPVector2 hitPoint);
+
+// SkillField生命周期Signals
+signal OnSkillFieldSpawned(entity_ref skillField, entity_ref owner, FPVector2 center);
+signal OnSkillFieldTick(entity_ref skillField);
+signal OnSkillFieldApplyEffect(entity_ref skillField, entity_ref target, FPVector2 hitPoint);
 
 event OnProjectileSpawned{
     EntityRef Projectile;

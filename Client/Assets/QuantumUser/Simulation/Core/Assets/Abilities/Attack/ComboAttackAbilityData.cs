@@ -1,7 +1,5 @@
 using Photon.Deterministic;
 using System;
-using System.Collections.Generic;
-using Quantum.Physics2D;
 using UnityEngine;
 
 namespace Quantum
@@ -9,10 +7,10 @@ namespace Quantum
     [Serializable]
     public class ComboStepConfig
     {
-        [Tooltip("打击框激活时间（从动画开始到判定触发的延迟）")]
+        [Tooltip("打击框激活时间")]
         public FP HitboxActiveTime = FP._0;
 
-        [Tooltip("打击框持续时间（判定生效的时间窗口，期间每个敌人只会被击中一次）")]
+        [Tooltip("打击框持续时间")]
         public FP HitboxActiveDuration = FP._0_10;
 
         [Tooltip("持续时间")]
@@ -26,6 +24,9 @@ namespace Quantum
 
         [Tooltip("受击硬直时间")]
         public FP HitstunDuration = FP._0_25;
+
+        [Tooltip("受击类型")]
+        public HitType HitType = HitType.Light;
 
         [Tooltip("攻击形状")]
         public Shape2DConfig AttackShape;
@@ -45,9 +46,78 @@ namespace Quantum
         [Tooltip("每段的配置")]
         public ComboStepConfig[] ComboSteps;
 
-        public override unsafe bool TryActivateAbility(Frame frame, EntityRef entityRef, PlayerLink* playerLink,
+        public override Shape2DConfig GetCurrentAttackShape(Frame frame, EntityRef entityRef)
+        {
+            if (!frame.Has<ComboAttackRuntimeComponent>(entityRef))
+                return base.GetCurrentAttackShape(frame, entityRef);
+
+            ComboAttackRuntimeComponent* comboRuntime = frame.Unsafe.GetPointer<ComboAttackRuntimeComponent>(entityRef);
+            int stepIndex = comboRuntime->CurrentComboStep - 1;
+
+            if (stepIndex >= 0 && stepIndex < ComboSteps.Length)
+            {
+                return ComboSteps[stepIndex].AttackShape;
+            }
+
+            return base.GetCurrentAttackShape(frame, entityRef);
+        }
+
+        public override FP GetCurrentHitboxActiveTime(Frame frame, EntityRef entityRef)
+        {
+            if (!frame.Has<ComboAttackRuntimeComponent>(entityRef))
+                return base.GetCurrentHitboxActiveTime(frame, entityRef);
+
+            ComboAttackRuntimeComponent* comboRuntime = frame.Unsafe.GetPointer<ComboAttackRuntimeComponent>(entityRef);
+            return comboRuntime->CurrentHitboxActiveTime;
+        }
+
+        public override FP GetCurrentHitboxActiveDuration(Frame frame, EntityRef entityRef)
+        {
+            if (!frame.Has<ComboAttackRuntimeComponent>(entityRef))
+                return base.GetCurrentHitboxActiveDuration(frame, entityRef);
+
+            ComboAttackRuntimeComponent* comboRuntime = frame.Unsafe.GetPointer<ComboAttackRuntimeComponent>(entityRef);
+            return comboRuntime->CurrentHitboxActiveDuration;
+        }
+
+        public override FP GetCurrentKnockbackForce(Frame frame, EntityRef entityRef)
+        {
+            if (!frame.Has<ComboAttackRuntimeComponent>(entityRef))
+                return base.GetCurrentKnockbackForce(frame, entityRef);
+
+            ComboAttackRuntimeComponent* comboRuntime = frame.Unsafe.GetPointer<ComboAttackRuntimeComponent>(entityRef);
+            return comboRuntime->CurrentKnockbackForce;
+        }
+
+        public override FP GetCurrentHitstunDuration(Frame frame, EntityRef entityRef)
+        {
+            if (!frame.Has<ComboAttackRuntimeComponent>(entityRef))
+                return base.GetCurrentHitstunDuration(frame, entityRef);
+
+            ComboAttackRuntimeComponent* comboRuntime = frame.Unsafe.GetPointer<ComboAttackRuntimeComponent>(entityRef);
+            return comboRuntime->CurrentHitstunDuration;
+        }
+
+        public override FPVector2 GetCurrentKnockbackDirection(Frame frame, EntityRef entityRef, FPVector2 attackerPos, FPVector2 targetPos)
+        {
+            if (!frame.Has<ComboAttackRuntimeComponent>(entityRef))
+                return base.GetCurrentKnockbackDirection(frame, entityRef, attackerPos, targetPos);
+
+            ComboAttackRuntimeComponent* comboRuntime = frame.Unsafe.GetPointer<ComboAttackRuntimeComponent>(entityRef);
+            bool isFacingRight = GetIsFacingRight(frame, entityRef);
+            
+            return new FPVector2(
+                comboRuntime->CurrentKnockbackDirection.X * (isFacingRight ? FP._1 : -FP._1),
+                comboRuntime->CurrentKnockbackDirection.Y
+            ).Normalized;
+        }
+
+        public override bool TryActivateAbility(Frame frame, EntityRef entityRef, PlayerLink* playerLink,
             AbilityType abilityType, ref Ability ability)
         {
+            if (!frame.Has<AttackComponent>(entityRef))
+                return base.TryActivateAbility(frame, entityRef, playerLink, abilityType, ref ability);
+
             var attackData = frame.Unsafe.GetPointer<AttackComponent>(entityRef);
 
             bool withinComboWindow = attackData->ComboWindowTimer.IsRunning(frame);
@@ -63,130 +133,47 @@ namespace Quantum
             }
 
             int comboIndex = nextComboCounter - 1;
-            
+
             if (comboIndex < 0 || comboIndex >= ComboSteps.Length)
                 return false;
 
             ComboStepConfig stepConfig = ComboSteps[comboIndex];
-            
-            AttackAbilityCache cache = new AttackAbilityCache
-            {
-                Duration = Duration,
-                HitboxActiveTime = HitboxActiveTime,
-                HitboxActiveDuration = HitboxActiveDuration,
-                KnockbackForce = KnockbackForce,
-                HitstunDuration = HitstunDuration,
-            };
-            Shape2DConfig oldAttackShape = AttackShape;
-            
+
             Duration = stepConfig.Duration;
-            HitboxActiveTime = stepConfig.HitboxActiveTime;
-            HitboxActiveDuration = stepConfig.HitboxActiveDuration;
-            AttackShape = stepConfig.AttackShape;
-            KnockbackForce = stepConfig.KnockbackForce;
-            HitstunDuration = stepConfig.HitstunDuration;
 
             bool activated = base.TryActivateAbility(frame, entityRef, playerLink, abilityType, ref ability);
 
             if (activated)
             {
+                if (!frame.Has<ComboAttackRuntimeComponent>(entityRef))
+                {
+                    frame.Add<ComboAttackRuntimeComponent>(entityRef);
+                }
+
+                ComboAttackRuntimeComponent* runtimeComponent = frame.Unsafe.GetPointer<ComboAttackRuntimeComponent>(entityRef);
+                runtimeComponent->CurrentComboStep = nextComboCounter;
+                runtimeComponent->CurrentHitboxActiveTime = stepConfig.HitboxActiveTime;
+                runtimeComponent->CurrentHitboxActiveDuration = stepConfig.HitboxActiveDuration;
+                runtimeComponent->CurrentKnockbackForce = stepConfig.KnockbackForce;
+                runtimeComponent->CurrentHitstunDuration = stepConfig.HitstunDuration;
+                runtimeComponent->CurrentKnockbackDirection = stepConfig.KnockbackDirection;
+
                 attackData->ComboCounter = nextComboCounter;
                 attackData->ComboWindowTimer = FrameTimer.FromSeconds(frame, ComboWindow);
-            }
-            else
-            {
-                Duration = cache.Duration;
-                HitboxActiveTime = cache.HitboxActiveTime;
-                HitboxActiveDuration = cache.HitboxActiveDuration;
-                KnockbackForce = cache.KnockbackForce;
-                HitstunDuration = cache.HitstunDuration;
-                AttackShape = oldAttackShape;
+
+                frame.Events.ComboAttackStarted(entityRef, nextComboCounter, MaxComboCount);
             }
 
             return activated;
-        }
-        
-        protected override void ExecuteAttackHitbox(Frame frame, EntityRef entityRef, Ability* ability)
-        {
-            AttackComponent* attackData = frame.Unsafe.GetPointer<AttackComponent>(entityRef);
-            int comboIndex = attackData->ComboCounter - 1;
-            
-            if (comboIndex < 0 || comboIndex >= ComboSteps.Length)
-            {
-                base.ExecuteAttackHitbox(frame, entityRef, ability);
-                return;
-            }
-
-            ComboStepConfig stepConfig = ComboSteps[comboIndex];
-            
-            Transform2D* transform = frame.Unsafe.GetPointer<Transform2D>(entityRef);
-            AttackComponent* attackComponent = frame.Unsafe.GetPointer<AttackComponent>(entityRef);
-            GameSettingsData gameSettingsData = frame.FindAsset<GameSettingsData>(frame.RuntimeConfig.GameSettingsData.Id);
-
-            bool isFacingRight = GetIsFacingRight(frame, entityRef);
-            var shape = CreateAttackShapeWithDirection(frame, stepConfig.AttackShape, isFacingRight);
-            
-            HitCollection hits = frame.Physics2D.OverlapShape(*transform, shape, gameSettingsData.PlayerLayerMask, QueryOptions.HitDynamics);
-
-            if (hits.Count > 0)
-            {
-                var hitList = frame.ResolveList(attackComponent->HitEntitiesThisAttack);
-                
-                for (int i = 0; i < hits.Count; i++)
-                {
-                    Hit hit = hits[i];
-
-                    if (hit.Entity == entityRef)
-                        continue;
-                    
-                    if (hitList.Contains(hit.Entity))
-                        continue;
-
-                    if (!frame.Unsafe.TryGetPointer<Transform2D>(hit.Entity, out var hitPlayerTransform))
-                        continue;
-
-                    hitList.Add(hit.Entity);
-
-                    OnHitTargetWithComboConfig(frame, entityRef, hit.Entity, transform->Position, hitPlayerTransform->Position, stepConfig);
-                }
-            }
-        }
-        
-        protected virtual void OnHitTargetWithComboConfig(Frame frame, EntityRef attacker, EntityRef target, FPVector2 attackerPos, FPVector2 targetPos, ComboStepConfig stepConfig)
-        {
-            if (frame.Has<HitReactionComponent>(target))
-            {
-                ApplyComboKnockback(frame, attacker, target, attackerPos, targetPos, stepConfig);
-            }
-        }
-        
-        protected virtual void ApplyComboKnockback(Frame frame, EntityRef attacker, EntityRef target, FPVector2 attackerPos, FPVector2 targetPos, ComboStepConfig stepConfig)
-        {
-            if (!frame.Unsafe.TryGetPointer<HitReactionComponent>(target, out var hitReaction))
-                return;
-
-            bool isFacingRight = GetIsFacingRight(frame, attacker);
-            FPVector2 knockbackDirection = new FPVector2(
-                stepConfig.KnockbackDirection.X * (isFacingRight ? FP._1 : -FP._1),
-                stepConfig.KnockbackDirection.Y
-            ).Normalized;
-            
-            FPVector2 knockbackVelocity = knockbackDirection * stepConfig.KnockbackForce;
-    
-            hitReaction->ApplyKnockback(frame, target, knockbackVelocity, stepConfig.HitstunDuration);
-        }
-        
-        protected override void OnAttackActivate(Frame frame, EntityRef entityRef, Ability* ability)
-        {
-            AttackComponent* attackData = frame.Unsafe.GetPointer<AttackComponent>(entityRef);
-            int comboStep = attackData->ComboCounter;
-
-            frame.Events.ComboAttackStarted(entityRef, comboStep, MaxComboCount);
         }
 
         public override Ability.AbilityState UpdateAbility(Frame frame, EntityRef entityRef, Ability* ability)
         {
             Ability.AbilityState abilityState = base.UpdateAbility(frame, entityRef, ability);
+            
+            if (!frame.Has<AttackComponent>(entityRef))
+                return abilityState;
+            
             AttackComponent* attackData = frame.Unsafe.GetPointer<AttackComponent>(entityRef);
 
             if (attackData->ComboCounter > 0 && !attackData->ComboWindowTimer.IsRunning(frame))

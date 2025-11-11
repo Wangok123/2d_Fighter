@@ -1,6 +1,5 @@
 using Photon.Deterministic;
 using System;
-using Quantum.Physics2D;
 using UnityEngine;
 
 namespace Quantum
@@ -41,6 +40,36 @@ namespace Quantum
         
         [Tooltip("最大蓄力时的攻击范围倍率")]
         public FP MaxChargeRangeMultiplier = FP._1_50;
+
+        public override Shape2DConfig GetCurrentAttackShape(Frame frame, EntityRef entityRef)
+        {
+            if (!ScaleAttackRangeWithCharge)
+                return base.GetCurrentAttackShape(frame, entityRef);
+
+            if (!frame.Unsafe.TryGetPointer<AttackComponent>(entityRef, out var attackComponent))
+                return base.GetCurrentAttackShape(frame, entityRef);
+
+            FP chargeTime = attackComponent->HeavyChargeTime;
+            FP chargeRatio = GetChargeRatio(chargeTime);
+            FP rangeMultiplier = FPMath.Lerp(FP._1, MaxChargeRangeMultiplier, chargeRatio);
+
+            return ScaleAttackShape(AttackShape, rangeMultiplier);
+        }
+
+        public override FP GetCurrentKnockbackForce(Frame frame, EntityRef entityRef)
+        {
+            if (!ScaleKnockbackWithCharge)
+                return base.GetCurrentKnockbackForce(frame, entityRef);
+
+            if (!frame.Unsafe.TryGetPointer<AttackComponent>(entityRef, out var attackComponent))
+                return base.GetCurrentKnockbackForce(frame, entityRef);
+
+            FP chargeTime = attackComponent->HeavyChargeTime;
+            FP chargeRatio = GetChargeRatio(chargeTime);
+            FP knockbackMultiplier = FPMath.Lerp(MinChargeKnockbackMultiplier, MaxChargeKnockbackMultiplier, chargeRatio);
+
+            return KnockbackForce * knockbackMultiplier;
+        }
 
         public override void UpdateInput(Frame frame, EntityRef entityRef, AbilityType abilityType, Ability* ability, SimpleInput2D input)
         {
@@ -145,50 +174,26 @@ namespace Quantum
             return activated;
         }
 
-        protected override void OnHitTarget(Frame frame, EntityRef attacker, EntityRef target, FPVector2 attackerPos, FPVector2 targetPos)
+        protected override void OnAbilityCancelled(Frame frame, EntityRef entityRef, AbilityType cancelledAbilityType)
         {
-            AttackComponent* attackComponent = frame.Unsafe.GetPointer<AttackComponent>(attacker);
-            FP chargeTime = attackComponent->HeavyChargeTime;
-            FP chargeRatio = (chargeTime - MinChargeTime) / FPMath.Max(MaxChargeTime - MinChargeTime, FP.EN4);
-            chargeRatio = FPMath.Clamp01(chargeRatio);
+            AttackComponent* attackComponent = frame.Unsafe.GetPointer<AttackComponent>(entityRef);
             
-            FP oldKnockbackForce = KnockbackForce;
-            
-            if (ScaleKnockbackWithCharge)
+            if (attackComponent->IsChargingHeavy)
             {
-                FP knockbackMultiplier = FPMath.Lerp(MinChargeKnockbackMultiplier, MaxChargeKnockbackMultiplier, chargeRatio);
-                KnockbackForce *= knockbackMultiplier;
+                attackComponent->IsChargingHeavy = false;
+                attackComponent->ChargeTimer = FrameTimer.None;
+                
+                if (!CanMoveWhileCharging && frame.Unsafe.TryGetPointer<AbilityEnable>(entityRef, out var abilityEnable))
+                {
+                    abilityEnable->MovementEnabled = true;
+                }
+
+                frame.Events.ChargingCancelled(entityRef);
             }
 
-            base.OnHitTarget(frame, attacker, target, attackerPos, targetPos);
-            
-            KnockbackForce = oldKnockbackForce;
+            base.OnAbilityCancelled(frame, entityRef, cancelledAbilityType);
         }
 
-        protected override void ExecuteAttackHitbox(Frame frame, EntityRef entityRef, Ability* ability)
-        {
-            if (ScaleAttackRangeWithCharge)
-            {
-                AttackComponent* attackComponent = frame.Unsafe.GetPointer<AttackComponent>(entityRef);
-                FP chargeTime = attackComponent->HeavyChargeTime;
-                FP chargeRatio = (chargeTime - MinChargeTime) / FPMath.Max(MaxChargeTime - MinChargeTime, FP.EN4);
-                chargeRatio = FPMath.Clamp01(chargeRatio);
-                
-                FP rangeMultiplier = FPMath.Lerp(FP._1, MaxChargeRangeMultiplier, chargeRatio);
-                
-                Shape2DConfig originalShape = AttackShape;
-                AttackShape = ScaleAttackShape(originalShape, rangeMultiplier);
-                
-                base.ExecuteAttackHitbox(frame, entityRef, ability);
-                
-                AttackShape = originalShape;
-            }
-            else
-            {
-                base.ExecuteAttackHitbox(frame, entityRef, ability);
-            }
-        }
-        
         protected virtual FP GetChargeRatio(FP chargeTime)
         {
             if (MaxChargeTime <= MinChargeTime)
@@ -200,7 +205,7 @@ namespace Quantum
             return FPMath.Clamp01(ratio);
         }
 
-        protected virtual FP GetChargeDamageMultiplier(FP chargeTime)
+        public virtual FP GetChargeDamageMultiplier(FP chargeTime)
         {
             FP chargeRatio = GetChargeRatio(chargeTime);
             return FPMath.Lerp(MinChargeDamageMultiplier, MaxChargeDamageMultiplier, chargeRatio);
@@ -224,26 +229,6 @@ namespace Quantum
             };
 
             return scaledShape;
-        }
-
-        protected override void OnAbilityCancelled(Frame frame, EntityRef entityRef, AbilityType cancelledAbilityType)
-        {
-            AttackComponent* attackComponent = frame.Unsafe.GetPointer<AttackComponent>(entityRef);
-            
-            if (attackComponent->IsChargingHeavy)
-            {
-                attackComponent->IsChargingHeavy = false;
-                attackComponent->ChargeTimer = FrameTimer.None;
-                
-                if (!CanMoveWhileCharging && frame.Unsafe.TryGetPointer<AbilityEnable>(entityRef, out var abilityEnable))
-                {
-                    abilityEnable->MovementEnabled = true;
-                }
-
-                frame.Events.ChargingCancelled(entityRef);
-            }
-
-            base.OnAbilityCancelled(frame, entityRef, cancelledAbilityType);
         }
     }
 }

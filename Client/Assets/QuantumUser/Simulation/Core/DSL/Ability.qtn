@@ -97,7 +97,7 @@ component CommandAttackRuntimeComponent
 component ComboAttackRuntimeComponent
 {
     [ExcludeFromPrototype]
-    FP CurrentDuration;
+    Int32 CurrentComboStep;
     
     [ExcludeFromPrototype]
     FP CurrentHitboxActiveTime;
@@ -110,9 +110,6 @@ component ComboAttackRuntimeComponent
     
     [ExcludeFromPrototype]
     FP CurrentHitstunDuration;
-    
-    [ExcludeFromPrototype]
-    Shape2DConfig CurrentAttackShape;
     
     [ExcludeFromPrototype]
     FPVector2 CurrentKnockbackDirection;
@@ -169,3 +166,11 @@ struct ComboRuntimeConfig
 signal CheckAbilityEnabled(AbilityType abilityId);
 signal OnCooldownsReset(entity_ref playerEntityRef);
 signal OnActiveAbilityStopped(entity_ref playerEntityRef);
+
+signal OnAttackHitboxActivate(entity_ref attacker);
+signal OnAttackExecute(entity_ref attacker);
+signal OnAttackHitTarget(entity_ref attacker, entity_ref target, FPVector2 attackerPos, FPVector2 targetPos);
+
+signal OnCommandAttackActivated(entity_ref attacker, Int32 sequenceIndex);
+signal OnCommandAttackHitboxActivate(entity_ref attacker, Int32 sequenceIndex);
+signal OnCommandAttackExecute(entity_ref attacker, Int32 sequenceIndex);

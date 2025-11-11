@@ -27,53 +27,6 @@ namespace Quantum
         
         [Tooltip("是否持续施加力")]
         public bool ContinuousForce = true;
-
-        public override void ApplyEffect(Frame frame, EntityRef skillFieldEntity, EntityRef target, FPVector2 hitPoint)
-        {
-            SkillFieldComponent* skillField = frame.Unsafe.GetPointer<SkillFieldComponent>(skillFieldEntity);
-            ApplyForceToTarget(frame, skillField->Owner, target, hitPoint);
-        }
-
-        private void ApplyForceToTarget(Frame frame, EntityRef owner, EntityRef target, FPVector2 hitPoint)
-        {
-            Transform2D* ownerTransform = frame.Unsafe.GetPointer<Transform2D>(owner);
-            Transform2D* targetTransform = frame.Unsafe.GetPointer<Transform2D>(target);
-
-            FPVector2 forceDirection = CalculateForceDirection(ownerTransform->Position, targetTransform->Position, hitPoint);
-            FP forceMagnitude = CalculateForceMagnitude(ownerTransform->Position, targetTransform->Position);
-
-            if (frame.Unsafe.TryGetPointer<HitReactionComponent>(target, out var hitReaction))
-            {
-                FPVector2 force = forceDirection * forceMagnitude;
-                hitReaction->ApplyKnockback(frame, target, force, FP._0_10);
-            }
-        }
-
-        private FPVector2 CalculateForceDirection(FPVector2 center, FPVector2 targetPos, FPVector2 hitPoint)
-        {
-            FPVector2 baseDirection = Direction switch
-            {
-                ForceDirection.FromCenter => (targetPos - center).Normalized,
-                ForceDirection.ToCenter => (center - targetPos).Normalized,
-                ForceDirection.CustomDirection => CustomDirection.Normalized,
-                _ => FPVector2.Zero
-            };
-
-            return FieldType == ForceFieldType.Push ? baseDirection : -baseDirection;
-        }
-
-        private FP CalculateForceMagnitude(FPVector2 center, FPVector2 targetPos)
-        {
-            if (!FalloffWithDistance)
-                return ForceStrength;
-
-            FP distance = FPVector2.Distance(center, targetPos);
-            if (distance >= MaxEffectRange)
-                return FP._0;
-
-            FP falloff = FP._1 - (distance / MaxEffectRange);
-            return ForceStrength * falloff;
-        }
     }
 
     public enum ForceFieldType

@@ -28,17 +28,6 @@ namespace Quantum
         
         [Tooltip("减速特效颜色提示")]
         public SlowEffectType EffectType = SlowEffectType.Ice;
-
-        public override void ApplyEffect(Frame frame, EntityRef skillFieldEntity, EntityRef target, FPVector2 hitPoint)
-        {
-            ApplySlowToTarget(frame, target);
-        }
-
-        private void ApplySlowToTarget(Frame frame, EntityRef target)
-        {
-            if (!frame.Unsafe.TryGetPointer<MovementComponent>(target, out var movement))
-                return;
-        }
     }
 
     public enum SlowEffectType
