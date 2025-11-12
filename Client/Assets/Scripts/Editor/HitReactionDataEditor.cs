@@ -5,7 +5,7 @@ using Quantum;
 namespace QuantumEditor
 {
     [CustomEditor(typeof(HitReactionData), true)]
-    public class HitReactionDataEditor : Editor
+    public class HitReactionDataEditor : UnityEditor.Editor
     {
         public override void OnInspectorGUI()
         {

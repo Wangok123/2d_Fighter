@@ -15,13 +15,13 @@ GameObject:
   - component: {fileID: 5428458400057698225}
   - component: {fileID: 4225920870206189311}
   - component: {fileID: 8595205649062271519}
-  - component: {fileID: 6071441484835123145}
   - component: {fileID: 7037740535014558776}
   - component: {fileID: 4042427979017233580}
   - component: {fileID: 294399432298058463}
   - component: {fileID: 1613700388019197692}
   - component: {fileID: 830373370507069944}
   - component: {fileID: 2045562779670424827}
+  - component: {fileID: 6596132072543008265}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -367,30 +367,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 04a1f74c0f284b57a8be0af2e7423374, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &6071441484835123145
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 747601124680124256}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d487beb18c6f64745b91190c87209af8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  EnableDebug: 1
-  AttackRangeColor: {r: 1, g: 0, b: 0, a: 0.3}
-  AttackWireframeColor: {r: 1, g: 0, b: 0, a: 1}
-  DefaultDisplayDuration: 0.1
-  ShowTimingInfo: 1
-  TextExtraDuration: 0.5
-  TextColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
-  TextBackgroundColor: {r: 0, g: 0, b: 0, a: 0.7}
-  FontSize: 14
-  Combo1Color: {r: 1, g: 0.5, b: 0, a: 0.3}
-  Combo2Color: {r: 1, g: 0, b: 0, a: 0.3}
-  Combo3Color: {r: 0.5, g: 0, b: 1, a: 0.3}
 --- !u!114 &7037740535014558776
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -648,6 +624,30 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Prototype:
     _empty_prototype_dummy_field_: 0
+--- !u!114 &6596132072543008265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 747601124680124256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d487beb18c6f64745b91190c87209af8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EnableDebug: 1
+  AttackRangeColor: {r: 1, g: 0, b: 0, a: 0.3}
+  AttackWireframeColor: {r: 1, g: 0, b: 0, a: 1}
+  DefaultDisplayDuration: 0.1
+  ShowTimingInfo: 1
+  TextExtraDuration: 0.5
+  TextColor: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  TextBackgroundColor: {r: 0, g: 0, b: 0, a: 0.7}
+  FontSize: 14
+  Combo1Color: {r: 1, g: 0.5, b: 0, a: 0.3}
+  Combo2Color: {r: 1, g: 0, b: 0, a: 0.3}
+  Combo3Color: {r: 0.5, g: 0, b: 1, a: 0.3}
 --- !u!1 &4774830198564325150
 GameObject:
   m_ObjectHideFlags: 0

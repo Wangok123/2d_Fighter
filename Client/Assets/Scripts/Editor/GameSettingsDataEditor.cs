@@ -1,11 +1,12 @@
 using UnityEditor;
 using UnityEngine;
 using Quantum;
+using LayerMask = UnityEngine.LayerMask;
 
 namespace QuantumEditor
 {
     [CustomEditor(typeof(GameSettingsData))]
-    public class GameSettingsDataEditor : Editor
+    public class GameSettingsDataEditor : UnityEditor.Editor
     {
         private SerializedProperty playerLayerMaskProp;
 

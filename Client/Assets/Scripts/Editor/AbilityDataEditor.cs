@@ -6,7 +6,7 @@ using Photon.Deterministic;
 namespace QuantumEditor
 {
     [CustomEditor(typeof(AbilityData), true)]
-    public class AbilityDataEditor : Editor
+    public class AbilityDataEditor : UnityEditor.Editor
     {
         public override void OnInspectorGUI()
         {

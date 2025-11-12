@@ -6,7 +6,7 @@ using Photon.Deterministic;
 namespace QuantumEditor
 {
     [CustomEditor(typeof(StatusData))]
-    public class StatusDataEditor : Editor
+    public class StatusDataEditor : UnityEditor.Editor
     {
         private SerializedProperty maxHealthProp;
         private SerializedProperty respawnTimeProp;

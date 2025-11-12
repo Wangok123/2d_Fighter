@@ -5,7 +5,7 @@ using Quantum;
 namespace QuantumEditor
 {
     [CustomEditor(typeof(PlayerMovementData))]
-    public class PlayerMovementDataEditor : Editor
+    public class PlayerMovementDataEditor : UnityEditor.Editor
     {
         private SerializedProperty defaultKCC2DConfigProp;
 
