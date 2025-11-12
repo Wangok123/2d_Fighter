@@ -40,7 +40,7 @@ MonoBehaviour:
     FlipDirectionMultiplier:
       RawValue: 65536
     Deceleration:
-      RawValue: 294912
+      RawValue: 3932160
     MaxBaseSpeed:
       RawValue: 458752
     DirectionType:

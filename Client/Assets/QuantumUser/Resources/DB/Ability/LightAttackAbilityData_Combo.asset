@@ -29,7 +29,7 @@ MonoBehaviour:
   KeepVelocity: 0
   StartCooldownAfterDelay: 0
   DisableMovementDuringAbility: 1
-  Priority: 2
+  Priority: 3
   CanBeCancelledByHigherPriority: 1
   CanCancelLowerPriority: 0
   _uiAbilityPrefab: {fileID: 0}
@@ -76,6 +76,7 @@ MonoBehaviour:
       RawValue: 32768
   HitstunDuration:
     RawValue: 16384
+  HitType: 1
   MaxComboCount: 2
   ComboWindow:
     RawValue: 49152
@@ -95,6 +96,7 @@ MonoBehaviour:
         RawValue: 32768
     HitstunDuration:
       RawValue: 16384
+    HitType: 1
     AttackShape:
       ShapeType: 4
       PolygonCollider:
@@ -129,16 +131,17 @@ MonoBehaviour:
     HitboxActiveDuration:
       RawValue: 6554
     Duration:
-      RawValue: 19661
+      RawValue: 13107
     KnockbackForce:
-      RawValue: 524288
+      RawValue: 655360
     KnockbackDirection:
       X:
-        RawValue: 65536
+        RawValue: 0
       Y:
-        RawValue: 32768
+        RawValue: 65536
     HitstunDuration:
       RawValue: 16384
+    HitType: 1
     AttackShape:
       ShapeType: 4
       PolygonCollider:

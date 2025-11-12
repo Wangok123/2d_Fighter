@@ -64,7 +64,6 @@ MonoBehaviour:
     BitMask: 64
   PierceTargets: 0
   MaxPierceCount: 1
-  BlockedByEnvironment: 1
   ExplosionFieldData:
     Id:
       Value: 304643639164399060
@@ -72,17 +71,6 @@ MonoBehaviour:
     RawValue: 655360
   ThrowArc:
     RawValue: 327680
-  KCCConfig:
-    Id:
-      Value: 388516095425130691
-  WallBounciness:
-    RawValue: 32768
-  GroundBounciness:
-    RawValue: 21845
-  GroundFriction:
-    RawValue: 32768
-  MinBounceVelocity:
-    RawValue: 65536
   DetonateType: 2
   DetonationDelay:
     RawValue: 131072

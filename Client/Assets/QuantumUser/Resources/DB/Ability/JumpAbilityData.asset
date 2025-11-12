@@ -17,17 +17,18 @@ MonoBehaviour:
     Guid:
       Value: 384777324059473156
   InputBuffer:
-    RawValue: 0
+    RawValue: 32768
   Delay:
     RawValue: 0
   Duration:
-    RawValue: 16384
+    RawValue: 0
   Cooldown:
     RawValue: 0
   CastDirectionType: 4
   FaceCastDirection: 1
   KeepVelocity: 0
   StartCooldownAfterDelay: 0
+  DisableMovementDuringAbility: 0
   Priority: 2
   CanBeCancelledByHigherPriority: 1
   CanCancelLowerPriority: 1
