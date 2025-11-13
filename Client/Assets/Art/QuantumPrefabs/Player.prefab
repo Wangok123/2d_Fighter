@@ -596,20 +596,16 @@ MonoBehaviour:
     StatusData:
       Id:
         Value: 336468280525922348
-    PlayerMovementData:
+    CharacterMovementData:
       Id:
         Value: 485897725668651356
-    CurrentHealth:
-      RawValue: 0
-    IsDead:
-      Value: 0
-    IsIncapacitated:
-      Value: 0
-    DisconnectedTimer:
-      Mode: 0
-      Frames: 0
-      Seconds:
-        RawValue: 0
+    HitReactionData:
+      Id:
+        Value: 0
+    KnockbackStatusEffect:
+      StatusEffectData:
+        Id:
+          Value: 0
 --- !u!114 &2045562779670424827
 MonoBehaviour:
   m_ObjectHideFlags: 0

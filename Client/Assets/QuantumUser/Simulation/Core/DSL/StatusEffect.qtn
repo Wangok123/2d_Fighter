@@ -1,6 +1,6 @@
 enum StatusEffectType
 {
-    Stun, Knockback
+    Knockback
 }
 
 struct StatusEffect
@@ -10,9 +10,9 @@ struct StatusEffect
 
 struct KnockbackStatusEffect : StatusEffect
 {
-    [ExcludeFromPrototype] FPVector3 KnockbackDirection;
-    [ExcludeFromPrototype] FPVector3 KnockbackVelocity;
-    
+    [ExcludeFromPrototype] FPVector2 KnockbackDirection;
+    [ExcludeFromPrototype] FPVector2 KnockbackVelocity;
+        
     asset_ref<KnockbackStatusEffectData> StatusEffectData;
 }
 
@@ -23,7 +23,7 @@ struct StatusEffectConfig
     FP Duration;
 }
 
-signal OnStunApplied(entity_ref playerEntityRef, FP duration);
-signal OnKnockbackApplied(entity_ref playerEntityRef, FP duration, FPVector2 direction);
+signal OnKnockbackApplied(entity_ref target, FPVector2 knockbackVelocity, FP duration);
+signal OnKnockbackPhysic2DApplied(entity_ref target, FPVector2 knockbackVelocity);
 
 signal OnStatusEffectsReset(entity_ref playerEntityRef);

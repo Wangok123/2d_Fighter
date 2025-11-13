@@ -91,7 +91,7 @@ namespace Quantum
             if (!frame.Unsafe.TryGetPointer<ProjectileComponent>(projectile, out var projectileComponent))
                 return;
 
-            if (!frame.Unsafe.TryGetPointer<HitReactionComponent>(target, out var hitReaction))
+            if (!frame.Unsafe.TryGetPointer<CharacterStatusComponent>(target, out var hitReaction))
                 return;
 
             ProjectileData projectileData = frame.FindAsset<ProjectileData>(projectileComponent->ProjectileData.Id);
@@ -104,7 +104,7 @@ namespace Quantum
             FP knockbackForce = projectileData.GetKnockbackForce(frame, projectile);
             FPVector2 knockbackVelocity = knockbackDirection * knockbackForce;
 
-            hitReaction->ApplyKnockback(frame, target, knockbackVelocity, projectileData.HitstunDuration);
+            frame.Signals.OnKnockbackApplied(target, knockbackVelocity, 0);
         }
 
         private void InitializeProjectile(Frame frame, EntityRef projectileEntity, ProjectileComponent* projectile,
@@ -329,9 +329,9 @@ namespace Quantum
             EntityRef nearest = EntityRef.None;
             FP nearestDistance = FP.MaxValue;
 
-            var filter = frame.Filter<Transform2D, HitReactionComponent>();
+            var filter = frame.Filter<Transform2D>();
 
-            while (filter.NextUnsafe(out var entity, out var transform, out var hitReaction))
+            while (filter.NextUnsafe(out var entity, out var transform))
             {
                 if (entity == owner)
                     continue;
@@ -372,9 +372,6 @@ namespace Quantum
                         continue;
 
                     if (hitList.Contains(hit.Entity))
-                        continue;
-
-                    if (!frame.Has<HitReactionComponent>(hit.Entity))
                         continue;
 
                     hitList.Add(hit.Entity);

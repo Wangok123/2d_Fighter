@@ -43,7 +43,7 @@ namespace Quantum
     
             KCC2D* kcc = frame.Unsafe.GetPointer<KCC2D>(entityRef);
             AbilityData abilityData = frame.FindAsset<AbilityData>(AbilityData.Id);
-            PlayerMovementData playerMovementData = frame.FindAsset<PlayerMovementData>(playerStatus->PlayerMovementData.Id);
+            CharacterMovementData playerMovementData = frame.FindAsset<CharacterMovementData>(playerStatus->CharacterMovementData.Id);
 
             RuntimeDuration = abilityData.Duration;
 
@@ -154,7 +154,7 @@ namespace Quantum
         {
             CharacterStatusComponent* playerStatus = frame.Unsafe.GetPointer<CharacterStatusComponent>(entityRef);
             AbilityInventory* abilityInventory = frame.Unsafe.GetPointer<AbilityInventory>(entityRef);
-            PlayerMovementData playerMovementData = frame.FindAsset<PlayerMovementData>(playerStatus->PlayerMovementData.Id);
+            CharacterMovementData playerMovementData = frame.FindAsset<CharacterMovementData>(playerStatus->CharacterMovementData.Id);
 
             AbilityData abilityData = frame.FindAsset<AbilityData>(AbilityData.Id);
 
@@ -169,9 +169,9 @@ namespace Quantum
             {
                 if (frame.Unsafe.TryGetPointer<AbilityEnable>(entityRef, out var abilityEnable))
                 {
-                    if (frame.Unsafe.TryGetPointer<HitReactionComponent>(entityRef, out var hitReaction))
+                    if (frame.Unsafe.TryGetPointer<CharacterStatusComponent>(entityRef, out var hitReaction))
                     {
-                        if (!hitReaction->IsHitstunned && !hitReaction->IsKnockedBack)
+                        if (!hitReaction->IsKnockedBack)
                         {
                             abilityEnable->MovementEnabled = true;
                         }

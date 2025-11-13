@@ -831,7 +831,8 @@ GameObject:
   - component: {fileID: 1850518762}
   - component: {fileID: 1850518761}
   - component: {fileID: 1850518760}
-  - component: {fileID: 1850518759}
+  - component: {fileID: 1850518765}
+  - component: {fileID: 1850518766}
   m_Layer: 6
   m_Name: CircleEntity2D
   m_TagString: Untagged
@@ -839,49 +840,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1850518759
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1850518758}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 60b52cdfcfd37cb41bbb0cd47f0bf1e9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  Prototype:
-    HitReactionData:
-      Id:
-        Value: 469818618232086861
-    IsHitstunned:
-      Value: 0
-    HitstunTimer:
-      Mode: 0
-      Frames: 0
-      Seconds:
-        RawValue: 0
-    IsKnockedBack:
-      Value: 0
-    KnockbackVelocity:
-      X:
-        RawValue: 0
-      Y:
-        RawValue: 0
-    KnockbackDecay:
-      RawValue: 0
-    InitialKnockbackVelocity:
-      X:
-        RawValue: 0
-      Y:
-        RawValue: 0
-    KnockbackStartTime:
-      RawValue: 0
-    KnockbackDuration:
-      RawValue: 0
-    CurrentMode:
-      Value: 0
 --- !u!114 &1850518760
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1009,7 +967,7 @@ MonoBehaviour:
     CallbackFlags:
       Value: 8
   PhysicsBody:
-    IsEnabled: 1
+    IsEnabled: 0
     Config2D: 116
     Config3D: 58
     RotationFreeze: 0
@@ -1211,6 +1169,48 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1850518765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1850518758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1ae181574d1dc0e4589d719243de5688, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Prototype:
+    StatusData:
+      Id:
+        Value: 0
+    CharacterMovementData:
+      Id:
+        Value: 0
+    HitReactionData:
+      Id:
+        Value: 293932180870028386
+    KnockbackStatusEffect:
+      StatusEffectData:
+        Id:
+          Value: 515051949245704636
+--- !u!114 &1850518766
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1850518758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d1c21a5c4814d8b469096111a8aa12a2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Prototype:
+    Config:
+      Id:
+        Value: 2107662128797502270
 --- !u!1 &1979263622
 GameObject:
   m_ObjectHideFlags: 0

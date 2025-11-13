@@ -24,11 +24,6 @@ namespace Quantum
 
         public override void Update(Frame frame, ref Filter filter)
         {
-            if (filter.Status->IsDead == true)
-            {
-                return;
-            }
-
             // Get input
             SimpleInput2D input = *frame.GetPlayerInput(filter.PlayerLink->Player);
 
@@ -44,10 +39,10 @@ namespace Quantum
             filter.KCC->Input = input;
             config.MoveWithAbility(frame, filter.Entity, filter.Transform, filter.KCC, filter.AbilityEnabled);
 
-            UpdateIsFacingRight(input, filter.MovementData, filter.KCC);
+            UpdateIsFacingRight(filter.MovementData, filter.KCC);
         }
         
-        private void UpdateIsFacingRight(SimpleInput2D input, MovementComponent* movementData, KCC2D* kcc)
+        private void UpdateIsFacingRight(MovementComponent* movementData, KCC2D* kcc)
         {
             FP horizontalVelocity = kcc->CombinedVelocity.X;
     

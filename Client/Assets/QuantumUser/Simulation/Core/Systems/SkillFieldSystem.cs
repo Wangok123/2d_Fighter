@@ -100,12 +100,9 @@ namespace Quantum
             if (!frame.Unsafe.TryGetPointer<SkillFieldComponent>(skillField, out var skillFieldComponent))
                 return;
 
-            if (!frame.Unsafe.TryGetPointer<HitReactionComponent>(target, out var hitReaction))
-                return;
-
             SkillFieldData skillFieldData = frame.FindAsset<SkillFieldData>(skillFieldComponent->SkillFieldData.Id);
 
-            ApplyFieldEffect(frame, skillField, skillFieldComponent, skillFieldData, target, hitPoint, hitReaction);
+            ApplyFieldEffect(frame, skillField, skillFieldComponent, skillFieldData, target, hitPoint);
         }
 
         private void InitializeSpecialField(Frame frame, EntityRef skillFieldEntity, SkillFieldComponent* skillField, SkillFieldData data, EntityRef owner, FPVector2 position)
@@ -181,16 +178,10 @@ namespace Quantum
                     if (!frame.Unsafe.TryGetPointer<Transform2D>(hit.Entity, out var targetTransform))
                         continue;
 
-                    if (!frame.Unsafe.TryGetPointer<HitReactionComponent>(hit.Entity, out var hitReaction))
-                        continue;
-
-                    FP distance = FPVector2.Distance(explosionCenter, targetTransform->Position);
-                    FP damage = CalculateExplosionDamage(data, explosionCenter, targetTransform->Position);
-
                     if (data.ApplyKnockback)
                     {
                         FPVector2 knockbackVelocity = CalculateExplosionKnockback(data, explosionCenter, targetTransform->Position);
-                        hitReaction->ApplyKnockback(frame, hit.Entity, knockbackVelocity, data.HitstunDuration);
+                        frame.Signals.OnKnockbackApplied(hit.Entity, knockbackVelocity, 0);
                     }
                 }
             }
@@ -226,14 +217,15 @@ namespace Quantum
             return direction * data.KnockbackForce;
         }
 
-        private void ApplyFieldEffect(Frame frame, EntityRef skillFieldEntity, SkillFieldComponent* skillField, SkillFieldData data, EntityRef target, FPVector2 hitPoint, HitReactionComponent* hitReaction)
+        private void ApplyFieldEffect(Frame frame, EntityRef skillFieldEntity, SkillFieldComponent* skillField, SkillFieldData data, EntityRef target, FPVector2 hitPoint)
         {
             if (data is DamageFieldData damageData)
             {
                 if (damageData.ApplyKnockback)
                 {
                     FPVector2 knockbackVelocity = CalculateDamageFieldKnockback(frame, damageData, skillField->Owner, target, hitPoint);
-                    hitReaction->ApplyKnockback(frame, target, knockbackVelocity, damageData.HitstunDuration);
+                    frame.Signals.OnKnockbackApplied(target, knockbackVelocity, 0);
+                    frame.Signals.OnKnockbackPhysic2DApplied(target, knockbackVelocity);
                 }
             }
             else if (data is HealFieldData healData)
@@ -241,14 +233,14 @@ namespace Quantum
             }
             else if (data is PushFieldData pushData)
             {
-                ApplyPushFieldForce(frame, pushData, skillField->Owner, target, hitPoint, hitReaction);
+                ApplyPushFieldForce(frame, pushData, skillField->Owner, target, hitPoint);
             }
             else if (data is SlowFieldData slowData)
             {
             }
             else if (data is VortexFieldData vortexData)
             {
-                ApplyVortexFieldForce(frame, skillFieldEntity, vortexData, target, hitReaction);
+                ApplyVortexFieldForce(frame, skillFieldEntity, vortexData, target);
                 
                 if (vortexData.DealDamage)
                 {
@@ -260,7 +252,7 @@ namespace Quantum
                 FP knockbackForce = data.GetKnockbackForce(frame, skillFieldEntity);
                 FPVector2 knockbackVelocity = knockbackDirection * knockbackForce;
 
-                hitReaction->ApplyKnockback(frame, target, knockbackVelocity, data.HitstunDuration);
+                frame.Signals.OnKnockbackApplied(target, knockbackVelocity, 0);
             }
         }
 
@@ -280,7 +272,7 @@ namespace Quantum
             return direction * data.KnockbackForce;
         }
 
-        private void ApplyPushFieldForce(Frame frame, PushFieldData data, EntityRef owner, EntityRef target, FPVector2 hitPoint, HitReactionComponent* hitReaction)
+        private void ApplyPushFieldForce(Frame frame, PushFieldData data, EntityRef owner, EntityRef target, FPVector2 hitPoint)
         {
             Transform2D* ownerTransform = frame.Unsafe.GetPointer<Transform2D>(owner);
             Transform2D* targetTransform = frame.Unsafe.GetPointer<Transform2D>(target);
@@ -289,7 +281,7 @@ namespace Quantum
             FP forceMagnitude = CalculatePushFieldMagnitude(data, ownerTransform->Position, targetTransform->Position);
 
             FPVector2 force = forceDirection * forceMagnitude;
-            hitReaction->ApplyKnockback(frame, target, force, FP._0_10);
+            frame.Signals.OnKnockbackApplied(target, force, 0);
         }
 
         private FPVector2 CalculatePushFieldDirection(PushFieldData data, FPVector2 center, FPVector2 targetPos, FPVector2 hitPoint)
@@ -318,7 +310,7 @@ namespace Quantum
             return data.ForceStrength * falloff;
         }
 
-        private void ApplyVortexFieldForce(Frame frame, EntityRef skillFieldEntity, VortexFieldData data, EntityRef target, HitReactionComponent* hitReaction)
+        private void ApplyVortexFieldForce(Frame frame, EntityRef skillFieldEntity, VortexFieldData data, EntityRef target)
         {
             Transform2D* fieldTransform = frame.Unsafe.GetPointer<Transform2D>(skillFieldEntity);
             Transform2D* targetTransform = frame.Unsafe.GetPointer<Transform2D>(target);
@@ -337,7 +329,7 @@ namespace Quantum
 
             FPVector2 totalForce = centripetalDir * data.CentripetalForce + tangentialDir * data.TangentialForce;
 
-            hitReaction->ApplyKnockback(frame, target, totalForce * frame.DeltaTime, FP._0_10);
+            frame.Signals.OnKnockbackApplied(target, totalForce, 0);
         }
         
         private void ExecuteTick(Frame frame, EntityRef skillFieldEntity, SkillFieldComponent* skillField, SkillFieldData skillFieldData)

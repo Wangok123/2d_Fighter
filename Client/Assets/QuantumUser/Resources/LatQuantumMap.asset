@@ -186,96 +186,29 @@ MonoBehaviour:
           Id:
             Value: 424419529196919110
     - rid: 8101032211223937026
-      type: {class: PhysicsBody2DPrototype, ns: Quantum.Prototypes, asm: Quantum.Engine}
-      data:
-        Config:
-          Value: 116
-        Mass:
-          RawValue: 32768
-        Drag:
-          RawValue: 32768
-        AngularDrag:
-          RawValue: 32768
-        CenterOfMass:
-          X:
-            RawValue: 0
-          Y:
-            RawValue: 0
-        GravityScale:
-          _hasValue: 0
-          _value:
-            RawValue: 65536
-        InertiaScale:
-          _hasValue: 0
-          _value:
-            RawValue: 65536
-        InertiaMode: 0
-        ExplicitInertia:
-          RawValue: 65536
-        ParametricInertiaShape:
-          ShapeType: 0
-          PolygonCollider:
-            Id:
-              Value: 0
-          CircleRadius:
-            RawValue: 32768
-          CapsuleSize:
-            X:
-              RawValue: 65536
-            Y:
-              RawValue: 131072
-          EdgeExtent:
-            RawValue: 32768
-          BoxExtents:
-            X:
-              RawValue: 32768
-            Y:
-              RawValue: 32768
-          PositionOffset:
-            X:
-              RawValue: 0
-            Y:
-              RawValue: 0
-          RotationOffset:
-            RawValue: 0
-          UserTag: 0
-          IsPersistent: 1
-          CompoundShapes: []
-    - rid: 8101032211223937027
       type: {class: PhysicsCallbacks2DPrototype, ns: Quantum.Prototypes, asm: Quantum.Engine}
       data:
         CallbackFlags:
           Value: 8
-    - rid: 8101032211223937028
-      type: {class: HitReactionComponentPrototype, ns: Quantum.Prototypes, asm: Quantum.Simulation}
+    - rid: 8101032211223937027
+      type: {class: CharacterController2DPrototype, ns: Quantum.Prototypes, asm: Quantum.Engine}
       data:
+        Config:
+          Id:
+            Value: 2107662128797502270
+    - rid: 8101032211223937028
+      type: {class: CharacterStatusComponentPrototype, ns: Quantum.Prototypes, asm: Quantum.Simulation}
+      data:
+        StatusData:
+          Id:
+            Value: 0
+        CharacterMovementData:
+          Id:
+            Value: 0
         HitReactionData:
           Id:
-            Value: 469818618232086861
-        IsHitstunned:
-          Value: 0
-        HitstunTimer:
-          Mode: 0
-          Frames: 0
-          Seconds:
-            RawValue: 0
-        IsKnockedBack:
-          Value: 0
-        KnockbackVelocity:
-          X:
-            RawValue: 0
-          Y:
-            RawValue: 0
-        KnockbackDecay:
-          RawValue: 0
-        InitialKnockbackVelocity:
-          X:
-            RawValue: 0
-          Y:
-            RawValue: 0
-        KnockbackStartTime:
-          RawValue: 0
-        KnockbackDuration:
-          RawValue: 0
-        CurrentMode:
-          Value: 0
+            Value: 293932180870028386
+        KnockbackStatusEffect:
+          StatusEffectData:
+            Id:
+              Value: 515051949245704636

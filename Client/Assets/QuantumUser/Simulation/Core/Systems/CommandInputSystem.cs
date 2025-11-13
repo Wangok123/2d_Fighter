@@ -111,19 +111,19 @@ namespace Quantum
                     if (hitList.Contains(hit.Entity))
                         continue;
 
-                    if (!frame.Has<HitReactionComponent>(hit.Entity))
+                    if (!frame.Has<CharacterStatusComponent>(hit.Entity))
                         continue;
 
                     hitList.Add(hit.Entity);
 
-                    ApplyHitboxDamage(frame, entityRef, hit.Entity, sequence, movement->IsFacingRight);
+                    ApplyHitboxDamage(frame, hit.Entity, sequence, movement->IsFacingRight);
                 }
             }
         }
 
-        private void ApplyHitboxDamage(Frame frame, EntityRef attacker, EntityRef target, CommandSequenceConfig sequence, bool isFacingRight)
+        private void ApplyHitboxDamage(Frame frame, EntityRef target, CommandSequenceConfig sequence, bool isFacingRight)
         {
-            if (!frame.Unsafe.TryGetPointer<HitReactionComponent>(target, out var hitReaction))
+            if (!frame.Unsafe.TryGetPointer<CharacterStatusComponent>(target, out var hitReaction))
                 return;
 
             FPVector2 knockbackDirection = new FPVector2(
@@ -133,7 +133,7 @@ namespace Quantum
             
             FPVector2 knockbackVelocity = knockbackDirection * sequence.KnockbackForce;
 
-            hitReaction->ApplyKnockback(frame, target, knockbackVelocity, sequence.HitstunDuration);
+            frame.Signals.OnKnockbackApplied(target, knockbackVelocity, 0);
         }
 
         private void SpawnProjectile(Frame frame, EntityRef entityRef, CommandSequenceConfig sequence)

@@ -169,7 +169,6 @@ signal OnActiveAbilityStopped(entity_ref playerEntityRef);
 
 signal OnAttackHitboxActivate(entity_ref attacker);
 signal OnAttackExecute(entity_ref attacker);
-signal OnAttackHitTarget(entity_ref attacker, entity_ref target, FPVector2 attackerPos, FPVector2 targetPos);
 
 signal OnCommandAttackActivated(entity_ref attacker, Int32 sequenceIndex);
 signal OnCommandAttackHitboxActivate(entity_ref attacker, Int32 sequenceIndex);

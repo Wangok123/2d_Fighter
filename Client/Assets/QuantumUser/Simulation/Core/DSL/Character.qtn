@@ -6,13 +6,10 @@ enum CharacterTeam
 component CharacterStatusComponent
 {
     asset_ref<StatusData> StatusData;
-    asset_ref<PlayerMovementData> PlayerMovementData;
-    
-	FP CurrentHealth;
-	Boolean IsDead;
-	Boolean IsIncapacitated;
+    asset_ref<CharacterMovementData> CharacterMovementData;
+    asset_ref<HitReactionData> HitReactionData;
 	
-	FrameTimer DisconnectedTimer;
+	KnockbackStatusEffect KnockbackStatusEffect;
 }
 
 component MovementComponent
@@ -46,16 +43,6 @@ component AttackComponent
     [ExcludeFromPrototype]
     list<EntityRef> HitEntitiesThisAttack;
 }
-
-// Signals
-signal OnKnockbackApplied(EntityRef target, FP duration, FPVector2 knockbackVelocity);
-signal OnStunApplied(EntityRef target, FP duration);
-signal OnHitstunApplied(EntityRef target, FP duration);
-signal OnDamageTaken(EntityRef target, EntityRef attacker, FP damage, HitType hitType);
-signal OnEntityDied(EntityRef target, EntityRef killer);
-signal OnEntityRespawned(EntityRef entity);
-signal OnSuperArmorActivated(EntityRef entity);
-signal OnSuperArmorBroken(EntityRef entity);
 
 // Events
 event OnPlayerHit
