@@ -1,4 +1,4 @@
-﻿namespace Quantum
+namespace Quantum
 {
     public class KnockbackStatusEffectData : AssetObject
     {

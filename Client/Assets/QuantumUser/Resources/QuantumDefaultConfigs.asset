@@ -87,7 +87,7 @@ MonoBehaviour:
     Y:
       RawValue: 0
   Radius:
-    RawValue: 45875
+    RawValue: 30147
   MaxPenetration:
     RawValue: 655
   PenetrationCorrection:
@@ -111,7 +111,7 @@ MonoBehaviour:
     X:
       RawValue: 0
     Y:
-      RawValue: -655360
+      RawValue: -2115502
   MaxSlope:
     RawValue: 3932160
   MaxSlopeSpeed:

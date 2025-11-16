@@ -9,47 +9,47 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 09bf3ec1e0ca4908841ea45aceed0981, type: 3}
+  m_Script: {fileID: 11500000, guid: f2029eac74108a04e9499e930a036fb7, type: 3}
   m_Name: KnockbackStatusEffectData
   m_EditorClassIdentifier: 
   Identifier:
     Path: QuantumUser/Resources/DB/StatusEffect/KnockbackStatusEffectData
     Guid:
-      Value: 515051949245704636
+      Value: 400731462195907610
   KnockbackCurveX:
     Samples:
     - RawValue: 0
-    - RawValue: 4032
-    - RawValue: 7936
-    - RawValue: 11712
-    - RawValue: 15360
-    - RawValue: 18880
-    - RawValue: 22272
-    - RawValue: 25536
+    - RawValue: 2048
+    - RawValue: 4096
+    - RawValue: 6144
+    - RawValue: 8192
+    - RawValue: 10240
+    - RawValue: 12288
+    - RawValue: 14336
+    - RawValue: 16384
+    - RawValue: 18432
+    - RawValue: 20480
+    - RawValue: 22528
+    - RawValue: 24576
+    - RawValue: 26624
     - RawValue: 28672
-    - RawValue: 31680
-    - RawValue: 34560
-    - RawValue: 37312
-    - RawValue: 39936
-    - RawValue: 42432
-    - RawValue: 44800
-    - RawValue: 47040
+    - RawValue: 30720
+    - RawValue: 32768
+    - RawValue: 34816
+    - RawValue: 36864
+    - RawValue: 38912
+    - RawValue: 40960
+    - RawValue: 43008
+    - RawValue: 45056
+    - RawValue: 47104
     - RawValue: 49152
-    - RawValue: 51136
-    - RawValue: 52992
-    - RawValue: 54720
-    - RawValue: 56320
-    - RawValue: 57792
-    - RawValue: 59136
-    - RawValue: 60352
+    - RawValue: 51200
+    - RawValue: 53248
+    - RawValue: 55296
+    - RawValue: 57344
+    - RawValue: 59392
     - RawValue: 61440
-    - RawValue: 62400
-    - RawValue: 63232
-    - RawValue: 63936
-    - RawValue: 64512
-    - RawValue: 64960
-    - RawValue: 65280
-    - RawValue: 65472
+    - RawValue: 63488
     - RawValue: 65536
     PreWrapMode: 0
     PostWrapMode: 0
@@ -66,59 +66,59 @@ MonoBehaviour:
       Value:
         RawValue: 0
       InTangent:
-        RawValue: 131072
+        RawValue: 65536
       OutTangent:
-        RawValue: 131072
+        RawValue: 65536
       TangentMode: 0
-      TangentModeLeft: 0
-      TangentModeRight: 0
+      TangentModeLeft: 1
+      TangentModeRight: 1
       WeightedMode: 0
     - Time:
         RawValue: 65536
       Value:
         RawValue: 65536
       InTangent:
-        RawValue: 0
+        RawValue: 65536
       OutTangent:
-        RawValue: 0
+        RawValue: 65536
       TangentMode: 0
-      TangentModeLeft: 0
-      TangentModeRight: 0
+      TangentModeLeft: 1
+      TangentModeRight: 1
       WeightedMode: 0
   KnockbackCurveY:
     Samples:
     - RawValue: 0
-    - RawValue: 4032
-    - RawValue: 7936
-    - RawValue: 11712
-    - RawValue: 15360
-    - RawValue: 18880
-    - RawValue: 22272
-    - RawValue: 25536
+    - RawValue: 2048
+    - RawValue: 4096
+    - RawValue: 6144
+    - RawValue: 8192
+    - RawValue: 10240
+    - RawValue: 12288
+    - RawValue: 14336
+    - RawValue: 16384
+    - RawValue: 18432
+    - RawValue: 20480
+    - RawValue: 22528
+    - RawValue: 24576
+    - RawValue: 26624
     - RawValue: 28672
-    - RawValue: 31680
-    - RawValue: 34560
-    - RawValue: 37312
-    - RawValue: 39936
-    - RawValue: 42432
-    - RawValue: 44800
-    - RawValue: 47040
+    - RawValue: 30720
+    - RawValue: 32768
+    - RawValue: 34816
+    - RawValue: 36864
+    - RawValue: 38912
+    - RawValue: 40960
+    - RawValue: 43008
+    - RawValue: 45056
+    - RawValue: 47104
     - RawValue: 49152
-    - RawValue: 51136
-    - RawValue: 52992
-    - RawValue: 54720
-    - RawValue: 56320
-    - RawValue: 57792
-    - RawValue: 59136
-    - RawValue: 60352
+    - RawValue: 51200
+    - RawValue: 53248
+    - RawValue: 55296
+    - RawValue: 57344
+    - RawValue: 59392
     - RawValue: 61440
-    - RawValue: 62400
-    - RawValue: 63232
-    - RawValue: 63936
-    - RawValue: 64512
-    - RawValue: 64960
-    - RawValue: 65280
-    - RawValue: 65472
+    - RawValue: 63488
     - RawValue: 65536
     PreWrapMode: 0
     PostWrapMode: 0
@@ -135,22 +135,22 @@ MonoBehaviour:
       Value:
         RawValue: 0
       InTangent:
-        RawValue: 131072
+        RawValue: 65536
       OutTangent:
-        RawValue: 131072
+        RawValue: 65536
       TangentMode: 0
-      TangentModeLeft: 0
-      TangentModeRight: 0
+      TangentModeLeft: 1
+      TangentModeRight: 1
       WeightedMode: 0
     - Time:
         RawValue: 65536
       Value:
         RawValue: 65536
       InTangent:
-        RawValue: 0
+        RawValue: 65536
       OutTangent:
-        RawValue: 0
+        RawValue: 65536
       TangentMode: 0
-      TangentModeLeft: 0
-      TangentModeRight: 0
+      TangentModeLeft: 1
+      TangentModeRight: 1
       WeightedMode: 0
