@@ -68,7 +68,7 @@ MonoBehaviour:
     RawValue: 3277
   KnockbackForce:
     RawValue: 327680
-  KnockbackType: 0
+  KnockbackType: 3
   FixedKnockbackDirection:
     X:
       RawValue: 65536
@@ -91,7 +91,7 @@ MonoBehaviour:
       RawValue: 327680
     KnockbackDirection:
       X:
-        RawValue: 65536
+        RawValue: 0
       Y:
         RawValue: 32768
     HitstunDuration:
@@ -133,7 +133,7 @@ MonoBehaviour:
     Duration:
       RawValue: 13107
     KnockbackForce:
-      RawValue: 655360
+      RawValue: 327680
     KnockbackDirection:
       X:
         RawValue: 0

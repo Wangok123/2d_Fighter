@@ -1,12 +1,5 @@
-enum CharacterTeam
-{
-    None, Blue, Red, Neutral
-}
-
 component CharacterStatusComponent
 {
-    asset_ref<StatusData> StatusData;
-    asset_ref<CharacterMovementData> CharacterMovementData;
     asset_ref<HitReactionData> HitReactionData;
 	
 	KnockbackStatusEffect KnockbackStatusEffect;
@@ -14,13 +7,10 @@ component CharacterStatusComponent
 
 component MovementComponent
 {
+    asset_ref<MovementData> MovementData;
+
 	[ExcludeFromPrototype] bool IsFacingRight;
 	[ExcludeFromPrototype] bool HasAirJump;
-}
-
-component CharacterLevelComponent
-{
-	Int32 CurrentLevel;
 }
 
 component AttackComponent

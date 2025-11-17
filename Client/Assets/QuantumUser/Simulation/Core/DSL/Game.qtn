@@ -1,0 +1,4 @@
+enum CharacterTeam
+{
+    None, Blue, Red, Neutral
+}

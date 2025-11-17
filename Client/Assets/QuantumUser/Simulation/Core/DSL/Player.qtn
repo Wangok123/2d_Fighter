@@ -1,5 +1,3 @@
-
-
 component PlayerLink
 {
 	player_ref Player;
@@ -9,4 +7,20 @@ component PlayerSpawner
 {
     player_ref PlayerRef;
     CharacterTeam PlayerTeam;
+}
+
+component PlayerStatusComponent
+{
+    asset_ref<StatusData> StatusData;
+    asset_ref<HitReactionData> HitReactionData;
+	
+	KnockbackStatusEffect KnockbackStatusEffect;
+}
+
+component PlayerMovementComponent
+{
+    asset_ref<PlayerMovementData> CharacterMovementData;
+
+	[ExcludeFromPrototype] bool IsFacingRight;
+	[ExcludeFromPrototype] bool HasAirJump;
 }

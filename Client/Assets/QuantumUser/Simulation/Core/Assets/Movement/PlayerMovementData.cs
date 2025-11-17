@@ -1,10 +1,10 @@
 ﻿namespace Quantum
 {
-    public class CharacterMovementData : AssetObject
+    public class PlayerMovementData : MovementData
     {
         public AssetRef<KCC2DConfig> DefaultKCC2DConfig;
         
-        public unsafe void UpdateKCCSettings(Frame frame, EntityRef playerEntityRef)
+        public override unsafe void UpdateKCCSettings(Frame frame, EntityRef playerEntityRef)
         {
             KCC2D* kcc = frame.Unsafe.GetPointer<KCC2D>(playerEntityRef);
 

@@ -199,12 +199,6 @@ MonoBehaviour:
     - rid: 8101032211223937028
       type: {class: CharacterStatusComponentPrototype, ns: Quantum.Prototypes, asm: Quantum.Simulation}
       data:
-        StatusData:
-          Id:
-            Value: 0
-        CharacterMovementData:
-          Id:
-            Value: 0
         HitReactionData:
           Id:
             Value: 293932180870028386

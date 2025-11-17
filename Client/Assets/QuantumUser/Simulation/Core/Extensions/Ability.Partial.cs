@@ -43,7 +43,6 @@ namespace Quantum
     
             KCC2D* kcc = frame.Unsafe.GetPointer<KCC2D>(entityRef);
             AbilityData abilityData = frame.FindAsset<AbilityData>(AbilityData.Id);
-            CharacterMovementData playerMovementData = frame.FindAsset<CharacterMovementData>(playerStatus->CharacterMovementData.Id);
 
             RuntimeDuration = abilityData.Duration;
 
@@ -57,8 +56,6 @@ namespace Quantum
             abilityInventory->ActiveAbilityInfo.ActiveAbilityType = abilityType;
             abilityInventory->ActiveAbilityInfo.CastDirection = GetCastDirection(frame, playerRef, abilityData, entityRef);
             abilityInventory->ActiveAbilityInfo.CastVelocity = kcc->CombinedVelocity;
-
-            playerMovementData.UpdateKCCSettings(frame, entityRef);
 
             if (abilityData.DisableMovementDuringAbility)
             {
@@ -152,9 +149,9 @@ namespace Quantum
 
         public void StopAbility(Frame frame, EntityRef entityRef)
         {
-            CharacterStatusComponent* playerStatus = frame.Unsafe.GetPointer<CharacterStatusComponent>(entityRef);
+            MovementComponent* movement = frame.Unsafe.GetPointer<MovementComponent>(entityRef);
             AbilityInventory* abilityInventory = frame.Unsafe.GetPointer<AbilityInventory>(entityRef);
-            CharacterMovementData playerMovementData = frame.FindAsset<CharacterMovementData>(playerStatus->CharacterMovementData.Id);
+            MovementData playerMovementData = frame.FindAsset<MovementData>(movement->MovementData.Id);
 
             AbilityData abilityData = frame.FindAsset<AbilityData>(AbilityData.Id);
 

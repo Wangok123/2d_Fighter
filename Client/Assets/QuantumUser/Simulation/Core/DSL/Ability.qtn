@@ -138,7 +138,7 @@ struct Ability
     FP RuntimeDuration;
 
     [ExcludeFromPrototype] CountdownTimer InputBufferTimer;
-    [ExcludeFromPrototype] CountdownTimer DelayTimer;
+    [ExcludeFromPrototype] CountdownTimer  DelayTimer;
     [ExcludeFromPrototype] CountdownTimer DurationTimer;
     [ExcludeFromPrototype] CountdownTimer CooldownTimer;
 

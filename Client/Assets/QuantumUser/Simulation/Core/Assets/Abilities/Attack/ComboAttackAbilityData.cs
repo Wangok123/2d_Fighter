@@ -104,10 +104,34 @@ namespace Quantum
                 return base.GetCurrentKnockbackDirection(frame, entityRef, attackerPos, targetPos);
 
             ComboAttackRuntimeComponent* comboRuntime = frame.Unsafe.GetPointer<ComboAttackRuntimeComponent>(entityRef);
-            bool isFacingRight = GetIsFacingRight(frame, entityRef);
-            
+    
+            switch (KnockbackType)
+            {
+                case AttackKnockbackType.AwayFromAttacker:
+                    FPVector2 awayDirection = targetPos - attackerPos;
+                    return awayDirection.Normalized;
+
+                case AttackKnockbackType.AttackerFacingDirection:
+                    bool isFacingRight = GetIsFacingRight(frame, entityRef);
+                    return new FPVector2(
+                        comboRuntime->CurrentKnockbackDirection.X * (isFacingRight ? FP._1 : -FP._1),
+                        comboRuntime->CurrentKnockbackDirection.Y
+                    ).Normalized;
+
+                case AttackKnockbackType.Up:
+                    return FPVector2.Up;
+
+                case AttackKnockbackType.Fixed:
+                    isFacingRight = GetIsFacingRight(frame, entityRef);
+                    return new FPVector2(
+                        comboRuntime->CurrentKnockbackDirection.X * (isFacingRight ? FP._1 : -FP._1),
+                        comboRuntime->CurrentKnockbackDirection.Y
+                    ).Normalized;
+            }
+    
+            bool defaultIsFacingRight = GetIsFacingRight(frame, entityRef);
             return new FPVector2(
-                comboRuntime->CurrentKnockbackDirection.X * (isFacingRight ? FP._1 : -FP._1),
+                comboRuntime->CurrentKnockbackDirection.X * (defaultIsFacingRight ? FP._1 : -FP._1),
                 comboRuntime->CurrentKnockbackDirection.Y
             ).Normalized;
         }

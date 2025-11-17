@@ -89,8 +89,9 @@ namespace Quantum
             FP knockbackForce = attackData.GetCurrentKnockbackForce(frame, attacker);
             FPVector2 knockbackDirection = attackData.GetCurrentKnockbackDirection(frame, attacker, attackerPos, targetPos);
             FPVector2 knockbackVelocity = knockbackDirection * knockbackForce;
+            FP hitstunDuration = attackData.GetCurrentHitstunDuration(frame, attacker);
 
-            frame.Signals.OnKnockbackApplied(target, knockbackVelocity, 0);
+            frame.Signals.OnKnockbackApplied(target, knockbackVelocity, hitstunDuration);
         }
 
         private bool GetIsFacingRight(Frame frame, EntityRef entityRef)

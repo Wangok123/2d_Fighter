@@ -9,16 +9,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c91a081dd4f249518a4a14e6c3ac5c47, type: 3}
+  m_Script: {fileID: 11500000, guid: 31370bdc0dab40beb087cd2430801e9f, type: 3}
   m_Name: PlayerMovementData
   m_EditorClassIdentifier: 
   Identifier:
-    Path: QuantumUser/Resources/DB/PlayerMovementData
+    Path: QuantumUser/Resources/DB/Movement/PlayerMovementData
     Guid:
-      Value: 485897725668651356
+      Value: 433540883464778043
   DefaultKCC2DConfig:
     Id:
       Value: 335552892607164892
-  NoMovementKCCSettings:
-    Id:
-      Value: 377939240486057651

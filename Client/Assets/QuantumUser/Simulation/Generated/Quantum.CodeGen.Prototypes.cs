@@ -212,25 +212,8 @@ namespace Quantum.Prototypes {
     }
   }
   [System.SerializableAttribute()]
-  [Quantum.Prototypes.Prototype(typeof(Quantum.CharacterLevelComponent))]
-  public unsafe partial class CharacterLevelComponentPrototype : ComponentPrototype<Quantum.CharacterLevelComponent> {
-    public Int32 CurrentLevel;
-    partial void MaterializeUser(Frame frame, ref Quantum.CharacterLevelComponent result, in PrototypeMaterializationContext context);
-    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
-        Quantum.CharacterLevelComponent component = default;
-        Materialize((Frame)f, ref component, in context);
-        return f.Set(entity, component) == SetResult.ComponentAdded;
-    }
-    public void Materialize(Frame frame, ref Quantum.CharacterLevelComponent result, in PrototypeMaterializationContext context = default) {
-        result.CurrentLevel = this.CurrentLevel;
-        MaterializeUser(frame, ref result, in context);
-    }
-  }
-  [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.CharacterStatusComponent))]
   public unsafe partial class CharacterStatusComponentPrototype : ComponentPrototype<Quantum.CharacterStatusComponent> {
-    public AssetRef<StatusData> StatusData;
-    public AssetRef<CharacterMovementData> CharacterMovementData;
     public AssetRef<HitReactionData> HitReactionData;
     public Quantum.Prototypes.KnockbackStatusEffectPrototype KnockbackStatusEffect;
     partial void MaterializeUser(Frame frame, ref Quantum.CharacterStatusComponent result, in PrototypeMaterializationContext context);
@@ -240,8 +223,6 @@ namespace Quantum.Prototypes {
         return f.Set(entity, component) == SetResult.ComponentAdded;
     }
     public void Materialize(Frame frame, ref Quantum.CharacterStatusComponent result, in PrototypeMaterializationContext context = default) {
-        result.StatusData = this.StatusData;
-        result.CharacterMovementData = this.CharacterMovementData;
         result.HitReactionData = this.HitReactionData;
         this.KnockbackStatusEffect.Materialize(frame, ref result.KnockbackStatusEffect, in context);
         MaterializeUser(frame, ref result, in context);
@@ -554,8 +535,7 @@ namespace Quantum.Prototypes {
   [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.MovementComponent))]
   public unsafe partial class MovementComponentPrototype : ComponentPrototype<Quantum.MovementComponent> {
-    [HideInInspector()]
-    public Int32 _empty_prototype_dummy_field_;
+    public AssetRef<MovementData> MovementData;
     partial void MaterializeUser(Frame frame, ref Quantum.MovementComponent result, in PrototypeMaterializationContext context);
     public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
         Quantum.MovementComponent component = default;
@@ -563,6 +543,7 @@ namespace Quantum.Prototypes {
         return f.Set(entity, component) == SetResult.ComponentAdded;
     }
     public void Materialize(Frame frame, ref Quantum.MovementComponent result, in PrototypeMaterializationContext context = default) {
+        result.MovementData = this.MovementData;
         MaterializeUser(frame, ref result, in context);
     }
   }
@@ -582,6 +563,21 @@ namespace Quantum.Prototypes {
     }
   }
   [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.PlayerMovementComponent))]
+  public unsafe partial class PlayerMovementComponentPrototype : ComponentPrototype<Quantum.PlayerMovementComponent> {
+    public AssetRef<PlayerMovementData> CharacterMovementData;
+    partial void MaterializeUser(Frame frame, ref Quantum.PlayerMovementComponent result, in PrototypeMaterializationContext context);
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+        Quantum.PlayerMovementComponent component = default;
+        Materialize((Frame)f, ref component, in context);
+        return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref Quantum.PlayerMovementComponent result, in PrototypeMaterializationContext context = default) {
+        result.CharacterMovementData = this.CharacterMovementData;
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.PlayerSpawner))]
   public unsafe partial class PlayerSpawnerPrototype : ComponentPrototype<Quantum.PlayerSpawner> {
     public PlayerRef PlayerRef;
@@ -595,6 +591,25 @@ namespace Quantum.Prototypes {
     public void Materialize(Frame frame, ref Quantum.PlayerSpawner result, in PrototypeMaterializationContext context = default) {
         result.PlayerRef = this.PlayerRef;
         result.PlayerTeam = this.PlayerTeam;
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.PlayerStatusComponent))]
+  public unsafe partial class PlayerStatusComponentPrototype : ComponentPrototype<Quantum.PlayerStatusComponent> {
+    public AssetRef<StatusData> StatusData;
+    public AssetRef<HitReactionData> HitReactionData;
+    public Quantum.Prototypes.KnockbackStatusEffectPrototype KnockbackStatusEffect;
+    partial void MaterializeUser(Frame frame, ref Quantum.PlayerStatusComponent result, in PrototypeMaterializationContext context);
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+        Quantum.PlayerStatusComponent component = default;
+        Materialize((Frame)f, ref component, in context);
+        return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref Quantum.PlayerStatusComponent result, in PrototypeMaterializationContext context = default) {
+        result.StatusData = this.StatusData;
+        result.HitReactionData = this.HitReactionData;
+        this.KnockbackStatusEffect.Materialize(frame, ref result.KnockbackStatusEffect, in context);
         MaterializeUser(frame, ref result, in context);
     }
   }

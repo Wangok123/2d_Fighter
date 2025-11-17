@@ -1182,12 +1182,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Prototype:
-    StatusData:
-      Id:
-        Value: 0
-    CharacterMovementData:
-      Id:
-        Value: 0
     HitReactionData:
       Id:
         Value: 293932180870028386

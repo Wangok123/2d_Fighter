@@ -24,9 +24,9 @@ namespace Quantum
             // 计算当前应有的击退速度
             FPVector2 knockbackVelocity = GetKnockbackVelocity(frame, filter.CharacterStatus);
     
-            // 直接设置 KCC 速度，让 KCC 处理碰撞
+            // 【重构】只设置速度，不调用 Move，统一由 Character2DSystem 处理移动
             filter.KCC->Velocity = knockbackVelocity;
-            filter.KCC->Move(frame, filter.EntityRef, FPVector2.Up);
+            filter.KCC->Move(frame, filter.EntityRef, filter.CharacterStatus->KnockbackStatusEffect.KnockbackDirection);
     
             // 更新计时器
             filter.CharacterStatus->KnockbackStatusEffect.DurationTimer.Tick(frame.DeltaTime);
@@ -35,35 +35,48 @@ namespace Quantum
             if (!filter.CharacterStatus->KnockbackStatusEffect.DurationTimer.IsRunning)
             {
                 // 恢复设置
-                // CharacterMovementData playerMovementData = frame.FindAsset<CharacterMovementData>(filter.CharacterStatus->CharacterMovementData.Id);
-                // playerMovementData.UpdateKCCSettings(frame, filter.EntityRef);
+                filter.CharacterStatus->KnockbackStatusEffect.KnockbackVelocity = FPVector2.Zero;
             }
         }
 
         public void OnKnockbackApplied(Frame frame, EntityRef target, FPVector2 knockbackVelocity, FP duration)
         {
             CharacterStatusComponent* playerStatus = frame.Unsafe.GetPointer<CharacterStatusComponent>(target);
-            CharacterMovementData playerMovementData = frame.FindAsset<CharacterMovementData>(playerStatus->CharacterMovementData.Id);
 
-            playerStatus->KnockbackStatusEffect.DurationTimer.Start(1);
+            if (duration <= FP._0)
+            {
+                duration = FP._0_50;
+            }
+            
+            playerStatus->KnockbackStatusEffect.DurationTimer.Start(duration);
             playerStatus->KnockbackStatusEffect.KnockbackDirection = knockbackVelocity.Normalized;
             playerStatus->KnockbackStatusEffect.KnockbackVelocity = knockbackVelocity;
         }
         
         private FPVector2 GetKnockbackVelocity(Frame frame, CharacterStatusComponent* hitReaction)
         {
-            KnockbackStatusEffectData data = frame.FindAsset<KnockbackStatusEffectData>(hitReaction->KnockbackStatusEffect.StatusEffectData.Id);
+            if (hitReaction->KnockbackStatusEffect.StatusEffectData.Id.IsValid)
+            {
+                KnockbackStatusEffectData data = frame.FindAsset<KnockbackStatusEffectData>(hitReaction->KnockbackStatusEffect.StatusEffectData.Id);
     
-            FP normalizedTime = hitReaction->KnockbackStatusEffect.DurationTimer.NormalizedTime;
-            FP velocityScaleX = data.KnockbackCurveX.Evaluate(normalizedTime);
-            FP velocityScaleY = data.KnockbackCurveY.Evaluate(normalizedTime);
+                FP normalizedTime = hitReaction->KnockbackStatusEffect.DurationTimer.NormalizedTime;
+                FP velocityScaleX = data.KnockbackCurveX.Evaluate(normalizedTime);
+                FP velocityScaleY = data.KnockbackCurveY.Evaluate(normalizedTime);
     
-            FPVector2 knockbackVelocity = new FPVector2(
-                hitReaction->KnockbackStatusEffect.KnockbackDirection.X * hitReaction->KnockbackStatusEffect.KnockbackVelocity.X * velocityScaleX,
-                hitReaction->KnockbackStatusEffect.KnockbackDirection.Y * hitReaction->KnockbackStatusEffect.KnockbackVelocity.Y * velocityScaleY
-            );
-            
-            return knockbackVelocity;
+                FPVector2 knockbackVelocity = new FPVector2(
+                    hitReaction->KnockbackStatusEffect.KnockbackDirection.X * hitReaction->KnockbackStatusEffect.KnockbackVelocity.X * velocityScaleX,
+                    hitReaction->KnockbackStatusEffect.KnockbackDirection.Y * hitReaction->KnockbackStatusEffect.KnockbackVelocity.Y * velocityScaleY
+                );
+                
+                return knockbackVelocity;
+            }
+            else
+            {
+                FP normalizedTime = hitReaction->KnockbackStatusEffect.DurationTimer.NormalizedTime;
+                FP falloffScale = FP._1 - normalizedTime;
+                
+                return hitReaction->KnockbackStatusEffect.KnockbackVelocity * falloffScale;
+            }
         }
 
         public void OnKnockbackPhysic2DApplied(Frame frame, EntityRef target, FPVector2 knockbackVelocity)
@@ -73,7 +86,6 @@ namespace Quantum
                 physicsBody->Velocity = knockbackVelocity;
             }
         }
-
         
     }
 }

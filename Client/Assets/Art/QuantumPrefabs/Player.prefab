@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 830373370507069944}
   - component: {fileID: 2045562779670424827}
   - component: {fileID: 6596132072543008265}
+  - component: {fileID: 5920013954263597409}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -565,7 +566,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Prototype:
-    _empty_prototype_dummy_field_: 0
+    MovementData:
+      Id:
+        Value: 433540883464778043
 --- !u!114 &1613700388019197692
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -593,12 +596,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Prototype:
-    StatusData:
-      Id:
-        Value: 336468280525922348
-    CharacterMovementData:
-      Id:
-        Value: 485897725668651356
     HitReactionData:
       Id:
         Value: 0
@@ -644,6 +641,20 @@ MonoBehaviour:
   Combo1Color: {r: 1, g: 0.5, b: 0, a: 0.3}
   Combo2Color: {r: 1, g: 0, b: 0, a: 0.3}
   Combo3Color: {r: 0.5, g: 0, b: 1, a: 0.3}
+--- !u!114 &5920013954263597409
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 747601124680124256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 374247ccd5a30ba41aa59524e420c47e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Prototype:
+    _empty_prototype_dummy_field_: 0
 --- !u!1 &4774830198564325150
 GameObject:
   m_ObjectHideFlags: 0
