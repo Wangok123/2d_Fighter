@@ -116,24 +116,49 @@ namespace Quantum
 
                     hitList.Add(hit.Entity);
 
-                    ApplyHitboxDamage(frame, hit.Entity, sequence, movement->IsFacingRight);
+                    ApplyHitboxDamage(frame, entityRef,hit.Entity, sequence, movement->IsFacingRight);
                 }
             }
         }
 
-        private void ApplyHitboxDamage(Frame frame, EntityRef target, CommandSequenceConfig sequence, bool isFacingRight)
+        private void ApplyHitboxDamage(Frame frame, EntityRef source, EntityRef target, CommandSequenceConfig sequence, bool isFacingRight)
         {
             if (!frame.Unsafe.TryGetPointer<CharacterStatusComponent>(target, out var hitReaction))
                 return;
 
-            FPVector2 knockbackDirection = new FPVector2(
-                sequence.KnockbackDirection.X * (isFacingRight ? FP._1 : -FP._1),
-                sequence.KnockbackDirection.Y
-            ).Normalized;
-            
-            FPVector2 knockbackVelocity = knockbackDirection * sequence.KnockbackForce;
+            // 修改：检查是否配置了击退数据
+            if (!sequence.KnockbackStatusEffectData.Id.IsValid)
+            {
+                return;
+            }
 
-            frame.Signals.OnKnockbackApplied(target, knockbackVelocity, 0);
+            KnockbackStatusEffectData knockbackData = frame.FindAsset<KnockbackStatusEffectData>(sequence.KnockbackStatusEffectData.Id);
+    
+            // 修改：根据攻击者朝向计算击退方向
+            Transform2D* attackerTransform = frame.Unsafe.GetPointer<Transform2D>(source);
+            Transform2D* targetTransform = frame.Unsafe.GetPointer<Transform2D>(target);
+    
+            FPVector2 knockbackDirection = knockbackData.GetKnockbackDirection(
+                frame, 
+                isFacingRight, 
+                attackerTransform->Position, 
+                targetTransform->Position
+            );
+
+            KnockbackApplicationMode knockbackMode = knockbackData.KnockbackApplicationMode;
+
+            // 修改：根据模式选择不同的信号
+            switch (knockbackMode)
+            {
+                case KnockbackApplicationMode.CharacterController:
+                    frame.Signals.OnKnockbackApplied(target, knockbackData.KnockBackDuration, knockbackDirection, sequence.KnockbackStatusEffectData);
+                    break;
+
+                case KnockbackApplicationMode.Physics2D:
+                    FPVector2 knockbackVelocity = knockbackDirection * knockbackData.KnockbackForce;
+                    frame.Signals.OnKnockbackPhysic2DApplied(target, knockbackVelocity);
+                    break;
+            }
         }
 
         private void SpawnProjectile(Frame frame, EntityRef entityRef, CommandSequenceConfig sequence)

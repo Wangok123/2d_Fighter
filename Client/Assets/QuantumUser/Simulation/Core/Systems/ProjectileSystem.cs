@@ -99,13 +99,43 @@ namespace Quantum
             if (HandleSpecialHitBehavior(frame, projectile, projectileComponent, projectileData, target, hitPoint))
                 return;
 
-            FPVector2 knockbackDirection =
-                projectileData.GetKnockbackDirection(frame, projectile, projectileComponent->Owner, target, hitPoint);
-            FP knockbackForce = projectileData.GetKnockbackForce(frame, projectile);
-            FPVector2 knockbackVelocity = knockbackDirection * knockbackForce;
+            // 修改：使用 KnockbackStatusEffectData
+            AssetRef<KnockbackStatusEffectData> knockbackDataRef = projectileData.GetKnockbackStatusEffectData(frame, projectile);
+    
+            if (!knockbackDataRef.Id.IsValid)
+            {
+                return;
+            }
 
-            frame.Signals.OnKnockbackApplied(target, knockbackVelocity, 0);
+            KnockbackStatusEffectData knockbackData = frame.FindAsset<KnockbackStatusEffectData>(knockbackDataRef.Id);
+    
+            // 修改：计算击退方向（使用 projectile 位置和 target 位置）
+            Transform2D* projectileTransform = frame.Unsafe.GetPointer<Transform2D>(projectile);
+            Transform2D* targetTransform = frame.Unsafe.GetPointer<Transform2D>(target);
+    
+            FPVector2 knockbackDirection = knockbackData.GetKnockbackDirection(
+                frame, 
+                projectile, 
+                projectileTransform->Position, 
+                targetTransform->Position
+            );
+
+            KnockbackApplicationMode knockbackMode = knockbackData.KnockbackApplicationMode;
+
+            // 修改：根据模式选择不同的信号
+            switch (knockbackMode)
+            {
+                case KnockbackApplicationMode.CharacterController:
+                    frame.Signals.OnKnockbackApplied(target, knockbackData.KnockBackDuration, knockbackDirection, knockbackDataRef);
+                    break;
+
+                case KnockbackApplicationMode.Physics2D:
+                    FPVector2 knockbackVelocity = knockbackDirection * knockbackData.KnockbackForce;
+                    frame.Signals.OnKnockbackPhysic2DApplied(target, knockbackVelocity);
+                    break;
+            }
         }
+
 
         private void InitializeProjectile(Frame frame, EntityRef projectileEntity, ProjectileComponent* projectile,
             ProjectileData data, EntityRef owner)

@@ -28,10 +28,10 @@ namespace Quantum
         [Tooltip("是否根据蓄力时间缩放击退力度")]
         public bool ScaleKnockbackWithCharge = true;
         
-        [Tooltip("最小蓄力击退倍率")]
+        [Tooltip("最小蓄力击退力度倍率")]
         public FP MinChargeKnockbackMultiplier = FP._1;
         
-        [Tooltip("最大蓄力击退倍率")]
+        [Tooltip("最大蓄力击退力度倍率")]
         public FP MaxChargeKnockbackMultiplier = FP._1_50;
         
         [Header("Charge Visual Settings")]
@@ -56,19 +56,33 @@ namespace Quantum
             return ScaleAttackShape(AttackShape, rangeMultiplier);
         }
 
-        public override FP GetCurrentKnockbackForce(Frame frame, EntityRef entityRef)
+        public override AssetRef<KnockbackStatusEffectData> GetCurrentKnockbackStatusEffectData(Frame frame, EntityRef entityRef)
         {
             if (!ScaleKnockbackWithCharge)
-                return base.GetCurrentKnockbackForce(frame, entityRef);
+                return base.GetCurrentKnockbackStatusEffectData(frame, entityRef);
+
+            AssetRef<KnockbackStatusEffectData> baseDataRef = base.GetCurrentKnockbackStatusEffectData(frame, entityRef);
+            
+            if (!baseDataRef.Id.IsValid)
+                return baseDataRef;
 
             if (!frame.Unsafe.TryGetPointer<AttackComponent>(entityRef, out var attackComponent))
-                return base.GetCurrentKnockbackForce(frame, entityRef);
+                return baseDataRef;
+
+            if (!frame.Unsafe.TryGetPointer<ChargeAttackRuntimeComponent>(entityRef, out var chargeRuntime))
+            {
+                frame.Add<ChargeAttackRuntimeComponent>(entityRef);
+                chargeRuntime = frame.Unsafe.GetPointer<ChargeAttackRuntimeComponent>(entityRef);
+            }
 
             FP chargeTime = attackComponent->HeavyChargeTime;
             FP chargeRatio = GetChargeRatio(chargeTime);
             FP knockbackMultiplier = FPMath.Lerp(MinChargeKnockbackMultiplier, MaxChargeKnockbackMultiplier, chargeRatio);
 
-            return KnockbackForce * knockbackMultiplier;
+            chargeRuntime->CurrentKnockbackMultiplier = knockbackMultiplier;
+            chargeRuntime->BaseKnockbackData = baseDataRef;
+
+            return baseDataRef;
         }
 
         public override void UpdateInput(Frame frame, EntityRef entityRef, AbilityType abilityType, Ability* ability, SimpleInput2D input)

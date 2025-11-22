@@ -5,7 +5,7 @@ using UnityEngine.Scripting;
 namespace Quantum
 {
     [Preserve]
-    public unsafe class SkillFieldSystem : SystemMainThreadFilter<SkillFieldSystem.Filter>, 
+    public unsafe class SkillFieldSystem : SystemMainThreadFilter<SkillFieldSystem.Filter>,
         ISignalSpawnSkillField,
         ISignalDestroySkillField,
         ISignalOnSkillFieldApplyEffect
@@ -40,7 +40,8 @@ namespace Quantum
             skillFieldData.OnCustomTick(frame, filter.Entity, filter.SkillField);
         }
 
-        public void SpawnSkillField(Frame frame, AssetRef<SkillFieldData> skillFieldDataRef, FPVector2 position, EntityRef owner)
+        public void SpawnSkillField(Frame frame, AssetRef<SkillFieldData> skillFieldDataRef, FPVector2 position,
+            EntityRef owner)
         {
             SkillFieldData skillFieldData = frame.FindAsset<SkillFieldData>(skillFieldDataRef.Id);
 
@@ -105,7 +106,8 @@ namespace Quantum
             ApplyFieldEffect(frame, skillField, skillFieldComponent, skillFieldData, target, hitPoint);
         }
 
-        private void InitializeSpecialField(Frame frame, EntityRef skillFieldEntity, SkillFieldComponent* skillField, SkillFieldData data, EntityRef owner, FPVector2 position)
+        private void InitializeSpecialField(Frame frame, EntityRef skillFieldEntity, SkillFieldComponent* skillField,
+            SkillFieldData data, EntityRef owner, FPVector2 position)
         {
             if (data is DelayedExplosionFieldData delayedData)
             {
@@ -125,7 +127,8 @@ namespace Quantum
             }
         }
 
-        private void UpdateSpecialFieldBehavior(Frame frame, EntityRef skillFieldEntity, SkillFieldComponent* skillField, SkillFieldData data)
+        private void UpdateSpecialFieldBehavior(Frame frame, EntityRef skillFieldEntity,
+            SkillFieldComponent* skillField, SkillFieldData data)
         {
             if (data is DelayedExplosionFieldData delayedData)
             {
@@ -146,7 +149,8 @@ namespace Quantum
             }
         }
 
-        private void TriggerDelayedExplosion(Frame frame, EntityRef skillFieldEntity, SkillFieldComponent* skillField, DelayedExplosionFieldData data)
+        private void TriggerDelayedExplosion(Frame frame, EntityRef skillFieldEntity, SkillFieldComponent* skillField,
+            DelayedExplosionFieldData data)
         {
             Transform2D* transform = frame.Unsafe.GetPointer<Transform2D>(skillFieldEntity);
             FPVector2 explosionCenter = transform->Position;
@@ -161,14 +165,15 @@ namespace Quantum
             }
 
             var shape = data.EffectArea.CreateShape(frame);
-            HitCollection hits = frame.Physics2D.OverlapShape(*transform, shape, data.TargetLayer, QueryOptions.HitDynamics);
+            HitCollection hits =
+                frame.Physics2D.OverlapShape(*transform, shape, data.TargetLayer, QueryOptions.HitDynamics);
 
             if (hits.Count > 0)
             {
                 for (int i = 0; i < hits.Count; i++)
                 {
                     Hit hit = hits[i];
-                    
+
                     if (hit.Entity == skillField->Owner)
                         continue;
 
@@ -178,113 +183,164 @@ namespace Quantum
                     if (!frame.Unsafe.TryGetPointer<Transform2D>(hit.Entity, out var targetTransform))
                         continue;
 
+                    // 修改：使用 KnockbackStatusEffectData 统一处理击退
                     if (data.ApplyKnockback)
                     {
-                        FPVector2 knockbackVelocity = CalculateExplosionKnockback(data, explosionCenter, targetTransform->Position);
-                        frame.Signals.OnKnockbackApplied(hit.Entity, knockbackVelocity, 0);
+                        AssetRef<KnockbackStatusEffectData> knockbackDataRef =
+                            data.GetKnockbackStatusEffectData(frame, skillFieldEntity);
+
+                        if (!knockbackDataRef.Id.IsValid)
+                        {
+                            continue;
+                        }
+
+                        KnockbackStatusEffectData knockbackData =
+                            frame.FindAsset<KnockbackStatusEffectData>(knockbackDataRef.Id);
+
+                        // 修改：使用 KnockbackStatusEffectData 计算击退方向
+                        FPVector2 knockbackDirection = knockbackData.GetKnockbackDirection(
+                            frame,
+                            skillField->Owner,
+                            explosionCenter,
+                            targetTransform->Position
+                        );
+
+                        KnockbackApplicationMode knockbackMode = knockbackData.KnockbackApplicationMode;
+
+                        // 修改：根据模式选择不同的信号
+                        switch (knockbackMode)
+                        {
+                            case KnockbackApplicationMode.CharacterController:
+                                frame.Signals.OnKnockbackApplied(hit.Entity, knockbackData.KnockBackDuration,
+                                    knockbackDirection, knockbackDataRef);
+                                break;
+
+                            case KnockbackApplicationMode.Physics2D:
+                                FPVector2 knockbackVelocity = knockbackDirection * knockbackData.KnockbackForce;
+                                frame.Signals.OnKnockbackPhysic2DApplied(hit.Entity, knockbackVelocity);
+                                break;
+                        }
                     }
                 }
             }
         }
 
-        private FP CalculateExplosionDamage(DelayedExplosionFieldData data, FPVector2 center, FPVector2 targetPos)
-        {
-            if (!data.DamageFalloff)
-                return data.ExplosionDamage;
-
-            FP distance = FPVector2.Distance(center, targetPos);
-            FP maxRange = data.EffectArea.CircleRadius;
-
-            if (distance <= FP._0_01)
-                return data.ExplosionDamage * data.CenterDamageMultiplier;
-
-            FP ratio = FP._1 - (distance / maxRange);
-            FP damageMultiplier = FP._1 + (data.CenterDamageMultiplier - FP._1) * ratio;
-            
-            return data.ExplosionDamage * damageMultiplier;
-        }
-
-        private FPVector2 CalculateExplosionKnockback(DelayedExplosionFieldData data, FPVector2 center, FPVector2 targetPos)
-        {
-            FPVector2 direction = data.KnockbackType switch
-            {
-                ExplosionKnockbackType.FromCenter => (targetPos - center).Normalized,
-                ExplosionKnockbackType.Up => FPVector2.Up,
-                ExplosionKnockbackType.None => FPVector2.Zero,
-                _ => FPVector2.Zero
-            };
-
-            return direction * data.KnockbackForce;
-        }
-
-        private void ApplyFieldEffect(Frame frame, EntityRef skillFieldEntity, SkillFieldComponent* skillField, SkillFieldData data, EntityRef target, FPVector2 hitPoint)
+        private void ApplyFieldEffect(Frame frame, EntityRef skillFieldEntity, SkillFieldComponent* skillField,
+            SkillFieldData data, EntityRef target, FPVector2 hitPoint)
         {
             if (data is DamageFieldData damageData)
             {
                 if (damageData.ApplyKnockback)
                 {
-                    FPVector2 knockbackVelocity = CalculateDamageFieldKnockback(frame, damageData, skillField->Owner, target, hitPoint);
-                    frame.Signals.OnKnockbackApplied(target, knockbackVelocity, 0);
-                    frame.Signals.OnKnockbackPhysic2DApplied(target, knockbackVelocity);
+                    ApplyKnockbackFromData(frame, skillFieldEntity, skillField, data, target, hitPoint);
                 }
             }
             else if (data is HealFieldData healData)
             {
+                // 治疗逻辑
             }
             else if (data is PushFieldData pushData)
             {
+                // 修改：Push力场使用持续物理力
                 ApplyPushFieldForce(frame, pushData, skillField->Owner, target, hitPoint);
             }
             else if (data is SlowFieldData slowData)
             {
+                // 减速逻辑
             }
             else if (data is VortexFieldData vortexData)
             {
+                // 修改：Vortex力场使用持续物理力
                 ApplyVortexFieldForce(frame, skillFieldEntity, vortexData, target);
-                
+
                 if (vortexData.DealDamage)
                 {
+                    // 伤害逻辑
                 }
             }
             else
             {
-                FPVector2 knockbackDirection = data.GetKnockbackDirection(frame, skillFieldEntity, target, hitPoint);
-                FP knockbackForce = data.GetKnockbackForce(frame, skillFieldEntity);
-                FPVector2 knockbackVelocity = knockbackDirection * knockbackForce;
-
-                frame.Signals.OnKnockbackApplied(target, knockbackVelocity, 0);
+                ApplyKnockbackFromData(frame, skillFieldEntity, skillField, data, target, hitPoint);
             }
         }
 
-        private FPVector2 CalculateDamageFieldKnockback(Frame frame, DamageFieldData data, EntityRef owner, EntityRef target, FPVector2 hitPoint)
+        private void ApplyKnockbackFromData(Frame frame, EntityRef skillFieldEntity, SkillFieldComponent* skillField,
+            SkillFieldData data, EntityRef target, FPVector2 hitPoint)
         {
-            Transform2D* ownerTransform = frame.Unsafe.GetPointer<Transform2D>(owner);
-            Transform2D* targetTransform = frame.Unsafe.GetPointer<Transform2D>(target);
+            AssetRef<KnockbackStatusEffectData> knockbackDataRef =
+                data.GetKnockbackStatusEffectData(frame, skillFieldEntity);
 
-            FPVector2 direction = data.KnockbackDirection switch
+            if (!knockbackDataRef.Id.IsValid)
             {
-                KnockbackDirection.FromCenter => (targetTransform->Position - ownerTransform->Position).Normalized,
-                KnockbackDirection.FromHitPoint => (targetTransform->Position - hitPoint).Normalized,
-                KnockbackDirection.Up => FPVector2.Up,
-                _ => FPVector2.Zero
-            };
+                return;
+            }
 
-            return direction * data.KnockbackForce;
+            KnockbackStatusEffectData knockbackData = frame.FindAsset<KnockbackStatusEffectData>(knockbackDataRef.Id);
+
+            Transform2D* fieldTransform = frame.Unsafe.GetPointer<Transform2D>(skillFieldEntity);
+            Transform2D* targetTransform = frame.Unsafe.GetPointer<Transform2D>(target);
+
+            FPVector2 knockbackDirection = knockbackData.GetKnockbackDirection(
+                frame,
+                skillField->Owner,
+                fieldTransform->Position,
+                targetTransform->Position
+            );
+
+            KnockbackApplicationMode knockbackMode = knockbackData.KnockbackApplicationMode;
+
+            switch (knockbackMode)
+            {
+                case KnockbackApplicationMode.CharacterController:
+                    frame.Signals.OnKnockbackApplied(target, knockbackData.KnockBackDuration, knockbackDirection,
+                        knockbackDataRef);
+                    break;
+
+                case KnockbackApplicationMode.Physics2D:
+                    FPVector2 knockbackVelocity = knockbackDirection * knockbackData.KnockbackForce;
+                    frame.Signals.OnKnockbackPhysic2DApplied(target, knockbackVelocity);
+                    break;
+            }
         }
-
-        private void ApplyPushFieldForce(Frame frame, PushFieldData data, EntityRef owner, EntityRef target, FPVector2 hitPoint)
+        
+        private void ApplyPushFieldForce(Frame frame, PushFieldData data, EntityRef owner, EntityRef target,
+            FPVector2 hitPoint)
         {
+            // 修改：从 PushFieldData 获取 KnockbackStatusEffectData
+            AssetRef<KnockbackStatusEffectData> knockbackDataRef = data.GetKnockbackStatusEffectData(frame, owner);
+    
+            if (!knockbackDataRef.Id.IsValid)
+            {
+                return;
+            }
+    
+            KnockbackStatusEffectData knockbackData = frame.FindAsset<KnockbackStatusEffectData>(knockbackDataRef.Id);
+    
             Transform2D* ownerTransform = frame.Unsafe.GetPointer<Transform2D>(owner);
             Transform2D* targetTransform = frame.Unsafe.GetPointer<Transform2D>(target);
 
+            // 修改：计算力的方向（保留原有的 PushField 逻辑）
             FPVector2 forceDirection = CalculatePushFieldDirection(data, ownerTransform->Position, targetTransform->Position, hitPoint);
             FP forceMagnitude = CalculatePushFieldMagnitude(data, ownerTransform->Position, targetTransform->Position);
 
-            FPVector2 force = forceDirection * forceMagnitude;
-            frame.Signals.OnKnockbackApplied(target, force, 0);
+            // 修改：根据 KnockbackApplicationMode 选择不同的信号
+            switch (knockbackData.KnockbackApplicationMode)
+            {
+                case KnockbackApplicationMode.CharacterController:
+                    // 修改：使用 CharacterController 模式，传入方向和持续时间
+                    frame.Signals.OnKnockbackApplied(target, knockbackData.KnockBackDuration, forceDirection, knockbackDataRef);
+                    break;
+
+                case KnockbackApplicationMode.Physics2D:
+                    // 修改：使用 Physics2D 模式，直接设置速度
+                    FPVector2 force = forceDirection * forceMagnitude;
+                    frame.Signals.OnKnockbackPhysic2DApplied(target, force);
+                    break;
+            }
         }
 
-        private FPVector2 CalculatePushFieldDirection(PushFieldData data, FPVector2 center, FPVector2 targetPos, FPVector2 hitPoint)
+        private FPVector2 CalculatePushFieldDirection(PushFieldData data, FPVector2 center, FPVector2 targetPos,
+            FPVector2 hitPoint)
         {
             FPVector2 baseDirection = data.Direction switch
             {
@@ -310,8 +366,19 @@ namespace Quantum
             return data.ForceStrength * falloff;
         }
 
+        // 修改：ApplyVortexFieldForce 使用 Physics2D 信号
         private void ApplyVortexFieldForce(Frame frame, EntityRef skillFieldEntity, VortexFieldData data, EntityRef target)
         {
+            // 修改：从 VortexFieldData 获取 KnockbackStatusEffectData
+            AssetRef<KnockbackStatusEffectData> knockbackDataRef = data.GetKnockbackStatusEffectData(frame, skillFieldEntity);
+    
+            if (!knockbackDataRef.Id.IsValid)
+            {
+                return;
+            }
+    
+            KnockbackStatusEffectData knockbackData = frame.FindAsset<KnockbackStatusEffectData>(knockbackDataRef.Id);
+    
             Transform2D* fieldTransform = frame.Unsafe.GetPointer<Transform2D>(skillFieldEntity);
             Transform2D* targetTransform = frame.Unsafe.GetPointer<Transform2D>(target);
 
@@ -321,23 +388,40 @@ namespace Quantum
             if (distance < FP._0_01)
                 return;
 
+            // 修改：计算旋涡力的方向（保留原有的 Vortex 逻辑）
             FPVector2 centripetalDir = -toTarget.Normalized;
-            
+
             FPVector2 tangentialDir = data.RotationDirection == VortexRotation.Clockwise
                 ? new FPVector2(toTarget.Y, -toTarget.X).Normalized
                 : new FPVector2(-toTarget.Y, toTarget.X).Normalized;
 
-            FPVector2 totalForce = centripetalDir * data.CentripetalForce + tangentialDir * data.TangentialForce;
+            FPVector2 forceDirection = (centripetalDir * data.CentripetalForce + tangentialDir * data.TangentialForce).Normalized;
 
-            frame.Signals.OnKnockbackApplied(target, totalForce, 0);
+            // 修改：根据 KnockbackApplicationMode 选择不同的信号
+            switch (knockbackData.KnockbackApplicationMode)
+            {
+                case KnockbackApplicationMode.CharacterController:
+                    // 修改：使用 CharacterController 模式，传入方向和持续时间
+                    frame.Signals.OnKnockbackApplied(target, knockbackData.KnockBackDuration, forceDirection, knockbackDataRef);
+                    break;
+
+                case KnockbackApplicationMode.Physics2D:
+                    // 修改：使用 Physics2D 模式，直接设置速度
+                    FPVector2 totalForce = centripetalDir * data.CentripetalForce + tangentialDir * data.TangentialForce;
+                    frame.Signals.OnKnockbackPhysic2DApplied(target, totalForce);
+                    break;
+            }
         }
-        
-        private void ExecuteTick(Frame frame, EntityRef skillFieldEntity, SkillFieldComponent* skillField, SkillFieldData skillFieldData)
+
+
+        private void ExecuteTick(Frame frame, EntityRef skillFieldEntity, SkillFieldComponent* skillField,
+            SkillFieldData skillFieldData)
         {
             Transform2D* transform = frame.Unsafe.GetPointer<Transform2D>(skillFieldEntity);
 
             var shape = skillFieldData.EffectArea.CreateShape(frame);
-            HitCollection hits = frame.Physics2D.OverlapShape(*transform, shape, skillFieldData.TargetLayer, QueryOptions.HitDynamics);
+            HitCollection hits = frame.Physics2D.OverlapShape(*transform, shape, skillFieldData.TargetLayer,
+                QueryOptions.HitDynamics);
 
             var affectedList = frame.ResolveList(skillField->AffectedEntities);
             affectedList.Clear();
@@ -355,7 +439,7 @@ namespace Quantum
                     affectedList.Add(hit.Entity);
                 }
             }
-            
+
             frame.Events.OnSkillFieldTick(skillFieldEntity, skillField->AffectedEntities);
         }
     }

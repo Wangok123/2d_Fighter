@@ -229,10 +229,29 @@ namespace Quantum.Prototypes {
     }
   }
   [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.ChargeAttackRuntimeComponent))]
+  public unsafe partial class ChargeAttackRuntimeComponentPrototype : ComponentPrototype<Quantum.ChargeAttackRuntimeComponent> {
+    public FP CurrentKnockbackMultiplier;
+    public AssetRef<KnockbackStatusEffectData> BaseKnockbackData;
+    partial void MaterializeUser(Frame frame, ref Quantum.ChargeAttackRuntimeComponent result, in PrototypeMaterializationContext context);
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+        Quantum.ChargeAttackRuntimeComponent component = default;
+        Materialize((Frame)f, ref component, in context);
+        return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref Quantum.ChargeAttackRuntimeComponent result, in PrototypeMaterializationContext context = default) {
+        result.CurrentKnockbackMultiplier = this.CurrentKnockbackMultiplier;
+        result.BaseKnockbackData = this.BaseKnockbackData;
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.ComboAttackRuntimeComponent))]
   public unsafe partial class ComboAttackRuntimeComponentPrototype : ComponentPrototype<Quantum.ComboAttackRuntimeComponent> {
-    [HideInInspector()]
-    public Int32 _empty_prototype_dummy_field_;
+    public Int32 CurrentComboStep;
+    public FP CurrentHitboxActiveTime;
+    public FP CurrentHitboxActiveDuration;
+    public AssetRef<KnockbackStatusEffectData> CurrentKnockbackStatusEffectData;
     partial void MaterializeUser(Frame frame, ref Quantum.ComboAttackRuntimeComponent result, in PrototypeMaterializationContext context);
     public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
         Quantum.ComboAttackRuntimeComponent component = default;
@@ -240,6 +259,10 @@ namespace Quantum.Prototypes {
         return f.Set(entity, component) == SetResult.ComponentAdded;
     }
     public void Materialize(Frame frame, ref Quantum.ComboAttackRuntimeComponent result, in PrototypeMaterializationContext context = default) {
+        result.CurrentComboStep = this.CurrentComboStep;
+        result.CurrentHitboxActiveTime = this.CurrentHitboxActiveTime;
+        result.CurrentHitboxActiveDuration = this.CurrentHitboxActiveDuration;
+        result.CurrentKnockbackStatusEffectData = this.CurrentKnockbackStatusEffectData;
         MaterializeUser(frame, ref result, in context);
     }
   }
@@ -752,18 +775,6 @@ namespace Quantum.Prototypes {
     public Int32 _empty_prototype_dummy_field_;
     partial void MaterializeUser(Frame frame, ref Quantum.StatusEffect result, in PrototypeMaterializationContext context);
     public void Materialize(Frame frame, ref Quantum.StatusEffect result, in PrototypeMaterializationContext context = default) {
-        MaterializeUser(frame, ref result, in context);
-    }
-  }
-  [System.SerializableAttribute()]
-  [Quantum.Prototypes.Prototype(typeof(Quantum.StatusEffectConfig))]
-  public unsafe partial class StatusEffectConfigPrototype : StructPrototype {
-    public Quantum.QEnum32<StatusEffectType> Type;
-    public FP Duration;
-    partial void MaterializeUser(Frame frame, ref Quantum.StatusEffectConfig result, in PrototypeMaterializationContext context);
-    public void Materialize(Frame frame, ref Quantum.StatusEffectConfig result, in PrototypeMaterializationContext context = default) {
-        result.Type = this.Type;
-        result.Duration = this.Duration;
         MaterializeUser(frame, ref result, in context);
     }
   }

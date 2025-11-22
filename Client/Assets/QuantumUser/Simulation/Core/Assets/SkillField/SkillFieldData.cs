@@ -33,14 +33,8 @@ namespace Quantum
         [Tooltip("每次Tick伤害")]
         public FP DamagePerTick = 5;
         
-        [Tooltip("击退力度")]
-        public FP KnockbackForce = 3;
-        
-        [Tooltip("击退方向")]
-        public FPVector2 KnockbackDirection = FPVector2.Up;
-        
-        [Tooltip("受击硬直时间")]
-        public FP HitstunDuration = FP._0_10;
+        [Tooltip("击退配置数据")]
+        public AssetRef<KnockbackStatusEffectData> KnockbackStatusEffectData;
 
         public virtual bool ShouldAffectTarget(Frame frame, EntityRef owner, EntityRef target)
         {
@@ -68,14 +62,9 @@ namespace Quantum
             return DamagePerTick;
         }
 
-        public virtual FP GetKnockbackForce(Frame frame, EntityRef skillFieldEntity)
+        public virtual AssetRef<KnockbackStatusEffectData> GetKnockbackStatusEffectData(Frame frame, EntityRef skillFieldEntity)
         {
-            return KnockbackForce;
-        }
-
-        public virtual FPVector2 GetKnockbackDirection(Frame frame, EntityRef skillFieldEntity, EntityRef target, FPVector2 hitPoint)
-        {
-            return KnockbackDirection.Normalized;
+            return KnockbackStatusEffectData;
         }
 
         public virtual void OnCustomSpawn(Frame frame, EntityRef skillFieldEntity, SkillFieldComponent* skillField)

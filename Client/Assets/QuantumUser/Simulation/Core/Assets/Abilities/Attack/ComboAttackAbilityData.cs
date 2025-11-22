@@ -16,17 +16,8 @@ namespace Quantum
         [Tooltip("持续时间")]
         public FP Duration = FP._1;
 
-        [Tooltip("击退力度")]
-        public FP KnockbackForce = FP._5;
-
-        [Tooltip("击退方向")]
-        public FPVector2 KnockbackDirection = new FPVector2(FP._1, FP._0_50);
-
-        [Tooltip("受击硬直时间")]
-        public FP HitstunDuration = FP._0_25;
-
-        [Tooltip("受击类型")]
-        public HitType HitType = HitType.Light;
+        [Tooltip("击退配置数据")]
+        public AssetRef<KnockbackStatusEffectData> KnockbackStatusEffectData;
 
         [Tooltip("攻击形状")]
         public Shape2DConfig AttackShape;
@@ -80,60 +71,13 @@ namespace Quantum
             return comboRuntime->CurrentHitboxActiveDuration;
         }
 
-        public override FP GetCurrentKnockbackForce(Frame frame, EntityRef entityRef)
+        public override AssetRef<KnockbackStatusEffectData> GetCurrentKnockbackStatusEffectData(Frame frame, EntityRef entityRef)
         {
             if (!frame.Has<ComboAttackRuntimeComponent>(entityRef))
-                return base.GetCurrentKnockbackForce(frame, entityRef);
+                return base.GetCurrentKnockbackStatusEffectData(frame, entityRef);
 
             ComboAttackRuntimeComponent* comboRuntime = frame.Unsafe.GetPointer<ComboAttackRuntimeComponent>(entityRef);
-            return comboRuntime->CurrentKnockbackForce;
-        }
-
-        public override FP GetCurrentHitstunDuration(Frame frame, EntityRef entityRef)
-        {
-            if (!frame.Has<ComboAttackRuntimeComponent>(entityRef))
-                return base.GetCurrentHitstunDuration(frame, entityRef);
-
-            ComboAttackRuntimeComponent* comboRuntime = frame.Unsafe.GetPointer<ComboAttackRuntimeComponent>(entityRef);
-            return comboRuntime->CurrentHitstunDuration;
-        }
-
-        public override FPVector2 GetCurrentKnockbackDirection(Frame frame, EntityRef entityRef, FPVector2 attackerPos, FPVector2 targetPos)
-        {
-            if (!frame.Has<ComboAttackRuntimeComponent>(entityRef))
-                return base.GetCurrentKnockbackDirection(frame, entityRef, attackerPos, targetPos);
-
-            ComboAttackRuntimeComponent* comboRuntime = frame.Unsafe.GetPointer<ComboAttackRuntimeComponent>(entityRef);
-    
-            switch (KnockbackType)
-            {
-                case AttackKnockbackType.AwayFromAttacker:
-                    FPVector2 awayDirection = targetPos - attackerPos;
-                    return awayDirection.Normalized;
-
-                case AttackKnockbackType.AttackerFacingDirection:
-                    bool isFacingRight = GetIsFacingRight(frame, entityRef);
-                    return new FPVector2(
-                        comboRuntime->CurrentKnockbackDirection.X * (isFacingRight ? FP._1 : -FP._1),
-                        comboRuntime->CurrentKnockbackDirection.Y
-                    ).Normalized;
-
-                case AttackKnockbackType.Up:
-                    return FPVector2.Up;
-
-                case AttackKnockbackType.Fixed:
-                    isFacingRight = GetIsFacingRight(frame, entityRef);
-                    return new FPVector2(
-                        comboRuntime->CurrentKnockbackDirection.X * (isFacingRight ? FP._1 : -FP._1),
-                        comboRuntime->CurrentKnockbackDirection.Y
-                    ).Normalized;
-            }
-    
-            bool defaultIsFacingRight = GetIsFacingRight(frame, entityRef);
-            return new FPVector2(
-                comboRuntime->CurrentKnockbackDirection.X * (defaultIsFacingRight ? FP._1 : -FP._1),
-                comboRuntime->CurrentKnockbackDirection.Y
-            ).Normalized;
+            return comboRuntime->CurrentKnockbackStatusEffectData;
         }
 
         public override bool TryActivateAbility(Frame frame, EntityRef entityRef, PlayerLink* playerLink,
@@ -178,9 +122,7 @@ namespace Quantum
                 runtimeComponent->CurrentComboStep = nextComboCounter;
                 runtimeComponent->CurrentHitboxActiveTime = stepConfig.HitboxActiveTime;
                 runtimeComponent->CurrentHitboxActiveDuration = stepConfig.HitboxActiveDuration;
-                runtimeComponent->CurrentKnockbackForce = stepConfig.KnockbackForce;
-                runtimeComponent->CurrentHitstunDuration = stepConfig.HitstunDuration;
-                runtimeComponent->CurrentKnockbackDirection = stepConfig.KnockbackDirection;
+                runtimeComponent->CurrentKnockbackStatusEffectData = stepConfig.KnockbackStatusEffectData;
 
                 attackData->ComboCounter = nextComboCounter;
                 attackData->ComboWindowTimer = FrameTimer.FromSeconds(frame, ComboWindow);

@@ -143,9 +143,9 @@ MonoBehaviour:
       data:
         Position:
           X:
-            RawValue: -205783
+            RawValue: 203816
           Y:
-            RawValue: -80609
+            RawValue: 363069
         Rotation:
           RawValue: 0
     - rid: 8101032211223937025
@@ -195,7 +195,7 @@ MonoBehaviour:
       data:
         Config:
           Id:
-            Value: 2107662128797502270
+            Value: 311654634759721963
     - rid: 8101032211223937028
       type: {class: CharacterStatusComponentPrototype, ns: Quantum.Prototypes, asm: Quantum.Simulation}
       data:

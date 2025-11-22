@@ -1,0 +1,77 @@
+﻿enum AttackKnockbackType : Byte
+{
+    AwayFromAttacker,
+    AttackerFacingDirection,
+    Up,
+    Fixed
+}
+
+enum CommandAttackExecutionType : Byte
+{
+    Hitbox,
+    Projectile,
+    SkillField,
+}
+
+flags KnockbackApplicationMode : Byte
+{
+    CharacterController,
+    Physics2D
+}
+
+// 指令攻击运行时数据
+component CommandAttackRuntimeComponent
+{
+    [ExcludeFromPrototype]
+    int MatchedSequenceIndex;
+    
+    [ExcludeFromPrototype]
+    QBoolean HasStartedHitboxWindow;
+    
+    [ExcludeFromPrototype]
+    list<EntityRef> HitEntitiesThisAttack;
+}
+
+component ComboAttackRuntimeComponent
+{
+    [ExcludeFromPrototype]
+    Int32 CurrentComboStep;
+    
+    [ExcludeFromPrototype]
+    FP CurrentHitboxActiveTime;
+    
+    [ExcludeFromPrototype]
+    FP CurrentHitboxActiveDuration;
+    
+    [ExcludeFromPrototype]
+    FP CurrentKnockbackForce;
+    
+    [ExcludeFromPrototype]
+    FP CurrentHitstunDuration;
+    
+    [ExcludeFromPrototype]
+    FPVector2 CurrentKnockbackDirection;
+}
+
+component ComboAttackRuntimeComponent
+{
+    int CurrentComboStep;
+    FP CurrentHitboxActiveTime;
+    FP CurrentHitboxActiveDuration;
+    asset_ref<KnockbackStatusEffectData> CurrentKnockbackStatusEffectData;
+}
+
+component ChargeAttackRuntimeComponent
+{
+    FP CurrentKnockbackMultiplier;
+    asset_ref<KnockbackStatusEffectData> BaseKnockbackData;
+}
+
+struct AttackAbilityCache
+{
+    FP Duration;
+    FP HitboxActiveTime;
+    FP HitboxActiveDuration;
+    FP KnockbackForce;
+    FP HitstunDuration;
+}

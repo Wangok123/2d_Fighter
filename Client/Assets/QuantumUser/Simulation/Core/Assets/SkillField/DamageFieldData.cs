@@ -7,7 +7,7 @@ namespace Quantum
     {
         [Header("伤害设置")]
         [Tooltip("每Tick伤害")]
-        public FP DamagePerTick = 5;
+        public new FP DamagePerTick = 5;
         
         [Tooltip("伤害类型")]
         public DamageType DamageType = DamageType.Fire;
@@ -23,13 +23,12 @@ namespace Quantum
 
         [Header("击退设置")]
         [Tooltip("是否应用击退")]
-        public bool ApplyKnockback = false;
-        
-        [Tooltip("击退力度")]
-        public FP KnockbackForce = 3;
-        
-        [Tooltip("击退方向")]
-        public KnockbackDirection KnockbackDirection = KnockbackDirection.FromCenter;
+        public bool ApplyKnockback = true;
+
+        public override FP GetDamagePerTick(Frame frame, EntityRef skillFieldEntity)
+        {
+            return DamagePerTick;
+        }
     }
 
     public enum DamageType
@@ -41,12 +40,5 @@ namespace Quantum
         Poison,
         Dark,
         Holy
-    }
-
-    public enum KnockbackDirection
-    {
-        FromCenter,
-        FromHitPoint,
-        Up
     }
 }

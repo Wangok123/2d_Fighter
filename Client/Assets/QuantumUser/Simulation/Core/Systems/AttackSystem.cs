@@ -1,5 +1,6 @@
 ﻿using Photon.Deterministic;
 using Quantum.Physics2D;
+using UnityEngine;
 using UnityEngine.Scripting;
 
 namespace Quantum
@@ -82,16 +83,35 @@ namespace Quantum
             if (!dic.TryGetValue(activeAbilityType, out var ability))
                 return;
 
-            AbilityData abilityDataBase = frame.FindAsset<AbilityData>(ability.AbilityData.Id);
-            if (!(abilityDataBase is AttackAbilityData attackData))
+            AttackAbilityData attackData = frame.FindAsset<AttackAbilityData>(ability.AbilityData.Id);
+            if (attackData == null)
+            {
+                Debug.LogError("Attack data is null in OnAttackHitTarget");
                 return;
+            }
+            
+            AssetRef<KnockbackStatusEffectData> knockbackDataRef = attackData.GetCurrentKnockbackStatusEffectData(frame, attacker);
+            if (!knockbackDataRef.Id.IsValid)
+            {
+                Debug.LogWarning("Knockback data is not configured for this attack");
+                return;
+            }
 
-            FP knockbackForce = attackData.GetCurrentKnockbackForce(frame, attacker);
-            FPVector2 knockbackDirection = attackData.GetCurrentKnockbackDirection(frame, attacker, attackerPos, targetPos);
-            FPVector2 knockbackVelocity = knockbackDirection * knockbackForce;
-            FP hitstunDuration = attackData.GetCurrentHitstunDuration(frame, attacker);
+            KnockbackStatusEffectData knockbackData = frame.FindAsset<KnockbackStatusEffectData>(knockbackDataRef.Id);
+            FPVector2 knockbackDirection = knockbackData.GetKnockbackDirection(frame, attacker, attackerPos, targetPos);
+            KnockbackApplicationMode knockbackMode = knockbackData.KnockbackApplicationMode;
+            
+            switch (knockbackMode)
+            {
+                case KnockbackApplicationMode.CharacterController:
+                    frame.Signals.OnKnockbackApplied(target, knockbackData.KnockBackDuration, knockbackDirection, knockbackDataRef);
+                    break;
 
-            frame.Signals.OnKnockbackApplied(target, knockbackVelocity, hitstunDuration);
+                case KnockbackApplicationMode.Physics2D:
+                    FPVector2 knockbackVelocity = knockbackDirection * knockbackData.KnockbackForce;
+                    frame.Signals.OnKnockbackPhysic2DApplied(target, knockbackVelocity);
+                    break;
+            }
         }
 
         private bool GetIsFacingRight(Frame frame, EntityRef entityRef)

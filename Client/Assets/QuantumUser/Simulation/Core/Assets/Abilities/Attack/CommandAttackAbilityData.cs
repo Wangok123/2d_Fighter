@@ -9,7 +9,7 @@ namespace Quantum
     {
         [Tooltip("指令序列名称")]
         public string SequenceName = "Special Move";
-        
+    
         [Tooltip("指令序列")]
         public CommandInput[] InputSequence = new CommandInput[] 
         { 
@@ -18,51 +18,42 @@ namespace Quantum
             CommandInput.Right, 
             CommandInput.LP 
         };
-        
+    
         [Header("执行类型")]
         [Tooltip("攻击执行方式")]
         public CommandAttackExecutionType ExecutionType = CommandAttackExecutionType.Projectile;
-        
+    
         [Header("通用设置")]
         [Tooltip("持续时间")]
         public FP Duration = FP._1;
-        
+    
         [Tooltip("冷却时间")]
         public FP Cooldown = 3;
 
         [Header("碰撞盒攻击设置（ExecutionType = Hitbox）")]
         [Tooltip("打击框激活时间")]
         public FP HitboxActiveTime = FP._0_10;
-        
+    
         [Tooltip("打击框持续时间")]
         public FP HitboxActiveDuration = FP._0_10;
-        
+    
         [Tooltip("攻击形状")]
         public Shape2DConfig AttackShape;
-        
-        [Tooltip("击退力度")]
-        public FP KnockbackForce = 10;
-        
-        [Tooltip("击退方向")]
-        public FPVector2 KnockbackDirection = new FPVector2(FP._1, FP._0_50);
-        
-        [Tooltip("受击硬直")]
-        public FP HitstunDuration = FP._0_50;
-        
-        [Tooltip("受击类型")]
-        public HitType HitType = HitType.Heavy;
+    
+        [Tooltip("击退配置数据")]
+        public AssetRef<KnockbackStatusEffectData> KnockbackStatusEffectData;
 
         [Header("飞行道具设置（ExecutionType = Projectile）")]
         [Tooltip("飞行道具数据")]
         public AssetRef<ProjectileData> ProjectileData;
-        
+    
         [Tooltip("生成偏移")]
         public FPVector2 SpawnOffset = FPVector2.Right;
 
         [Header("技能场设置（ExecutionType = SkillField）")]
         [Tooltip("技能场数据")]
         public AssetRef<SkillFieldData> SkillFieldData;
-        
+    
         [Tooltip("生成位置偏移")]
         public FPVector2 FieldSpawnOffset = FPVector2.Zero;
     }

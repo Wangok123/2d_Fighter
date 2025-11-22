@@ -16,6 +16,17 @@ MonoBehaviour:
     Path: QuantumUser/Resources/DB/StatusEffect/KnockbackStatusEffectData
     Guid:
       Value: 400731462195907610
+  KnockbackType: 1
+  KnockbackApplicationMode: 0
+  KnockbackForce:
+    RawValue: 327680
+  KnockBackDuration:
+    RawValue: 65536
+  FixedKnockbackDirection:
+    X:
+      RawValue: 65536
+    Y:
+      RawValue: 32768
   KnockbackCurveX:
     Samples:
     - RawValue: 0
@@ -88,38 +99,38 @@ MonoBehaviour:
   KnockbackCurveY:
     Samples:
     - RawValue: 0
-    - RawValue: 2048
-    - RawValue: 4096
-    - RawValue: 6144
-    - RawValue: 8192
-    - RawValue: 10240
-    - RawValue: 12288
-    - RawValue: 14336
-    - RawValue: 16384
-    - RawValue: 18432
+    - RawValue: 2168
+    - RawValue: 4544
+    - RawValue: 7080
+    - RawValue: 9728
+    - RawValue: 12440
+    - RawValue: 15168
+    - RawValue: 17864
     - RawValue: 20480
-    - RawValue: 22528
-    - RawValue: 24576
-    - RawValue: 26624
-    - RawValue: 28672
-    - RawValue: 30720
+    - RawValue: 22968
+    - RawValue: 25280
+    - RawValue: 27368
+    - RawValue: 29184
+    - RawValue: 30680
+    - RawValue: 31808
+    - RawValue: 32520
     - RawValue: 32768
-    - RawValue: 34816
-    - RawValue: 36864
-    - RawValue: 38912
-    - RawValue: 40960
-    - RawValue: 43008
-    - RawValue: 45056
-    - RawValue: 47104
-    - RawValue: 49152
-    - RawValue: 51200
-    - RawValue: 53248
-    - RawValue: 55296
-    - RawValue: 57344
-    - RawValue: 59392
-    - RawValue: 61440
-    - RawValue: 63488
-    - RawValue: 65536
+    - RawValue: 32520
+    - RawValue: 31808
+    - RawValue: 30680
+    - RawValue: 29184
+    - RawValue: 27368
+    - RawValue: 25280
+    - RawValue: 22968
+    - RawValue: 20480
+    - RawValue: 17864
+    - RawValue: 15168
+    - RawValue: 12440
+    - RawValue: 9728
+    - RawValue: 7080
+    - RawValue: 4544
+    - RawValue: 2168
+    - RawValue: 0
     PreWrapMode: 0
     PostWrapMode: 0
     StartTime:
@@ -143,14 +154,30 @@ MonoBehaviour:
       TangentModeRight: 1
       WeightedMode: 0
     - Time:
-        RawValue: 65536
+        RawValue: 32768
       Value:
-        RawValue: 65536
+        RawValue: 32768
       InTangent:
-        RawValue: 65536
+        RawValue: 0
       OutTangent:
-        RawValue: 65536
+        RawValue: 0
       TangentMode: 0
       TangentModeLeft: 1
       TangentModeRight: 1
       WeightedMode: 0
+    - Time:
+        RawValue: 65536
+      Value:
+        RawValue: 0
+      InTangent:
+        RawValue: -65536
+      OutTangent:
+        RawValue: -65536
+      TangentMode: 0
+      TangentModeLeft: 1
+      TangentModeRight: 1
+      WeightedMode: 0
+  KnockbackDistanceX:
+    RawValue: 196608
+  KnockbackDistanceY:
+    RawValue: 131072

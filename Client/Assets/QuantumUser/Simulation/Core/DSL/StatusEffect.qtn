@@ -3,6 +3,12 @@ enum StatusEffectType
     Knockback
 }
 
+enum KnockbackApplicationMode
+{
+    CharacterController,
+    Physics2D
+}
+
 struct StatusEffect
 {
     [ExcludeFromPrototype] CountdownTimer DurationTimer;
@@ -11,19 +17,12 @@ struct StatusEffect
 struct KnockbackStatusEffect : StatusEffect
 {
     [ExcludeFromPrototype] FPVector2 KnockbackDirection;
-    [ExcludeFromPrototype] FPVector2 KnockbackVelocity;
-        
+    [ExcludeFromPrototype] FPVector2 KnockbackVelocity;   // 矢量速度
+    [ExcludeFromPrototype] FPVector2 InitialKnockbackVelocity;
     asset_ref<KnockbackStatusEffectData> StatusEffectData;
 }
 
-[Serializable]
-struct StatusEffectConfig
-{
-    StatusEffectType Type;
-    FP Duration;
-}
-
-signal OnKnockbackApplied(entity_ref target, FPVector2 knockbackVelocity, FP duration);
+signal OnKnockbackApplied(entity_ref target, FP duration, FPVector2 direction, asset_ref<KnockbackStatusEffectData> statusEffectData);
 signal OnKnockbackPhysic2DApplied(entity_ref target, FPVector2 knockbackVelocity);
 
 signal OnStatusEffectsReset(entity_ref playerEntityRef);

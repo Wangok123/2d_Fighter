@@ -18,17 +18,8 @@ namespace Quantum
         [Tooltip("基础伤害")]
         public FP BaseDamage = 10;
         
-        [Tooltip("击退力度")]
-        public FP KnockbackForce = 5;
-        
-        [Tooltip("击退类型")]
-        public KnockbackDirectionType KnockbackType = KnockbackDirectionType.AwayFromSource;
-        
-        [Tooltip("固定击退方向（仅当类型为Fixed时使用）")]
-        public FPVector2 FixedKnockbackDirection = new FPVector2(FP._1, FP._0_50);
-        
-        [Tooltip("受击硬直时间")]
-        public FP HitstunDuration = FP._0_25;
+        [Tooltip("击退配置数据")]
+        public AssetRef<KnockbackStatusEffectData> KnockbackStatusEffectData;
 
         [Header("碰撞设置")]
         [Tooltip("碰撞形状")]
@@ -48,48 +39,9 @@ namespace Quantum
             return BaseDamage;
         }
 
-        public virtual FP GetKnockbackForce(Frame frame, EntityRef projectileEntity)
+        public virtual AssetRef<KnockbackStatusEffectData> GetKnockbackStatusEffectData(Frame frame, EntityRef projectileEntity)
         {
-            return KnockbackForce;
-        }
-
-        public virtual FPVector2 GetKnockbackDirection(Frame frame, EntityRef projectileEntity, EntityRef attacker, EntityRef target, FPVector2 hitPoint)
-        {
-            switch (KnockbackType)
-            {
-                case KnockbackDirectionType.AwayFromSource:
-                    if (frame.Unsafe.TryGetPointer<Transform2D>(projectileEntity, out var projectileTransform) &&
-                        frame.Unsafe.TryGetPointer<Transform2D>(target, out var targetTransform))
-                    {
-                        FPVector2 direction = targetTransform->Position - projectileTransform->Position;
-                        return direction.Normalized;
-                    }
-                    break;
-
-                case KnockbackDirectionType.AwayFromAttacker:
-                    if (frame.Unsafe.TryGetPointer<Transform2D>(attacker, out var attackerTransform) &&
-                        frame.Unsafe.TryGetPointer<Transform2D>(target, out var targetTransform2))
-                    {
-                        FPVector2 direction = targetTransform2->Position - attackerTransform->Position;
-                        return direction.Normalized;
-                    }
-                    break;
-
-                case KnockbackDirectionType.ProjectileDirection:
-                    if (frame.Unsafe.TryGetPointer<ProjectileComponent>(projectileEntity, out var projectileComp))
-                    {
-                        return projectileComp->Direction.Normalized;
-                    }
-                    break;
-
-                case KnockbackDirectionType.Up:
-                    return FPVector2.Up;
-
-                case KnockbackDirectionType.Fixed:
-                    return FixedKnockbackDirection.Normalized;
-            }
-
-            return FixedKnockbackDirection.Normalized;
+            return KnockbackStatusEffectData;
         }
 
         public virtual bool ShouldDestroyOnHit(Frame frame, EntityRef projectileEntity, EntityRef target)
