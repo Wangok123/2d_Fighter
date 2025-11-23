@@ -56,15 +56,9 @@ MonoBehaviour:
   AffectEnemies: 1
   DamagePerTick:
     RawValue: 327680
-  KnockbackForce:
-    RawValue: 655360
-  KnockbackDirection:
-    X:
-      RawValue: 65536
-    Y:
-      RawValue: 65536
-  HitstunDuration:
-    RawValue: 32768
+  KnockbackStatusEffectData:
+    Id:
+      Value: 400731462195907610
   ExplosionDelay:
     RawValue: 0
   ExplosionDamage:
@@ -73,6 +67,5 @@ MonoBehaviour:
   CenterDamageMultiplier:
     RawValue: 98304
   ApplyKnockback: 1
-  KnockbackType: 1
   ExplosionEffect: {fileID: 0}
   WarningEffect: {fileID: 0}

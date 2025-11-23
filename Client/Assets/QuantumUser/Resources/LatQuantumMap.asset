@@ -143,9 +143,9 @@ MonoBehaviour:
       data:
         Position:
           X:
-            RawValue: 203816
+            RawValue: -235929
           Y:
-            RawValue: 363069
+            RawValue: -17039
         Rotation:
           RawValue: 0
     - rid: 8101032211223937025

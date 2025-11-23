@@ -21,15 +21,9 @@ MonoBehaviour:
   VisualPrototype: {fileID: 3097001405596171208, guid: 8ef8ac312f2526b4ab14d4e14d9e9b63, type: 3}
   BaseDamage:
     RawValue: 655360
-  KnockbackForce:
-    RawValue: 327680
-  KnockbackDirectionX:
-    RawValue: 65536
-  KnockbackDirectionY:
-    RawValue: 32768
-  HitstunDuration:
-    RawValue: 16384
-  HitType: 1
+  KnockbackStatusEffectData:
+    Id:
+      Value: 400731462195907610
   CollisionShape:
     ShapeType: 1
     PolygonCollider:
@@ -63,6 +57,5 @@ MonoBehaviour:
     BitMask: 64
   PierceTargets: 0
   MaxPierceCount: 1
-  BlockedByEnvironment: 1
   MoveSpeed:
     RawValue: 655360
