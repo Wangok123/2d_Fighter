@@ -2,6 +2,8 @@ component CharacterStatusComponent
 {
     asset_ref<HitReactionData> HitReactionData;
 	
+	Boolean IsSuperArmored;
+	
 	KnockbackStatusEffect KnockbackStatusEffect;
 }
 
@@ -147,5 +149,14 @@ event AttackHitboxActivated
     Int32 ComboStep;
 }
 
+event PlungeAttackStarted
+{
+    EntityRef Entity;
+}
+
+event PlungeAttackLanded
+{
+    EntityRef Entity;
+}
 
 

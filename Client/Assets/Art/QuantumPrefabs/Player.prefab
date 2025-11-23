@@ -23,6 +23,9 @@ GameObject:
   - component: {fileID: 2045562779670424827}
   - component: {fileID: 6596132072543008265}
   - component: {fileID: 5920013954263597409}
+  - component: {fileID: 7915154271347562333}
+  - component: {fileID: 2159835049100872727}
+  - component: {fileID: 8357867320065699727}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -599,6 +602,8 @@ MonoBehaviour:
     HitReactionData:
       Id:
         Value: 0
+    IsSuperArmored:
+      Value: 0
     KnockbackStatusEffect:
       StatusEffectData:
         Id:
@@ -654,7 +659,78 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Prototype:
+    CurrentComboStep: 0
+    CurrentHitboxActiveTime:
+      RawValue: 0
+    CurrentHitboxActiveDuration:
+      RawValue: 0
+    CurrentKnockbackStatusEffectData:
+      Id:
+        Value: 0
+--- !u!114 &7915154271347562333
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 747601124680124256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 08576052e5ac43d449eb5e9c8db72f1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Prototype:
+    CurrentSkill:
+      Id:
+        Value: 0
+    Phase:
+      Value: 0
+    PhaseTimer:
+      RawValue: 0
+    ElapsedTime:
+      RawValue: 0
+    HitEntities: []
+    ActionIndex: 0
+    HasTriggeredLanding:
+      Value: 0
+--- !u!114 &2159835049100872727
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 747601124680124256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1e4926cd955560041a2472f01e87f2a5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Prototype:
     _empty_prototype_dummy_field_: 0
+--- !u!114 &8357867320065699727
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 747601124680124256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4bab964bc1884cf6ae60b0189d0bddff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EnableDebug: 1
+  ShockwaveColor: {r: 1, g: 0.3, b: 0, a: 0.4}
+  ShockwaveWireframeColor: {r: 1, g: 0.5, b: 0, a: 1}
+  DisplayDuration: 1.5
+  ShowSkillInfo: 1
+  TextExtraDuration: 0.5
+  TextColor: {r: 1, g: 0.7, b: 0, a: 1}
+  TextBackgroundColor: {r: 0, g: 0, b: 0, a: 0.7}
+  FontSize: 14
+  ShowFallTrajectory: 1
+  TrajectoryColor: {r: 0, g: 1, b: 1, a: 0.5}
+  TrajectorySteps: 20
 --- !u!1 &4774830198564325150
 GameObject:
   m_ObjectHideFlags: 0

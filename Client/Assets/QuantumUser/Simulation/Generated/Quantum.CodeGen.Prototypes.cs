@@ -215,6 +215,7 @@ namespace Quantum.Prototypes {
   [Quantum.Prototypes.Prototype(typeof(Quantum.CharacterStatusComponent))]
   public unsafe partial class CharacterStatusComponentPrototype : ComponentPrototype<Quantum.CharacterStatusComponent> {
     public AssetRef<HitReactionData> HitReactionData;
+    public QBoolean IsSuperArmored;
     public Quantum.Prototypes.KnockbackStatusEffectPrototype KnockbackStatusEffect;
     partial void MaterializeUser(Frame frame, ref Quantum.CharacterStatusComponent result, in PrototypeMaterializationContext context);
     public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
@@ -224,6 +225,7 @@ namespace Quantum.Prototypes {
     }
     public void Materialize(Frame frame, ref Quantum.CharacterStatusComponent result, in PrototypeMaterializationContext context = default) {
         result.HitReactionData = this.HitReactionData;
+        result.IsSuperArmored = this.IsSuperArmored;
         this.KnockbackStatusEffect.Materialize(frame, ref result.KnockbackStatusEffect, in context);
         MaterializeUser(frame, ref result, in context);
     }
@@ -637,6 +639,23 @@ namespace Quantum.Prototypes {
     }
   }
   [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.PlungeAttackRuntimeComponent))]
+  public unsafe partial class PlungeAttackRuntimeComponentPrototype : ComponentPrototype<Quantum.PlungeAttackRuntimeComponent> {
+    public QBoolean HasLanded;
+    public QBoolean IsPlunging;
+    partial void MaterializeUser(Frame frame, ref Quantum.PlungeAttackRuntimeComponent result, in PrototypeMaterializationContext context);
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+        Quantum.PlungeAttackRuntimeComponent component = default;
+        Materialize((Frame)f, ref component, in context);
+        return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref Quantum.PlungeAttackRuntimeComponent result, in PrototypeMaterializationContext context = default) {
+        result.HasLanded = this.HasLanded;
+        result.IsPlunging = this.IsPlunging;
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.ProjectileComponent))]
   public unsafe partial class ProjectileComponentPrototype : ComponentPrototype<Quantum.ProjectileComponent> {
     [HideInInspector()]
@@ -732,6 +751,41 @@ namespace Quantum.Prototypes {
         result.Use = this.Use;
         result.Block = this.Block;
         MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.SkillComponent))]
+  public unsafe class SkillComponentPrototype : ComponentPrototype<Quantum.SkillComponent> {
+    public AssetRef<SkillData> CurrentSkill;
+    public Quantum.QEnum8<SkillPhase> Phase;
+    public FP PhaseTimer;
+    public FP ElapsedTime;
+    [DynamicCollectionAttribute()]
+    public MapEntityId[] HitEntities = {};
+    public Int32 ActionIndex;
+    public QBoolean HasTriggeredLanding;
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+        Quantum.SkillComponent component = default;
+        Materialize((Frame)f, ref component, in context);
+        return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref Quantum.SkillComponent result, in PrototypeMaterializationContext context = default) {
+        result.CurrentSkill = this.CurrentSkill;
+        result.Phase = this.Phase;
+        result.PhaseTimer = this.PhaseTimer;
+        result.ElapsedTime = this.ElapsedTime;
+        if (this.HitEntities.Length == 0) {
+          result.HitEntities = default;
+        } else {
+          var list = frame.AllocateList(out result.HitEntities, this.HitEntities.Length);
+          for (int i = 0; i < this.HitEntities.Length; ++i) {
+            EntityRef tmp = default;
+            PrototypeValidator.FindMapEntity(this.HitEntities[i], in context, out tmp);
+            list.Add(tmp);
+          }
+        }
+        result.ActionIndex = this.ActionIndex;
+        result.HasTriggeredLanding = this.HasTriggeredLanding;
     }
   }
   [System.SerializableAttribute()]

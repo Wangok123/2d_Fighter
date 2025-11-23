@@ -144,6 +144,9 @@ namespace Quantum
         protected virtual void OnAbilityCancelled(Frame frame, EntityRef entityRef, AbilityType cancelledAbilityType)
         {
         }
-
+        
+        public virtual void OnCommandInputDetected(Frame frame, EntityRef entityRef)
+        {
+        }
     }
 }

@@ -1,0 +1,77 @@
+﻿// 技能特性标记
+flags SkillFlags : Int32
+{
+    None = 0,
+    ApplyDownwardForce = 1,
+    GroundedOnly = 2,
+    AirOnly = 3,
+    Chargeable = 4,
+    Cancelable = 5,
+    MultiHit = 6,
+    SuperArmor = 7,
+    LandingShockwave = 8
+}
+
+// 技能阶段
+enum SkillPhase : Byte
+{
+    None = 0,
+    Startup = 1,
+    Active = 2,
+    Recovery = 3
+}
+
+// 技能动作类型
+enum SkillActionType : Byte
+{
+    None = 0,
+    ApplyVelocity = 1,
+    SpawnHitbox = 2,
+    SpawnProjectile = 3,
+    ApplyStatusEffect = 4,
+    PlayAnimation = 5,
+    SpawnVFX = 6
+}
+
+// 技能组件（只存储运行时数据，不存储配置）
+component SkillComponent
+{
+    asset_ref<SkillData> CurrentSkill;
+    SkillPhase Phase;
+    FP PhaseTimer;
+    FP ElapsedTime;
+    list<EntityRef> HitEntities;
+    Int32 ActionIndex;
+    
+    Boolean HasTriggeredLanding;
+}
+
+// System间通信Signals
+signal OnSkillActivationRequested(entity_ref entity, asset_ref<SkillData> skillData);
+signal OnSkillPhaseChanged(entity_ref entity, SkillPhase newPhase);
+signal OnSkillCompleted(entity_ref entity);
+signal OnSkillLanded(entity_ref entity, asset_ref<SkillData> skillData);
+
+// 逻辑层向表现层Events
+event SkillActivated
+{
+    EntityRef Entity;
+    asset_ref<SkillData> SkillData;
+}
+
+event SkillPhaseChanged
+{
+    EntityRef Entity;
+    SkillPhase NewPhase;
+}
+
+event SkillCompleted
+{
+    EntityRef Entity;
+}
+
+event SkillLanded
+{
+    EntityRef Entity;
+    FPVector2 Position;
+}

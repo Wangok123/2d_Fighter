@@ -1185,6 +1185,8 @@ MonoBehaviour:
     HitReactionData:
       Id:
         Value: 293932180870028386
+    IsSuperArmored:
+      Value: 0
     KnockbackStatusEffect:
       StatusEffectData:
         Id:

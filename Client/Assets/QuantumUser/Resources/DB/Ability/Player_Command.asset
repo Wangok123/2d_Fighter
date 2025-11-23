@@ -76,16 +76,9 @@ MonoBehaviour:
       UserTag: 0
       IsPersistent: 0
       CompoundShapes: []
-    KnockbackForce:
-      RawValue: 0
-    KnockbackDirection:
-      X:
-        RawValue: 65536
-      Y:
-        RawValue: 32768
-    HitstunDuration:
-      RawValue: 0
-    HitType: 2
+    KnockbackStatusEffectData:
+      Id:
+        Value: 0
     ProjectileData:
       Id:
         Value: 406473470409463380
@@ -142,16 +135,9 @@ MonoBehaviour:
       UserTag: 0
       IsPersistent: 0
       CompoundShapes: []
-    KnockbackForce:
-      RawValue: 0
-    KnockbackDirection:
-      X:
-        RawValue: 65536
-      Y:
-        RawValue: 32768
-    HitstunDuration:
-      RawValue: 0
-    HitType: 2
+    KnockbackStatusEffectData:
+      Id:
+        Value: 0
     ProjectileData:
       Id:
         Value: 451170818431387603
@@ -168,17 +154,17 @@ MonoBehaviour:
         RawValue: 0
       Y:
         RawValue: 0
-  - SequenceName: UP
-    InputSequence: 0500000009000000
-    ExecutionType: 0
+  - SequenceName: Plunge Attack
+    InputSequence: 010000000a000000
+    ExecutionType: 1
     Duration:
       RawValue: 65536
     Cooldown:
-      RawValue: 0
+      RawValue: 65536
     HitboxActiveTime:
       RawValue: 0
     HitboxActiveDuration:
-      RawValue: 65536
+      RawValue: 0
     AttackShape:
       ShapeType: 4
       PolygonCollider:
@@ -195,9 +181,9 @@ MonoBehaviour:
         RawValue: 0
       BoxExtents:
         X:
-          RawValue: 32768
+          RawValue: 0
         Y:
-          RawValue: 32768
+          RawValue: 0
       PositionOffset:
         X:
           RawValue: 65536
@@ -208,16 +194,9 @@ MonoBehaviour:
       UserTag: 0
       IsPersistent: 0
       CompoundShapes: []
-    KnockbackForce:
-      RawValue: 327680
-    KnockbackDirection:
-      X:
-        RawValue: 0
-      Y:
-        RawValue: 32768
-    HitstunDuration:
-      RawValue: 0
-    HitType: 2
+    KnockbackStatusEffectData:
+      Id:
+        Value: 0
     ProjectileData:
       Id:
         Value: 0
@@ -234,3 +213,10 @@ MonoBehaviour:
         RawValue: 0
       Y:
         RawValue: 0
+  SkillMappings:
+  - SkillName: Plunge Attack
+    SequenceIndex: 2
+    SkillDataRef:
+      Id:
+        Value: 412559908612940318
+    IsEnabled: 1

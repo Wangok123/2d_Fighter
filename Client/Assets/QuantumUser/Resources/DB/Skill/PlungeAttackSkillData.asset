@@ -1,0 +1,124 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 63af19a79e7c460c8704f68a0caff0d8, type: 3}
+  m_Name: PlungeAttackSkillData
+  m_EditorClassIdentifier: 
+  Identifier:
+    Path: QuantumUser/Resources/DB/Skill/PlungeAttackSkillData
+    Guid:
+      Value: 412559908612940318
+  SkillName: PlungeAttack
+  TotalDuration:
+    RawValue: 65536
+  Cooldown:
+    RawValue: 131072
+  Flags: 394
+  StartupDuration:
+    RawValue: 6554
+  ActiveDuration:
+    RawValue: 131072
+  RecoveryDuration:
+    RawValue: 26214
+  Actions:
+  - ActionType: 1
+    TriggerTime:
+      RawValue: 0
+    Velocity:
+      X:
+        RawValue: 0
+      Y:
+        RawValue: -983040
+    Duration:
+      RawValue: 0
+    HitboxShape:
+      ShapeType: 0
+      PolygonCollider:
+        Id:
+          Value: 0
+      CircleRadius:
+        RawValue: 0
+      CapsuleSize:
+        X:
+          RawValue: 0
+        Y:
+          RawValue: 0
+      EdgeExtent:
+        RawValue: 0
+      BoxExtents:
+        X:
+          RawValue: 0
+        Y:
+          RawValue: 0
+      PositionOffset:
+        X:
+          RawValue: 0
+        Y:
+          RawValue: 0
+      RotationOffset:
+        RawValue: 0
+      UserTag: 0
+      IsPersistent: 0
+      CompoundShapes: []
+    KnockbackData:
+      Id:
+        Value: 0
+    ProjectileData:
+      Id:
+        Value: 0
+    SpawnOffset:
+      X:
+        RawValue: 0
+      Y:
+        RawValue: 0
+    AnimationName: 
+    VFXPrefabName: 
+    VFXOffset:
+      X:
+        RawValue: 0
+      Y:
+        RawValue: 0
+  DownwardAcceleration:
+    RawValue: 1966080
+  MaxDownwardSpeed:
+    RawValue: 1310720
+  ShockwaveShape:
+    ShapeType: 1
+    PolygonCollider:
+      Id:
+        Value: 0
+    CircleRadius:
+      RawValue: 131072
+    CapsuleSize:
+      X:
+        RawValue: 65536
+      Y:
+        RawValue: 131072
+    EdgeExtent:
+      RawValue: 32768
+    BoxExtents:
+      X:
+        RawValue: 32768
+      Y:
+        RawValue: 32768
+    PositionOffset:
+      X:
+        RawValue: 0
+      Y:
+        RawValue: 0
+    RotationOffset:
+      RawValue: 0
+    UserTag: 0
+    IsPersistent: 1
+    CompoundShapes: []
+  ShockwaveKnockbackData:
+    Id:
+      Value: 412362592953328249

@@ -73,6 +73,9 @@ namespace Quantum {
         case AbilityType.AttackHeavy:
           return HP.WasPressed;
         
+        case AbilityType.SpecialUltimate:
+          return false; // SpecialUltimate 由指令序列触发，不需要单按键检测
+        
         default:
           throw new System.ArgumentException($"Unknown {nameof(AbilityType)}: {abilityType}", nameof(abilityType));
       }

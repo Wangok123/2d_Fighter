@@ -110,10 +110,3 @@ struct ComboRuntimeConfig
 signal CheckAbilityEnabled(AbilityType abilityId);
 signal OnCooldownsReset(entity_ref playerEntityRef);
 signal OnActiveAbilityStopped(entity_ref playerEntityRef);
-
-signal OnAttackHitboxActivate(entity_ref attacker);
-signal OnAttackExecute(entity_ref attacker);
-
-signal OnCommandAttackActivated(entity_ref attacker, Int32 sequenceIndex);
-signal OnCommandAttackHitboxActivate(entity_ref attacker, Int32 sequenceIndex);
-signal OnCommandAttackExecute(entity_ref attacker, Int32 sequenceIndex);

@@ -49,6 +49,30 @@ namespace Quantum.Prototypes.Unity {
   using RuntimeInitializeOnLoadMethodAttribute = UnityEngine.RuntimeInitializeOnLoadMethodAttribute;
   #endif //;
   
+  [System.SerializableAttribute()]
+  public unsafe partial class SkillComponentPrototype : Quantum.QuantumUnityPrototypeAdapter<Quantum.Prototypes.SkillComponentPrototype> {
+    public AssetRef<SkillData> CurrentSkill;
+    public Quantum.QEnum8<SkillPhase> Phase;
+    public FP PhaseTimer;
+    public FP ElapsedTime;
+    [DynamicCollectionAttribute()]
+    public Quantum.QuantumEntityPrototype[] HitEntities = {};
+    public Int32 ActionIndex;
+    public QBoolean HasTriggeredLanding;
+    partial void ConvertUser(Quantum.QuantumEntityPrototypeConverter converter, ref Quantum.Prototypes.SkillComponentPrototype prototype);
+    public override Quantum.Prototypes.SkillComponentPrototype Convert(Quantum.QuantumEntityPrototypeConverter converter) {
+      var result = new Quantum.Prototypes.SkillComponentPrototype();
+      converter.Convert(this.CurrentSkill, out result.CurrentSkill);
+      converter.Convert(this.Phase, out result.Phase);
+      converter.Convert(this.PhaseTimer, out result.PhaseTimer);
+      converter.Convert(this.ElapsedTime, out result.ElapsedTime);
+      converter.Convert(this.HitEntities, out result.HitEntities);
+      converter.Convert(this.ActionIndex, out result.ActionIndex);
+      converter.Convert(this.HasTriggeredLanding, out result.HasTriggeredLanding);
+      ConvertUser(converter, ref result);
+      return result;
+    }
+  }
 }
 #pragma warning restore 0109
 #pragma warning restore 1591

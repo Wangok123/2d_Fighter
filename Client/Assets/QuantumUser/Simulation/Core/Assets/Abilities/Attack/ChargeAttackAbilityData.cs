@@ -7,39 +7,29 @@ namespace Quantum
     [Serializable]
     public unsafe partial class ChargeAttackAbilityData : AttackAbilityData
     {
-        [Header("Charge Settings")]
-        [Tooltip("最小蓄力时间（达到此时间即可释放）")]
+        [Header("Charge Settings")] [Tooltip("最小蓄力时间（达到此时间即可释放）")]
         public FP MinChargeTime = FP._0_25;
-        
-        [Tooltip("最大蓄力时间（达到此时间为满蓄力）")]
-        public FP MaxChargeTime = FP._1;
-        
-        [Tooltip("蓄力时是否可以移动")]
-        public bool CanMoveWhileCharging = false;
-        
-        [Header("Charge Damage Scaling")]
-        [Tooltip("最小蓄力伤害倍率")]
+
+        [Tooltip("最大蓄力时间（达到此时间为满蓄力）")] public FP MaxChargeTime = FP._1;
+
+        [Tooltip("蓄力时是否可以移动")] public bool CanMoveWhileCharging = false;
+
+        [Header("Charge Damage Scaling")] [Tooltip("最小蓄力伤害倍率")]
         public FP MinChargeDamageMultiplier = FP._1;
-        
-        [Tooltip("最大蓄力伤害倍率")]
-        public FP MaxChargeDamageMultiplier = 2;
-        
-        [Header("Charge Knockback Scaling")]
-        [Tooltip("是否根据蓄力时间缩放击退力度")]
+
+        [Tooltip("最大蓄力伤害倍率")] public FP MaxChargeDamageMultiplier = 2;
+
+        [Header("Charge Knockback Scaling")] [Tooltip("是否根据蓄力时间缩放击退力度")]
         public bool ScaleKnockbackWithCharge = true;
-        
-        [Tooltip("最小蓄力击退力度倍率")]
-        public FP MinChargeKnockbackMultiplier = FP._1;
-        
-        [Tooltip("最大蓄力击退力度倍率")]
-        public FP MaxChargeKnockbackMultiplier = FP._1_50;
-        
-        [Header("Charge Visual Settings")]
-        [Tooltip("是否根据蓄力时间缩放攻击范围")]
+
+        [Tooltip("最小蓄力击退力度倍率")] public FP MinChargeKnockbackMultiplier = FP._1;
+
+        [Tooltip("最大蓄力击退力度倍率")] public FP MaxChargeKnockbackMultiplier = FP._1_50;
+
+        [Header("Charge Visual Settings")] [Tooltip("是否根据蓄力时间缩放攻击范围")]
         public bool ScaleAttackRangeWithCharge = false;
-        
-        [Tooltip("最大蓄力时的攻击范围倍率")]
-        public FP MaxChargeRangeMultiplier = FP._1_50;
+
+        [Tooltip("最大蓄力时的攻击范围倍率")] public FP MaxChargeRangeMultiplier = FP._1_50;
 
         public override Shape2DConfig GetCurrentAttackShape(Frame frame, EntityRef entityRef)
         {
@@ -56,13 +46,15 @@ namespace Quantum
             return ScaleAttackShape(AttackShape, rangeMultiplier);
         }
 
-        public override AssetRef<KnockbackStatusEffectData> GetCurrentKnockbackStatusEffectData(Frame frame, EntityRef entityRef)
+        public override AssetRef<KnockbackStatusEffectData> GetCurrentKnockbackStatusEffectData(Frame frame,
+            EntityRef entityRef)
         {
             if (!ScaleKnockbackWithCharge)
                 return base.GetCurrentKnockbackStatusEffectData(frame, entityRef);
 
-            AssetRef<KnockbackStatusEffectData> baseDataRef = base.GetCurrentKnockbackStatusEffectData(frame, entityRef);
-            
+            AssetRef<KnockbackStatusEffectData>
+                baseDataRef = base.GetCurrentKnockbackStatusEffectData(frame, entityRef);
+
             if (!baseDataRef.Id.IsValid)
                 return baseDataRef;
 
@@ -77,7 +69,8 @@ namespace Quantum
 
             FP chargeTime = attackComponent->HeavyChargeTime;
             FP chargeRatio = GetChargeRatio(chargeTime);
-            FP knockbackMultiplier = FPMath.Lerp(MinChargeKnockbackMultiplier, MaxChargeKnockbackMultiplier, chargeRatio);
+            FP knockbackMultiplier =
+                FPMath.Lerp(MinChargeKnockbackMultiplier, MaxChargeKnockbackMultiplier, chargeRatio);
 
             chargeRuntime->CurrentKnockbackMultiplier = knockbackMultiplier;
             chargeRuntime->BaseKnockbackData = baseDataRef;
@@ -85,22 +78,35 @@ namespace Quantum
             return baseDataRef;
         }
 
-        public override void UpdateInput(Frame frame, EntityRef entityRef, AbilityType abilityType, Ability* ability, SimpleInput2D input)
+        public override void UpdateInput(Frame frame, EntityRef entityRef, AbilityType abilityType, Ability* ability,
+            SimpleInput2D input)
         {
             if (!ability->AbilityData.Id.IsValid || ability->AbilityData.Id != Guid)
             {
                 return;
             }
 
+            // 修改：检查是否有技能正在执行，如果有则不处理蓄力输入
+            if (frame.Unsafe.TryGetPointer<SkillComponent>(entityRef, out var skillComponent))
+            {
+                if (skillComponent->CurrentSkill.Id.IsValid)
+                {
+                    // 有技能正在执行，不处理蓄力输入
+                    return;
+                }
+            }
+
             AttackComponent* attackComponent = frame.Unsafe.GetPointer<AttackComponent>(entityRef);
 
             if (attackComponent->IsChargingHeavy)
             {
-                bool wasButtonReleased = input.GetAbilityInputWasPressed(abilityType) == false && 
-                                         (abilityType == AbilityType.AttackHeavy ? input.HP.WasReleased : input.LP.WasReleased);
+                bool wasButtonReleased = input.GetAbilityInputWasPressed(abilityType) == false &&
+                                         (abilityType == AbilityType.AttackHeavy
+                                             ? input.HP.WasReleased
+                                             : input.LP.WasReleased);
 
                 FP currentChargeTime = attackComponent->ChargeTimer.ElapsedSeconds(frame);
-                
+
                 if (currentChargeTime >= MaxChargeTime)
                 {
                     currentChargeTime = MaxChargeTime;
@@ -116,8 +122,9 @@ namespace Quantum
                     {
                         attackComponent->IsChargingHeavy = false;
                         attackComponent->ChargeTimer = FrameTimer.None;
-                        
-                        if (!CanMoveWhileCharging && frame.Unsafe.TryGetPointer<AbilityEnable>(entityRef, out var abilityEnable))
+
+                        if (!CanMoveWhileCharging &&
+                            frame.Unsafe.TryGetPointer<AbilityEnable>(entityRef, out var abilityEnable))
                         {
                             abilityEnable->MovementEnabled = true;
                         }
@@ -132,15 +139,17 @@ namespace Quantum
                 {
                     if (!ability->IsOnCooldown)
                     {
-                        CharacterStatusComponent* playerStatus = frame.Unsafe.GetPointer<CharacterStatusComponent>(entityRef);
+                        CharacterStatusComponent* playerStatus =
+                            frame.Unsafe.GetPointer<CharacterStatusComponent>(entityRef);
                         AbilityInventory* abilityInventory = frame.Unsafe.GetPointer<AbilityInventory>(entityRef);
-                        
+
                         if (!playerStatus->IsIncapacitated && !abilityInventory->HasActiveAbility)
                         {
                             attackComponent->IsChargingHeavy = true;
                             attackComponent->ChargeTimer = FrameTimer.FromSeconds(frame, MaxChargeTime);
-                            
-                            if (!CanMoveWhileCharging && frame.Unsafe.TryGetPointer<AbilityEnable>(entityRef, out var abilityEnable))
+
+                            if (!CanMoveWhileCharging &&
+                                frame.Unsafe.TryGetPointer<AbilityEnable>(entityRef, out var abilityEnable))
                             {
                                 abilityEnable->MovementEnabled = false;
                             }
@@ -152,15 +161,17 @@ namespace Quantum
             }
         }
 
-        public override bool TryActivateAbility(Frame frame, EntityRef entityRef, PlayerLink* playerLink, AbilityType abilityType, ref Ability ability)
+
+        public override bool TryActivateAbility(Frame frame, EntityRef entityRef, PlayerLink* playerLink,
+            AbilityType abilityType, ref Ability ability)
         {
             AttackComponent* attackComponent = frame.Unsafe.GetPointer<AttackComponent>(entityRef);
-            
+
             if (!attackComponent->IsChargingHeavy)
             {
                 return false;
             }
-            
+
             FP currentChargeTime = attackComponent->ChargeTimer.ElapsedSeconds(frame);
 
             if (currentChargeTime < MinChargeTime)
@@ -176,12 +187,13 @@ namespace Quantum
             {
                 attackComponent->IsChargingHeavy = false;
                 attackComponent->ChargeTimer = FrameTimer.None;
-                
-                if (!CanMoveWhileCharging && frame.Unsafe.TryGetPointer<AbilityEnable>(entityRef, out var abilityEnable))
+
+                if (!CanMoveWhileCharging &&
+                    frame.Unsafe.TryGetPointer<AbilityEnable>(entityRef, out var abilityEnable))
                 {
                     abilityEnable->MovementEnabled = true;
                 }
-                
+
                 frame.Events.ChargeAttackReleased(entityRef, currentChargeTime, currentChargeTime >= MinChargeTime);
             }
 
@@ -191,13 +203,14 @@ namespace Quantum
         protected override void OnAbilityCancelled(Frame frame, EntityRef entityRef, AbilityType cancelledAbilityType)
         {
             AttackComponent* attackComponent = frame.Unsafe.GetPointer<AttackComponent>(entityRef);
-            
+
             if (attackComponent->IsChargingHeavy)
             {
                 attackComponent->IsChargingHeavy = false;
                 attackComponent->ChargeTimer = FrameTimer.None;
-                
-                if (!CanMoveWhileCharging && frame.Unsafe.TryGetPointer<AbilityEnable>(entityRef, out var abilityEnable))
+
+                if (!CanMoveWhileCharging &&
+                    frame.Unsafe.TryGetPointer<AbilityEnable>(entityRef, out var abilityEnable))
                 {
                     abilityEnable->MovementEnabled = true;
                 }
@@ -243,6 +256,32 @@ namespace Quantum
             };
 
             return scaledShape;
+        }
+
+        public override void OnCommandInputDetected(Frame frame, EntityRef entityRef)
+        {
+            // 当检测到指令输入时，取消蓄力状态
+            if (!frame.Unsafe.TryGetPointer<AttackComponent>(entityRef, out var attackComponent))
+                return;
+
+            if (!attackComponent->IsChargingHeavy)
+                return;
+
+#if DEBUG || UNITY_EDITOR
+            UnityEngine.Debug.Log($"[ChargeAttack] Cancelling charge due to command input");
+#endif
+
+            attackComponent->IsChargingHeavy = false;
+            attackComponent->ChargeTimer = FrameTimer.None;
+
+            // 恢复移动能力
+            if (frame.Unsafe.TryGetPointer<AbilityEnable>(entityRef, out var abilityEnable))
+            {
+                abilityEnable->MovementEnabled = true;
+            }
+
+            // 触发取消事件
+            frame.Events.ChargingCancelled(entityRef);
         }
     }
 }
