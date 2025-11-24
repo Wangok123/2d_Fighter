@@ -166,7 +166,7 @@ namespace Quantum
             if (!frame.Unsafe.TryGetPointer<MovementComponent>(filter.Entity, out var movement))
                 return;
 
-            GameSettingsData gameSettings = frame.FindAsset<GameSettingsData>(frame.RuntimeConfig.GameSettingsData.Id);
+            GameSettingsData gameSettings = GameSettingsHelper.Get(frame);
 
             Shape2DConfig adjustedConfig = new Shape2DConfig
             {

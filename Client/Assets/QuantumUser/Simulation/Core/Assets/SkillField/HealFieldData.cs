@@ -31,5 +31,12 @@ namespace Quantum
         
         [Tooltip("是否移除负面状态")]
         public bool RemoveDebuffs = false;
+        
+        public override void ApplyEffect(Frame frame, EntityRef skillFieldEntity, 
+            SkillFieldComponent* skillField, EntityRef target, FPVector2 hitPoint)
+        {
+            // 应用治疗逻辑
+            // TODO: 实现治疗系统后添加
+        }
     }
 }

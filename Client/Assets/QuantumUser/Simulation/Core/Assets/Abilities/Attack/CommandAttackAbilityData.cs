@@ -73,6 +73,87 @@ namespace Quantum
 
             return CommandSequences[sequenceIndex];
         }
+        
+        public bool ActivateForSequence(Frame frame, EntityRef entityRef, PlayerLink* playerLink,
+            AbilityType abilityType, ref Ability ability, int sequenceIndex)
+        {
+            CommandSequenceConfig sequence = GetCommandSequence(sequenceIndex);
+            if (sequence == null)
+            {
+#if DEBUG || UNITY_EDITOR
+                UnityEngine.Debug.LogError($"[CommandAttack] Invalid sequence index: {sequenceIndex}");
+#endif
+                return false;
+            }
+
+            FP originalDuration = Duration;
+            FP originalCooldown = Cooldown;
+    
+            Duration = sequence.Duration;
+            Cooldown = sequence.Cooldown;
+
+#if DEBUG || UNITY_EDITOR
+            UnityEngine.Debug.Log(
+                $"[CommandAttack] ActivateForSequence - Duration={Duration}, Cooldown={Cooldown} for sequence {sequenceIndex}");
+#endif
+            ability.BufferInput(frame);
+
+            bool activated = TryActivateAbility(frame, entityRef, playerLink, abilityType, ref ability);
+            
+            if (!activated)
+            {
+                Duration = originalDuration;
+                Cooldown = originalCooldown;
+            }
+
+            return activated;
+        }
+
+
+        public override Ability.AbilityState UpdateAbility(Frame frame, EntityRef entityRef, Ability* ability)
+        {
+            Ability.AbilityState abilityState = base.UpdateAbility(frame, entityRef, ability);
+
+            if (!abilityState.IsActive)
+                return abilityState;
+
+            if (!frame.Unsafe.TryGetPointer<CommandAttackRuntimeComponent>(entityRef, out var runtime))
+                return abilityState;
+
+            CommandSequenceConfig sequence = GetCommandSequence(runtime->MatchedSequenceIndex);
+            if (sequence == null || sequence.ExecutionType != CommandAttackExecutionType.Hitbox)
+                return abilityState;
+
+            // 修改：处理Hitbox类型的执行时机
+            FP elapsedTime = ability->DurationTimer.ElapsedTime;
+            FP hitboxStartTime = sequence.HitboxActiveTime;
+            FP hitboxEndTime = sequence.HitboxActiveTime + sequence.HitboxActiveDuration;
+
+            if (elapsedTime >= hitboxStartTime && elapsedTime < hitboxEndTime)
+            {
+                if (!runtime->HasStartedHitboxWindow)
+                {
+                    frame.Signals.OnCommandAttackHitboxActivate(entityRef, runtime->MatchedSequenceIndex);
+                    runtime->HasStartedHitboxWindow = true;
+                }
+
+                frame.Signals.OnCommandAttackExecute(entityRef, runtime->MatchedSequenceIndex);
+            }
+
+            // 修改：在Ability结束时清理
+            if (abilityState.IsActiveEndTick)
+            {
+                if (runtime->HitEntitiesThisAttack.Ptr != default)
+                {
+                    frame.FreeList(runtime->HitEntitiesThisAttack);
+                    runtime->HitEntitiesThisAttack = default;
+                }
+
+                runtime->HasStartedHitboxWindow = false;
+            }
+
+            return abilityState;
+        }
 
         public bool ShouldUseSkillSystem(int sequenceIndex)
         {
@@ -111,37 +192,33 @@ namespace Quantum
             return false;
         }
 
+        // 修改：UpdateInput 只负责记录输入和检测序列，不设置 HasBufferedInput
+        // CommandAttack 的激活完全由 CommandInputSystem 通过 Signal 触发
         public override void UpdateInput(Frame frame, EntityRef entityRef, AbilityType abilityType, Ability* ability,
             SimpleInput2D input)
         {
-            // 检查实体是否有指令输入组件
             if (!frame.Unsafe.TryGetPointer<CommandInputComponent>(entityRef, out var commandInput))
             {
-#if DEBUG || UNITY_EDITOR
-                UnityEngine.Debug.LogWarning(
-                    $"[CommandAttack] Entity {entityRef} does not have CommandInputComponent!");
-#endif
                 return;
             }
 
-            // 检查实体是否有移动组件（用于获取朝向）
             if (!frame.Unsafe.TryGetPointer<MovementComponent>(entityRef, out var movement))
                 return;
 
-            // 记录方向输入
+            // 修改：只记录方向输入，不激活任何 Ability
             CommandInput directionInput = commandInput->GetDirectionInput(input, movement->IsFacingRight);
             if (directionInput != CommandInput.None)
             {
                 commandInput->RecordInput(frame, directionInput);
             }
 
-            // 记录按钮输入并检测指令序列
+            // 修改：记录按钮输入并检测序列
             CommandInput buttonInput = commandInput->GetButtonInput(input);
             if (buttonInput != CommandInput.None)
             {
                 commandInput->RecordInput(frame, buttonInput);
 
-                // 遍历所有指令序列，检查是否匹配
+                // 修改：检测指令序列
                 for (int i = 0; i < CommandSequences.Length; i++)
                 {
                     if (commandInput->CheckCommandSequence(frame, CommandSequences[i].InputSequence))
@@ -150,21 +227,23 @@ namespace Quantum
                         UnityEngine.Debug.Log(
                             $"[CommandAttack] ✓ Matched sequence {i}: {CommandSequences[i].SequenceName}");
 #endif
-                        // 清空缓冲区
                         commandInput->ClearBuffer();
 
                         // 修改：通知所有 Ability 指令输入被检测到
                         NotifyAllAbilitiesCommandDetected(frame, entityRef);
 
-                        // 触发指令攻击激活信号
+                        // 修改：发送信号让 CommandInputSystem 处理激活
                         frame.Signals.OnCommandAttackActivated(entityRef, i);
 
                         return;
                     }
                 }
             }
+
+            // 修改：注意这里不设置 ability->HasBufferedInput，所以 AbilitySystem 不会自动激活 CommandAttack
         }
 
+        
         private void NotifyAllAbilitiesCommandDetected(Frame frame, EntityRef entityRef)
         {
             if (!frame.Unsafe.TryGetPointer<AbilityInventory>(entityRef, out var abilityInventory))

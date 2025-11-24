@@ -111,7 +111,7 @@ namespace Quantum
             return Priority > otherAbility.Priority;
         }
 
-        private bool TryCancelActiveAbility(Frame frame, EntityRef entityRef, AbilityInventory* abilityInventory)
+        protected bool TryCancelActiveAbility(Frame frame, EntityRef entityRef, AbilityInventory* abilityInventory)
         {
             AbilityType activeAbilityType = abilityInventory->ActiveAbilityInfo.ActiveAbilityType;
             

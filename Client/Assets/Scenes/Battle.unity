@@ -1190,7 +1190,7 @@ MonoBehaviour:
     KnockbackStatusEffect:
       StatusEffectData:
         Id:
-          Value: 400731462195907610
+          Value: 0
 --- !u!114 &1850518766
 MonoBehaviour:
   m_ObjectHideFlags: 0

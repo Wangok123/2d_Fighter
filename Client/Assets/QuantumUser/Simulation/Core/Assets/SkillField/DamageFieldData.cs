@@ -29,6 +29,19 @@ namespace Quantum
         {
             return DamagePerTick;
         }
+        
+        public override void ApplyEffect(Frame frame, EntityRef skillFieldEntity, 
+            SkillFieldComponent* skillField, EntityRef target, FPVector2 hitPoint)
+        {
+            // 应用伤害逻辑
+            // TODO: 实现伤害系统后添加
+        
+            // 如果配置了击退，调用基类方法
+            if (ApplyKnockback && KnockbackStatusEffectData.Id.IsValid)
+            {
+                base.ApplyEffect(frame, skillFieldEntity, skillField, target, hitPoint);
+            }
+        }
     }
 
     public enum DamageType

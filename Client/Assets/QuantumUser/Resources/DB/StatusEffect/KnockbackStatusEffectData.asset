@@ -16,7 +16,7 @@ MonoBehaviour:
     Path: QuantumUser/Resources/DB/StatusEffect/KnockbackStatusEffectData
     Guid:
       Value: 400731462195907610
-  KnockbackType: 1
+  KnockbackType: 0
   KnockbackApplicationMode: 0
   KnockbackForce:
     RawValue: 327680

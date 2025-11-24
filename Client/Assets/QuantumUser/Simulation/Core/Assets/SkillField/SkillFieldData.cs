@@ -6,35 +6,23 @@ namespace Quantum
 {
     public unsafe partial class SkillFieldData : AssetObject
     {
-        [Header("基础设置")]
-        [Tooltip("持续时间")]
-        public FP Duration = 5;
-        
-        [Tooltip("Tick间隔")]
-        public FP TickInterval = FP._0_50;
-        
-        [Tooltip("视觉Prototype")]
-        public EntityPrototype VisualPrototype;
+        [Header("基础设置")] [Tooltip("持续时间")] public FP Duration = 5;
 
-        [Header("效果范围")]
-        [Tooltip("范围形状")]
-        public Shape2DConfig EffectArea;
-        
-        [Tooltip("影响层")]
-        public LayerMask TargetLayer = 1 << 6;
-        
-        [Tooltip("是否影响友军")]
-        public bool AffectAllies = false;
-        
-        [Tooltip("是否影响敌人")]
-        public bool AffectEnemies = true;
+        [Tooltip("Tick间隔")] public FP TickInterval = FP._0_50;
 
-        [Header("伤害设置")]
-        [Tooltip("每次Tick伤害")]
-        public FP DamagePerTick = 5;
-        
-        [Tooltip("击退配置数据")]
-        public AssetRef<KnockbackStatusEffectData> KnockbackStatusEffectData;
+        [Tooltip("视觉Prototype")] public EntityPrototype VisualPrototype;
+
+        [Header("效果范围")] [Tooltip("范围形状")] public Shape2DConfig EffectArea;
+
+        [Tooltip("影响层")] public LayerMask TargetLayer = 1 << 6;
+
+        [Tooltip("是否影响友军")] public bool AffectAllies = false;
+
+        [Tooltip("是否影响敌人")] public bool AffectEnemies = true;
+
+        [Header("伤害设置")] [Tooltip("每次Tick伤害")] public FP DamagePerTick = 5;
+
+        [Tooltip("击退配置数据")] public AssetRef<KnockbackStatusEffectData> KnockbackStatusEffectData;
 
         public virtual bool ShouldAffectTarget(Frame frame, EntityRef owner, EntityRef target)
         {
@@ -62,7 +50,8 @@ namespace Quantum
             return DamagePerTick;
         }
 
-        public virtual AssetRef<KnockbackStatusEffectData> GetKnockbackStatusEffectData(Frame frame, EntityRef skillFieldEntity)
+        public virtual AssetRef<KnockbackStatusEffectData> GetKnockbackStatusEffectData(Frame frame,
+            EntityRef skillFieldEntity)
         {
             return KnockbackStatusEffectData;
         }
@@ -77,6 +66,42 @@ namespace Quantum
 
         public virtual void OnCustomDestroy(Frame frame, EntityRef skillFieldEntity, SkillFieldComponent* skillField)
         {
+        }
+
+        public virtual void ApplyEffect(Frame frame, EntityRef skillFieldEntity,
+            SkillFieldComponent* skillField, EntityRef target, FPVector2 hitPoint)
+        {
+            if (KnockbackStatusEffectData.Id.IsValid)
+            {
+                ApplyKnockback(frame, skillFieldEntity, skillField, target, hitPoint);
+            }
+        }
+
+        // 添加：受保护的辅助方法供子类使用
+        protected void ApplyKnockback(Frame frame, EntityRef skillFieldEntity,
+            SkillFieldComponent* skillField, EntityRef target, FPVector2 hitPoint)
+        {
+            KnockbackStatusEffectData knockbackData =
+                frame.FindAsset<KnockbackStatusEffectData>(KnockbackStatusEffectData.Id);
+
+            Transform2D* fieldTransform = frame.Unsafe.GetPointer<Transform2D>(skillFieldEntity);
+            Transform2D* targetTransform = frame.Unsafe.GetPointer<Transform2D>(target);
+
+            FPVector2 knockbackDirection = knockbackData.GetKnockbackDirection(
+                frame, skillField->Owner, fieldTransform->Position, targetTransform->Position);
+
+            switch (knockbackData.KnockbackApplicationMode)
+            {
+                case KnockbackApplicationMode.CharacterController:
+                    frame.Signals.OnKnockbackApplied(target, knockbackData.KnockBackDuration,
+                        knockbackDirection, KnockbackStatusEffectData);
+                    break;
+
+                case KnockbackApplicationMode.Physics2D:
+                    FPVector2 knockbackVelocity = knockbackDirection * knockbackData.KnockbackForce;
+                    frame.Signals.OnKnockbackPhysic2DApplied(target, knockbackVelocity);
+                    break;
+            }
         }
     }
 }

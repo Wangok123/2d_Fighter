@@ -61,5 +61,26 @@ namespace Quantum
         public virtual void OnCustomUpdate(Frame frame, EntityRef projectileEntity, ProjectileComponent* projectile)
         {
         }
+        
+        public virtual void OnInitialize(Frame frame, EntityRef projectileEntity, 
+            ProjectileComponent* projectile, EntityRef owner)
+        {
+            // 基础实现：设置速度（大多数弹道都需要）
+            // 子类可以重写此方法
+        }
+
+        public virtual bool OnUpdateMovement(Frame frame, EntityRef projectileEntity, 
+            ProjectileComponent* projectile, Transform2D* transform)
+        {
+            // 基础实现：直线移动
+            transform->Position += projectile->Direction * projectile->Speed * frame.DeltaTime;
+            return true;
+        }
+        
+        public virtual bool OnHandleHit(Frame frame, EntityRef projectileEntity, 
+            ProjectileComponent* projectile, EntityRef target, FPVector2 hitPoint)
+        {
+            return false; // 默认不处理特殊行为
+        }
     }
 }

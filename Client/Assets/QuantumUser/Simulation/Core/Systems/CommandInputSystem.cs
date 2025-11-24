@@ -1,4 +1,5 @@
 using Photon.Deterministic;
+using Quantum.Core.Utils;
 using Quantum.Physics2D;
 using UnityEngine.Scripting;
 
@@ -39,25 +40,25 @@ namespace Quantum
             if (!frame.Unsafe.TryGetPointer<AbilityInventory>(entityRef, out var abilityInventory))
             {
 #if DEBUG || UNITY_EDITOR
-                UnityEngine.Debug.LogWarning($"[CommandInputSystem] No AbilityInventory found!");
+                UnityEngine.Debug.LogError($"[CommandInputSystem] No AbilityInventory found!");
 #endif
                 return;
             }
 
             var dic = frame.ResolveDictionary(abilityInventory->AbilitiesDic);
-            if (!dic.TryGetValue(AbilityType.SpecialUltimate, out var ability))
+            if (!dic.TryGetValuePointer(AbilityType.SpecialUltimate, out Ability* ability))
             {
 #if DEBUG || UNITY_EDITOR
-                UnityEngine.Debug.LogWarning($"[CommandInputSystem] No SpecialUltimate ability found in inventory!");
+                UnityEngine.Debug.LogError($"[CommandInputSystem] No SpecialUltimate ability found in inventory!");
 #endif
                 return;
             }
 
-            AbilityData abilityDataBase = frame.FindAsset<AbilityData>(ability.AbilityData.Id);
+            AbilityData abilityDataBase = frame.FindAsset<AbilityData>(ability->AbilityData.Id);
             if (!(abilityDataBase is CommandAttackAbilityData commandData))
             {
 #if DEBUG || UNITY_EDITOR
-                UnityEngine.Debug.LogWarning($"[CommandInputSystem] Ability is not CommandAttackAbilityData!");
+                UnityEngine.Debug.LogError($"[CommandInputSystem] Ability is not CommandAttackAbilityData!");
 #endif
                 return;
             }
@@ -66,7 +67,7 @@ namespace Quantum
             if (sequence == null)
             {
 #if DEBUG || UNITY_EDITOR
-                UnityEngine.Debug.LogWarning($"[CommandInputSystem] Sequence {sequenceIndex} is null!");
+                UnityEngine.Debug.LogError($"[CommandInputSystem] Sequence {sequenceIndex} is null!");
 #endif
                 return;
             }
@@ -74,22 +75,38 @@ namespace Quantum
 #if DEBUG || UNITY_EDITOR
             UnityEngine.Debug.Log($"[CommandInputSystem] Sequence found: {sequence.SequenceName}");
 #endif
+            
+            // 修改：添加或更新RuntimeComponent
+            if (!frame.Has<CommandAttackRuntimeComponent>(entityRef))
+            {
+                frame.Add<CommandAttackRuntimeComponent>(entityRef);
+            }
 
-            // 修改：通过虚方法检查是否应该使用技能系统
+            CommandAttackRuntimeComponent* runtime = frame.Unsafe.GetPointer<CommandAttackRuntimeComponent>(entityRef);
+            runtime->MatchedSequenceIndex = sequenceIndex;
+            runtime->HasStartedHitboxWindow = false;
+
+            // 修改：清理之前的击中列表
+            if (runtime->HitEntitiesThisAttack.Ptr != default)
+            {
+                frame.FreeList(runtime->HitEntitiesThisAttack);
+            }
+
+            runtime->HitEntitiesThisAttack = frame.AllocateList<EntityRef>();
+
+            // 修改：检查是否应该使用技能系统
             if (commandData.ShouldUseSkillSystem(sequenceIndex))
             {
 #if DEBUG || UNITY_EDITOR
                 UnityEngine.Debug.Log($"[CommandInputSystem] Using Skill System for sequence {sequenceIndex}");
 #endif
 
-                // 修改：通过虚方法获取技能数据
                 if (commandData.TryGetSkillDataForSequence(frame, entityRef, sequenceIndex, out var skillDataRef))
                 {
 #if DEBUG || UNITY_EDITOR
                     UnityEngine.Debug.Log($"[CommandInputSystem] SkillData found: {skillDataRef.Id.Value}");
 #endif
 
-                    // 确保实体有SkillComponent
                     if (!frame.Has<SkillComponent>(entityRef))
                     {
                         frame.Add<SkillComponent>(entityRef);
@@ -98,7 +115,6 @@ namespace Quantum
 #endif
                     }
 
-                    // 修改：通过Signal激活技能
                     frame.Signals.OnSkillActivationRequested(entityRef, skillDataRef);
 #if DEBUG || UNITY_EDITOR
                     UnityEngine.Debug.Log($"[CommandInputSystem] ✓ OnSkillActivationRequested signal sent!");
@@ -107,7 +123,7 @@ namespace Quantum
                 else
                 {
 #if DEBUG || UNITY_EDITOR
-                    UnityEngine.Debug.LogWarning(
+                    UnityEngine.Debug.LogError(
                         $"[CommandInputSystem] Failed to get SkillData for sequence {sequenceIndex}");
 #endif
                 }
@@ -119,7 +135,31 @@ namespace Quantum
             UnityEngine.Debug.Log($"[CommandInputSystem] Using traditional execution for sequence {sequenceIndex}");
 #endif
 
-            // 修改：处理传统的Command Attack执行类型
+            // 修改：对于传统执行，激活Ability使Duration生效
+            if (!frame.Unsafe.TryGetPointer<PlayerLink>(entityRef, out var playerLink))
+            {
+#if DEBUG || UNITY_EDITOR
+                UnityEngine.Debug.LogError($"[CommandInputSystem] No PlayerLink found!");
+#endif
+                return;
+            }
+
+            // 修改：使用新的 ActivateForSequence 方法激活 Ability（会设置对应序列的 Duration/Cooldown）
+            if (!commandData.ActivateForSequence(frame, entityRef, playerLink, AbilityType.SpecialUltimate,
+                    ref *ability, sequenceIndex))
+            {
+#if DEBUG || UNITY_EDITOR
+                UnityEngine.Debug.LogError($"[CommandInputSystem] Failed to activate CommandAttack ability!");
+#endif
+                return;
+            }
+
+#if DEBUG || UNITY_EDITOR
+            UnityEngine.Debug.Log(
+                $"[CommandInputSystem] ✓ CommandAttack ability activated with Duration: {sequence.Duration}");
+#endif
+
+            // 修改：对于非Hitbox类型，立即执行操作
             switch (sequence.ExecutionType)
             {
                 case CommandAttackExecutionType.Projectile:
@@ -131,7 +171,7 @@ namespace Quantum
                     break;
 
                 case CommandAttackExecutionType.Hitbox:
-                    // Hitbox类型在OnCommandAttackExecute中处理
+                    // Hitbox类型在UpdateAbility中处理
                     break;
             }
         }
@@ -179,7 +219,7 @@ namespace Quantum
         {
             Transform2D* transform = frame.Unsafe.GetPointer<Transform2D>(entityRef);
             MovementComponent* movement = frame.Unsafe.GetPointer<MovementComponent>(entityRef);
-            GameSettingsData gameSettings = frame.FindAsset<GameSettingsData>(frame.RuntimeConfig.GameSettingsData.Id);
+            GameSettingsData gameSettings = GameSettingsHelper.Get(frame);
 
             var shape = CreateAttackShapeWithDirection(frame, sequence.AttackShape, movement->IsFacingRight);
             HitCollection hits = frame.Physics2D.OverlapShape(*transform, shape, gameSettings.PlayerLayerMask,

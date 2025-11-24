@@ -7,34 +7,26 @@ namespace Quantum
     [Serializable]
     public class ComboStepConfig
     {
-        [Tooltip("打击框激活时间")]
-        public FP HitboxActiveTime = FP._0;
+        [Tooltip("打击框激活时间")] public FP HitboxActiveTime = FP._0;
 
-        [Tooltip("打击框持续时间")]
-        public FP HitboxActiveDuration = FP._0_10;
+        [Tooltip("打击框持续时间")] public FP HitboxActiveDuration = FP._0_10;
 
-        [Tooltip("持续时间")]
-        public FP Duration = FP._1;
+        [Tooltip("持续时间")] public FP Duration = FP._1;
 
-        [Tooltip("击退配置数据")]
-        public AssetRef<KnockbackStatusEffectData> KnockbackStatusEffectData;
+        [Tooltip("击退配置数据")] public AssetRef<KnockbackStatusEffectData> KnockbackStatusEffectData;
 
-        [Tooltip("攻击形状")]
-        public Shape2DConfig AttackShape;
+        [Tooltip("攻击形状")] public Shape2DConfig AttackShape;
     }
 
     [Serializable]
     public unsafe partial class ComboAttackAbilityData : AttackAbilityData
     {
-        [Header("Combo Settings")]
-        [Tooltip("最大连击数")]
+        [Header("Combo Settings")] [Tooltip("最大连击数")]
         public int MaxComboCount = 3;
 
-        [Tooltip("连击时间窗口")]
-        public FP ComboWindow = FP._0_50;
+        [Tooltip("连击时间窗口")] public FP ComboWindow = FP._0_50;
 
-        [Header("Combo Chain Configuration")]
-        [Tooltip("每段的配置")]
+        [Header("Combo Chain Configuration")] [Tooltip("每段的配置")]
         public ComboStepConfig[] ComboSteps;
 
         public override Shape2DConfig GetCurrentAttackShape(Frame frame, EntityRef entityRef)
@@ -71,7 +63,8 @@ namespace Quantum
             return comboRuntime->CurrentHitboxActiveDuration;
         }
 
-        public override AssetRef<KnockbackStatusEffectData> GetCurrentKnockbackStatusEffectData(Frame frame, EntityRef entityRef)
+        public override AssetRef<KnockbackStatusEffectData> GetCurrentKnockbackStatusEffectData(Frame frame,
+            EntityRef entityRef)
         {
             if (!frame.Has<ComboAttackRuntimeComponent>(entityRef))
                 return base.GetCurrentKnockbackStatusEffectData(frame, entityRef);
@@ -118,7 +111,8 @@ namespace Quantum
                     frame.Add<ComboAttackRuntimeComponent>(entityRef);
                 }
 
-                ComboAttackRuntimeComponent* runtimeComponent = frame.Unsafe.GetPointer<ComboAttackRuntimeComponent>(entityRef);
+                ComboAttackRuntimeComponent* runtimeComponent =
+                    frame.Unsafe.GetPointer<ComboAttackRuntimeComponent>(entityRef);
                 runtimeComponent->CurrentComboStep = nextComboCounter;
                 runtimeComponent->CurrentHitboxActiveTime = stepConfig.HitboxActiveTime;
                 runtimeComponent->CurrentHitboxActiveDuration = stepConfig.HitboxActiveDuration;
@@ -136,10 +130,10 @@ namespace Quantum
         public override Ability.AbilityState UpdateAbility(Frame frame, EntityRef entityRef, Ability* ability)
         {
             Ability.AbilityState abilityState = base.UpdateAbility(frame, entityRef, ability);
-            
+
             if (!frame.Has<AttackComponent>(entityRef))
                 return abilityState;
-            
+
             AttackComponent* attackData = frame.Unsafe.GetPointer<AttackComponent>(entityRef);
 
             if (attackData->ComboCounter > 0 && !attackData->ComboWindowTimer.IsRunning(frame))
@@ -166,6 +160,52 @@ namespace Quantum
             }
 
             base.OnAbilityCancelled(frame, entityRef, cancelledAbilityType);
+        }
+
+        // 修改：添加打断连击的方法
+        public override void OnCommandInputDetected(Frame frame, EntityRef entityRef)
+        {
+            if (!frame.Unsafe.TryGetPointer<AttackComponent>(entityRef, out var attackComponent))
+                return;
+
+            bool hasCombo = attackComponent->ComboCounter > 0;
+            bool hasComboWindow = attackComponent->ComboWindowTimer.IsRunning(frame);
+
+            if (!hasCombo && !hasComboWindow)
+                return;
+
+#if DEBUG || UNITY_EDITOR
+            UnityEngine.Debug.Log(
+                $"[ComboAttack] ✓ Interrupting combo due to command input. ComboCounter: {attackComponent->ComboCounter}");
+#endif
+            
+            if (attackComponent->HitEntitiesThisAttack != default)
+            {
+                frame.FreeList(attackComponent->HitEntitiesThisAttack);
+                attackComponent->HitEntitiesThisAttack = default;
+            }
+
+            attackComponent->HasStartedHitboxWindow = false;
+
+            // 重置连击状态
+            ResetComboState(frame, entityRef);
+            
+            if (frame.Unsafe.TryGetPointer<AbilityInventory>(entityRef, out var abilityInventory))
+            {
+                var dic = frame.ResolveDictionary(abilityInventory->AbilitiesDic);
+
+                if (dic.TryGetValuePointer(AbilityType.AttackLight, out Ability* ability))
+                {
+                    if (ability->IsActive || ability->IsDelayed)
+                    {
+#if DEBUG || UNITY_EDITOR
+                        UnityEngine.Debug.Log($"[ComboAttack] ✓ Stopping ComboAttack ability");
+#endif
+                        ability->StopAbility(frame, entityRef);
+                        frame.Events.AbilityCancelled(entityRef, AbilityType.AttackLight);
+                    }
+                }
+            }
         }
 
         private void ResetComboState(Frame frame, EntityRef entityRef)

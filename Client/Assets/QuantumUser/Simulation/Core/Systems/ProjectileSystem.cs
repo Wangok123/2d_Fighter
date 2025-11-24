@@ -98,8 +98,7 @@ namespace Quantum
 
             if (HandleSpecialHitBehavior(frame, projectile, projectileComponent, projectileData, target, hitPoint))
                 return;
-
-            // 修改：使用 KnockbackStatusEffectData
+            
             AssetRef<KnockbackStatusEffectData> knockbackDataRef = projectileData.GetKnockbackStatusEffectData(frame, projectile);
     
             if (!knockbackDataRef.Id.IsValid)
@@ -140,245 +139,22 @@ namespace Quantum
         private void InitializeProjectile(Frame frame, EntityRef projectileEntity, ProjectileComponent* projectile,
             ProjectileData data, EntityRef owner)
         {
-            if (data is StraightProjectileData straightData)
-            {
-                projectile->Speed = straightData.MoveSpeed;
-            }
-            else if (data is HomingProjectileData homingData)
-            {
-                projectile->Speed = homingData.MoveSpeed;
-            }
-            else if (data is ArcProjectileData arcData)
-            {
-                projectile->Speed = arcData.InitialSpeed;
-            }
-            else if (data is BoomerangProjectileData boomerangData)
-            {
-                projectile->Speed = boomerangData.ForwardSpeed;
-
-                if (frame.Unsafe.TryGetPointer<BoomerangRuntimeComponent>(projectileEntity, out var boomerangRuntime))
-                {
-                    boomerangRuntime->CurrentPhase = BoomerangPhase.Forward;
-                    boomerangRuntime->DistanceTraveled = FP._0;
-
-                    if (boomerangData.UseKCC &&
-                        frame.Unsafe.TryGetPointer<CharacterController2D>(projectileEntity, out var kcc))
-                    {
-                        InitializeKCC(frame, kcc, boomerangData.KCCConfig);
-                        kcc->Velocity = projectile->Direction * boomerangData.ForwardSpeed;
-                    }
-                }
-                else
-                {
-                    Debug.LogError("BoomerangRuntimeComponent not found on projectile entity!");
-                }
-            }
-            else if (data is GrenadeProjectileData grenadeData)
-            {
-                projectile->Speed = grenadeData.ThrowSpeed;
-
-                if (!frame.Unsafe.TryGetPointer<GrenadeRuntimeComponent>(projectileEntity, out var grenadeRuntime))
-                {
-                    Log.Error(
-                        "[Grenade Init] GrenadeRuntimeComponent not found! Add QPrototypeGrenadeRuntimeComponent to prefab");
-                    return;
-                }
-
-                grenadeRuntime->TimeAlive = FP._0;
-                grenadeRuntime->HasDetonated = false;
-
-                if (!frame.Unsafe.TryGetPointer<PhysicsBody2D>(projectileEntity, out var body))
-                {
-                    Log.Error("[Grenade Init] PhysicsBody2D not found! Add QPrototypePhysicsBody2D to prefab");
-                    return;
-                }
-
-                // 修改：计算投掷方向
-                FP horizontalSign = projectile->Direction.X >= FP._0 ? FP._1 : -FP._1;
-
-                if (FPMath.Abs(projectile->Direction.X) < FP._0_01)
-                {
-                    if (frame.Unsafe.TryGetPointer<Transform2D>(owner, out var ownerTransform))
-                    {
-                        FP ownerRotation = ownerTransform->Rotation;
-                        FP rotationRad = ownerRotation * FP.Deg2Rad;
-                        FP cosRot = FPMath.Cos(rotationRad);
-                        horizontalSign = cosRot >= FP._0 ? FP._1 : -FP._1;
-                    }
-                    else
-                    {
-                        horizontalSign = FP._1;
-                    }
-                }
-
-                // 修改：直接设置PhysicsBody的速度（物理引擎会自动应用重力和碰撞）
-                body->Velocity = new FPVector2(
-                    horizontalSign * grenadeData.ThrowSpeed,
-                    grenadeData.ThrowArc
-                );
-            }
-        }
-
-        private void InitializeKCC(Frame frame, CharacterController2D* kcc,
-            AssetRef<CharacterController2DConfig> configRef)
-        {
-            if (configRef.Id.IsValid)
-            {
-                var config = frame.FindAsset<CharacterController2DConfig>(configRef.Id);
-                kcc->Init(frame, config);
-            }
-            else
-            {
-                kcc->Init(frame);
-            }
+            data.OnInitialize(frame, projectileEntity, projectile, owner);
         }
 
         private bool UpdateProjectileMovement(Frame frame, EntityRef projectileEntity, ProjectileComponent* projectile,
             ProjectileData data)
         {
             Transform2D* transform = frame.Unsafe.GetPointer<Transform2D>(projectileEntity);
-
-            if (data is StraightProjectileData)
-            {
-                transform->Position += projectile->Direction * projectile->Speed * frame.DeltaTime;
-            }
-            else if (data is HomingProjectileData homingData)
-            {
-                if (homingData.AutoTargetNearest)
-                {
-                    EntityRef target = FindNearestTarget(frame, transform->Position, projectile->Owner,
-                        homingData.TrackingRange);
-                    if (target != EntityRef.None)
-                    {
-                        Transform2D* targetTransform = frame.Unsafe.GetPointer<Transform2D>(target);
-                        FPVector2 directionToTarget = (targetTransform->Position - transform->Position).Normalized;
-
-                        projectile->Direction = FPVector2.Lerp(projectile->Direction, directionToTarget,
-                            homingData.TurnSpeed * frame.DeltaTime);
-                        projectile->Direction = projectile->Direction.Normalized;
-                    }
-                }
-
-
-                transform->Position += projectile->Direction * projectile->Speed * frame.DeltaTime;
-                transform->Rotation = FPMath.Atan2(projectile->Direction.Y, projectile->Direction.X) * FP.Rad2Deg;
-            }
-            else if (data is BoomerangProjectileData boomerangData)
-            {
-                if (frame.Unsafe.TryGetPointer<BoomerangRuntimeComponent>(projectileEntity, out var boomerangRuntime))
-                {
-                    if (boomerangRuntime->CurrentPhase == BoomerangPhase.Forward)
-                    {
-                        FP speed = boomerangData.ForwardSpeed;
-                        FP moveDistance = speed * frame.DeltaTime;
-                        transform->Position += projectile->Direction * moveDistance;
-                        boomerangRuntime->DistanceTraveled += moveDistance;
-
-                        if (boomerangRuntime->DistanceTraveled >= boomerangData.MaxDistance)
-                        {
-                            boomerangRuntime->CurrentPhase = BoomerangPhase.Return;
-                        }
-                    }
-                    else if (boomerangRuntime->CurrentPhase == BoomerangPhase.Return)
-                    {
-                        if (frame.Unsafe.TryGetPointer<Transform2D>(projectile->Owner, out var ownerTransform))
-                        {
-                            FPVector2 directionToOwner = (ownerTransform->Position - transform->Position).Normalized;
-                            FP speed = boomerangData.ReturnSpeed;
-                            transform->Position += directionToOwner * speed * frame.DeltaTime;
-                            if (FPVector2.Distance(transform->Position, ownerTransform->Position) <
-                                boomerangData.CatchDistance)
-                            {
-                                frame.Signals.DestroyProjectile(projectileEntity, ProjectileDestroyReason.HitTarget);
-                                return false;
-                            }
-                        }
-                    }
-                }
-            }
-            else if (data is GrenadeProjectileData grenadeData)
-            {
-                if (frame.Unsafe.TryGetPointer<GrenadeRuntimeComponent>(projectileEntity, out var grenadeRuntime))
-                {
-                    if (!grenadeRuntime->HasDetonated)
-                    {
-                        grenadeRuntime->TimeAlive += frame.DeltaTime;
-                        if (grenadeData.DetonateType == GrenadeDetonateType.Timer &&
-                            grenadeRuntime->TimeAlive >= grenadeData.DetonationDelay)
-                        {
-                            TriggerGrenadeExplosion(frame, projectileEntity, grenadeData, grenadeRuntime);
-                            return false;
-                        }
-                    }
-                }
-            }
-
-            return true;
+    
+            // 直接调用多态方法
+            return data.OnUpdateMovement(frame, projectileEntity, projectile, transform);
         }
 
         private bool HandleSpecialHitBehavior(Frame frame, EntityRef projectileEntity, ProjectileComponent* projectile,
             ProjectileData data, EntityRef target, FPVector2 hitPoint)
         {
-            if (data is GrenadeProjectileData grenadeData)
-            {
-                if (!frame.Unsafe.TryGetPointer<GrenadeRuntimeComponent>(projectileEntity, out var grenadeRuntime))
-                    return false;
-
-                if (grenadeRuntime->HasDetonated)
-                    return true;
-
-                if (grenadeData.CanDetonateInAir || grenadeData.DetonateType == GrenadeDetonateType.FirstContact)
-                {
-                    TriggerGrenadeExplosion(frame, projectileEntity, grenadeData, grenadeRuntime);
-                    return true;
-                }
-            }
-
-            return false;
-        }
-
-        private void TriggerGrenadeExplosion(Frame frame, EntityRef projectileEntity, GrenadeProjectileData grenadeData,
-            GrenadeRuntimeComponent* grenadeRuntime)
-        {
-            grenadeRuntime->HasDetonated = true;
-
-            Transform2D* transform = frame.Unsafe.GetPointer<Transform2D>(projectileEntity);
-            FPVector2 explosionPosition = transform->Position;
-
-            if (grenadeData.SpawnSkillFieldOnExplosion && grenadeData.ExplosionFieldData.Id.IsValid)
-            {
-                frame.Signals.SpawnSkillField(grenadeData.ExplosionFieldData, explosionPosition,
-                    frame.Unsafe.GetPointer<ProjectileComponent>(projectileEntity)->Owner);
-            }
-
-            frame.Signals.DestroyProjectile(projectileEntity, ProjectileDestroyReason.HitTarget);
-        }
-
-        private EntityRef FindNearestTarget(Frame frame, FPVector2 position, EntityRef owner, FP trackingRange)
-        {
-            EntityRef nearest = EntityRef.None;
-            FP nearestDistance = FP.MaxValue;
-
-            var filter = frame.Filter<Transform2D>();
-
-            while (filter.NextUnsafe(out var entity, out var transform))
-            {
-                if (entity == owner)
-                    continue;
-
-                FP distance = FPVector2.Distance(position, transform->Position);
-
-                if (trackingRange > 0 && distance > trackingRange)
-                    continue;
-
-                if (distance < nearestDistance)
-                {
-                    nearestDistance = distance;
-                    nearest = entity;
-                }
-            }
-
-            return nearest;
+            return data.OnHandleHit(frame, projectileEntity, projectile, target, hitPoint);
         }
 
         private void CheckCollisions(Frame frame, EntityRef projectileEntity, ProjectileComponent* projectile,
@@ -388,7 +164,7 @@ namespace Quantum
 
             var shape = projectileData.CollisionShape.CreateShape(frame);
             HitCollection hits = frame.Physics2D.OverlapShape(*transform, shape, projectileData.CollisionLayer,
-                QueryOptions.HitDynamics | QueryOptions.HitStatics);
+                QueryOptions.HitSolids);
 
             if (hits.Count > 0)
             {
