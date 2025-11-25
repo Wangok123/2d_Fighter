@@ -289,7 +289,7 @@ namespace Quantum.Menu {
           // Or create a random id
           Guid.NewGuid().ToString(),
         RuntimeConfig = connectArgs.RuntimeConfig,
-        SessionConfig = (connectArgs.SessionConfig != null ? connectArgs.SessionConfig.Config : null) ?? QuantumDeterministicSessionConfigAsset.DefaultConfig,
+        SessionConfig = connectArgs.SessionConfig?.Config ?? QuantumDeterministicSessionConfigAsset.DefaultConfig,
         GameMode = DeterministicGameMode.Multiplayer,
         PlayerCount = connectArgs.MaxPlayerCount,
         Communicator = new QuantumNetworkCommunicator(Client),
@@ -379,8 +379,8 @@ namespace Quantum.Menu {
     private static void PatchConnectArgs(QuantumMenuConnectArgs connectArgs)
     {
       // set global configs for ServerSettings and SessionConfig when null
-      if (connectArgs.ServerSettings == null) connectArgs.ServerSettings = PhotonServerSettings.Global;
-      if (connectArgs.SessionConfig == null) connectArgs.SessionConfig = QuantumDeterministicSessionConfigAsset.Global;
+      connectArgs.ServerSettings = connectArgs.ServerSettings ?? PhotonServerSettings.Global;
+      connectArgs.SessionConfig = connectArgs.SessionConfig ?? QuantumDeterministicSessionConfigAsset.Global;
 
       // limit player count
       connectArgs.MaxPlayerCount = Math.Min(connectArgs.MaxPlayerCount, Input.MaxCount);

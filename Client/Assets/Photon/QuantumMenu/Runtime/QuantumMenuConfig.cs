@@ -81,7 +81,7 @@ namespace Quantum.Menu {
     /// <summary>
     /// Returns an id that should be unique to this machine.
     /// </summary>
-    public virtual string MachineId => _machineId != null ? _machineId.Id : null;
+    public virtual string MachineId => _machineId?.Id;
     /// <summary>
     /// Returns the code generator.
     /// </summary>

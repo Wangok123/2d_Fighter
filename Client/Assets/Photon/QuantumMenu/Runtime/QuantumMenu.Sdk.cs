@@ -14,7 +14,7 @@ namespace Quantum.Menu {
     /// <summary>
     /// Getter to retrieve Photon Realtime <see cref="Photon.Realtime.AppSettings"/> from <see cref="ServerSettings"/>
     /// </summary>
-    public AppSettings AppSettings => ServerSettings != null ? ServerSettings.AppSettings : null;
+    public AppSettings AppSettings => ServerSettings?.AppSettings;
     /// <summary>
     /// Photon Realtime authentication settings.
     /// </summary>

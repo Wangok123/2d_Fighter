@@ -61,7 +61,7 @@ namespace Quantum.Editor {
           EditorGUILayout.TextField("PreferredRegion", data.ConnectionArgs.PreferredRegion);
           EditorGUILayout.TextField("Region", data.ConnectionArgs.Region);
           EditorGUILayout.TextField("AppVersion", data.ConnectionArgs.AppVersion);
-          EditorGUILayout.TextField("Scene", data.ConnectionArgs.Scene != null ? data.ConnectionArgs.Scene.ScenePath : null);
+          EditorGUILayout.TextField("Scene", data.ConnectionArgs.Scene?.ScenePath);
           EditorGUILayout.IntField("MaxPlayerCount", data.ConnectionArgs.MaxPlayerCount);
           EditorGUILayout.Toggle("Creating", data.ConnectionArgs.Creating);
         }

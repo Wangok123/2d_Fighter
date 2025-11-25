@@ -125,7 +125,7 @@ namespace Quantum.Menu {
         _sceneButton.interactable = false;
       }
 
-      if (ConnectionArgs.Scene == null || string.IsNullOrEmpty(ConnectionArgs.Scene.NameOrSceneName)) {
+      if (string.IsNullOrEmpty(ConnectionArgs.Scene?.NameOrSceneName)) {
         _playButton.interactable = false;
         _partyButton.interactable = false;
         Debug.LogWarning("No valid scene to start found. Add a QuantumMenuSceneInfo asset to Resources.");
