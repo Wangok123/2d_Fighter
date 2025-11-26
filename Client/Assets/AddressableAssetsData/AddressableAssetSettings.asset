@@ -88,6 +88,7 @@ MonoBehaviour:
     m_LabelNames:
     - default
     - Core
+    - QuantumScenes
   m_SchemaTemplates: []
   m_GroupTemplateObjects:
   - {fileID: 11400000, guid: d0d38720cc4f6ab499338adbb18fb1ab, type: 2}

@@ -189,7 +189,7 @@ MonoBehaviour:
       type: {class: PhysicsCallbacks2DPrototype, ns: Quantum.Prototypes, asm: Quantum.Engine}
       data:
         CallbackFlags:
-          Value: 8
+          Value: 0
     - rid: 8101032211223937027
       type: {class: CharacterController2DPrototype, ns: Quantum.Prototypes, asm: Quantum.Engine}
       data:

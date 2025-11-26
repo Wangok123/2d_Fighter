@@ -29,6 +29,12 @@ MonoBehaviour:
     m_SerializedLabels:
     - Core
     FlaggedDuringContentUpdateRestriction: 0
+  - m_GUID: 1a7d53cc752b7044cbb7bad05ea7e104
+    m_Address: Assets/Scenes/Battle.unity
+    m_ReadOnly: 0
+    m_SerializedLabels:
+    - QuantumScenes
+    FlaggedDuringContentUpdateRestriction: 0
   m_ReadOnly: 0
   m_Settings: {fileID: 11400000, guid: 111d283fa48bf35439480d1d008b9991, type: 2}
   m_SchemaSet:
