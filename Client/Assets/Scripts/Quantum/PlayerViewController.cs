@@ -7,19 +7,39 @@ namespace Quantum.QuantumView
 {
     public unsafe class PlayerViewController : QuantumEntityViewComponent<CustomViewContext>
     {
+        [Header("同步优化配置")]
+        [Tooltip("是否为本地玩家")]
+        [SerializeField] private bool _isLocalPlayer = false;
+        
+        [Tooltip("本地玩家使用预测帧（灵敏），远程玩家使用验证帧（稳定）")]
+        [SerializeField] private bool _useHybridFrameMode = true;
+
+        [Tooltip("动画防抖间隔（秒）")]
+        [SerializeField] private float _animationDebounceTime = 0.08f;
+
+        [Tooltip("是否启用帧去重")]
+        [SerializeField] private bool _enableFrameDeduplication = true;
+
+        [Header("视图引用")]
+        [SerializeField] private Transform _playerCenterTransform;
+        [SerializeField] private WarriorAnimationManager _manager;
+
+        [Header("调试信息")]
+        [SerializeField] private bool _showDebugLog = false;
+
         private readonly Vector3 _rightRotation = Vector3.zero;
         private readonly Vector3 _leftRotation = new(0, 180, 0);
 
         [HideInInspector] public int LookDirection;
-        [SerializeField] private Transform _playerCenterTransform;
-        [SerializeField] private WarriorAnimationManager _manager;
 
-        private bool _isPlayingAbilityAnimation;
-
-        // 添加：当前播放的攻击段数，防止重复播放
         private int _currentAttackStep = -1;
+        
+        private int _lastProcessedFrame = -1;
         private int _lastComboEventFrame = -1;
         private int _lastComboStep = -1;
+        
+        private float _lastAnimationTime;
+        private string _currentAnimationState;
 
         public override void OnActivate(Frame frame)
         {
@@ -27,12 +47,28 @@ namespace Quantum.QuantumView
             QuantumEvent.Subscribe<EventAbilityCancelled>(this, OnAbilityCancelled);
             QuantumEvent.Subscribe<EventAbilityEnded>(this, OnAbilityEnded);
 
-            // 订阅攻击事件
             QuantumEvent.Subscribe<EventComboAttackStarted>(this, OnComboAttackStarted);
             QuantumEvent.Subscribe<EventChargingStarted>(this, OnChargeAttackStarted);
             QuantumEvent.Subscribe<EventChargingCancelled>(this, OnChargeAttackCancelled);
             QuantumEvent.Subscribe<EventChargeAttackReleased>(this, OnChargeAttackReleased);
             QuantumEvent.Subscribe<EventCommandAttackExecuted>(this, OnCommandAttackExecuted);
+
+            _lastProcessedFrame = -1;
+            _currentAnimationState = null;
+            _currentAttackStep = -1;
+
+            if (frame.TryGet<PlayerLink>(EntityRef, out var playerLink))
+            {
+                if (Game != null)
+                {
+                    _isLocalPlayer = Game.PlayerIsLocal(playerLink.Player);
+                }
+                
+                if (_showDebugLog)
+                {
+                    Debug.Log($"[PlayerViewController] Entity {EntityRef} - IsLocal: {_isLocalPlayer}, PlayerRef: {playerLink.Player}");
+                }
+            }
         }
 
         public override void OnDeactivate()
@@ -42,19 +78,125 @@ namespace Quantum.QuantumView
 
         public override void OnUpdateView()
         {
-            KCC2D* kcc = VerifiedFrame.Unsafe.GetPointer<KCC2D>(EntityRef);
-            KCC2DConfig config = VerifiedFrame.FindAsset(kcc->Config);
-            UpdateRightFace();
-            if (!_isPlayingAbilityAnimation)
+            Frame frameToUse = GetFrameToUse();
+            if (frameToUse == null)
+            {
+                return;
+            }
+
+            if (_enableFrameDeduplication && frameToUse.Number == _lastProcessedFrame)
+            {
+                return;
+            }
+            _lastProcessedFrame = frameToUse.Number;
+
+            if (!frameToUse.Unsafe.TryGetPointer<KCC2D>(EntityRef, out var kcc))
+            {
+                return;
+            }
+
+            KCC2DConfig config = frameToUse.FindAsset(kcc->Config);
+            
+            UpdateRightFace(frameToUse);
+            
+            // 🎯 检查 Frame 中的真实能力状态（包括蓄力状态）
+            bool isPlayingAbility = IsPlayingAbility(frameToUse);
+            
+            // 只有在没有激活能力时才更新移动动画
+            if (!isPlayingAbility)
             {
                 UpdateAnimatorMovementSpeed(kcc, config);
                 UpdateAnimatorJumpState(kcc);
             }
         }
 
-        private void UpdateRightFace()
+        // 🎯 从 Frame 中获取真实的能力状态
+        private bool IsPlayingAbility(Frame frame)
         {
-            bool isRight = VerifiedFrame.Get<MovementComponent>(EntityRef).IsFacingRight;
+            // ✅ 1. 检查蓄力状态（最高优先级）
+            if (frame.Unsafe.TryGetPointer<AttackComponent>(EntityRef, out var attackComponent))
+            {
+                if (attackComponent->IsChargingHeavy)
+                {
+                    if (_showDebugLog)
+                    {
+                        Debug.Log($"[PlayerViewController] Protecting animation - IsCharging at Frame {frame.Number}");
+                    }
+                    return true;
+                }
+            }
+
+            // ✅ 2. 检查激活的能力
+            if (!frame.Unsafe.TryGetPointer<AbilityInventory>(EntityRef, out var abilityInventory))
+            {
+                return false;
+            }
+
+            if (!abilityInventory->HasActiveAbility)
+            {
+                return false;
+            }
+
+            AbilityType activeAbility = abilityInventory->ActiveAbilityInfo.ActiveAbilityType;
+            
+            // 🎯 区分哪些能力需要保护动画
+            switch (activeAbility)
+            {
+                // 攻击能力 - 高优先级，保护动画
+                case AbilityType.AttackLight:
+                case AbilityType.AttackHeavy:
+                    if (_showDebugLog)
+                    {
+                        Debug.Log($"[PlayerViewController] Protecting animation - Active Ability: {activeAbility} at Frame {frame.Number}");
+                    }
+                    return true;
+
+                // 移动能力 - 需要保护的
+                case AbilityType.MovementDash:
+                case AbilityType.MovementAirDash:
+                case AbilityType.MovementWallSlide:
+                    if (_showDebugLog)
+                    {
+                        Debug.Log($"[PlayerViewController] Protecting animation - Active Ability: {activeAbility} at Frame {frame.Number}");
+                    }
+                    return true;
+
+                // 跳跃类 - 不保护，允许移动动画覆盖
+                case AbilityType.MovementJump:
+                case AbilityType.MovementDoubleJump:
+                case AbilityType.MovementWallJump:
+                    return false;
+
+                default:
+                    return false;
+            }
+        }
+
+        private Frame GetFrameToUse()
+        {
+            if (_useHybridFrameMode)
+            {
+                if (_isLocalPlayer)
+                {
+                    return PredictedFrame ?? VerifiedFrame;
+                }
+                else
+                {
+                    return VerifiedFrame;
+                }
+            }
+            
+            return VerifiedFrame;
+        }
+
+        private void UpdateRightFace(Frame frame)
+        {
+            if (!frame.TryGet<MovementComponent>(EntityRef, out var movement))
+            {
+                return;
+            }
+
+            bool isRight = movement.IsFacingRight;
             if (isRight)
             {
                 _playerCenterTransform.localRotation = Quaternion.Euler(_rightRotation);
@@ -71,15 +213,16 @@ namespace Quantum.QuantumView
         {
             var isGrounded = kcc->State == KCCState.GROUNDED;
             FP normalizedSpeed = kcc->_kinematicVelocity.Magnitude / config.BaseSettings.MaxBaseSpeed;
+            
             if (isGrounded)
             {
                 if (normalizedSpeed <= 0.5f.ToFP())
                 {
-                    _manager.PlayIdle();
+                    PlayAnimationSafe("Idle", () => _manager.PlayIdle());
                 }
                 else
                 {
-                    _manager.PlayRun();
+                    PlayAnimationSafe("Run", () => _manager.PlayRun());
                 }
             }
         }
@@ -91,13 +234,32 @@ namespace Quantum.QuantumView
             {
                 if (kcc->_kinematicVelocity.Y > 0)
                 {
-                    _manager.PlayJump();
+                    PlayAnimationSafe("Jump", () => _manager.PlayJump());
                 }
                 else
                 {
-                    _manager.PlayFall();
+                    PlayAnimationSafe("Fall", () => _manager.PlayFall());
                 }
             }
+        }
+
+        private void PlayAnimationSafe(string animName, System.Action playAction)
+        {
+            if (_currentAnimationState == animName && 
+                Time.time - _lastAnimationTime < _animationDebounceTime)
+            {
+                return;
+            }
+
+            _currentAnimationState = animName;
+            _lastAnimationTime = Time.time;
+            
+            if (_showDebugLog)
+            {
+                Debug.Log($"[PlayerViewController] {(_isLocalPlayer ? "LOCAL" : "REMOTE")} Playing: {animName} at Frame {_lastProcessedFrame}");
+            }
+            
+            playAction?.Invoke();
         }
 
         private void OnAbilityActivated(EventAbilityActivated e)
@@ -108,30 +270,25 @@ namespace Quantum.QuantumView
             {
                 case AbilityType.MovementJump:
                 case AbilityType.MovementDoubleJump:
-                    _manager.PlayJump();
+                    PlayAnimationSafe("Jump", () => _manager.PlayJump());
                     break;
 
                 case AbilityType.MovementDash:
                 case AbilityType.MovementAirDash:
-                    _isPlayingAbilityAnimation = true;
-                    _manager.PlayDash();
+                    PlayAnimationSafe("Dash", () => _manager.PlayDash());
                     break;
 
                 case AbilityType.MovementWallSlide:
-                    _isPlayingAbilityAnimation = true;
-                    _manager.PlayWallSlide();
+                    PlayAnimationSafe("WallSlide", () => _manager.PlayWallSlide());
                     break;
 
                 case AbilityType.MovementWallJump:
-                    _manager.PlayJump();
+                    PlayAnimationSafe("WallJump", () => _manager.PlayJump());
                     break;
 
+                // 攻击动画由具体事件处理
                 case AbilityType.AttackLight:
-                    _isPlayingAbilityAnimation = true;
-                    break;
-
                 case AbilityType.AttackHeavy:
-                    _isPlayingAbilityAnimation = true;
                     break;
             }
         }
@@ -140,19 +297,10 @@ namespace Quantum.QuantumView
         {
             if (e.Entity != EntityRef) return;
 
-            switch (e.AbilityType)
+            if (e.AbilityType == AbilityType.AttackLight || 
+                e.AbilityType == AbilityType.AttackHeavy)
             {
-                case AbilityType.MovementWallSlide:
-                    _isPlayingAbilityAnimation = false;
-                    break;
-
-                case AbilityType.MovementDash:
-                case AbilityType.MovementAirDash:
-                case AbilityType.AttackLight:
-                case AbilityType.AttackHeavy:
-                    _isPlayingAbilityAnimation = false;
-                    _currentAttackStep = -1; // 重置攻击段数
-                    break;
+                _currentAttackStep = -1;
             }
         }
 
@@ -160,26 +308,19 @@ namespace Quantum.QuantumView
         {
             if (e.Entity != EntityRef) return;
 
-            switch (e.AbilityType)
+            if (e.AbilityType == AbilityType.AttackLight || 
+                e.AbilityType == AbilityType.AttackHeavy)
             {
-                case AbilityType.MovementDash:
-                case AbilityType.MovementAirDash:
-                case AbilityType.AttackLight:
-                case AbilityType.AttackHeavy:
-                case AbilityType.MovementWallSlide:
-                    _isPlayingAbilityAnimation = false;
-                    _currentAttackStep = -1; // 重置攻击段数
-                    break;
+                _currentAttackStep = -1;
             }
         }
 
-        // 轻攻击连击事件
         private void OnComboAttackStarted(EventComboAttackStarted e)
         {
             if (e.Entity != EntityRef) return;
 
-            // 防止Quantum回滚导致的重复事件触发
             int currentFrame = VerifiedFrame.Number;
+            
             if (_lastComboEventFrame == currentFrame && _lastComboStep == e.Step)
             {
                 return;
@@ -188,7 +329,6 @@ namespace Quantum.QuantumView
             _lastComboEventFrame = currentFrame;
             _lastComboStep = e.Step;
 
-            // 添加：防止同一段攻击重复播放
             if (_currentAttackStep == e.Step)
             {
                 return;
@@ -196,14 +336,13 @@ namespace Quantum.QuantumView
 
             _currentAttackStep = e.Step;
 
-            // 根据连击段数播放动画
             switch (e.Step)
             {
                 case 1:
-                    _manager.PlayAttack1(); // Attack_1
+                    PlayAnimationSafe("Attack1", () => _manager.PlayAttack1());
                     break;
                 case 2:
-                    _manager.PlayAttack2(); // Attack_2
+                    PlayAnimationSafe("Attack2", () => _manager.PlayAttack2());
                     break;
             }
         }
@@ -212,42 +351,44 @@ namespace Quantum.QuantumView
         {
             if (e.Entity != EntityRef) return;
 
-            _isPlayingAbilityAnimation = true;
-            // 播放蓄力开始动画/特效
-            _manager.PlayChargeStart(); // ChargeStart
+            PlayAnimationSafe("ChargeStart", () => _manager.PlayChargeStart());
         }
 
-        // 蓄力取消事件
         private void OnChargeAttackCancelled(EventChargingCancelled e)
         {
             if (e.Entity != EntityRef) return;
 
-            _isPlayingAbilityAnimation = false;
-            // 播放蓄力取消动画/特效
-            Debug.Log("蓄力被取消");
+            // Frame 状态会自动更新 IsChargingHeavy = false
         }
 
-        // 重攻击释放事件
         private void OnChargeAttackReleased(EventChargeAttackReleased e)
         {
             if (e.Entity != EntityRef) return;
 
-            // 根据是否满蓄力播放不同动画
-            if (e.IsFullyCharged)
-            {
-                _manager.PlayHeavyAttack(); // Attack_3（满蓄力重攻击）
-            }
-            else
-            {
-                _manager.PlayHeavyAttack(); // Attack（普通重攻击）
-            }
+            string animName = e.IsFullyCharged ? "HeavyAttackFull" : "HeavyAttack";
+            PlayAnimationSafe(animName, () => _manager.PlayHeavyAttack());
         }
         
         private void OnCommandAttackExecuted(EventCommandAttackExecuted e)
         {
             if (e.PlayerEntityRef != EntityRef) return;
 
-            _isPlayingAbilityAnimation = true;
+            // Frame 状态会自动包含这个信息
+        }
+
+        private void OnDrawGizmosSelected()
+        {
+            if (!Application.isPlaying) return;
+
+            Gizmos.color = _isLocalPlayer ? Color.green : Color.cyan;
+            Gizmos.DrawWireSphere(transform.position, 0.5f);
+
+            if (_playerCenterTransform != null)
+            {
+                Gizmos.color = LookDirection > 0 ? Color.green : Color.red;
+                Vector3 direction = LookDirection > 0 ? Vector3.right : Vector3.left;
+                Gizmos.DrawRay(_playerCenterTransform.position, direction * 1f);
+            }
         }
     }
 }
