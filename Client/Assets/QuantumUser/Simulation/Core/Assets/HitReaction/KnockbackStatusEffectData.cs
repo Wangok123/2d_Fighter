@@ -9,9 +9,6 @@ namespace Quantum
         [Tooltip("击退类型")]
         public AttackKnockbackType KnockbackType = AttackKnockbackType.AwayFromAttacker;
         
-        [Tooltip("击退应用模式")]
-        public KnockbackApplicationMode KnockbackApplicationMode = KnockbackApplicationMode.CharacterController;
-        
         [Header("Physics Knockback Settings")]
         [Tooltip("击退力度（仅Physics2D模式使用）")]
         public FP KnockbackForce = 5;

@@ -89,7 +89,7 @@ namespace Quantum
                 Debug.LogError("Attack data is null in OnAttackHitTarget");
                 return;
             }
-            
+    
             AssetRef<KnockbackStatusEffectData> knockbackDataRef = attackData.GetCurrentKnockbackStatusEffectData(frame, attacker);
             if (!knockbackDataRef.Id.IsValid)
             {
@@ -99,20 +99,35 @@ namespace Quantum
 
             KnockbackStatusEffectData knockbackData = frame.FindAsset<KnockbackStatusEffectData>(knockbackDataRef.Id);
             FPVector2 knockbackDirection = knockbackData.GetKnockbackDirection(frame, attacker, attackerPos, targetPos);
-            KnockbackApplicationMode knockbackMode = knockbackData.KnockbackApplicationMode;
-            
-            switch (knockbackMode)
-            {
-                case KnockbackApplicationMode.CharacterController:
-                    frame.Signals.OnKnockbackApplied(target, knockbackData.KnockBackDuration, knockbackDirection, knockbackDataRef);
-                    break;
-
-                case KnockbackApplicationMode.Physics2D:
-                    FPVector2 knockbackVelocity = knockbackDirection * knockbackData.KnockbackForce;
-                    frame.Signals.OnKnockbackPhysic2DApplied(target, knockbackVelocity);
-                    break;
-            }
+    
+            // 根据目标实体的组件动态决定击退方式
+            ApplyKnockbackToTarget(frame, target, knockbackData, knockbackDirection, knockbackDataRef);
         }
+        
+        private void ApplyKnockbackToTarget(Frame frame, EntityRef target, KnockbackStatusEffectData knockbackData, 
+            FPVector2 knockbackDirection, AssetRef<KnockbackStatusEffectData> knockbackDataRef)
+        {
+            // 优先检查是否有PhysicsBody2D组件
+            if (frame.Has<PhysicsBody2D>(target))
+            {
+                FPVector2 knockbackVelocity = knockbackDirection * knockbackData.KnockbackForce;
+                frame.Signals.OnKnockbackPhysic2DApplied(target, knockbackVelocity);
+                return;
+            }
+    
+            // 检查是否有CharacterController2D组件
+            if (frame.Has<CharacterController2D>(target))
+            {
+                frame.Signals.OnKnockbackApplied(target, knockbackData.KnockBackDuration, knockbackDirection, knockbackDataRef);
+                return;
+            }
+    
+            // 如果都没有，记录警告
+#if DEBUG || UNITY_EDITOR
+            Debug.LogError($"[AttackSystem] Target entity {target} has neither PhysicsBody2D nor CharacterController2D");
+#endif
+        }
+
 
         private bool GetIsFacingRight(Frame frame, EntityRef entityRef)
         {

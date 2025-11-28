@@ -273,20 +273,28 @@ namespace Quantum
                 targetTransform->Position
             );
 
-            KnockbackApplicationMode knockbackMode = knockbackData.KnockbackApplicationMode;
+            ApplyKnockbackToTarget(frame, target, knockbackData, knockbackDirection, sequence.KnockbackStatusEffectData);
+        }
 
-            switch (knockbackMode)
+        private void ApplyKnockbackToTarget(Frame frame, EntityRef target, KnockbackStatusEffectData knockbackData, 
+            FPVector2 knockbackDirection, AssetRef<KnockbackStatusEffectData> knockbackDataRef)
+        {
+            if (frame.Has<PhysicsBody2D>(target))
             {
-                case KnockbackApplicationMode.CharacterController:
-                    frame.Signals.OnKnockbackApplied(target, knockbackData.KnockBackDuration, knockbackDirection,
-                        sequence.KnockbackStatusEffectData);
-                    break;
-
-                case KnockbackApplicationMode.Physics2D:
-                    FPVector2 knockbackVelocity = knockbackDirection * knockbackData.KnockbackForce;
-                    frame.Signals.OnKnockbackPhysic2DApplied(target, knockbackVelocity);
-                    break;
+                FPVector2 knockbackVelocity = knockbackDirection * knockbackData.KnockbackForce;
+                frame.Signals.OnKnockbackPhysic2DApplied(target, knockbackVelocity);
+                return;
             }
+    
+            if (frame.Has<CharacterController2D>(target))
+            {
+                frame.Signals.OnKnockbackApplied(target, knockbackData.KnockBackDuration, knockbackDirection, knockbackDataRef);
+                return;
+            }
+    
+#if DEBUG || UNITY_EDITOR
+            UnityEngine.Debug.LogWarning($"[CommandInputSystem] Target entity {target} has neither PhysicsBody2D nor CharacterController2D");
+#endif
         }
 
         private void SpawnProjectile(Frame frame, EntityRef entityRef, CommandSequenceConfig sequence)

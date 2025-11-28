@@ -1,4 +1,4 @@
-﻿using Photon.Deterministic;
+using Photon.Deterministic;
 using Quantum.Physics2D;
 using UnityEngine;
 using UnityEngine.Scripting;
@@ -108,7 +108,6 @@ namespace Quantum
 
             KnockbackStatusEffectData knockbackData = frame.FindAsset<KnockbackStatusEffectData>(knockbackDataRef.Id);
     
-            // 修改：计算击退方向（使用 projectile 位置和 target 位置）
             Transform2D* projectileTransform = frame.Unsafe.GetPointer<Transform2D>(projectile);
             Transform2D* targetTransform = frame.Unsafe.GetPointer<Transform2D>(target);
     
@@ -119,20 +118,28 @@ namespace Quantum
                 targetTransform->Position
             );
 
-            KnockbackApplicationMode knockbackMode = knockbackData.KnockbackApplicationMode;
+            ApplyKnockbackToTarget(frame, target, knockbackData, knockbackDirection, knockbackDataRef);
+        }
 
-            // 修改：根据模式选择不同的信号
-            switch (knockbackMode)
+        private void ApplyKnockbackToTarget(Frame frame, EntityRef target, KnockbackStatusEffectData knockbackData, 
+            FPVector2 knockbackDirection, AssetRef<KnockbackStatusEffectData> knockbackDataRef)
+        {
+            if (frame.Has<PhysicsBody2D>(target))
             {
-                case KnockbackApplicationMode.CharacterController:
-                    frame.Signals.OnKnockbackApplied(target, knockbackData.KnockBackDuration, knockbackDirection, knockbackDataRef);
-                    break;
-
-                case KnockbackApplicationMode.Physics2D:
-                    FPVector2 knockbackVelocity = knockbackDirection * knockbackData.KnockbackForce;
-                    frame.Signals.OnKnockbackPhysic2DApplied(target, knockbackVelocity);
-                    break;
+                FPVector2 knockbackVelocity = knockbackDirection * knockbackData.KnockbackForce;
+                frame.Signals.OnKnockbackPhysic2DApplied(target, knockbackVelocity);
+                return;
             }
+    
+            if (frame.Has<CharacterController2D>(target))
+            {
+                frame.Signals.OnKnockbackApplied(target, knockbackData.KnockBackDuration, knockbackDirection, knockbackDataRef);
+                return;
+            }
+    
+#if DEBUG || UNITY_EDITOR
+            UnityEngine.Debug.LogWarning($"[ProjectileSystem] Target entity {target} has neither PhysicsBody2D nor CharacterController2D");
+#endif
         }
 
 

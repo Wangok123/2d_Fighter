@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Photon.Deterministic;
 
 namespace Quantum
@@ -60,26 +60,34 @@ namespace Quantum
 
             FPVector2 forceDirection = (centripetalDir * CentripetalForce + 
                                         tangentialDir * TangentialForce).Normalized;
+            FPVector2 totalForce = centripetalDir * CentripetalForce + 
+                                   tangentialDir * TangentialForce;
 
-            switch (knockbackData.KnockbackApplicationMode)
-            {
-                case KnockbackApplicationMode.CharacterController:
-                    frame.Signals.OnKnockbackApplied(target, knockbackData.KnockBackDuration, 
-                        forceDirection, knockbackDataRef);
-                    break;
+            ApplyKnockbackToTarget(frame, target, knockbackData, forceDirection, totalForce, knockbackDataRef);
 
-                case KnockbackApplicationMode.Physics2D:
-                    FPVector2 totalForce = centripetalDir * CentripetalForce + 
-                                           tangentialDir * TangentialForce;
-                    frame.Signals.OnKnockbackPhysic2DApplied(target, totalForce);
-                    break;
-            }
-
-            // 如果造成伤害
             if (DealDamage)
             {
-                // TODO: 实现伤害系统后添加
             }
+        }
+
+        private void ApplyKnockbackToTarget(Frame frame, EntityRef target, KnockbackStatusEffectData knockbackData, 
+            FPVector2 forceDirection, FPVector2 totalForce, AssetRef<KnockbackStatusEffectData> knockbackDataRef)
+        {
+            if (frame.Has<PhysicsBody2D>(target))
+            {
+                frame.Signals.OnKnockbackPhysic2DApplied(target, totalForce);
+                return;
+            }
+    
+            if (frame.Has<CharacterController2D>(target))
+            {
+                frame.Signals.OnKnockbackApplied(target, knockbackData.KnockBackDuration, forceDirection, knockbackDataRef);
+                return;
+            }
+    
+#if DEBUG || UNITY_EDITOR
+            UnityEngine.Debug.LogWarning($"[VortexFieldData] Target entity {target} has neither PhysicsBody2D nor CharacterController2D");
+#endif
         }
     }
 

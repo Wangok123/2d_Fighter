@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Photon.Deterministic;
 
 namespace Quantum
@@ -40,18 +40,28 @@ namespace Quantum
             FP forceMagnitude = CalculatePushFieldMagnitude(
                 fieldTransform->Position, targetTransform->Position);
 
-            switch (knockbackData.KnockbackApplicationMode)
-            {
-                case KnockbackApplicationMode.CharacterController:
-                    frame.Signals.OnKnockbackApplied(target, knockbackData.KnockBackDuration,
-                        forceDirection, knockbackDataRef);
-                    break;
+            ApplyKnockbackToTarget(frame, target, knockbackData, forceDirection, forceMagnitude, knockbackDataRef);
+        }
 
-                case KnockbackApplicationMode.Physics2D:
-                    FPVector2 force = forceDirection * forceMagnitude;
-                    frame.Signals.OnKnockbackPhysic2DApplied(target, force);
-                    break;
+        private void ApplyKnockbackToTarget(Frame frame, EntityRef target, KnockbackStatusEffectData knockbackData, 
+            FPVector2 forceDirection, FP forceMagnitude, AssetRef<KnockbackStatusEffectData> knockbackDataRef)
+        {
+            if (frame.Has<PhysicsBody2D>(target))
+            {
+                FPVector2 force = forceDirection * forceMagnitude;
+                frame.Signals.OnKnockbackPhysic2DApplied(target, force);
+                return;
             }
+    
+            if (frame.Has<CharacterController2D>(target))
+            {
+                frame.Signals.OnKnockbackApplied(target, knockbackData.KnockBackDuration, forceDirection, knockbackDataRef);
+                return;
+            }
+    
+#if DEBUG || UNITY_EDITOR
+            UnityEngine.Debug.LogWarning($"[PushFieldData] Target entity {target} has neither PhysicsBody2D nor CharacterController2D");
+#endif
         }
 
         private FPVector2 CalculatePushFieldDirection(FPVector2 center, FPVector2 targetPos, FPVector2 hitPoint)

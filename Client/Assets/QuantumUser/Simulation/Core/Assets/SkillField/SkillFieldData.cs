@@ -1,4 +1,4 @@
-﻿using UnityEngine;
+using UnityEngine;
 using Photon.Deterministic;
 using Quantum.Physics2D;
 
@@ -90,18 +90,28 @@ namespace Quantum
             FPVector2 knockbackDirection = knockbackData.GetKnockbackDirection(
                 frame, skillField->Owner, fieldTransform->Position, targetTransform->Position);
 
-            switch (knockbackData.KnockbackApplicationMode)
-            {
-                case KnockbackApplicationMode.CharacterController:
-                    frame.Signals.OnKnockbackApplied(target, knockbackData.KnockBackDuration,
-                        knockbackDirection, KnockbackStatusEffectData);
-                    break;
+            ApplyKnockbackToTarget(frame, target, knockbackData, knockbackDirection, KnockbackStatusEffectData);
+        }
 
-                case KnockbackApplicationMode.Physics2D:
-                    FPVector2 knockbackVelocity = knockbackDirection * knockbackData.KnockbackForce;
-                    frame.Signals.OnKnockbackPhysic2DApplied(target, knockbackVelocity);
-                    break;
+        private void ApplyKnockbackToTarget(Frame frame, EntityRef target, KnockbackStatusEffectData knockbackData, 
+            FPVector2 knockbackDirection, AssetRef<KnockbackStatusEffectData> knockbackDataRef)
+        {
+            if (frame.Has<PhysicsBody2D>(target))
+            {
+                FPVector2 knockbackVelocity = knockbackDirection * knockbackData.KnockbackForce;
+                frame.Signals.OnKnockbackPhysic2DApplied(target, knockbackVelocity);
+                return;
             }
+    
+            if (frame.Has<CharacterController2D>(target))
+            {
+                frame.Signals.OnKnockbackApplied(target, knockbackData.KnockBackDuration, knockbackDirection, knockbackDataRef);
+                return;
+            }
+    
+#if DEBUG || UNITY_EDITOR
+            UnityEngine.Debug.LogWarning($"[SkillFieldData] Target entity {target} has neither PhysicsBody2D nor CharacterController2D");
+#endif
         }
     }
 }

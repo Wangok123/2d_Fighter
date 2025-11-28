@@ -1,4 +1,4 @@
-﻿using Photon.Deterministic;
+using Photon.Deterministic;
 using Quantum.Core.Utils;
 using Quantum.Physics2D;
 using UnityEngine.Scripting;
@@ -252,17 +252,28 @@ namespace Quantum
                 targetTransform->Position
             );
 
-            switch (knockbackData.KnockbackApplicationMode)
-            {
-                case KnockbackApplicationMode.CharacterController:
-                    frame.Signals.OnKnockbackApplied(target, knockbackData.KnockBackDuration, knockbackDirection, action.KnockbackData);
-                    break;
+            ApplyKnockbackToTarget(frame, target, knockbackData, knockbackDirection, action.KnockbackData);
+        }
 
-                case KnockbackApplicationMode.Physics2D:
-                    FPVector2 knockbackVelocity = knockbackDirection * knockbackData.KnockbackForce;
-                    frame.Signals.OnKnockbackPhysic2DApplied(target, knockbackVelocity);
-                    break;
+        private void ApplyKnockbackToTarget(Frame frame, EntityRef target, KnockbackStatusEffectData knockbackData, 
+            FPVector2 knockbackDirection, AssetRef<KnockbackStatusEffectData> knockbackDataRef)
+        {
+            if (frame.Has<PhysicsBody2D>(target))
+            {
+                FPVector2 knockbackVelocity = knockbackDirection * knockbackData.KnockbackForce;
+                frame.Signals.OnKnockbackPhysic2DApplied(target, knockbackVelocity);
+                return;
             }
+    
+            if (frame.Has<CharacterController2D>(target))
+            {
+                frame.Signals.OnKnockbackApplied(target, knockbackData.KnockBackDuration, knockbackDirection, knockbackDataRef);
+                return;
+            }
+    
+#if DEBUG || UNITY_EDITOR
+            UnityEngine.Debug.LogWarning($"[SkillSystem] Target entity {target} has neither PhysicsBody2D nor CharacterController2D");
+#endif
         }
 
         private void ApplySkillFlags(Frame frame, ref Filter filter, SkillData skillData)
