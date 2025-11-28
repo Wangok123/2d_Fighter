@@ -20,6 +20,10 @@ namespace Quantum.QuantumView
         [Tooltip("是否启用帧去重")]
         [SerializeField] private bool _enableFrameDeduplication = true;
 
+        [Header("位置平滑 - 仅远程玩家")]
+        [Tooltip("自动为远程玩家添加平滑组件")]
+        [SerializeField] private bool _autoAddSmoothingForRemote = true;
+
         [Header("视图引用")]
         [SerializeField] private Transform _playerCenterTransform;
         [SerializeField] private WarriorAnimationManager _manager;
@@ -40,6 +44,9 @@ namespace Quantum.QuantumView
         
         private float _lastAnimationTime;
         private string _currentAnimationState;
+
+        private QuantumSmoothTransform _smoothTransform;
+        private bool _useSmoothTransform;
 
         public override void OnActivate(Frame frame)
         {
@@ -69,11 +76,47 @@ namespace Quantum.QuantumView
                     Debug.Log($"[PlayerViewController] Entity {EntityRef} - IsLocal: {_isLocalPlayer}, PlayerRef: {playerLink.Player}");
                 }
             }
+
+            InitializeSmoothTransform(frame);
         }
 
         public override void OnDeactivate()
         {
             QuantumEvent.UnsubscribeListener(this);
+        }
+
+        private void InitializeSmoothTransform(Frame frame)
+        {
+            if (_autoAddSmoothingForRemote && !_isLocalPlayer)
+            {
+                _smoothTransform = GetComponent<QuantumSmoothTransform>();
+                if (_smoothTransform == null)
+                {
+                    _smoothTransform = gameObject.AddComponent<QuantumSmoothTransform>();
+                }
+
+                if (frame.Unsafe.TryGetPointer<Transform2D>(EntityRef, out var transform2D))
+                {
+                    _smoothTransform.Initialize(transform2D->Position.ToUnityVector3());
+                }
+
+                _useSmoothTransform = true;
+
+                if (_showDebugLog)
+                {
+                    Debug.Log($"[PlayerViewController] QuantumSmoothTransform enabled for REMOTE player");
+                }
+            }
+            else
+            {
+                _smoothTransform = GetComponent<QuantumSmoothTransform>();
+                _useSmoothTransform = _smoothTransform != null && _smoothTransform.IsEnabled;
+
+                if (_useSmoothTransform && _showDebugLog)
+                {
+                    Debug.Log($"[PlayerViewController] Using existing QuantumSmoothTransform");
+                }
+            }
         }
 
         public override void OnUpdateView()
@@ -84,10 +127,13 @@ namespace Quantum.QuantumView
                 return;
             }
 
-            if (_enableFrameDeduplication && frameToUse.Number == _lastProcessedFrame)
+            bool isRollback = frameToUse.Number < _lastProcessedFrame;
+            
+            if (_enableFrameDeduplication && !isRollback && frameToUse.Number == _lastProcessedFrame)
             {
                 return;
             }
+
             _lastProcessedFrame = frameToUse.Number;
 
             if (!frameToUse.Unsafe.TryGetPointer<KCC2D>(EntityRef, out var kcc))
@@ -95,14 +141,17 @@ namespace Quantum.QuantumView
                 return;
             }
 
+            if (frameToUse.Unsafe.TryGetPointer<Transform2D>(EntityRef, out var transform2D))
+            {
+                UpdatePosition(transform2D->Position.ToUnityVector3(), isRollback);
+            }
+
             KCC2DConfig config = frameToUse.FindAsset(kcc->Config);
             
             UpdateRightFace(frameToUse);
             
-            // 🎯 检查 Frame 中的真实能力状态（包括蓄力状态）
             bool isPlayingAbility = IsPlayingAbility(frameToUse);
             
-            // 只有在没有激活能力时才更新移动动画
             if (!isPlayingAbility)
             {
                 UpdateAnimatorMovementSpeed(kcc, config);
@@ -110,10 +159,20 @@ namespace Quantum.QuantumView
             }
         }
 
-        // 🎯 从 Frame 中获取真实的能力状态
+        private void UpdatePosition(Vector3 newTargetPosition, bool isRollback)
+        {
+            if (_useSmoothTransform && _smoothTransform != null)
+            {
+                _smoothTransform.SetTargetPosition(newTargetPosition, isRollback);
+            }
+            else
+            {
+                transform.position = newTargetPosition;
+            }
+        }
+
         private bool IsPlayingAbility(Frame frame)
         {
-            // ✅ 1. 检查蓄力状态（最高优先级）
             if (frame.Unsafe.TryGetPointer<AttackComponent>(EntityRef, out var attackComponent))
             {
                 if (attackComponent->IsChargingHeavy)
@@ -126,7 +185,6 @@ namespace Quantum.QuantumView
                 }
             }
 
-            // ✅ 2. 检查激活的能力
             if (!frame.Unsafe.TryGetPointer<AbilityInventory>(EntityRef, out var abilityInventory))
             {
                 return false;
@@ -139,19 +197,10 @@ namespace Quantum.QuantumView
 
             AbilityType activeAbility = abilityInventory->ActiveAbilityInfo.ActiveAbilityType;
             
-            // 🎯 区分哪些能力需要保护动画
             switch (activeAbility)
             {
-                // 攻击能力 - 高优先级，保护动画
                 case AbilityType.AttackLight:
                 case AbilityType.AttackHeavy:
-                    if (_showDebugLog)
-                    {
-                        Debug.Log($"[PlayerViewController] Protecting animation - Active Ability: {activeAbility} at Frame {frame.Number}");
-                    }
-                    return true;
-
-                // 移动能力 - 需要保护的
                 case AbilityType.MovementDash:
                 case AbilityType.MovementAirDash:
                 case AbilityType.MovementWallSlide:
@@ -161,7 +210,6 @@ namespace Quantum.QuantumView
                     }
                     return true;
 
-                // 跳跃类 - 不保护，允许移动动画覆盖
                 case AbilityType.MovementJump:
                 case AbilityType.MovementDoubleJump:
                 case AbilityType.MovementWallJump:
@@ -286,7 +334,6 @@ namespace Quantum.QuantumView
                     PlayAnimationSafe("WallJump", () => _manager.PlayJump());
                     break;
 
-                // 攻击动画由具体事件处理
                 case AbilityType.AttackLight:
                 case AbilityType.AttackHeavy:
                     break;
@@ -357,8 +404,6 @@ namespace Quantum.QuantumView
         private void OnChargeAttackCancelled(EventChargingCancelled e)
         {
             if (e.Entity != EntityRef) return;
-
-            // Frame 状态会自动更新 IsChargingHeavy = false
         }
 
         private void OnChargeAttackReleased(EventChargeAttackReleased e)
@@ -372,8 +417,6 @@ namespace Quantum.QuantumView
         private void OnCommandAttackExecuted(EventCommandAttackExecuted e)
         {
             if (e.PlayerEntityRef != EntityRef) return;
-
-            // Frame 状态会自动包含这个信息
         }
 
         private void OnDrawGizmosSelected()

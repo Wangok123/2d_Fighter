@@ -26,6 +26,7 @@ GameObject:
   - component: {fileID: 7915154271347562333}
   - component: {fileID: 2159835049100872727}
   - component: {fileID: 8357867320065699727}
+  - component: {fileID: 5750710710912283385}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -360,6 +361,7 @@ MonoBehaviour:
   _useHybridFrameMode: 1
   _animationDebounceTime: 0.08
   _enableFrameDeduplication: 1
+  _autoAddSmoothingForRemote: 1
   _playerCenterTransform: {fileID: 8015249240277242128}
   _manager: {fileID: 664570513622321090}
   _showDebugLog: 0
@@ -736,6 +738,24 @@ MonoBehaviour:
   ShowFallTrajectory: 1
   TrajectoryColor: {r: 0, g: 1, b: 1, a: 0.5}
   TrajectorySteps: 20
+--- !u!114 &5750710710912283385
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 747601124680124256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: af7ce5d0f7a4e334b9645b40d85f1d65, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _positionSmoothTime: 0.05
+  _rollbackCorrectionTime: 0.15
+  _maxTeleportDistance: 5
+  _enableSmoothing: 1
+  _showDebugGizmos: 1
+  _showDebugLog: 1
 --- !u!1 &4774830198564325150
 GameObject:
   m_ObjectHideFlags: 0
