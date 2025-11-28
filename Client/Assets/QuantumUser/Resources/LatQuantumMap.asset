@@ -134,10 +134,143 @@ MonoBehaviour:
     - rid: 8101032211223937026
     - rid: 8101032211223937027
     - rid: 8101032211223937028
+  - Components:
+    - rid: 3331545490863947776
+    - rid: 3331545490863947777
+    - rid: 3331545490863947778
+    - rid: 3331545490863947779
+    - rid: 3331545490863947780
+    - rid: 3331545490863947781
   SerializedTriangleDataUncompressedSize: 8
   references:
     version: 2
     RefIds:
+    - rid: 3331545490863947776
+      type: {class: Transform2DPrototype, ns: Quantum.Prototypes, asm: Quantum.Engine}
+      data:
+        Position:
+          X:
+            RawValue: -11141
+          Y:
+            RawValue: -17039
+        Rotation:
+          RawValue: 0
+    - rid: 3331545490863947777
+      type: {class: PhysicsCollider2DPrototype, ns: Quantum.Prototypes, asm: Quantum.Engine}
+      data:
+        ShapeConfig:
+          ShapeType: 1
+          PolygonCollider:
+            Id:
+              Value: 0
+          CircleRadius:
+            RawValue: 32817
+          CapsuleSize:
+            X:
+              RawValue: 65536
+            Y:
+              RawValue: 131072
+          EdgeExtent:
+            RawValue: 32768
+          BoxExtents:
+            X:
+              RawValue: 32768
+            Y:
+              RawValue: 32768
+          PositionOffset:
+            X:
+              RawValue: 0
+            Y:
+              RawValue: 0
+          RotationOffset:
+            RawValue: 0
+          UserTag: 0
+          IsPersistent: 1
+          CompoundShapes: []
+        Layer: 6
+        IsTrigger: 0
+        PhysicsMaterial:
+          Id:
+            Value: 424419529196919110
+    - rid: 3331545490863947778
+      type: {class: PhysicsBody2DPrototype, ns: Quantum.Prototypes, asm: Quantum.Engine}
+      data:
+        Config:
+          Value: 116
+        Mass:
+          RawValue: 32768
+        Drag:
+          RawValue: 32768
+        AngularDrag:
+          RawValue: 32768
+        CenterOfMass:
+          X:
+            RawValue: 0
+          Y:
+            RawValue: 0
+        GravityScale:
+          _hasValue: 0
+          _value:
+            RawValue: 65536
+        InertiaScale:
+          _hasValue: 0
+          _value:
+            RawValue: 65536
+        InertiaMode: 0
+        ExplicitInertia:
+          RawValue: 65536
+        ParametricInertiaShape:
+          ShapeType: 0
+          PolygonCollider:
+            Id:
+              Value: 0
+          CircleRadius:
+            RawValue: 32768
+          CapsuleSize:
+            X:
+              RawValue: 65536
+            Y:
+              RawValue: 131072
+          EdgeExtent:
+            RawValue: 32768
+          BoxExtents:
+            X:
+              RawValue: 32768
+            Y:
+              RawValue: 32768
+          PositionOffset:
+            X:
+              RawValue: 0
+            Y:
+              RawValue: 0
+          RotationOffset:
+            RawValue: 0
+          UserTag: 0
+          IsPersistent: 1
+          CompoundShapes: []
+    - rid: 3331545490863947779
+      type: {class: PhysicsCallbacks2DPrototype, ns: Quantum.Prototypes, asm: Quantum.Engine}
+      data:
+        CallbackFlags:
+          Value: 0
+    - rid: 3331545490863947780
+      type: {class: CharacterController2DPrototype, ns: Quantum.Prototypes, asm: Quantum.Engine}
+      data:
+        Config:
+          Id:
+            Value: 311654634759721963
+    - rid: 3331545490863947781
+      type: {class: CharacterStatusComponentPrototype, ns: Quantum.Prototypes, asm: Quantum.Simulation}
+      data:
+        HitReactionData:
+          Id:
+            Value: 293932180870028386
+        IsSuperArmored:
+          Value: 0
+        KnockbackStatusEffect:
+          StatusEffectData:
+            Id:
+              Value: 0
     - rid: 8101032211223937024
       type: {class: Transform2DPrototype, ns: Quantum.Prototypes, asm: Quantum.Engine}
       data:
