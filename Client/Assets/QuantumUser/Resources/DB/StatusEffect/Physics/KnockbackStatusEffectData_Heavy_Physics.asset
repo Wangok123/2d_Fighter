@@ -16,8 +16,7 @@ MonoBehaviour:
     Path: QuantumUser/Resources/DB/StatusEffect/Physics/KnockbackStatusEffectData_Heavy_Physics
     Guid:
       Value: 387950239245387747
-  KnockbackType: 1
-  KnockbackApplicationMode: 0
+  KnockbackType: 3
   KnockbackForce:
     RawValue: 327680
   KnockBackDuration:

@@ -8,7 +8,6 @@ namespace QuantumEditor
     public class KnockbackStatusEffectDataEditor : UnityEditor.Editor
     {
         private SerializedProperty knockbackType;
-        private SerializedProperty knockbackApplicationMode;
         private SerializedProperty knockbackForce;
         private SerializedProperty knockBackDuration;
         private SerializedProperty fixedKnockbackDirection;
@@ -20,7 +19,6 @@ namespace QuantumEditor
         private void OnEnable()
         {
             knockbackType = serializedObject.FindProperty("KnockbackType");
-            knockbackApplicationMode = serializedObject.FindProperty("KnockbackApplicationMode");
             knockbackForce = serializedObject.FindProperty("KnockbackForce");
             knockBackDuration = serializedObject.FindProperty("KnockBackDuration");
             fixedKnockbackDirection = serializedObject.FindProperty("FixedKnockbackDirection");
@@ -36,25 +34,19 @@ namespace QuantumEditor
 
             EditorGUILayout.LabelField("Common Knockback Settings", EditorStyles.boldLabel);
             EditorGUILayout.PropertyField(knockbackType, new GUIContent("击退类型"));
-            EditorGUILayout.PropertyField(knockbackApplicationMode, new GUIContent("击退应用模式"));
 
             EditorGUILayout.Space(10);
 
-            KnockbackApplicationMode mode = (KnockbackApplicationMode)knockbackApplicationMode.intValue;
-
-            if (mode == KnockbackApplicationMode.Physics2D)
-            {
-                DrawPhysics2DSettings();
-            }
-            else if (mode == KnockbackApplicationMode.CharacterController)
-            {
-                DrawCharacterControllerSettings();
-            }
+            DrawPhysicsSettings();
+            
+            EditorGUILayout.Space(10);
+            
+            DrawCharacterControllerSettings();
 
             serializedObject.ApplyModifiedProperties();
         }
 
-        private void DrawPhysics2DSettings()
+        private void DrawPhysicsSettings()
         {
             EditorGUILayout.LabelField("Physics Knockback Settings", EditorStyles.boldLabel);
             EditorGUILayout.PropertyField(knockbackForce, new GUIContent("击退力度"));

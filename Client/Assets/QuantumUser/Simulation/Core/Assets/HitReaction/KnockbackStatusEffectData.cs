@@ -50,7 +50,13 @@ namespace Quantum
                     return FPVector2.Up;
 
                 case AttackKnockbackType.Fixed:
-                    return FixedKnockbackDirection.Normalized;
+                    // 修改：根据攻击者朝向调整固定方向
+                    bool attackerFacingRight = GetIsFacingRight(frame, attacker);
+                    FPVector2 directionWithFacing = new FPVector2(
+                        attackerFacingRight ? FixedKnockbackDirection.X : -FixedKnockbackDirection.X,
+                        FixedKnockbackDirection.Y
+                    );
+                    return directionWithFacing.Normalized;
             }
 
             return FixedKnockbackDirection.Normalized;
@@ -71,7 +77,12 @@ namespace Quantum
                     return FPVector2.Up;
 
                 case AttackKnockbackType.Fixed:
-                    return FixedKnockbackDirection.Normalized;
+                    // 修改：根据攻击者朝向调整固定方向
+                    FPVector2 directionWithFacing = new FPVector2(
+                        isFacingRight ? FixedKnockbackDirection.X : -FixedKnockbackDirection.X,
+                        FixedKnockbackDirection.Y
+                    );
+                    return directionWithFacing.Normalized;
             }
 
             return FixedKnockbackDirection.Normalized;
