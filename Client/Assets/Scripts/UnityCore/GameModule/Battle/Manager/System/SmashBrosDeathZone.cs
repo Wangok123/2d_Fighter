@@ -15,7 +15,7 @@ namespace UnityCore.GameModule.Battle.Manager.System
         [Header("调试")]
         [SerializeField] private bool showDebugGizmos = true;
 
-        private Camera _mainCamera;
+        private UnityEngine.Camera _mainCamera;
 
         private void Awake()
         {
