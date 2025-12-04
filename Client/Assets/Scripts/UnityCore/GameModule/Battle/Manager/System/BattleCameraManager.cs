@@ -10,7 +10,7 @@ namespace UnityCore.GameModule.Battle.Manager.System
         private CinemachineVirtualCamera _virtualCamera;
         private CinemachineTargetGroup _targetGroup;
         private CinemachineConfiner2D _confiner;
-        private UnityEngine.Camera _mainCamera;
+        private Camera _mainCamera;
         private BattleCameraConfig _config;
 
         private readonly List<Transform> _activePlayerTransforms = new List<Transform>();
@@ -19,7 +19,7 @@ namespace UnityCore.GameModule.Battle.Manager.System
 
         public override int Priority => 20;
 
-        public void Initialize(CinemachineVirtualCamera virtualCamera, CinemachineTargetGroup targetGroup, BattleCameraConfig config, UnityEngine.Camera mainCamera)
+        public void Initialize(CinemachineVirtualCamera virtualCamera, CinemachineTargetGroup targetGroup, BattleCameraConfig config, Camera mainCamera)
         {
             _virtualCamera = virtualCamera;
             _targetGroup = targetGroup;

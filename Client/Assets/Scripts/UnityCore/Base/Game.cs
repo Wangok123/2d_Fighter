@@ -2,7 +2,6 @@ using Configs;
 using UnityCore.Audio;
 using UnityCore.Entities;
 using UnityCore.EventSystem;
-using UnityCore.GameModule.Battle.CameraSystem;
 using UnityCore.Input;
 using UnityCore.Network;
 using UnityCore.ResourceSystem;
@@ -21,7 +20,6 @@ namespace UnityCore.Base
         public static EntityComponent World => GameEntry.GetComponent<EntityComponent>();
         public static ConfigComponent Config => GameEntry.GetComponent<ConfigComponent>();
         public static InputComponent Input => GameEntry.GetComponent<InputComponent>();
-        public static BattleCameraComponent BattleCamera => GameEntry.GetComponent<BattleCameraComponent>();
 
         // 获取当前平台
         public static string Platform

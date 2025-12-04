@@ -6,7 +6,7 @@ using UnityEngine;
 namespace UnityCore.GameModule.Battle.CameraSystem
 {
     [DisallowMultipleComponent]
-    public class BattleCameraComponent : LatComponent
+    public class BattleCameraComponent : MonoBehaviour
     {
         [Header("Cinemachine 引用")]
         [SerializeField] private CinemachineVirtualCamera virtualCamera;
@@ -18,10 +18,8 @@ namespace UnityCore.GameModule.Battle.CameraSystem
         private BattleCameraManager _manager;
         private Camera _mainCamera;
 
-        protected override void Awake()
+        private void Awake()
         {
-            base.Awake();
-            
             _mainCamera = Camera.main;
             _manager = GameModuleManager.GetModule<BattleCameraManager>();
             
@@ -32,9 +30,15 @@ namespace UnityCore.GameModule.Battle.CameraSystem
             }
             
             _manager.Initialize(virtualCamera, targetGroup, config, _mainCamera);
-            IsInit = true;
         }
 
+        private void OnDestroy()
+        {
+            // 场景卸载时清理
+            _manager?.ClearAllPlayers();
+        }
+
+        // 公共 API
         public void RegisterPlayer(Transform playerTransform, float weight = 1f, float radius = 1f)
         {
             _manager?.RegisterPlayer(playerTransform, weight, radius);
