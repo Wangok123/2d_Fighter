@@ -13,6 +13,13 @@ namespace UnityCore.GameModule.Battle.Manager.System
         [Header("配置")]
         [SerializeField] private BattleCameraConfig config;
 
+        [Header("掉落追踪设置")]
+        [SerializeField] private Transform lowerPlatform;
+        [Tooltip("玩家掉落超过此距离后，相机停止追踪。设为0则立即停止追踪")]
+        [SerializeField] private float loseSightAtRange = 20f;
+        [Tooltip("是否启用掉落追踪功能")]
+        [SerializeField] private bool enableFallOffTracking = true;
+
         private List<Transform> _activePlayerTransforms = new List<Transform>();
         private float _targetOrthographicSize;
         private float _zoomVelocity;
@@ -90,11 +97,33 @@ namespace UnityCore.GameModule.Battle.Manager.System
             if (_activePlayerTransforms.Count == 0 || virtualCamera == null || config == null)
                 return;
 
+            if (enableFallOffTracking && lowerPlatform != null)
+            {
+                UpdatePlayerWeights();
+            }
+
             UpdateCameraZoom();
             
             if (config.useCameraBounds)
             {
                 ClampCameraPosition();
+            }
+        }
+
+        private void UpdatePlayerWeights()
+        {
+            if (targetGroup == null)
+                return;
+
+            for (int i = 0; i < targetGroup.m_Targets.Length; i++)
+            {
+                if (targetGroup.m_Targets[i].target == null)
+                    continue;
+
+                float distanceBelow = lowerPlatform.position.y - targetGroup.m_Targets[i].target.position.y;
+
+                float weight = Mathf.Clamp(1f - distanceBelow / Mathf.Max(0.001f, loseSightAtRange), 0f, 1f);
+                targetGroup.m_Targets[i].weight = weight;
             }
         }
 
