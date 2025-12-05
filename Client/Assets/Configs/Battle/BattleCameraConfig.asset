@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b664661e5aad5f04581a718b2a8c28db, type: 3}
+  m_Name: BattleCameraConfig
+  m_EditorClassIdentifier: 
+  minOrthographicSize: 5
+  maxOrthographicSize: 15
+  screenMargin: 0.15
+  zoomSmoothTime: 0.5
+  useCameraBounds: 1
+  minCameraBounds: {x: -50, y: -10}
+  maxCameraBounds: {x: 50, y: 20}
+  showDebugGizmos: 1

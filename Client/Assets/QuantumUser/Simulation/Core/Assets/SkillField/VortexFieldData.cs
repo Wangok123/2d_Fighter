@@ -17,9 +17,6 @@ namespace Quantum
         
         [Tooltip("是否造成伤害")]
         public bool DealDamage = true;
-        
-        [Tooltip("每Tick伤害")]
-        public FP DamagePerTick = 2;
 
         [Header("高级设置")]
         [Tooltip("旋涡核心半径")]
@@ -30,6 +27,11 @@ namespace Quantum
         
         [Tooltip("眩晕持续时间")]
         public FP StunDuration = FP._1;
+
+        public override FP GetDamagePerTick(Frame frame, EntityRef skillFieldEntity)
+        {
+            return DealDamage ? base.GetDamagePerTick(frame, skillFieldEntity) : FP._0;
+        }
     
         public override void ApplyEffect(Frame frame, EntityRef skillFieldEntity, 
             SkillFieldComponent* skillField, EntityRef target, FPVector2 hitPoint)

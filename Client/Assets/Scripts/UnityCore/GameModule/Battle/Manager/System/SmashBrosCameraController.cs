@@ -10,33 +10,12 @@ namespace UnityCore.GameModule.Battle.Manager.System
         [SerializeField] private CinemachineVirtualCamera virtualCamera;
         [SerializeField] private CinemachineTargetGroup targetGroup;
 
-        [Header("缩放设置")]
-        [Tooltip("最小正交大小（最大缩放）")]
-        [SerializeField] private float minOrthographicSize = 5f;
-        
-        [Tooltip("最大正交大小（最小缩放）")]
-        [SerializeField] private float maxOrthographicSize = 15f;
-        
-        [Tooltip("边距百分比（0-1），玩家距离边缘的安全距离")]
-        [SerializeField] private float screenMargin = 0.15f;
-
-        [Header("平滑设置")]
-        [Tooltip("缩放平滑速度")]
-        [SerializeField] private float zoomSmoothSpeed = 2f;
-
-        [Header("边界限制")]
-        [Tooltip("是否启用摄像机边界")]
-        [SerializeField] private bool useCameraBounds = true;
-        
-        [SerializeField] private Vector2 minCameraBounds = new Vector2(-50f, -10f);
-        [SerializeField] private Vector2 maxCameraBounds = new Vector2(50f, 20f);
-
-        [Header("调试")]
-        [SerializeField] private bool showDebugGizmos = true;
+        [Header("配置")]
+        [SerializeField] private BattleCameraConfig config;
 
         private List<Transform> _activePlayerTransforms = new List<Transform>();
         private float _targetOrthographicSize;
-        private Vector3 _targetPosition;
+        private float _zoomVelocity;
 
         private void Awake()
         {
@@ -50,7 +29,12 @@ namespace UnityCore.GameModule.Battle.Manager.System
                 Debug.LogError("[SmashBrosCameraController] CinemachineTargetGroup 未设置!");
             }
 
-            _targetOrthographicSize = virtualCamera != null ? virtualCamera.m_Lens.OrthographicSize : minOrthographicSize;
+            if (config == null)
+            {
+                Debug.LogError("[SmashBrosCameraController] BattleCameraConfig 未设置!");
+            }
+
+            _targetOrthographicSize = virtualCamera != null ? virtualCamera.m_Lens.OrthographicSize : (config != null ? config.minOrthographicSize : 5f);
         }
 
         public void RegisterPlayer(Transform playerTransform, float weight = 1f, float radius = 1f)
@@ -103,12 +87,12 @@ namespace UnityCore.GameModule.Battle.Manager.System
 
         private void LateUpdate()
         {
-            if (_activePlayerTransforms.Count == 0 || virtualCamera == null)
+            if (_activePlayerTransforms.Count == 0 || virtualCamera == null || config == null)
                 return;
 
             UpdateCameraZoom();
             
-            if (useCameraBounds)
+            if (config.useCameraBounds)
             {
                 ClampCameraPosition();
             }
@@ -118,8 +102,8 @@ namespace UnityCore.GameModule.Battle.Manager.System
         {
             Bounds playersBounds = CalculatePlayersBounds();
 
-            float requiredHeight = playersBounds.size.y / (1f - screenMargin * 2f);
-            float requiredWidth = playersBounds.size.x / (1f - screenMargin * 2f);
+            float requiredHeight = playersBounds.size.y / (1f - config.screenMargin * 2f);
+            float requiredWidth = playersBounds.size.x / (1f - config.screenMargin * 2f);
 
             float aspectRatio = Camera.main != null ? Camera.main.aspect : 16f / 9f;
             float requiredOrthographicSize = Mathf.Max(
@@ -127,12 +111,13 @@ namespace UnityCore.GameModule.Battle.Manager.System
                 requiredWidth / aspectRatio * 0.5f
             );
 
-            _targetOrthographicSize = Mathf.Clamp(requiredOrthographicSize, minOrthographicSize, maxOrthographicSize);
+            _targetOrthographicSize = Mathf.Clamp(requiredOrthographicSize, config.minOrthographicSize, config.maxOrthographicSize);
 
-            virtualCamera.m_Lens.OrthographicSize = Mathf.Lerp(
+            virtualCamera.m_Lens.OrthographicSize = Mathf.SmoothDamp(
                 virtualCamera.m_Lens.OrthographicSize,
                 _targetOrthographicSize,
-                Time.deltaTime * zoomSmoothSpeed
+                ref _zoomVelocity,
+                config.zoomSmoothTime
             );
         }
 
@@ -169,14 +154,14 @@ namespace UnityCore.GameModule.Battle.Manager.System
 
             float clampedX = Mathf.Clamp(
                 targetPosition.x,
-                minCameraBounds.x + cameraHalfWidth,
-                maxCameraBounds.x - cameraHalfWidth
+                config.minCameraBounds.x + cameraHalfWidth,
+                config.maxCameraBounds.x - cameraHalfWidth
             );
 
             float clampedY = Mathf.Clamp(
                 targetPosition.y,
-                minCameraBounds.y + orthographicSize,
-                maxCameraBounds.y - orthographicSize
+                config.minCameraBounds.y + orthographicSize,
+                config.maxCameraBounds.y - orthographicSize
             );
 
             if (targetGroup != null && targetGroup.transform != null)
@@ -188,20 +173,20 @@ namespace UnityCore.GameModule.Battle.Manager.System
 
         private void OnDrawGizmos()
         {
-            if (!showDebugGizmos)
+            if (config == null || !config.showDebugGizmos)
                 return;
 
-            if (useCameraBounds)
+            if (config.useCameraBounds)
             {
                 Gizmos.color = Color.yellow;
                 Vector3 center = new Vector3(
-                    (minCameraBounds.x + maxCameraBounds.x) * 0.5f,
-                    (minCameraBounds.y + maxCameraBounds.y) * 0.5f,
+                    (config.minCameraBounds.x + config.maxCameraBounds.x) * 0.5f,
+                    (config.minCameraBounds.y + config.maxCameraBounds.y) * 0.5f,
                     0f
                 );
                 Vector3 size = new Vector3(
-                    maxCameraBounds.x - minCameraBounds.x,
-                    maxCameraBounds.y - minCameraBounds.y,
+                    config.maxCameraBounds.x - config.minCameraBounds.x,
+                    config.maxCameraBounds.y - config.minCameraBounds.y,
                     0.1f
                 );
                 Gizmos.DrawWireCube(center, size);
