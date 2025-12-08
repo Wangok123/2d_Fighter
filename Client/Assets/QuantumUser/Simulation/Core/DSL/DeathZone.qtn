@@ -1,0 +1,36 @@
+singleton component SpawnPlaces
+{
+    list<entity_ref> Spawners;
+} 
+
+component DeathZone
+{
+    Boolean IsActive;
+}
+
+component RespawnComponent
+{
+    Boolean IsDead;
+    CountdownTimer RespawnTimer;
+}
+
+component RespawnPoint
+{
+    CharacterTeam Team;
+}
+
+signal OnCharacterRespawn(EntityRef character);
+
+event OnPlayerDeathZoneDeath
+{
+    EntityRef Player;
+    FPVector2 Position;
+}
+
+event OnPlayerRespawned
+{
+    EntityRef Player;
+    FPVector2 Position;
+}
+
+

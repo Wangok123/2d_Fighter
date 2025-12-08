@@ -73,6 +73,18 @@ namespace Quantum.Prototypes.Unity {
       return result;
     }
   }
+  [System.SerializableAttribute()]
+  public unsafe partial class SpawnPlacesPrototype : Quantum.QuantumUnityPrototypeAdapter<Quantum.Prototypes.SpawnPlacesPrototype> {
+    [DynamicCollectionAttribute()]
+    public Quantum.QuantumEntityPrototype[] Spawners = {};
+    partial void ConvertUser(Quantum.QuantumEntityPrototypeConverter converter, ref Quantum.Prototypes.SpawnPlacesPrototype prototype);
+    public override Quantum.Prototypes.SpawnPlacesPrototype Convert(Quantum.QuantumEntityPrototypeConverter converter) {
+      var result = new Quantum.Prototypes.SpawnPlacesPrototype();
+      converter.Convert(this.Spawners, out result.Spawners);
+      ConvertUser(converter, ref result);
+      return result;
+    }
+  }
 }
 #pragma warning restore 0109
 #pragma warning restore 1591

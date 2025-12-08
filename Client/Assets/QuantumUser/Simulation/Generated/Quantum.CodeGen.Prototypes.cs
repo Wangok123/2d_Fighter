@@ -337,6 +337,21 @@ namespace Quantum.Prototypes {
     }
   }
   [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.DeathZone))]
+  public unsafe partial class DeathZonePrototype : ComponentPrototype<Quantum.DeathZone> {
+    public QBoolean IsActive;
+    partial void MaterializeUser(Frame frame, ref Quantum.DeathZone result, in PrototypeMaterializationContext context);
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+        Quantum.DeathZone component = default;
+        Materialize((Frame)f, ref component, in context);
+        return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref Quantum.DeathZone result, in PrototypeMaterializationContext context = default) {
+        result.IsActive = this.IsActive;
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.DelayedExplosionRuntimeComponent))]
   public unsafe partial class DelayedExplosionRuntimeComponentPrototype : ComponentPrototype<Quantum.DelayedExplosionRuntimeComponent> {
     [HideInInspector()]
@@ -722,6 +737,38 @@ namespace Quantum.Prototypes {
         MaterializeUser(frame, ref result, in context);
     }
   }
+  [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.RespawnComponent))]
+  public unsafe partial class RespawnComponentPrototype : ComponentPrototype<Quantum.RespawnComponent> {
+    public QBoolean IsDead;
+    public Quantum.Prototypes.CountdownTimerPrototype RespawnTimer;
+    partial void MaterializeUser(Frame frame, ref Quantum.RespawnComponent result, in PrototypeMaterializationContext context);
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+        Quantum.RespawnComponent component = default;
+        Materialize((Frame)f, ref component, in context);
+        return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref Quantum.RespawnComponent result, in PrototypeMaterializationContext context = default) {
+        result.IsDead = this.IsDead;
+        this.RespawnTimer.Materialize(frame, ref result.RespawnTimer, in context);
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.RespawnPoint))]
+  public unsafe partial class RespawnPointPrototype : ComponentPrototype<Quantum.RespawnPoint> {
+    public Quantum.QEnum32<CharacterTeam> Team;
+    partial void MaterializeUser(Frame frame, ref Quantum.RespawnPoint result, in PrototypeMaterializationContext context);
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+        Quantum.RespawnPoint component = default;
+        Materialize((Frame)f, ref component, in context);
+        return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref Quantum.RespawnPoint result, in PrototypeMaterializationContext context = default) {
+        result.Team = this.Team;
+        MaterializeUser(frame, ref result, in context);
+    }
+  }
   [ExcludeFromPrototype()]
   [System.SerializableAttribute()]
   [Quantum.Prototypes.Prototype(typeof(Quantum.SimpleInput2D))]
@@ -801,6 +848,29 @@ namespace Quantum.Prototypes {
     }
     public void Materialize(Frame frame, ref Quantum.SkillFieldComponent result, in PrototypeMaterializationContext context = default) {
         MaterializeUser(frame, ref result, in context);
+    }
+  }
+  [System.SerializableAttribute()]
+  [Quantum.Prototypes.Prototype(typeof(Quantum.SpawnPlaces))]
+  public unsafe class SpawnPlacesPrototype : ComponentPrototype<Quantum.SpawnPlaces> {
+    [DynamicCollectionAttribute()]
+    public MapEntityId[] Spawners = {};
+    public override Boolean AddToEntity(FrameBase f, EntityRef entity, in PrototypeMaterializationContext context) {
+        Quantum.SpawnPlaces component = default;
+        Materialize((Frame)f, ref component, in context);
+        return f.Set(entity, component) == SetResult.ComponentAdded;
+    }
+    public void Materialize(Frame frame, ref Quantum.SpawnPlaces result, in PrototypeMaterializationContext context = default) {
+        if (this.Spawners.Length == 0) {
+          result.Spawners = default;
+        } else {
+          var list = frame.AllocateList(out result.Spawners, this.Spawners.Length);
+          for (int i = 0; i < this.Spawners.Length; ++i) {
+            EntityRef tmp = default;
+            PrototypeValidator.FindMapEntity(this.Spawners[i], in context, out tmp);
+            list.Add(tmp);
+          }
+        }
     }
   }
   [System.SerializableAttribute()]

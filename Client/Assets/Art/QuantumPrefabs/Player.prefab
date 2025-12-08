@@ -27,6 +27,7 @@ GameObject:
   - component: {fileID: 2159835049100872727}
   - component: {fileID: 8357867320065699727}
   - component: {fileID: 5750710710912283385}
+  - component: {fileID: 5010626006884769855}
   m_Layer: 6
   m_Name: Player
   m_TagString: Untagged
@@ -756,6 +757,26 @@ MonoBehaviour:
   _enableSmoothing: 1
   _showDebugGizmos: 1
   _showDebugLog: 1
+--- !u!114 &5010626006884769855
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 747601124680124256}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: be71375f7744d734da596f27894583ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Prototype:
+    IsDead:
+      Value: 0
+    RespawnTimer:
+      TimeLeft:
+        RawValue: 0
+      StartTime:
+        RawValue: 0
 --- !u!1 &4774830198564325150
 GameObject:
   m_ObjectHideFlags: 0

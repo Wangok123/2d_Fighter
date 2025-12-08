@@ -1927,6 +1927,24 @@ namespace Quantum {
     }
   }
   [StructLayout(LayoutKind.Explicit)]
+  public unsafe partial struct DeathZone : Quantum.IComponent {
+    public const Int32 SIZE = 4;
+    public const Int32 ALIGNMENT = 4;
+    [FieldOffset(0)]
+    public QBoolean IsActive;
+    public override readonly Int32 GetHashCode() {
+      unchecked { 
+        var hash = 14281;
+        hash = hash * 31 + IsActive.GetHashCode();
+        return hash;
+      }
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+        var p = (DeathZone*)ptr;
+        QBoolean.Serialize(&p->IsActive, serializer);
+    }
+  }
+  [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct DelayedExplosionRuntimeComponent : Quantum.IComponent {
     public const Int32 SIZE = 4;
     public const Int32 ALIGNMENT = 4;
@@ -2251,6 +2269,46 @@ namespace Quantum {
     }
   }
   [StructLayout(LayoutKind.Explicit)]
+  public unsafe partial struct RespawnComponent : Quantum.IComponent {
+    public const Int32 SIZE = 24;
+    public const Int32 ALIGNMENT = 8;
+    [FieldOffset(0)]
+    public QBoolean IsDead;
+    [FieldOffset(8)]
+    public CountdownTimer RespawnTimer;
+    public override readonly Int32 GetHashCode() {
+      unchecked { 
+        var hash = 20899;
+        hash = hash * 31 + IsDead.GetHashCode();
+        hash = hash * 31 + RespawnTimer.GetHashCode();
+        return hash;
+      }
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+        var p = (RespawnComponent*)ptr;
+        QBoolean.Serialize(&p->IsDead, serializer);
+        Quantum.CountdownTimer.Serialize(&p->RespawnTimer, serializer);
+    }
+  }
+  [StructLayout(LayoutKind.Explicit)]
+  public unsafe partial struct RespawnPoint : Quantum.IComponent {
+    public const Int32 SIZE = 4;
+    public const Int32 ALIGNMENT = 4;
+    [FieldOffset(0)]
+    public CharacterTeam Team;
+    public override readonly Int32 GetHashCode() {
+      unchecked { 
+        var hash = 17749;
+        hash = hash * 31 + (Int32)Team;
+        return hash;
+      }
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+        var p = (RespawnPoint*)ptr;
+        serializer.Stream.Serialize((Int32*)&p->Team);
+    }
+  }
+  [StructLayout(LayoutKind.Explicit)]
   public unsafe partial struct SkillComponent : Quantum.IComponent {
     public const Int32 SIZE = 40;
     public const Int32 ALIGNMENT = 8;
@@ -2360,6 +2418,31 @@ namespace Quantum {
         FPVector2.Serialize(&p->Center, serializer);
     }
   }
+  [StructLayout(LayoutKind.Explicit)]
+  public unsafe partial struct SpawnPlaces : Quantum.IComponentSingleton {
+    public const Int32 SIZE = 4;
+    public const Int32 ALIGNMENT = 4;
+    [FieldOffset(0)]
+    public QListPtr<EntityRef> Spawners;
+    public override readonly Int32 GetHashCode() {
+      unchecked { 
+        var hash = 12227;
+        hash = hash * 31 + Spawners.GetHashCode();
+        return hash;
+      }
+    }
+    public void ClearPointers(FrameBase f, EntityRef entity) {
+      Spawners = default;
+    }
+    public static void OnRemoved(FrameBase frame, EntityRef entity, void* ptr) {
+      var p = (Quantum.SpawnPlaces*)ptr;
+      p->ClearPointers((Frame)frame, entity);
+    }
+    public static void Serialize(void* ptr, FrameSerializer serializer) {
+        var p = (SpawnPlaces*)ptr;
+        QList.Serialize(&p->Spawners, serializer, Statics.SerializeEntityRef);
+    }
+  }
   public unsafe partial interface ISignalCheckAbilityEnabled : ISignal {
     void CheckAbilityEnabled(Frame f, AbilityType abilityId);
   }
@@ -2392,6 +2475,9 @@ namespace Quantum {
   }
   public unsafe partial interface ISignalOnClearInputBuffer : ISignal {
     void OnClearInputBuffer(Frame f, EntityRef playerEntityRef);
+  }
+  public unsafe partial interface ISignalOnCharacterRespawn : ISignal {
+    void OnCharacterRespawn(Frame f, EntityRef character);
   }
   public unsafe partial interface ISignalOnKCC2DPreCollision : ISignal {
     void OnKCC2DPreCollision(Frame f, EntityRef entity, KCC2D* kcc, ref KCC2DSettings settings, KCCQueryResult* collision);
@@ -2464,6 +2550,7 @@ namespace Quantum {
     private ISignalOnPlungeAttackActivated[] _ISignalOnPlungeAttackActivatedSystems;
     private ISignalOnPlungeAttackLanded[] _ISignalOnPlungeAttackLandedSystems;
     private ISignalOnClearInputBuffer[] _ISignalOnClearInputBufferSystems;
+    private ISignalOnCharacterRespawn[] _ISignalOnCharacterRespawnSystems;
     private ISignalOnKCC2DPreCollision[] _ISignalOnKCC2DPreCollisionSystems;
     private ISignalOnKCC2DTrigger[] _ISignalOnKCC2DTriggerSystems;
     private ISignalOnKCC2DSolverCollision[] _ISignalOnKCC2DSolverCollisionSystems;
@@ -2505,6 +2592,7 @@ namespace Quantum {
       _ISignalOnPlungeAttackActivatedSystems = BuildSignalsArray<ISignalOnPlungeAttackActivated>();
       _ISignalOnPlungeAttackLandedSystems = BuildSignalsArray<ISignalOnPlungeAttackLanded>();
       _ISignalOnClearInputBufferSystems = BuildSignalsArray<ISignalOnClearInputBuffer>();
+      _ISignalOnCharacterRespawnSystems = BuildSignalsArray<ISignalOnCharacterRespawn>();
       _ISignalOnKCC2DPreCollisionSystems = BuildSignalsArray<ISignalOnKCC2DPreCollision>();
       _ISignalOnKCC2DTriggerSystems = BuildSignalsArray<ISignalOnKCC2DTrigger>();
       _ISignalOnKCC2DSolverCollisionSystems = BuildSignalsArray<ISignalOnKCC2DSolverCollision>();
@@ -2548,6 +2636,8 @@ namespace Quantum {
       BuildSignalsArrayOnComponentRemoved<Quantum.CommandAttackRuntimeComponent>();
       BuildSignalsArrayOnComponentAdded<Quantum.CommandInputComponent>();
       BuildSignalsArrayOnComponentRemoved<Quantum.CommandInputComponent>();
+      BuildSignalsArrayOnComponentAdded<Quantum.DeathZone>();
+      BuildSignalsArrayOnComponentRemoved<Quantum.DeathZone>();
       BuildSignalsArrayOnComponentAdded<Quantum.DelayedExplosionRuntimeComponent>();
       BuildSignalsArrayOnComponentRemoved<Quantum.DelayedExplosionRuntimeComponent>();
       BuildSignalsArrayOnComponentAdded<Quantum.GrenadeRuntimeComponent>();
@@ -2594,10 +2684,16 @@ namespace Quantum {
       BuildSignalsArrayOnComponentRemoved<Quantum.PlungeAttackRuntimeComponent>();
       BuildSignalsArrayOnComponentAdded<Quantum.ProjectileComponent>();
       BuildSignalsArrayOnComponentRemoved<Quantum.ProjectileComponent>();
+      BuildSignalsArrayOnComponentAdded<Quantum.RespawnComponent>();
+      BuildSignalsArrayOnComponentRemoved<Quantum.RespawnComponent>();
+      BuildSignalsArrayOnComponentAdded<Quantum.RespawnPoint>();
+      BuildSignalsArrayOnComponentRemoved<Quantum.RespawnPoint>();
       BuildSignalsArrayOnComponentAdded<Quantum.SkillComponent>();
       BuildSignalsArrayOnComponentRemoved<Quantum.SkillComponent>();
       BuildSignalsArrayOnComponentAdded<Quantum.SkillFieldComponent>();
       BuildSignalsArrayOnComponentRemoved<Quantum.SkillFieldComponent>();
+      BuildSignalsArrayOnComponentAdded<Quantum.SpawnPlaces>();
+      BuildSignalsArrayOnComponentRemoved<Quantum.SpawnPlaces>();
       BuildSignalsArrayOnComponentAdded<Transform2D>();
       BuildSignalsArrayOnComponentRemoved<Transform2D>();
       BuildSignalsArrayOnComponentAdded<Transform2DVertical>();
@@ -2734,6 +2830,15 @@ namespace Quantum {
           var s = array[i];
           if (_f.SystemIsEnabledInHierarchy((SystemBase)s)) {
             s.OnClearInputBuffer(_f, playerEntityRef);
+          }
+        }
+      }
+      public void OnCharacterRespawn(EntityRef character) {
+        var array = _f._ISignalOnCharacterRespawnSystems;
+        for (Int32 i = 0; i < array.Length; ++i) {
+          var s = array[i];
+          if (_f.SystemIsEnabledInHierarchy((SystemBase)s)) {
+            s.OnCharacterRespawn(_f, character);
           }
         }
       }
@@ -2959,6 +3064,7 @@ namespace Quantum {
       typeRegistry.Register(typeof(ComponentTypeRef), ComponentTypeRef.SIZE);
       typeRegistry.Register(typeof(Quantum.CountdownTimer), Quantum.CountdownTimer.SIZE);
       typeRegistry.Register(typeof(Quantum.DashDirection), 4);
+      typeRegistry.Register(typeof(Quantum.DeathZone), Quantum.DeathZone.SIZE);
       typeRegistry.Register(typeof(Quantum.DelayedExplosionRuntimeComponent), Quantum.DelayedExplosionRuntimeComponent.SIZE);
       typeRegistry.Register(typeof(DistanceJoint), DistanceJoint.SIZE);
       typeRegistry.Register(typeof(DistanceJoint3D), DistanceJoint3D.SIZE);
@@ -3041,6 +3147,8 @@ namespace Quantum {
       typeRegistry.Register(typeof(Quantum.QuantumThumbSticks), Quantum.QuantumThumbSticks.SIZE);
       typeRegistry.Register(typeof(QueryOptions), 2);
       typeRegistry.Register(typeof(RNGSession), RNGSession.SIZE);
+      typeRegistry.Register(typeof(Quantum.RespawnComponent), Quantum.RespawnComponent.SIZE);
+      typeRegistry.Register(typeof(Quantum.RespawnPoint), Quantum.RespawnPoint.SIZE);
       typeRegistry.Register(typeof(Shape2D), Shape2D.SIZE);
       typeRegistry.Register(typeof(Shape3D), Shape3D.SIZE);
       typeRegistry.Register(typeof(Quantum.SimpleInput2D), Quantum.SimpleInput2D.SIZE);
@@ -3049,6 +3157,7 @@ namespace Quantum {
       typeRegistry.Register(typeof(Quantum.SkillFieldComponent), Quantum.SkillFieldComponent.SIZE);
       typeRegistry.Register(typeof(Quantum.SkillFlags), 4);
       typeRegistry.Register(typeof(Quantum.SkillPhase), 1);
+      typeRegistry.Register(typeof(Quantum.SpawnPlaces), Quantum.SpawnPlaces.SIZE);
       typeRegistry.Register(typeof(Quantum.SpecialMove), Quantum.SpecialMove.SIZE);
       typeRegistry.Register(typeof(SpringJoint), SpringJoint.SIZE);
       typeRegistry.Register(typeof(SpringJoint3D), SpringJoint3D.SIZE);
@@ -3061,7 +3170,7 @@ namespace Quantum {
       typeRegistry.Register(typeof(Quantum._globals_), Quantum._globals_.SIZE);
     }
     static partial void InitComponentTypeIdGen() {
-      ComponentTypeId.Reset(ComponentTypeId.BuiltInComponentCount + 21)
+      ComponentTypeId.Reset(ComponentTypeId.BuiltInComponentCount + 25)
         .AddBuiltInComponents()
         .Add<Quantum.AbilityEnable>(Quantum.AbilityEnable.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.AbilityInventory>(Quantum.AbilityInventory.Serialize, null, Quantum.AbilityInventory.OnRemoved, ComponentFlags.None)
@@ -3072,6 +3181,7 @@ namespace Quantum {
         .Add<Quantum.ComboAttackRuntimeComponent>(Quantum.ComboAttackRuntimeComponent.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.CommandAttackRuntimeComponent>(Quantum.CommandAttackRuntimeComponent.Serialize, null, Quantum.CommandAttackRuntimeComponent.OnRemoved, ComponentFlags.None)
         .Add<Quantum.CommandInputComponent>(Quantum.CommandInputComponent.Serialize, null, null, ComponentFlags.None)
+        .Add<Quantum.DeathZone>(Quantum.DeathZone.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.DelayedExplosionRuntimeComponent>(Quantum.DelayedExplosionRuntimeComponent.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.GrenadeRuntimeComponent>(Quantum.GrenadeRuntimeComponent.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.KCC2D>(Quantum.KCC2D.Serialize, null, null, ComponentFlags.None)
@@ -3082,8 +3192,11 @@ namespace Quantum {
         .Add<Quantum.PlayerStatusComponent>(Quantum.PlayerStatusComponent.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.PlungeAttackRuntimeComponent>(Quantum.PlungeAttackRuntimeComponent.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.ProjectileComponent>(Quantum.ProjectileComponent.Serialize, null, Quantum.ProjectileComponent.OnRemoved, ComponentFlags.None)
+        .Add<Quantum.RespawnComponent>(Quantum.RespawnComponent.Serialize, null, null, ComponentFlags.None)
+        .Add<Quantum.RespawnPoint>(Quantum.RespawnPoint.Serialize, null, null, ComponentFlags.None)
         .Add<Quantum.SkillComponent>(Quantum.SkillComponent.Serialize, null, Quantum.SkillComponent.OnRemoved, ComponentFlags.None)
         .Add<Quantum.SkillFieldComponent>(Quantum.SkillFieldComponent.Serialize, null, Quantum.SkillFieldComponent.OnRemoved, ComponentFlags.None)
+        .Add<Quantum.SpawnPlaces>(Quantum.SpawnPlaces.Serialize, null, Quantum.SpawnPlaces.OnRemoved, ComponentFlags.Singleton)
         .Finish();
     }
     [Preserve()]
