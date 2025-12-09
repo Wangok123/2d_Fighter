@@ -20,6 +20,20 @@ namespace Quantum
         public bool IsDelayedOrActive => IsDelayed || IsActive;
         public bool IsOnCooldown => CooldownTimer.IsRunning;
         
+        private bool IsKnockedBack(Frame frame, EntityRef entity)
+        {
+            if (frame.Unsafe.TryGetPointer<KnockbackComponent>(entity, out var knockback))
+            {
+                return knockback->IsKnockedBack;
+            }
+            return false;
+        }
+        
+        private bool IsIncapacitated(Frame frame, EntityRef entity)
+        {
+            return IsKnockedBack(frame, entity);
+        }
+        
         public bool TryActivateAbility(Frame frame, EntityRef entityRef, PlayerRef playerRef, AbilityType abilityType)
         {
             if (IsOnCooldown)
@@ -27,8 +41,7 @@ namespace Quantum
                 return false;
             }
 
-            CharacterStatusComponent* playerStatus = frame.Unsafe.GetPointer<CharacterStatusComponent>(entityRef);
-            if (playerStatus->IsIncapacitated)
+            if (IsIncapacitated(frame, entityRef))
             {
                 return false;
             }
@@ -80,9 +93,7 @@ namespace Quantum
 
             if (IsDelayedOrActive)
             {
-                CharacterStatusComponent* playerStatus = frame.Unsafe.GetPointer<CharacterStatusComponent>(entityRef);
-
-                if (playerStatus->IsIncapacitated)
+                if (IsIncapacitated(frame, entityRef))
                 {
                     StopAbility(frame, entityRef);
 
@@ -166,14 +177,7 @@ namespace Quantum
             {
                 if (frame.Unsafe.TryGetPointer<AbilityEnable>(entityRef, out var abilityEnable))
                 {
-                    if (frame.Unsafe.TryGetPointer<CharacterStatusComponent>(entityRef, out var hitReaction))
-                    {
-                        if (!hitReaction->IsKnockedBack)
-                        {
-                            abilityEnable->MovementEnabled = true;
-                        }
-                    }
-                    else
+                    if (!IsKnockedBack(frame, entityRef))
                     {
                         abilityEnable->MovementEnabled = true;
                     }

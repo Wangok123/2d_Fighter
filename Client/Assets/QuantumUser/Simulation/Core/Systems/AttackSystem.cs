@@ -1,4 +1,4 @@
-﻿using Photon.Deterministic;
+using Photon.Deterministic;
 using Quantum.Physics2D;
 using UnityEngine;
 using UnityEngine.Scripting;
@@ -107,25 +107,7 @@ namespace Quantum
         private void ApplyKnockbackToTarget(Frame frame, EntityRef target, KnockbackStatusEffectData knockbackData, 
             FPVector2 knockbackDirection, AssetRef<KnockbackStatusEffectData> knockbackDataRef)
         {
-            // 优先检查是否有PhysicsBody2D组件
-            if (frame.Has<PhysicsBody2D>(target))
-            {
-                FPVector2 knockbackVelocity = knockbackDirection * knockbackData.KnockbackForce;
-                frame.Signals.OnKnockbackPhysic2DApplied(target, knockbackVelocity);
-                return;
-            }
-    
-            // 检查是否有CharacterController2D组件
-            if (frame.Has<CharacterController2D>(target))
-            {
-                frame.Signals.OnKnockbackApplied(target, knockbackData.KnockBackDuration, knockbackDirection, knockbackDataRef);
-                return;
-            }
-    
-            // 如果都没有，记录警告
-#if DEBUG || UNITY_EDITOR
-            Debug.LogError($"[AttackSystem] Target entity {target} has neither PhysicsBody2D nor CharacterController2D");
-#endif
+            frame.Signals.OnKnockbackApplied(target, knockbackData.KnockBackDuration, knockbackDirection, knockbackDataRef);
         }
 
 

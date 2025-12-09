@@ -10,17 +10,17 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: f2029eac74108a04e9499e930a036fb7, type: 3}
-  m_Name: KnockbackStatusEffectData_Heavy
+  m_Name: KnockbackStatusEffectData_Light_1
   m_EditorClassIdentifier: 
   Identifier:
-    Path: QuantumUser/Resources/DB/StatusEffect/Character2D/KnockbackStatusEffectData_Heavy
+    Path: QuantumUser/Resources/DB/StatusEffect/Character2D/KnockbackStatusEffectData_Light_1
     Guid:
-      Value: 452770096438764889
-  KnockbackType: 1
+      Value: 276191350580181501
+  KnockbackType: 3
   KnockbackForce:
     RawValue: 327680
   KnockBackDuration:
-    RawValue: 32768
+    RawValue: 9830
   FixedKnockbackDirection:
     X:
       RawValue: 65536
@@ -66,7 +66,7 @@ MonoBehaviour:
     StartTime:
       RawValue: 0
     EndTime:
-      RawValue: 65536
+      RawValue: 13107
     Resolution: 32
     OriginalPreWrapMode: 8
     OriginalPostWrapMode: 8
@@ -76,21 +76,21 @@ MonoBehaviour:
       Value:
         RawValue: 0
       InTangent:
-        RawValue: 65536
+        RawValue: 327680
       OutTangent:
-        RawValue: 65536
+        RawValue: 327680
       TangentMode: 0
       TangentModeLeft: 1
       TangentModeRight: 1
       WeightedMode: 0
     - Time:
-        RawValue: 65536
+        RawValue: 13107
       Value:
         RawValue: 65536
       InTangent:
-        RawValue: 65536
+        RawValue: 327680
       OutTangent:
-        RawValue: 65536
+        RawValue: 327680
       TangentMode: 0
       TangentModeLeft: 1
       TangentModeRight: 1
@@ -98,44 +98,44 @@ MonoBehaviour:
   KnockbackCurveY:
     Samples:
     - RawValue: 0
-    - RawValue: 2162
-    - RawValue: 4532
-    - RawValue: 7062
-    - RawValue: 9703
-    - RawValue: 12408
-    - RawValue: 15129
-    - RawValue: 17818
-    - RawValue: 20428
-    - RawValue: 22909
-    - RawValue: 25215
-    - RawValue: 27298
-    - RawValue: 29110
-    - RawValue: 30602
-    - RawValue: 31727
-    - RawValue: 32437
-    - RawValue: 32685
-    - RawValue: 32437
-    - RawValue: 31727
-    - RawValue: 30602
-    - RawValue: 29110
-    - RawValue: 27298
-    - RawValue: 25215
-    - RawValue: 22909
-    - RawValue: 20428
-    - RawValue: 17818
-    - RawValue: 15129
-    - RawValue: 12408
-    - RawValue: 9703
-    - RawValue: 7062
-    - RawValue: 4532
-    - RawValue: 2162
-    - RawValue: 0
+    - RawValue: 1444
+    - RawValue: 3047
+    - RawValue: 4787
+    - RawValue: 6639
+    - RawValue: 8580
+    - RawValue: 10587
+    - RawValue: 12636
+    - RawValue: 14703
+    - RawValue: 16766
+    - RawValue: 18801
+    - RawValue: 20785
+    - RawValue: 22693
+    - RawValue: 24503
+    - RawValue: 26191
+    - RawValue: 27733
+    - RawValue: 29107
+    - RawValue: 30288
+    - RawValue: 31254
+    - RawValue: 31981
+    - RawValue: 32445
+    - RawValue: 32623
+    - RawValue: 32491
+    - RawValue: 32027
+    - RawValue: 31100
+    - RawValue: 29334
+    - RawValue: 26851
+    - RawValue: 23824
+    - RawValue: 20427
+    - RawValue: 16832
+    - RawValue: 13215
+    - RawValue: 9748
+    - RawValue: 6606
     PreWrapMode: 0
     PostWrapMode: 0
     StartTime:
       RawValue: 0
     EndTime:
-      RawValue: 65536
+      RawValue: 13708
     Resolution: 32
     OriginalPreWrapMode: 8
     OriginalPostWrapMode: 8
@@ -145,38 +145,38 @@ MonoBehaviour:
       Value:
         RawValue: 0
       InTangent:
-        RawValue: 65370
+        RawValue: 207532
       OutTangent:
-        RawValue: 65370
+        RawValue: 207532
       TangentMode: 0
       TangentModeLeft: 1
       TangentModeRight: 1
       WeightedMode: 0
     - Time:
-        RawValue: 32768
+        RawValue: 10024
       Value:
-        RawValue: 32685
+        RawValue: 31743
       InTangent:
-        RawValue: 0
+        RawValue: -119819
       OutTangent:
-        RawValue: 0
+        RawValue: -119819
       TangentMode: 0
       TangentModeLeft: 1
       TangentModeRight: 1
       WeightedMode: 0
     - Time:
-        RawValue: 65536
+        RawValue: 13708
       Value:
-        RawValue: 0
+        RawValue: 6606
       InTangent:
-        RawValue: -65370
+        RawValue: -447171
       OutTangent:
-        RawValue: -65370
+        RawValue: -447171
       TangentMode: 0
       TangentModeLeft: 1
       TangentModeRight: 1
       WeightedMode: 0
   KnockbackDistanceX:
-    RawValue: 327680
-  KnockbackDistanceY:
     RawValue: 65536
+  KnockbackDistanceY:
+    RawValue: 131072

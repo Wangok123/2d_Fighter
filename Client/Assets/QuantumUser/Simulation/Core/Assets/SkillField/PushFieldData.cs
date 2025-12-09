@@ -46,22 +46,7 @@ namespace Quantum
         private void ApplyKnockbackToTarget(Frame frame, EntityRef target, KnockbackStatusEffectData knockbackData, 
             FPVector2 forceDirection, FP forceMagnitude, AssetRef<KnockbackStatusEffectData> knockbackDataRef)
         {
-            if (frame.Has<PhysicsBody2D>(target))
-            {
-                FPVector2 force = forceDirection * forceMagnitude;
-                frame.Signals.OnKnockbackPhysic2DApplied(target, force);
-                return;
-            }
-    
-            if (frame.Has<CharacterController2D>(target))
-            {
-                frame.Signals.OnKnockbackApplied(target, knockbackData.KnockBackDuration, forceDirection, knockbackDataRef);
-                return;
-            }
-    
-#if DEBUG || UNITY_EDITOR
-            UnityEngine.Debug.LogWarning($"[PushFieldData] Target entity {target} has neither PhysicsBody2D nor CharacterController2D");
-#endif
+            frame.Signals.OnKnockbackApplied(target, knockbackData.KnockBackDuration, forceDirection, knockbackDataRef);
         }
 
         private FPVector2 CalculatePushFieldDirection(FPVector2 center, FPVector2 targetPos, FPVector2 hitPoint)

@@ -10,23 +10,22 @@ namespace Quantum
         public struct Filter
         {
             public EntityRef EntityRef;
-            public CharacterStatusComponent* CharacterStatus;
             public CharacterController2D* KCC;
         }
+        
         public override void Update(Frame frame, ref Filter filter)
         {
-            if (filter.CharacterStatus->IsKnockedBack)
+            bool isKnockedBack = frame.Has<KnockbackComponent>(filter.EntityRef) && 
+                                 frame.Get<KnockbackComponent>(filter.EntityRef).IsKnockedBack;
+            
+            if (isKnockedBack)
             {
                 filter.KCC->Velocity = FPVector2.Lerp(filter.KCC->Velocity, FPVector2.Zero, FP._10 * frame.DeltaTime);
             }
             
             FPVector2 movementDirection;
             
-            if (filter.CharacterStatus->IsKnockedBack)
-            {
-                movementDirection = FPVector2.Zero;
-            }
-            else if (filter.CharacterStatus->IsIncapacitated)
+            if (isKnockedBack)
             {
                 movementDirection = FPVector2.Zero;
             }
@@ -40,10 +39,7 @@ namespace Quantum
                 }
             }
             
-            if (!filter.CharacterStatus->IsRespawning)
-            {
-                filter.KCC->Move(frame, filter.EntityRef, movementDirection);
-            }
+            filter.KCC->Move(frame, filter.EntityRef, movementDirection);
         }
         
         private FPVector2 GetMovementDirection(Frame frame, EntityRef entityRef)

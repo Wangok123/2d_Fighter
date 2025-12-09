@@ -16,4 +16,12 @@ MonoBehaviour:
     Path: QuantumUser/Resources/DB/StatusEffect/HitReactionData
     Guid:
       Value: 293932180870028386
-  CanBeKnockedBack: 1
+  CanBeKnockedBack: 0
+  KnockbackStrengthMultiplier:
+    RawValue: 327680
+  KnockbackDurationMultiplier:
+    RawValue: 327680
+  KnockbackImmunityDuration:
+    RawValue: 0
+  MinKnockbackInterval:
+    RawValue: 6554

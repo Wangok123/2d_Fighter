@@ -106,70 +106,40 @@ MonoBehaviour:
         Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
     SystemName: 
     StartDisabled: 0
-    Children:
-    - SystemType:
-        AssemblyQualifiedName: Quantum.KnockbackStatusEffectSystem, Quantum.Simulation,
-          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      SystemName: 
-      StartDisabled: 0
-      Children: []
+    Children: []
   - SystemType:
       AssemblyQualifiedName: Quantum.Character2DSystem, Quantum.Simulation, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
     SystemName: 
     StartDisabled: 0
-    Children:
-    - SystemType:
-        AssemblyQualifiedName: Quantum.KnockbackStatusEffectSystem, Quantum.Simulation,
-          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      SystemName: 
-      StartDisabled: 0
-      Children: []
+    Children: []
   - SystemType:
       AssemblyQualifiedName: Quantum.SkillSystem, Quantum.Simulation, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
     SystemName: 
     StartDisabled: 0
-    Children:
-    - SystemType:
-        AssemblyQualifiedName: Quantum.KnockbackStatusEffectSystem, Quantum.Simulation,
-          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      SystemName: 
-      StartDisabled: 0
-      Children: []
+    Children: []
   - SystemType:
       AssemblyQualifiedName: Quantum.SkillActivationSystem, Quantum.Simulation, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
     SystemName: 
     StartDisabled: 0
-    Children:
-    - SystemType:
-        AssemblyQualifiedName: Quantum.KnockbackStatusEffectSystem, Quantum.Simulation,
-          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      SystemName: 
-      StartDisabled: 0
-      Children: []
+    Children: []
   - SystemType:
       AssemblyQualifiedName: Quantum.DeathZoneSystem, Quantum.Simulation, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
     SystemName: 
     StartDisabled: 0
-    Children:
-    - SystemType:
-        AssemblyQualifiedName: Quantum.KnockbackStatusEffectSystem, Quantum.Simulation,
-          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      SystemName: 
-      StartDisabled: 0
-      Children: []
+    Children: []
   - SystemType:
       AssemblyQualifiedName: Quantum.RespawnSystem, Quantum.Simulation, Version=0.0.0.0,
         Culture=neutral, PublicKeyToken=null
     SystemName: 
     StartDisabled: 0
-    Children:
-    - SystemType:
-        AssemblyQualifiedName: Quantum.KnockbackStatusEffectSystem, Quantum.Simulation,
-          Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-      SystemName: 
-      StartDisabled: 0
-      Children: []
+    Children: []
+  - SystemType:
+      AssemblyQualifiedName: Quantum.UnifiedKnockbackSystem, Quantum.Simulation,
+        Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    SystemName: 
+    StartDisabled: 0
+    Children: []

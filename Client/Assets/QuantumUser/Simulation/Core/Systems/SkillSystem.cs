@@ -90,12 +90,6 @@ namespace Quantum
                 filter.SkillComponent->HitEntities = default;
             }
 
-            // 清除霸体状态
-            if (frame.Unsafe.TryGetPointer<CharacterStatusComponent>(filter.Entity, out var status))
-            {
-                status->IsSuperArmored = false;
-            }
-
             filter.SkillComponent->CurrentSkill = default;
             filter.SkillComponent->Phase = SkillPhase.None;
             filter.SkillComponent->ElapsedTime = FP._0;
@@ -204,10 +198,7 @@ namespace Quantum
 
                     if (hitList.Contains(hit.Entity))
                         continue;
-
-                    if (!frame.Has<CharacterStatusComponent>(hit.Entity))
-                        continue;
-
+                    
                     hitList.Add(hit.Entity);
 
                     ApplyHitEffect(frame, ref filter, hit.Entity, action, movement->IsFacingRight);
@@ -258,22 +249,7 @@ namespace Quantum
         private void ApplyKnockbackToTarget(Frame frame, EntityRef target, KnockbackStatusEffectData knockbackData, 
             FPVector2 knockbackDirection, AssetRef<KnockbackStatusEffectData> knockbackDataRef)
         {
-            if (frame.Has<PhysicsBody2D>(target))
-            {
-                FPVector2 knockbackVelocity = knockbackDirection * knockbackData.KnockbackForce;
-                frame.Signals.OnKnockbackPhysic2DApplied(target, knockbackVelocity);
-                return;
-            }
-    
-            if (frame.Has<CharacterController2D>(target))
-            {
-                frame.Signals.OnKnockbackApplied(target, knockbackData.KnockBackDuration, knockbackDirection, knockbackDataRef);
-                return;
-            }
-    
-#if DEBUG || UNITY_EDITOR
-            UnityEngine.Debug.LogWarning($"[SkillSystem] Target entity {target} has neither PhysicsBody2D nor CharacterController2D");
-#endif
+            frame.Signals.OnKnockbackApplied(target, knockbackData.KnockBackDuration, knockbackDirection, knockbackDataRef);
         }
 
         private void ApplySkillFlags(Frame frame, ref Filter filter, SkillData skillData)
@@ -315,10 +291,6 @@ namespace Quantum
             // 应用霸体状态
             if (skillData.Flags.HasFlag(SkillFlags.SuperArmor))
             {
-                if (frame.Unsafe.TryGetPointer<CharacterStatusComponent>(filter.Entity, out var status))
-                {
-                    status->IsSuperArmored = true;
-                }
             }
         }
     }

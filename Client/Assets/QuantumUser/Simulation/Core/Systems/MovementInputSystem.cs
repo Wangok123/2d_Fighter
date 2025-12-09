@@ -16,7 +16,6 @@ namespace Quantum
             public EntityRef Entity;
             public Transform2D* Transform;
             public PlayerLink* PlayerLink;
-            public CharacterStatusComponent* Status;
             public MovementComponent* MovementData;
             public KCC2D* KCC;
             public AbilityEnable* AbilityEnabled;

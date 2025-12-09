@@ -1,10 +1,7 @@
 component CharacterStatusComponent
 {
     asset_ref<HitReactionData> HitReactionData;
-	
 	Boolean IsSuperArmored;
-	
-	KnockbackStatusEffect KnockbackStatusEffect;
 }
 
 component MovementComponent

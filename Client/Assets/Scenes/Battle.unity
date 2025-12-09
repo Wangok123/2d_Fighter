@@ -2360,10 +2360,6 @@ MonoBehaviour:
         Value: 293932180870028386
     IsSuperArmored:
       Value: 0
-    KnockbackStatusEffect:
-      StatusEffectData:
-        Id:
-          Value: 0
 --- !u!114 &1850518766
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3192,10 +3188,6 @@ MonoBehaviour:
         Value: 293932180870028386
     IsSuperArmored:
       Value: 0
-    KnockbackStatusEffect:
-      StatusEffectData:
-        Id:
-          Value: 0
 --- !u!114 &2029404941
 MonoBehaviour:
   m_ObjectHideFlags: 0

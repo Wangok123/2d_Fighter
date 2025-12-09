@@ -345,10 +345,6 @@ MonoBehaviour:
             Value: 293932180870028386
         IsSuperArmored:
           Value: 0
-        KnockbackStatusEffect:
-          StatusEffectData:
-            Id:
-              Value: 0
     - rid: 6673512082068996096
       type: {class: Transform2DPrototype, ns: Quantum.Prototypes, asm: Quantum.Engine}
       data:
@@ -430,10 +426,6 @@ MonoBehaviour:
             Value: 293932180870028386
         IsSuperArmored:
           Value: 0
-        KnockbackStatusEffect:
-          StatusEffectData:
-            Id:
-              Value: 0
     - rid: 8101753271808425984
       type: {class: Transform2DPrototype, ns: Quantum.Prototypes, asm: Quantum.Engine}
       data:

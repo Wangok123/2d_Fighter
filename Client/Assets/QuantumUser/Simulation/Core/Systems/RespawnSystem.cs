@@ -78,10 +78,11 @@ namespace Quantum
 
         private void ResetStatusEffects(Frame frame, EntityRef character)
         {
-            if (frame.TryGet<CharacterStatusComponent>(character, out var statusComponent))
+            if (frame.Has<KnockbackComponent>(character))
             {
-                statusComponent.KnockbackStatusEffect.DurationTimer.Reset();
-                statusComponent.KnockbackStatusEffect.KnockbackVelocity = FPVector2.Zero;
+                KnockbackComponent* knockback = frame.Unsafe.GetPointer<KnockbackComponent>(character);
+                knockback->StatusEffect.DurationTimer.Reset();
+                knockback->StatusEffect.KnockbackVelocity = FPVector2.Zero;
             }
         }
 

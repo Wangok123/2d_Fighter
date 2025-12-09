@@ -139,11 +139,9 @@ namespace Quantum
                 {
                     if (!ability->IsOnCooldown)
                     {
-                        CharacterStatusComponent* playerStatus =
-                            frame.Unsafe.GetPointer<CharacterStatusComponent>(entityRef);
                         AbilityInventory* abilityInventory = frame.Unsafe.GetPointer<AbilityInventory>(entityRef);
 
-                        if (!playerStatus->IsIncapacitated && !abilityInventory->HasActiveAbility)
+                        if (!IsIncapacitated(frame, entityRef) && !abilityInventory->HasActiveAbility)
                         {
                             attackComponent->IsChargingHeavy = true;
                             attackComponent->ChargeTimer = FrameTimer.FromSeconds(frame, MaxChargeTime);
@@ -282,6 +280,20 @@ namespace Quantum
 
             // 触发取消事件
             frame.Events.ChargingCancelled(entityRef);
+        }
+        
+        private bool IsKnockedBack(Frame frame, EntityRef entity)
+        {
+            if (frame.Unsafe.TryGetPointer<KnockbackComponent>(entity, out var knockback))
+            {
+                return knockback->IsKnockedBack;
+            }
+            return false;
+        }
+        
+        private bool IsIncapacitated(Frame frame, EntityRef entity)
+        {
+            return IsKnockedBack(frame, entity);
         }
     }
 }

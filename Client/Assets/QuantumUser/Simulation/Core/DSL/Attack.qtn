@@ -13,12 +13,6 @@ enum CommandAttackExecutionType : Byte
     SkillField,
 }
 
-flags KnockbackApplicationMode : Byte
-{
-    CharacterController,
-    Physics2D
-}
-
 // 指令攻击运行时数据
 component CommandAttackRuntimeComponent
 {

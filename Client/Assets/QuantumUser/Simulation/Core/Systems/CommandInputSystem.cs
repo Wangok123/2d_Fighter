@@ -239,9 +239,6 @@ namespace Quantum
                     if (hitList.Contains(hit.Entity))
                         continue;
 
-                    if (!frame.Has<CharacterStatusComponent>(hit.Entity))
-                        continue;
-
                     hitList.Add(hit.Entity);
 
                     ApplyHitboxDamage(frame, entityRef, hit.Entity, sequence, movement->IsFacingRight);
@@ -252,9 +249,6 @@ namespace Quantum
         private void ApplyHitboxDamage(Frame frame, EntityRef source, EntityRef target, CommandSequenceConfig sequence,
             bool isFacingRight)
         {
-            if (!frame.Unsafe.TryGetPointer<CharacterStatusComponent>(target, out var hitReaction))
-                return;
-
             if (!sequence.KnockbackStatusEffectData.Id.IsValid)
             {
                 return;
@@ -279,22 +273,7 @@ namespace Quantum
         private void ApplyKnockbackToTarget(Frame frame, EntityRef target, KnockbackStatusEffectData knockbackData, 
             FPVector2 knockbackDirection, AssetRef<KnockbackStatusEffectData> knockbackDataRef)
         {
-            if (frame.Has<PhysicsBody2D>(target))
-            {
-                FPVector2 knockbackVelocity = knockbackDirection * knockbackData.KnockbackForce;
-                frame.Signals.OnKnockbackPhysic2DApplied(target, knockbackVelocity);
-                return;
-            }
-    
-            if (frame.Has<CharacterController2D>(target))
-            {
-                frame.Signals.OnKnockbackApplied(target, knockbackData.KnockBackDuration, knockbackDirection, knockbackDataRef);
-                return;
-            }
-    
-#if DEBUG || UNITY_EDITOR
-            UnityEngine.Debug.LogWarning($"[CommandInputSystem] Target entity {target} has neither PhysicsBody2D nor CharacterController2D");
-#endif
+            frame.Signals.OnKnockbackApplied(target, knockbackData.KnockBackDuration, knockbackDirection, knockbackDataRef);
         }
 
         private void SpawnProjectile(Frame frame, EntityRef entityRef, CommandSequenceConfig sequence)
