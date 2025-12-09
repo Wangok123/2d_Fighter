@@ -19,19 +19,14 @@ namespace Quantum
         public void OnAdded(Frame frame, EntityRef entity, RespawnPoint* component)
         {
             var spawnPlaces = frame.Unsafe.GetPointerSingleton<SpawnPlaces>();
+    
             if (frame.TryResolveList(spawnPlaces->Spawners, out var spawners) == false)
             {
                 frame.AllocateList(out spawnPlaces->Spawners);
                 spawners = frame.ResolveList(spawnPlaces->Spawners);
             }
+    
             spawners.Add(entity);
-        }
-
-        private QList<EntityRef> InitSpawns(Frame frame)
-        {
-            var spawnPlaces = frame.Unsafe.GetPointerSingleton<SpawnPlaces>();
-            frame.AllocateList(out spawnPlaces->Spawners);
-            return frame.ResolveList(spawnPlaces->Spawners);
         }
 
         public override void Update(Frame frame, ref Filter filter)
@@ -96,9 +91,9 @@ namespace Quantum
             
             if (!frame.TryResolveList(spawnPlaces->Spawners, out var spawners))
             {
+                Log.Error("[RespawnSystem] Cannot resolve spawners list!");
                 return FPVector2.Zero;
             }
-            
 
             for (int i = 0; i < spawners.Count; i++)
             {
@@ -106,7 +101,6 @@ namespace Quantum
 
                 if (!frame.Exists(spawnEntity))
                 {
-                    Log.Error("Spawn entity does not exist");
                     continue;
                 }
 
@@ -124,15 +118,17 @@ namespace Quantum
             {
                 int randomIndex = frame.RNG->Next(0, spawners.Count);
                 var fallbackEntity = spawners[randomIndex];
-                
+
                 if (frame.Exists(fallbackEntity) && 
                     frame.TryGet<Transform2D>(fallbackEntity, out var fallbackTransform))
                 {
                     return fallbackTransform.Position;
                 }
-                
+
+                Log.Error($"[RespawnSystem] Fallback spawn point is invalid!");
             }
             
+            Log.Error("[RespawnSystem] No valid spawn points available!");
             return FPVector2.Zero;
         }
     }

@@ -153,6 +153,7 @@ MonoBehaviour:
     - rid: 6673512082068996097
   - Components:
     - rid: 8101753271808425984
+    - rid: 8101753271808425985
   SerializedTriangleDataUncompressedSize: 8
   references:
     version: 2
@@ -434,6 +435,16 @@ MonoBehaviour:
             Id:
               Value: 0
     - rid: 8101753271808425984
+      type: {class: Transform2DPrototype, ns: Quantum.Prototypes, asm: Quantum.Engine}
+      data:
+        Position:
+          X:
+            RawValue: 345690
+          Y:
+            RawValue: 432747
+        Rotation:
+          RawValue: 0
+    - rid: 8101753271808425985
       type: {class: RespawnPointPrototype, ns: Quantum.Prototypes, asm: Quantum.Simulation}
       data:
         Team:
