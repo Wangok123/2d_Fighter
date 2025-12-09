@@ -9,7 +9,7 @@ namespace Quantum
         ISignalOnComponentAdded<RespawnPoint>,
         ISignalOnCharacterRespawn
     {
-        public struct Filter
+        public struct Filter 
         {
             public EntityRef EntityRef;
             public Transform2D* Transform;
@@ -56,26 +56,69 @@ namespace Quantum
 
             transform->Teleport(frame, spawnPosition);
 
-            if (frame.TryGet<CharacterController2D>(character, out var kcc))
-            {
-                kcc.Velocity = FPVector2.Zero;
-            }
-
-            if (frame.TryGet<CharacterStatusComponent>(character, out var statusComponent))
-            {
-                statusComponent.KnockbackStatusEffect.DurationTimer.Reset();
-                statusComponent.KnockbackStatusEffect.KnockbackVelocity = FPVector2.Zero;
-            }
-
-            if (frame.TryGet<PhysicsCollider2D>(character, out var collider))
-            {
-                collider.IsTrigger = false;
-            }
+            ResetMovementState(frame, character);
+            ResetStatusEffects(frame, character);
+            ResetAttackState(frame, character);
+            ResetAbilityState(frame, character);
+            ResetPhysicsState(frame, character);
 
             respawnComponent->IsDead = false;
             respawnComponent->RespawnTimer.Reset();
 
             frame.Events.OnPlayerRespawned(character, spawnPosition);
+        }
+
+        private void ResetMovementState(Frame frame, EntityRef character)
+        {
+            if (frame.Unsafe.TryGetPointer<KCC2D>(character, out var kcc))
+            {
+                kcc->ResetVelocity();
+            }
+        }
+
+        private void ResetStatusEffects(Frame frame, EntityRef character)
+        {
+            if (frame.TryGet<CharacterStatusComponent>(character, out var statusComponent))
+            {
+                statusComponent.KnockbackStatusEffect.DurationTimer.Reset();
+                statusComponent.KnockbackStatusEffect.KnockbackVelocity = FPVector2.Zero;
+            }
+        }
+
+        private void ResetAttackState(Frame frame, EntityRef character)
+        {
+            if (frame.Unsafe.TryGetPointer<AttackComponent>(character, out var attackComponent))
+            {
+                attackComponent->ResetToDefault(frame, character);
+            }
+
+            if (frame.Has<ComboAttackRuntimeComponent>(character))
+            {
+                var comboRuntime = frame.Unsafe.GetPointer<ComboAttackRuntimeComponent>(character);
+                comboRuntime->ResetToDefault();
+            }
+
+            if (frame.Has<ChargeAttackRuntimeComponent>(character))
+            {
+                var chargeRuntime = frame.Unsafe.GetPointer<ChargeAttackRuntimeComponent>(character);
+                chargeRuntime->ResetToDefault();
+            }
+        }
+
+        private void ResetAbilityState(Frame frame, EntityRef character)
+        {
+            if (frame.Unsafe.TryGetPointer<AbilityInventory>(character, out var abilityInventory))
+            {
+                abilityInventory->ResetActiveAbility();
+            }
+        }
+
+        private void ResetPhysicsState(Frame frame, EntityRef character)
+        {
+            if (frame.TryGet<PhysicsCollider2D>(character, out var collider))
+            {
+                collider.IsTrigger = false;
+            }
         }
 
         private FPVector2 GetSpawnPosition(Frame frame, EntityRef character)

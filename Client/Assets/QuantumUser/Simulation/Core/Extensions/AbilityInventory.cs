@@ -1,3 +1,5 @@
+using Photon.Deterministic;
+
 namespace Quantum
 {
     public unsafe partial struct AbilityInventory
@@ -32,6 +34,14 @@ namespace Quantum
             
             ability = default;
             return false;
+        }
+
+        public void ResetActiveAbility()
+        {
+            ActiveAbilityInfo.ActiveAbilityType = AbilityType.None;
+            ActiveAbilityInfo.CastDirection = FPVector2.Zero;
+            ActiveAbilityInfo.CastVelocity = FPVector2.Zero;
+            ActiveAbilityInfo.CastRotation = FPQuaternion.Identity;
         }
     } 
 }

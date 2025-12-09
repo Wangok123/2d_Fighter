@@ -60,6 +60,8 @@ namespace Quantum.QuantumView
             QuantumEvent.Subscribe<EventChargeAttackReleased>(this, OnChargeAttackReleased);
             QuantumEvent.Subscribe<EventCommandAttackExecuted>(this, OnCommandAttackExecuted);
 
+            QuantumEvent.Subscribe<EventOnPlayerRespawned>(this, OnPlayerRespawned);
+
             _lastProcessedFrame = -1;
             _currentAnimationState = null;
             _currentAttackStep = -1;
@@ -417,6 +419,41 @@ namespace Quantum.QuantumView
         private void OnCommandAttackExecuted(EventCommandAttackExecuted e)
         {
             if (e.PlayerEntityRef != EntityRef) return;
+        }
+
+        private void OnPlayerRespawned(EventOnPlayerRespawned e)
+        {
+            if (e.Player != EntityRef) return;
+
+            ResetViewState();
+
+            if (_showDebugLog)
+            {
+                Debug.Log($"[PlayerViewController] {(_isLocalPlayer ? "LOCAL" : "REMOTE")} Player respawned, view state reset");
+            }
+        }
+
+        private void ResetViewState()
+        {
+            _currentAttackStep = -1;
+            _currentAnimationState = null;
+            _lastAnimationTime = 0f;
+            _lastComboEventFrame = -1;
+            _lastComboStep = -1;
+
+            if (_manager != null)
+            {
+                _manager.PlayIdle();
+            }
+
+            if (_useSmoothTransform && _smoothTransform != null)
+            {
+                Frame frame = VerifiedFrame ?? PredictedFrame;
+                if (frame != null && frame.Unsafe.TryGetPointer<Transform2D>(EntityRef, out var transform2D))
+                {
+                    _smoothTransform.Initialize(transform2D->Position.ToUnityVector3());
+                }
+            }
         }
 
         private void OnDrawGizmosSelected()
