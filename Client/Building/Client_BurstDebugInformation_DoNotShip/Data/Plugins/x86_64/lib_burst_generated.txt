@@ -21,6 +21,7 @@ Library: D:\Project\2d_Fighter\Client\Temp\BurstOutput\Data\Plugins\x86_64\lib_b
 --assembly-defines=Unity.2D.SpriteShape.Runtime;
 --assembly-defines=Photon.Realtime;
 --assembly-defines=Unity.2D.PixelPerfect;
+--assembly-defines=AimingRig;
 --assembly-defines=UniTask.TextMeshPro;
 --assembly-defines=Unity.TextMeshPro;
 --assembly-defines=Wjybxx.Dson.Core;
@@ -155,6 +156,7 @@ Library: D:\Project\2d_Fighter\Client\Temp\BurstOutput\Data\Plugins\x86_64\lib_b
 --assembly-defines=Unity.2D.SpriteShape.Runtime;
 --assembly-defines=Photon.Realtime;
 --assembly-defines=Unity.2D.PixelPerfect;
+--assembly-defines=AimingRig;
 --assembly-defines=UniTask.TextMeshPro;
 --assembly-defines=Unity.TextMeshPro;
 --assembly-defines=Wjybxx.Dson.Core;

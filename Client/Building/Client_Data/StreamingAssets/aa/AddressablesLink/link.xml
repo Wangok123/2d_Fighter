@@ -2,6 +2,7 @@
   <assembly fullname="Assembly-CSharp, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
     <type fullname="Configs.ConfigComponent" preserve="all" />
     <type fullname="GameMain" preserve="all" />
+    <type fullname="Quantum.DeathZoneDebugger" preserve="all" />
     <type fullname="Quantum.QuantumView.Base.CustomViewContext" preserve="all" />
     <type fullname="QuantumPositionDebugger" preserve="all" />
     <type fullname="UnityCore.Audio.AudioComponent" preserve="all" />
@@ -23,6 +24,7 @@
   <assembly fullname="Cinemachine, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
     <type fullname="Cinemachine.CinemachineBasicMultiChannelPerlin" preserve="all" />
     <type fullname="Cinemachine.CinemachineBrain" preserve="all" />
+    <type fullname="Cinemachine.CinemachineConfiner2D" preserve="all" />
     <type fullname="Cinemachine.CinemachineFramingTransposer" preserve="all" />
     <type fullname="Cinemachine.CinemachinePipeline" preserve="all" />
     <type fullname="Cinemachine.CinemachineTargetGroup" preserve="all" />
@@ -39,6 +41,10 @@
   <assembly fullname="Quantum.Unity, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
     <type fullname="Quantum.QPrototypeCharacterController2D" preserve="all" />
     <type fullname="Quantum.QPrototypeCharacterStatusComponent" preserve="all" />
+    <type fullname="Quantum.QPrototypeDeathZone" preserve="all" />
+    <type fullname="Quantum.QPrototypeKnockbackComponent" preserve="all" />
+    <type fullname="Quantum.QPrototypeRespawnPoint" preserve="all" />
+    <type fullname="Quantum.QPrototypeSpawnPlaces" preserve="all" />
     <type fullname="Quantum.QuantumEntityPrototype" preserve="all" />
     <type fullname="Quantum.QuantumEntityView" preserve="all" />
     <type fullname="Quantum.QuantumEntityViewUpdater" preserve="all" />
@@ -47,6 +53,7 @@
     <type fullname="Quantum.QuantumRunnerLocalDebug" preserve="all" />
     <type fullname="Quantum.QuantumStaticBoxCollider2D" preserve="all" />
     <type fullname="Quantum.QuantumStats" preserve="all" />
+    <type fullname="Quantum.Prototypes.Unity.SpawnPlacesPrototype" preserve="nothing" serialized="true" />
     <type fullname="Quantum.QuantumEntityPrototype/InitialNavMeshTargetInfo" preserve="nothing" serialized="true" />
     <type fullname="Quantum.QuantumEntityPrototype/NavMeshAvoidanceAgentInfo" preserve="nothing" serialized="true" />
     <type fullname="Quantum.QuantumEntityPrototype/NavMeshPathfinderInfo" preserve="nothing" serialized="true" />
@@ -125,6 +132,9 @@
     <type fullname="UnityEngine.Events.UnityEvent`1[Quantum.SessionRunner/Arguments]" preserve="nothing" serialized="true" />
     <type fullname="UnityEngine.RectOffset" preserve="nothing" serialized="true" />
   </assembly>
+  <assembly fullname="UnityEngine.Physics2DModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
+    <type fullname="UnityEngine.PolygonCollider2D" preserve="all" />
+  </assembly>
   <assembly fullname="UnityEngine.TextRenderingModule, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null">
     <type fullname="UnityEngine.Font" preserve="all" />
   </assembly>
@@ -164,7 +174,6 @@
     <type fullname="Quantum.AssetRef`1[Quantum.EntityView]" preserve="nothing" serialized="true" />
     <type fullname="Quantum.AssetRef`1[Quantum.GameSettingsData]" preserve="nothing" serialized="true" />
     <type fullname="Quantum.AssetRef`1[Quantum.HitReactionData]" preserve="nothing" serialized="true" />
-    <type fullname="Quantum.AssetRef`1[Quantum.KnockbackStatusEffectData]" preserve="nothing" serialized="true" />
     <type fullname="Quantum.AssetRef`1[Quantum.Map]" preserve="nothing" serialized="true" />
     <type fullname="Quantum.AssetRef`1[Quantum.NavMesh]" preserve="nothing" serialized="true" />
     <type fullname="Quantum.AssetRef`1[Quantum.NavMeshAgentConfig]" preserve="nothing" serialized="true" />
@@ -177,12 +186,15 @@
     <type fullname="Quantum.Prototypes.PhysicsBodyInertiaMode" preserve="nothing" serialized="true" />
     <type fullname="Quantum.QBoolean" preserve="nothing" serialized="true" />
     <type fullname="Quantum.QEnum32`1[Quantum.CallbackFlags]" preserve="nothing" serialized="true" />
+    <type fullname="Quantum.QEnum32`1[Quantum.CharacterTeam]" preserve="nothing" serialized="true" />
     <type fullname="Quantum.Shape2DConfig" preserve="nothing" serialized="true" />
     <type fullname="Quantum.Shape3DConfig" preserve="nothing" serialized="true" />
   </assembly>
   <assembly fullname="Quantum.Simulation">
     <type fullname="Quantum.Prototypes.CharacterStatusComponentPrototype" preserve="nothing" serialized="true" />
-    <type fullname="Quantum.Prototypes.KnockbackStatusEffectPrototype" preserve="nothing" serialized="true" />
+    <type fullname="Quantum.Prototypes.DeathZonePrototype" preserve="nothing" serialized="true" />
+    <type fullname="Quantum.Prototypes.KnockbackComponentPrototype" preserve="nothing" serialized="true" />
+    <type fullname="Quantum.Prototypes.RespawnPointPrototype" preserve="nothing" serialized="true" />
     <type fullname="Quantum.RuntimeConfig" preserve="nothing" serialized="true" />
     <type fullname="Quantum.RuntimePlayer" preserve="nothing" serialized="true" />
   </assembly>
