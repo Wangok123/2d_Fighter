@@ -134,12 +134,14 @@ MonoBehaviour:
     - rid: 8101032211223937026
     - rid: 8101032211223937027
     - rid: 8101032211223937028
+    - rid: 8101032211223937029
   - Components:
     - rid: 3331545490863947776
     - rid: 3331545490863947777
     - rid: 3331545490863947778
     - rid: 3331545490863947779
     - rid: 3331545490863947780
+    - rid: 3331545490863947781
   - Components:
     - rid: 2460740779258150912
     - rid: 2460740779258150913
@@ -345,6 +347,10 @@ MonoBehaviour:
             Value: 293932180870028386
         IsSuperArmored:
           Value: 0
+    - rid: 3331545490863947781
+      type: {class: KnockbackComponentPrototype, ns: Quantum.Prototypes, asm: Quantum.Simulation}
+      data:
+        _empty_prototype_dummy_field_: 0
     - rid: 6673512082068996096
       type: {class: Transform2DPrototype, ns: Quantum.Prototypes, asm: Quantum.Engine}
       data:
@@ -426,6 +432,10 @@ MonoBehaviour:
             Value: 293932180870028386
         IsSuperArmored:
           Value: 0
+    - rid: 8101032211223937029
+      type: {class: KnockbackComponentPrototype, ns: Quantum.Prototypes, asm: Quantum.Simulation}
+      data:
+        _empty_prototype_dummy_field_: 0
     - rid: 8101753271808425984
       type: {class: Transform2DPrototype, ns: Quantum.Prototypes, asm: Quantum.Engine}
       data:

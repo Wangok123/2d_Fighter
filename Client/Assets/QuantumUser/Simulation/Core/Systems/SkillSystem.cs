@@ -183,7 +183,8 @@ namespace Quantum
             }
 
             Shape2D shape = adjustedConfig.CreateShape(frame);
-            HitCollection hits = frame.Physics2D.OverlapShape(*filter.Transform, shape, gameSettings.PlayerLayerMask, QueryOptions.HitDynamics);
+            HitCollection hits = frame.Physics2D.OverlapShape(*filter.Transform, shape, gameSettings.PlayerLayerMask,
+                QueryOptions.HitDynamics | QueryOptions.HitKinematics | QueryOptions.HitTriggers);
 
             if (hits.Count > 0)
             {
@@ -198,7 +199,7 @@ namespace Quantum
 
                     if (hitList.Contains(hit.Entity))
                         continue;
-                    
+
                     hitList.Add(hit.Entity);
 
                     ApplyHitEffect(frame, ref filter, hit.Entity, action, movement->IsFacingRight);
@@ -224,12 +225,14 @@ namespace Quantum
             frame.Signals.SpawnProjectile(action.ProjectileData, spawnPosition, direction, filter.Entity);
         }
 
-        private void ApplyHitEffect(Frame frame, ref Filter filter, EntityRef target, SkillActionConfig action, bool isFacingRight)
+        private void ApplyHitEffect(Frame frame, ref Filter filter, EntityRef target, SkillActionConfig action,
+            bool isFacingRight)
         {
             if (!action.KnockbackData.Id.IsValid)
                 return;
 
-            KnockbackStatusEffectData knockbackData = frame.FindAsset<KnockbackStatusEffectData>(action.KnockbackData.Id);
+            KnockbackStatusEffectData knockbackData =
+                frame.FindAsset<KnockbackStatusEffectData>(action.KnockbackData.Id);
             if (knockbackData == null)
                 return;
 
@@ -246,10 +249,11 @@ namespace Quantum
             ApplyKnockbackToTarget(frame, target, knockbackData, knockbackDirection, action.KnockbackData);
         }
 
-        private void ApplyKnockbackToTarget(Frame frame, EntityRef target, KnockbackStatusEffectData knockbackData, 
+        private void ApplyKnockbackToTarget(Frame frame, EntityRef target, KnockbackStatusEffectData knockbackData,
             FPVector2 knockbackDirection, AssetRef<KnockbackStatusEffectData> knockbackDataRef)
         {
-            frame.Signals.OnKnockbackApplied(target, knockbackData.KnockBackDuration, knockbackDirection, knockbackDataRef);
+            frame.Signals.OnKnockbackApplied(target, knockbackData.KnockBackDuration, knockbackDirection,
+                knockbackDataRef);
         }
 
         private void ApplySkillFlags(Frame frame, ref Filter filter, SkillData skillData)
@@ -275,13 +279,13 @@ namespace Quantum
                     if (!filter.SkillComponent->HasTriggeredLanding)
                     {
                         skillData.SpawnLandingShockwave(frame, filter.Entity, filter.Transform, movement);
-                
+
                         frame.Signals.OnSkillLanded(filter.Entity, filter.SkillComponent->CurrentSkill);
                         frame.Events.SkillLanded(filter.Entity, filter.Transform->Position);
-                
+
                         // 标记已触发
                         filter.SkillComponent->HasTriggeredLanding = true;
-                        
+
                         CompleteSkill(frame, ref filter, skillData);
                         return;
                     }

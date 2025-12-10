@@ -166,7 +166,7 @@ namespace Quantum
 
             var shape = data.EffectArea.CreateShape(frame);
             HitCollection hits =
-                frame.Physics2D.OverlapShape(*transform, shape, data.TargetLayer, QueryOptions.HitSolids);
+                frame.Physics2D.OverlapShape(*transform, shape, data.TargetLayer);
 
             if (hits.Count > 0)
             {
@@ -230,7 +230,7 @@ namespace Quantum
 
             var shape = skillFieldData.EffectArea.CreateShape(frame);
             HitCollection hits = frame.Physics2D.OverlapShape(*transform, shape, skillFieldData.TargetLayer,
-                QueryOptions.HitDynamics);
+                QueryOptions.HitDynamics | QueryOptions.HitKinematics | QueryOptions.HitTriggers);
 
             var affectedList = frame.ResolveList(skillField->AffectedEntities);
             affectedList.Clear();

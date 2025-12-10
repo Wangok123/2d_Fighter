@@ -2010,6 +2010,7 @@ GameObject:
   - component: {fileID: 1850518760}
   - component: {fileID: 1850518765}
   - component: {fileID: 1850518766}
+  - component: {fileID: 1850518767}
   m_Layer: 6
   m_Name: CircleEntity2D
   m_TagString: Untagged
@@ -2380,6 +2381,20 @@ MonoBehaviour:
     Config:
       Id:
         Value: 311654634759721963
+--- !u!114 &1850518767
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1850518758}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea99c84047db9f148a339859d4b808b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Prototype:
+    _empty_prototype_dummy_field_: 0
 --- !u!1 &1867911148
 GameObject:
   m_ObjectHideFlags: 3
@@ -3167,6 +3182,7 @@ GameObject:
   - component: {fileID: 2029404942}
   - component: {fileID: 2029404941}
   - component: {fileID: 2029404940}
+  - component: {fileID: 2029404946}
   m_Layer: 6
   m_Name: CircleEntity2D_Physic
   m_TagString: Untagged
@@ -3521,6 +3537,20 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2029404946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2029404938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ea99c84047db9f148a339859d4b808b5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Prototype:
+    _empty_prototype_dummy_field_: 0
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

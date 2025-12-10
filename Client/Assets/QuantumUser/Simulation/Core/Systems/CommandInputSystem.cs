@@ -223,7 +223,7 @@ namespace Quantum
 
             var shape = CreateAttackShapeWithDirection(frame, sequence.AttackShape, movement->IsFacingRight);
             HitCollection hits = frame.Physics2D.OverlapShape(*transform, shape, gameSettings.PlayerLayerMask,
-                QueryOptions.HitDynamics);
+                QueryOptions.HitDynamics | QueryOptions.HitKinematics | QueryOptions.HitTriggers);
 
             if (hits.Count > 0)
             {

@@ -1,4 +1,4 @@
-using Photon.Deterministic;
+﻿using Photon.Deterministic;
 using Quantum.Physics2D;
 using UnityEngine;
 using UnityEngine.Scripting;
@@ -46,7 +46,7 @@ namespace Quantum
             var shape = CreateAttackShapeWithDirection(frame, attackShape, isFacingRight);
 
             HitCollection hits = frame.Physics2D.OverlapShape(*transform, shape, gameSettingsData.PlayerLayerMask,
-                QueryOptions.HitKinematics | QueryOptions.HitDynamics);
+                QueryOptions.HitKinematics | QueryOptions.HitDynamics | QueryOptions.HitTriggers);
 
             if (hits.Count > 0)
             {

@@ -198,9 +198,6 @@ namespace Quantum
                 {
                     if (ability->IsActive || ability->IsDelayed)
                     {
-#if DEBUG || UNITY_EDITOR
-                        UnityEngine.Debug.Log($"[ComboAttack] ✓ Stopping ComboAttack ability");
-#endif
                         ability->StopAbility(frame, entityRef);
                         frame.Events.AbilityCancelled(entityRef, AbilityType.AttackLight);
                     }

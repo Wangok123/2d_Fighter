@@ -61,6 +61,7 @@ namespace Quantum.QuantumView
             QuantumEvent.Subscribe<EventCommandAttackExecuted>(this, OnCommandAttackExecuted);
 
             QuantumEvent.Subscribe<EventOnPlayerRespawned>(this, OnPlayerRespawned);
+            QuantumEvent.Subscribe<EventOnPlayerKnockedBack>(this, OnPlayerKnockedBack);
 
             _lastProcessedFrame = -1;
             _currentAnimationState = null;
@@ -175,6 +176,18 @@ namespace Quantum.QuantumView
 
         private bool IsPlayingAbility(Frame frame)
         {
+            if (frame.Unsafe.TryGetPointer<KnockbackComponent>(EntityRef, out var knockback))
+            {
+                if (knockback->StatusEffect.DurationTimer.IsRunning)
+                {
+                    if (_showDebugLog)
+                    {
+                        Debug.Log($"[PlayerViewController] Protecting animation - Knockback active at Frame {frame.Number}");
+                    }
+                    return true;
+                }
+            }
+            
             if (frame.Unsafe.TryGetPointer<AttackComponent>(EntityRef, out var attackComponent))
             {
                 if (attackComponent->IsChargingHeavy)
@@ -421,6 +434,18 @@ namespace Quantum.QuantumView
             if (e.PlayerEntityRef != EntityRef) return;
         }
 
+        private void OnPlayerKnockedBack(EventOnPlayerKnockedBack e)
+        {
+            if (e.Entity != EntityRef) return;
+
+            PlayAnimationSafe("Hurt", () => _manager.PlayHurt());
+    
+            if (_showDebugLog)
+            {
+                Debug.Log($"[PlayerViewController] Playing Hurt animation - Direction: {e.Direction}, Force: {e.Force}");
+            }
+        }
+        
         private void OnPlayerRespawned(EventOnPlayerRespawned e)
         {
             if (e.Player != EntityRef) return;

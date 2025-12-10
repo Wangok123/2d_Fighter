@@ -156,7 +156,7 @@ namespace Quantum
 
             Shape2D shape = adjustedConfig.CreateShape(frame);
             HitCollection hits = frame.Physics2D.OverlapShape(*transform, shape, gameSettings.PlayerLayerMask,
-                QueryOptions.HitDynamics | QueryOptions.HitKinematics);
+                QueryOptions.HitDynamics | QueryOptions.HitKinematics | QueryOptions.HitTriggers);
 
 #if DEBUG || UNITY_EDITOR
             UnityEngine.Debug.Log($"[SkillData] Shockwave hit {hits.Count} entities");

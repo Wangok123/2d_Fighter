@@ -20,7 +20,7 @@ MonoBehaviour:
   KnockbackForce:
     RawValue: 327680
   KnockBackDuration:
-    RawValue: 111411
+    RawValue: 32768
   FixedKnockbackDirection:
     X:
       RawValue: 65536
@@ -177,6 +177,6 @@ MonoBehaviour:
       TangentModeRight: 1
       WeightedMode: 0
   KnockbackDistanceX:
-    RawValue: 458752
+    RawValue: 655360
   KnockbackDistanceY:
-    RawValue: 131072
+    RawValue: 0

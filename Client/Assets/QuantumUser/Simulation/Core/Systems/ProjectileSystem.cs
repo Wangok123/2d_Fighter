@@ -152,8 +152,7 @@ namespace Quantum
             Transform2D* transform = frame.Unsafe.GetPointer<Transform2D>(projectileEntity);
 
             var shape = projectileData.CollisionShape.CreateShape(frame);
-            HitCollection hits = frame.Physics2D.OverlapShape(*transform, shape, projectileData.CollisionLayer,
-                QueryOptions.HitSolids);
+            HitCollection hits = frame.Physics2D.OverlapShape(*transform, shape, projectileData.CollisionLayer);
 
             if (hits.Count > 0)
             {

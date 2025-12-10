@@ -41,10 +41,7 @@ namespace Quantum
         {
             if (!frame.Has<KnockbackComponent>(target))
             {
-#if DEBUG || UNITY_EDITOR
-                UnityEngine.Debug.LogWarning($"Entity {target} doesn't have KnockbackComponent. Adding it automatically.");
-#endif
-                frame.Add<KnockbackComponent>(target);
+                return;
             }
 
             KnockbackComponent* knockback = frame.Unsafe.GetPointer<KnockbackComponent>(target);
@@ -55,6 +52,9 @@ namespace Quantum
             knockback->StatusEffect.KnockbackVelocity = FPVector2.Zero;
 
             DetermineApplicationMode(frame, target, knockback);
+            
+            KnockbackStatusEffectData data = frame.FindAsset<KnockbackStatusEffectData>(statusEffectData.Id);
+            frame.Events.OnPlayerKnockedBack(target, direction, data.KnockbackForce);
         }
 
         private void DetermineApplicationMode(Frame frame, EntityRef target, KnockbackComponent* knockback)
