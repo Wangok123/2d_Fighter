@@ -25,7 +25,7 @@ namespace Quantum.QuantumView.Input
         {
             var playerLink = VerifiedFrame.Get<PlayerLink>(EntityRef);
 
-            if (!Game.PlayerIsLocal(playerLink.Player))
+            if (!Game.PlayerIsLocal(playerLink.Player) || playerLink.Player != 0)
             {
                 enabled = false;
                 return;
@@ -51,6 +51,12 @@ namespace Quantum.QuantumView.Input
 
         private void PollInput(CallbackPollInput callback)
         {
+            // 只为玩家0（1P）提供输入
+            if (callback.Player != 0)
+            {
+                return;
+            }
+            
             UpdateInputActions();
             callback.SetInput(_input, DeterministicInputFlags.Repeatable);
         }

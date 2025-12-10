@@ -1268,6 +1268,10 @@ MonoBehaviour:
       Id:
         Value: 1333204422022738546
     PlayerNickname: 
+  - PlayerAvatar:
+      Id:
+        Value: 1333204422022738546
+    PlayerNickname: 
   MaxPlayerCount: 0
   SimulationSpeedMultiplier: 1
   DisplaySaveAndReloadButton: 0
@@ -3522,6 +3526,7 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 595605021}
+  - {fileID: 1650112200}
   - {fileID: 449538393}
   - {fileID: 1979263624}
   - {fileID: 1156613526}
@@ -3530,6 +3535,5 @@ SceneRoots:
   - {fileID: 303468882}
   - {fileID: 1850518764}
   - {fileID: 2029404945}
-  - {fileID: 1650112200}
   - {fileID: 268478913}
   - {fileID: 2016039156}
