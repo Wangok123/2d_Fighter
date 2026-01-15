@@ -1,4 +1,4 @@
-﻿using GameProtocol;
+using GameProtocol;
 using LATLog;
 using LATMath;
 using UnityCore.Base;
@@ -25,6 +25,7 @@ namespace UnityCore.GameModule.Battle.Logic
         public override void LogicInit()
         {
             InitProperty();
+            InitBuff();
             InitSkill();
             InitMove();
             InitGameObject();
@@ -34,12 +35,14 @@ namespace UnityCore.GameModule.Battle.Logic
 
         public override void LogicTick()
         {
+            TickBuff();
             TickSkill();
             TickMove();
         }
 
         public override void LogicUnInit()
         {
+            UnInitBuff();
             UnInitSkill();
             UnInitMove();
         }

@@ -180,6 +180,6 @@ public enum SessionState
     None,
     Connected,
     Disconnected
-}k
+}
 }
 

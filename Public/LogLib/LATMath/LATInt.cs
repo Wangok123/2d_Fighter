@@ -156,6 +156,25 @@
         public static LATInt Zero => new LATInt(0);
         public static LATInt One => new LATInt(1);
 
+        public static LATInt Clamp(LATInt value, LATInt min, LATInt max)
+        {
+            if (value.Value < min.Value)
+                return min;
+            if (value.Value > max.Value)
+                return max;
+            return value;
+        }
+
+        public static LATInt Max(LATInt a, LATInt b)
+        {
+            return a.Value > b.Value ? a : b;
+        }
+        
+        public static LATInt Min(LATInt a, LATInt b)
+        {
+            return a.Value < b.Value ? a : b;
+        }
+
         public override string ToString()
         {
             return RawFloat.ToString();

@@ -8,11 +8,16 @@ namespace UnityCore.GameModule.Battle.Config
         public int ID { get; set; }
         public string UnitName { get; set; }
         public string ResourceName { get; set; }
+        
         public int Hp { get; set; }
+        public int Attack { get; set; }
         public int Def { get; set; }
         public int MoveSpeed { get; set; }
         
-        // 碰撞
+        public int CriticalRate { get; set; }
+        public int CriticalDamage { get; set; }
+        public int AttackSpeed { get; set; }
+        
         public ColliderConfig ColliderConfig { get; set; }
     }
 }
