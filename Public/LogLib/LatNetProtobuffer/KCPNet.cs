@@ -5,10 +5,11 @@ using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
+using Google.Protobuf;
 
 namespace LATNet
 {
-    public class KCPNet<T, K> where T : KCPSession<K>, new() where K : KCPMsg, new()
+    public class KCPNet<T, K> where T : KCPSession<K>, new() where K : IMessage, new()
     {
         private UdpClient udp;
         private IPEndPoint remoteEndPoint;

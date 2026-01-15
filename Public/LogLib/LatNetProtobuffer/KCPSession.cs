@@ -3,10 +3,11 @@ using System.Net;
 using System.Net.Sockets.Kcp;
 using System.Threading;
 using System.Threading.Tasks;
+using Google.Protobuf;
 
 namespace LATNet
 {
-    public abstract class KCPSession<T> where T : KCPMsg , new()
+    public abstract class KCPSession<T> where T : IMessage, new()
 {
     public Action<uint>? OnSessionClose;
 
