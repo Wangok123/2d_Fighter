@@ -129,7 +129,7 @@ namespace LATNet
             }
         }
 
-        public static T DeSerialize<T>(byte[] bytes) where T : KCPMsg
+        public static T DeSerialize<T>(byte[] bytes) where T : IMessage, new()
         {
             using (MemoryStream ms = new MemoryStream(bytes))
             {
