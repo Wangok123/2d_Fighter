@@ -39,20 +39,31 @@ namespace UnityCore.GameModule.Battle.Attributes
         private readonly List<AttributeModifier> _modifiers = new List<AttributeModifier>();
         private bool _isDirty = true;
         
+        private IAttributeCalculator _calculator;
+        
         public event Action<GameAttribute> OnValueChanged;
         
-        public GameAttribute(AttributeType type, LATInt baseValue)
+        public GameAttribute(AttributeType type, LATInt baseValue) 
+            : this(type, baseValue, null)
+        {
+        }
+        
+        public GameAttribute(AttributeType type, int baseValue) 
+            : this(type, new LATInt { Value = baseValue }, null)
+        {
+        }
+        
+        public GameAttribute(AttributeType type, LATInt baseValue, IAttributeCalculator calculator)
         {
             Type = type;
             _baseValue = baseValue;
+            _calculator = calculator ?? AttributeCalculatorFactory.GetCalculator(type);
             _isDirty = true;
         }
         
-        public GameAttribute(AttributeType type, int baseValue)
+        public GameAttribute(AttributeType type, int baseValue, IAttributeCalculator calculator) 
+            : this(type, new LATInt { Value = baseValue }, calculator)
         {
-            Type = type;
-            _baseValue = new LATInt { Value = baseValue };
-            _isDirty = true;
         }
         
         public void AddModifier(AttributeModifier modifier)
@@ -91,33 +102,22 @@ namespace UnityCore.GameModule.Battle.Attributes
             _isDirty = true;
         }
         
+        public void SetCalculator(IAttributeCalculator calculator)
+        {
+            _calculator = calculator ?? AttributeCalculatorFactory.GetCalculator(Type);
+            _isDirty = true;
+        }
+        
+        public IReadOnlyList<AttributeModifier> GetModifiers()
+        {
+            return _modifiers.AsReadOnly();
+        }
+        
         private void CalculateFinalValue()
         {
-            LATInt addSum = LATInt.Zero;
-            LATInt multiplySum = LATInt.Zero;
-            LATInt finalSum = LATInt.Zero;
-            
-            foreach (var modifier in _modifiers)
-            {
-                switch (modifier.Type)
-                {
-                    case ModifierType.Add:
-                        addSum += modifier.Value;
-                        break;
-                    
-                    case ModifierType.Multiply:
-                        multiplySum += modifier.Value;
-                        break;
-                    
-                    case ModifierType.Final:
-                        finalSum += modifier.Value;
-                        break;
-                }
-            }
-            
             LATInt previousValue = _finalValue;
             
-            _finalValue = (_baseValue + addSum) * (LATInt.One + multiplySum) + finalSum;
+            _finalValue = _calculator.Calculate(_baseValue, _modifiers);
             
             if (previousValue.Value != _finalValue.Value)
             {
