@@ -70,8 +70,17 @@ namespace UnityCore.GameModule.Battle.Attributes
         {
             if (modifier == null) return;
             
-            _modifiers.Add(modifier);
-            _modifiers.Sort();
+            int insertIndex = _modifiers.Count;
+            for (int i = 0; i < _modifiers.Count; i++)
+            {
+                if (_modifiers[i].CompareTo(modifier) > 0)
+                {
+                    insertIndex = i;
+                    break;
+                }
+            }
+            
+            _modifiers.Insert(insertIndex, modifier);
             _isDirty = true;
         }
         
