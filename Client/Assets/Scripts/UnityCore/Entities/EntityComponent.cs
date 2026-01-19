@@ -1,8 +1,7 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Core.ReferencePool;
-using Core.Utils;
 using UnityCore.Base;
 using UnityCore.Entities.Core;
 
@@ -11,18 +10,23 @@ namespace UnityCore.Entities
     public class EntityComponent : LatComponent
     {
         private List<Entity> _entities;
-        private List<ISystem> _systems;
+        private List<SystemInfo> _systems;
         private Dictionary<Type, Entity> _singletonEntities;
+        private bool _isDirty;
 
+        private struct SystemInfo
+        {
+            public ISystem System;
+            public int Priority;
+        }
 
         protected override void Awake()
         {
             base.Awake();
-
             _entities = new List<Entity>();
-            _systems = new List<ISystem>();
+            _systems = new List<SystemInfo>();
             _singletonEntities = new Dictionary<Type, Entity>();
-
+            _isDirty = false;
             IsInit = true;
         }
 
@@ -53,19 +57,50 @@ namespace UnityCore.Entities
             return entity;
         }
         
-        public void AddSystem(ISystem system)
+        public void AddSystem(ISystem system, int priority = 0)
         {
-            if (!_systems.Contains(system))
+            if (_systems.Any(s => s.System == system))
             {
-                _systems.Add(system);
+                return;
             }
+
+            _systems.Add(new SystemInfo { System = system, Priority = priority });
+            _isDirty = true;
+        }
+
+        public void RemoveSystem(ISystem system)
+        {
+            _systems.RemoveAll(s => s.System == system);
+        }
+
+        private void SortSystems()
+        {
+            if (!_isDirty) return;
+            
+            _systems.Sort((a, b) => b.Priority.CompareTo(a.Priority));
+            _isDirty = false;
         }
 
         public void Update()
         {
-            foreach (var system in _systems)
+            SortSystems();
+            
+            foreach (var systemInfo in _systems)
             {
-                system.Update();
+                systemInfo.System.Update();
+            }
+        }
+
+        public void FixedUpdate()
+        {
+            SortSystems();
+            
+            foreach (var systemInfo in _systems)
+            {
+                if (systemInfo.System is IFixedUpdateSystem fixedUpdateSystem)
+                {
+                    fixedUpdateSystem.FixedUpdate();
+                }
             }
         }
         
@@ -88,11 +123,13 @@ namespace UnityCore.Entities
         
         public void Clear()
         {
-            foreach (var entity in _entities)
+            foreach (var entity in _entities.ToList())
             {
                 DestroyEntity(entity);
             }
             _entities.Clear();
+            _systems.Clear();
+            _singletonEntities.Clear();
         }
         
         public IReadOnlyList<Entity> GetAllEntities()
@@ -105,6 +142,27 @@ namespace UnityCore.Entities
             foreach (var entity in _entities)
             {
                 if (entity.GetComponent<T>() != null)
+                {
+                    yield return entity;
+                }
+            }
+        }
+
+        public IEnumerable<Entity> GetEntitiesWithAll(params Type[] componentTypes)
+        {
+            foreach (var entity in _entities)
+            {
+                bool hasAll = true;
+                foreach (var type in componentTypes)
+                {
+                    if (entity.GetComponent(type) == null)
+                    {
+                        hasAll = false;
+                        break;
+                    }
+                }
+
+                if (hasAll)
                 {
                     yield return entity;
                 }
