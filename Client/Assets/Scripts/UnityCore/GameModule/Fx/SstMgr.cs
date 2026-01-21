@@ -1,0 +1,286 @@
+﻿#region LICENSE
+
+// Copyright 2025 wjybxx(845740757@qq.com)
+// 
+// Licensed under the Apache License, Version 2.0 (the "License");
+// you may not use this file except in compliance with the License.
+// You may obtain a copy of the License at
+// 
+//     http://www.apache.org/licenses/LICENSE-2.0
+// 
+// Unless required by applicable law or agreed to in writing, software
+// distributed under the License is distributed on an "AS IS" BASIS,
+// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+// See the License for the specific language governing permissions and
+// limitations under the License.
+
+#endregion
+
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices;
+using System.Text;
+using Wjybxx.Commons;
+using Wjybxx.Commons.Attributes;
+using Wjybxx.Commons.Collections;
+using Wjybxx.Commons.IO;
+using Wjybxx.Commons.Pool;
+
+namespace Wjybxx.BigCat.Fx
+{
+/// <summary>
+/// 共享字符串表管理器
+/// （客户端用）
+/// </summary>
+public static class SstMgr
+{
+    /// <summary>
+    /// 单个文本的缓存(正常也就几十个字符，多的时候200左右，200个中文最多600字节)
+    /// </summary>
+    private const int BUFFER_LENGTH = 4096;
+
+    /// <summary>
+    /// 关联的文件流
+    /// </summary>
+    private static Stream sstStream;
+    /// <summary>
+    /// 字段id到字符串的映射
+    /// (注意：不是共享字符串的id到字符串的索引)
+    /// (非并发集合是安全的，因为运行期间不会增删，不会导致结构性变化)
+    /// </summary>
+    private static readonly LinkedDictionary<int, Item> locationId2ItemMap = new();
+
+    /// <summary>
+    /// 获取字段关联的文本
+    /// </summary>
+    /// <param name="locationId">数据坐标</param>
+    /// <returns></returns>
+    [StableName]
+    public static string GetString(int locationId) {
+        if (locationId == 0) return string.Empty;
+        if (!locationId2ItemMap.TryGetValue(locationId, out Item item)) {
+            return locationId.ToString();
+        }
+        if (item.IsLoaded) {
+            return item.Value;
+        }
+        // 多线程访问Steam时需要加锁，buffer也需要避免共享
+        // 多线程时这里小概率会重复加载，不处理
+        string value;
+        Stream stream = item.Stream;
+        lock (stream) {
+            byte[] buffer = IArrayPool<byte>.Shared.Acquire(BUFFER_LENGTH);
+            try {
+                stream.Seek(item.offset, SeekOrigin.Begin);
+                _ = stream.Read(buffer, 0, 4 + 1 + 2);
+                int len = ByteBufferUtil.GetInt16LE(buffer, 4 + 1);
+                _ = stream.Read(buffer, 0, len);
+                value = Encoding.UTF8.GetString(buffer, 0, len);
+            }
+            finally {
+                IArrayPool<byte>.Shared.Release(buffer);
+            }
+        }
+        item = item.WithValue(value);
+        locationId2ItemMap[locationId] = item;
+
+        // 需要拷贝到其它Item -- 已提前相邻
+        int key = locationId;
+        while (locationId2ItemMap.PrevKey(key, out int prevKey, out Item prevItem)) {
+            if (prevItem.ssti != item.ssti) {
+                break;
+            }
+            locationId2ItemMap[prevKey] = item;
+            key = prevKey;
+        }
+        key = locationId;
+        while (locationId2ItemMap.NextKey(key, out int nextKey, out Item nextItem)) {
+            if (nextItem.ssti != item.ssti) {
+                break;
+            }
+            locationId2ItemMap[nextKey] = item;
+            key = nextKey;
+        }
+        return value;
+    }
+
+    /// <summary>
+    /// 该接口主要用于简化生成的代码
+    /// </summary>
+    /// <param name="idList"></param>
+    /// <returns></returns>
+    [StableName]
+    public static ImmutableList<string> GetStringList(IList<int> idList) {
+        if (idList.Count == 0) return ImmutableList<string>.Empty;
+        string[] array = new string[idList.Count];
+        for (int i = 0; i < idList.Count; i++) {
+            int locationId = idList[i];
+            array[i] = GetString(locationId);
+        }
+        return ImmutableList<string>.CreateRange(array);
+    }
+
+    /// <summary>
+    /// 直接加载所有字符串
+    /// (正常不应该使用，主要用于测试内存压力；只应该在无其它线程访问的时候调用)
+    /// </summary>
+    public static void LoadAll() {
+        foreach (var pair in locationId2ItemMap) {
+            Item item = pair.Value;
+            if (item.IsLoaded) continue;
+            GetString(pair.Key);
+        }
+    }
+
+    /// <summary>
+    /// 销毁文件流
+    /// </summary>
+    public static void Dispose() {
+        sstStream?.Dispose();
+    }
+
+    /// <summary>
+    /// 初始化共享字符串表，必须在游戏初始化流程时调用
+    /// </summary>
+    /// <param name="sstFilePath">共享字符串表文件</param>
+    /// <param name="indexFilePath">索引文件</param>
+    public static void Init(string sstFilePath, string indexFilePath) {
+        Init(File.OpenRead(sstFilePath), File.OpenRead(indexFilePath));
+    }
+
+    /// <summary>
+    /// 初始化共享字符串表，必须在游戏初始化流程时调用。
+    /// </summary>
+    /// <param name="sstFileData">共享字符串表数据</param>
+    /// <param name="indexFileData">索引文件数据</param>
+    public static void Init(byte[] sstFileData, byte[] indexFileData) {
+        Init(new MemoryStream(sstFileData), new MemoryStream(indexFileData));
+    }
+
+    /// <summary>
+    /// 初始化共享字符串表，必须在游戏初始化流程时调用。
+    /// 
+    /// 1.管理器会保存sst文件流的引用，直到用户显式调用<see cref="Dispose"/>销毁。
+    /// 2.Bundle模式下sst和index文件可能在压缩包中，需要由用户封装为Stream传入。
+    /// </summary>
+    /// <param name="sstStream">共享字符串表文件流</param>
+    /// <param name="indexStream">索引文件流</param>
+    public static void Init(Stream sstStream, Stream indexStream) {
+        SstMgr.sstStream = sstStream;
+        // 读取sst.db文件
+        Dictionary<int, Item> sstStringMap = new Dictionary<int, Item>(1000);
+        ReadSstMetaInfo(sstStringMap, sstStream);
+
+        // 读取索引文件 -- 对索引文件进行排序，让相同ssti的字段集中在一起
+        KeyValuePair<int, int>[] sortedIndexMap;
+        using (indexStream) {
+            sortedIndexMap = ReadIndexMap(indexStream).ToArray();
+            Array.Sort(sortedIndexMap, (a, b) => {
+                int r = a.Value.CompareTo(b.Value);
+                return r != 0 ? r : a.Key.CompareTo(b.Key);
+            });
+        }
+        locationId2ItemMap.Clear();
+        locationId2ItemMap.EnsureCapacity(sortedIndexMap.Length);
+        foreach (var pair in sortedIndexMap) {
+            int locationId = pair.Key;
+            int ssti = pair.Value;
+            if (sstStringMap.TryGetValue(ssti, out Item item)) {
+                locationId2ItemMap.Add(locationId, item);
+            }
+        }
+    }
+
+    private static Dictionary<int, int> ReadIndexMap(Stream fileStream) {
+        Dictionary<int, int> indexMap = new Dictionary<int, int>();
+        byte[] buffer = new byte[8];
+        while (fileStream.Position < fileStream.Length) {
+            _ = fileStream.Read(buffer, 0, buffer.Length);
+            int locationId = ByteBufferUtil.GetInt32LE(buffer, 0);
+            int ssti = ByteBufferUtil.GetInt32LE(buffer, 4);
+            indexMap.Add(locationId, ssti);
+        }
+        return indexMap;
+    }
+
+    private static void ReadSstMetaInfo(Dictionary<int, Item> sstStringMap, Stream fileStream) {
+        byte[] buffer = IArrayPool<byte>.Shared.Acquire(BUFFER_LENGTH);
+        while (fileStream.Position < fileStream.Length) {
+            int offset = (int)fileStream.Position;
+            // [id, preload, len, data]
+            _ = fileStream.Read(buffer, 0, 4 + 1 + 2);
+            int ssti = ByteBufferUtil.GetInt32LE(buffer, 0);
+            bool preload = ByteBufferUtil.GetByte(buffer, 4) == 1;
+            int len = ByteBufferUtil.GetInt16LE(buffer, 4 + 1);
+            if (len > buffer.Length) {
+                throw new AssertionError();
+            }
+            object streamOrValue;
+            if (preload) {
+                _ = fileStream.Read(buffer, 0, len);
+                streamOrValue = Encoding.UTF8.GetString(buffer, 0, len);
+                offset = -1;
+            } else {
+                fileStream.Seek(len, SeekOrigin.Current);
+                streamOrValue = fileStream;
+            }
+            sstStringMap.Add(ssti, new Item(ssti, offset, streamOrValue));
+        }
+        IArrayPool<byte>.Shared.Release(buffer);
+    }
+
+    /// <summary>
+    /// 注意：由于是Struct，加载后需要覆盖所有ssti相同的Item
+    /// </summary>
+    [StructLayout(LayoutKind.Explicit)]
+    private readonly struct Item
+    {
+#nullable disable
+        /// <summary>
+        /// 字符串索引
+        /// </summary>
+        [FieldOffset(0)]
+        public readonly int ssti;
+        /// <summary>
+        /// 文件中的偏移 -- len + data；
+        ///
+        /// -1表示已加载，value为string
+        /// 非负表示尚未加载，value为stream
+        /// </summary>
+        [FieldOffset(4)]
+        public readonly int offset;
+        /// <summary>
+        /// 关联的stream或最终字符串值
+        /// </summary>
+        [FieldOffset(8)]
+        public readonly object streamOrValue;
+
+        public Item(int ssti, int offset, object streamOrValue) {
+            this.ssti = ssti;
+            this.offset = offset;
+            this.streamOrValue = streamOrValue;
+        }
+
+        public Item WithValue(string value) {
+            return new Item(ssti, -1, value);
+        }
+
+        public bool IsLoaded {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get => offset < 0;
+        }
+
+        public string Value {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get => (string)streamOrValue;
+        }
+        public Stream Stream {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            get => (Stream)streamOrValue;
+        }
+    }
+}
+}
