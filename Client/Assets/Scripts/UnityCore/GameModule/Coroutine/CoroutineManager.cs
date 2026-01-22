@@ -23,6 +23,7 @@ namespace UnityCore.GameModule.Coroutine
 
             _gTime = new GTime();
             _gTime.Restart(timeScale: 1.0);
+            _gTime.Update(0.001);
 
             _coroutineMgr = new CoroutineMgr(
                 eventLoop: GlobalEventLoop.Inst,

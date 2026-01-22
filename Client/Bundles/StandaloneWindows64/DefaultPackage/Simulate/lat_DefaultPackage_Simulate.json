@@ -8,7 +8,7 @@
     "BuildPipeline": "EditorSimulateBuildPipeline",
     "PackageName": "DefaultPackage",
     "PackageVersion": "Simulate",
-    "PackageNote": "2025/7/29 20:58:51",
+    "PackageNote": "2026/1/22 20:16:47",
     "AssetList": [
         {
             "Address": "headicon",
@@ -685,9 +685,9 @@
         {
             "BundleName": "defaultpackage_assets_assetpackage_atlas.bundle",
             "UnityCRC": 0,
-            "FileHash": "7d4ec2dbafbf5042d0c683362e56e31e",
+            "FileHash": "6c10d635c4d0cdfd4e27cbd6c6fe276d",
             "FileCRC": "00000000",
-            "FileSize": 1272,
+            "FileSize": 1303,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -695,7 +695,7 @@
         {
             "BundleName": "defaultpackage_assets_assetpackage_audios_resaudio.bundle",
             "UnityCRC": 0,
-            "FileHash": "7cb6e7f3d3b8c05ffca830bc95bb81b5",
+            "FileHash": "ec519b4c55f9dfe7a2f2911d9b18f52d",
             "FileCRC": "00000000",
             "FileSize": 10249557,
             "Encrypted": false,
@@ -705,9 +705,9 @@
         {
             "BundleName": "defaultpackage_assets_assetpackage_characters_reschars.bundle",
             "UnityCRC": 0,
-            "FileHash": "17a96d4f2193323656fe929bfef94ae8",
+            "FileHash": "7f266fca21770911e76524b44bfbc0bb",
             "FileCRC": "00000000",
-            "FileSize": 985664,
+            "FileSize": 1024688,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -715,9 +715,9 @@
         {
             "BundleName": "defaultpackage_assets_assetpackage_scenes.bundle",
             "UnityCRC": 0,
-            "FileHash": "684d5e568401476942884612b449b003",
+            "FileHash": "77fe41fb5e4bfa32d38615321e91fcd8",
             "FileCRC": "00000000",
-            "FileSize": 223857,
+            "FileSize": 225861,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -725,7 +725,7 @@
         {
             "BundleName": "defaultpackage_assets_assetpackage_textures_heroshow.bundle",
             "UnityCRC": 0,
-            "FileHash": "5ee933e2a6a8e29b6d664d3ff41eb77a",
+            "FileHash": "1cc5d301e756dec6ae05a0788d7c92e5",
             "FileCRC": "00000000",
             "FileSize": 323388,
             "Encrypted": false,
@@ -735,9 +735,9 @@
         {
             "BundleName": "defaultpackage_assets_assetpackage_ui_uiprefab.bundle",
             "UnityCRC": 0,
-            "FileHash": "e2d99957bb532345aa6b87e91239969b",
+            "FileHash": "3d607d4be4f04b260c5940463d967297",
             "FileCRC": "00000000",
-            "FileSize": 438190,
+            "FileSize": 458483,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -745,9 +745,9 @@
         {
             "BundleName": "defaultpackage_assets_assetpackage_ui_uiprefab_common.bundle",
             "UnityCRC": 0,
-            "FileHash": "490f77b17dfdbc8c5c6aeb4e87245136",
+            "FileHash": "5e08454e2eaa46b80d009d1d89aff153",
             "FileCRC": "00000000",
-            "FileSize": 23118,
+            "FileSize": 23907,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
@@ -755,7 +755,7 @@
         {
             "BundleName": "defaultpackage_assets_assetpackage_ui_uiprefab_dynamicitem.bundle",
             "UnityCRC": 0,
-            "FileHash": "4b386fa041c22cb94232b5337011e51c",
+            "FileHash": "45d4d3d0cfcde1bdadb05d4ea94a20cd",
             "FileCRC": "00000000",
             "FileSize": 60821,
             "Encrypted": false,
@@ -765,7 +765,7 @@
         {
             "BundleName": "defaultpackage_assets_assetpackage_ui_uiprefab_loadwnd.bundle",
             "UnityCRC": 0,
-            "FileHash": "bcc25d6602ca6bad02c049658f9e6f30",
+            "FileHash": "8e720938bddaecc1d26fcd6d33e84d27",
             "FileCRC": "00000000",
             "FileSize": 78529,
             "Encrypted": false,
@@ -775,9 +775,9 @@
         {
             "BundleName": "defaultpackage_assets_assetpackage_ui_uiprefab_selectwnd.bundle",
             "UnityCRC": 0,
-            "FileHash": "6364741d072e1147269e6382f0fa93d2",
+            "FileHash": "3a1303058653773b1de8a2fb5229dac1",
             "FileCRC": "00000000",
-            "FileSize": 73272,
+            "FileSize": 75648,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []

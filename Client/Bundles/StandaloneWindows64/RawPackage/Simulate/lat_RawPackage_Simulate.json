@@ -8,7 +8,7 @@
     "BuildPipeline": "EditorSimulateBuildPipeline",
     "PackageName": "RawPackage",
     "PackageVersion": "Simulate",
-    "PackageNote": "2025/7/29 20:58:51",
+    "PackageNote": "2026/1/22 20:16:48",
     "AssetList": [
         {
             "Address": "demo_tbreward",
@@ -27,11 +27,27 @@
             "DependBundleIDs": []
         },
         {
+            "Address": "latcfg_tbskill",
+            "AssetPath": "Assets/GenerateDatas/bytes/latcfg_tbskill.bytes",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 2,
+            "DependBundleIDs": []
+        },
+        {
+            "Address": "latcfg_tbtarget",
+            "AssetPath": "Assets/GenerateDatas/bytes/latcfg_tbtarget.bytes",
+            "AssetGUID": "",
+            "AssetTags": [],
+            "BundleID": 3,
+            "DependBundleIDs": []
+        },
+        {
             "Address": "latcfg_tbunit",
             "AssetPath": "Assets/GenerateDatas/bytes/latcfg_tbunit.bytes",
             "AssetGUID": "",
             "AssetTags": [],
-            "BundleID": 2,
+            "BundleID": 4,
             "DependBundleIDs": []
         }
     ],
@@ -39,7 +55,7 @@
         {
             "BundleName": "rawpackage_assets_generatedatas_bytes_demo_tbreward_bytes.rawfile",
             "UnityCRC": 0,
-            "FileHash": "868f156e49a2d23792ccf1ad13790754",
+            "FileHash": "bdded7ddb8b337317187aaffe7591f39",
             "FileCRC": "00000000",
             "FileSize": 45,
             "Encrypted": false,
@@ -49,7 +65,7 @@
         {
             "BundleName": "rawpackage_assets_generatedatas_bytes_latcfg_tbmap_bytes.rawfile",
             "UnityCRC": 0,
-            "FileHash": "bab041496149fd5afa1662e886cf6aa6",
+            "FileHash": "19c08cd5b899f67f6fc1bb2fb3b84a1b",
             "FileCRC": "00000000",
             "FileSize": 65,
             "Encrypted": false,
@@ -57,11 +73,31 @@
             "DependBundleIDs": []
         },
         {
+            "BundleName": "rawpackage_assets_generatedatas_bytes_latcfg_tbskill_bytes.rawfile",
+            "UnityCRC": 0,
+            "FileHash": "e7833ef13e2cc2cc69ff100bcdfebd07",
+            "FileCRC": "00000000",
+            "FileSize": 92,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
+            "BundleName": "rawpackage_assets_generatedatas_bytes_latcfg_tbtarget_bytes.rawfile",
+            "UnityCRC": 0,
+            "FileHash": "002aaf33bc8e872b7ca7336ac4b024c4",
+            "FileCRC": "00000000",
+            "FileSize": 31,
+            "Encrypted": false,
+            "Tags": [],
+            "DependBundleIDs": []
+        },
+        {
             "BundleName": "rawpackage_assets_generatedatas_bytes_latcfg_tbunit_bytes.rawfile",
             "UnityCRC": 0,
-            "FileHash": "4f9a34ad8c455aeb293b0bcb0bff212a",
+            "FileHash": "e4e99771054a710d0a30c6d7aa0266b6",
             "FileCRC": "00000000",
-            "FileSize": 50,
+            "FileSize": 72,
             "Encrypted": false,
             "Tags": [],
             "DependBundleIDs": []
